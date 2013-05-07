@@ -123,6 +123,7 @@ class pi_ratepay_order extends pi_ratepay_order_parent
                 } catch (oxArticleInputException $oEx) {
                     oxRegistry::get("oxUtilsView")->addErrorToDisplay($oEx);
                 }
+
             }
         } else {
             return parent::execute();
@@ -154,6 +155,7 @@ class pi_ratepay_order extends pi_ratepay_order_parent
     private function _ratepayRequest()
     {
         $ratepayRequest = $this->_getRatepayRequest($this->_paymentId, $this->getBasket());
+
 
         $paymentMethod = pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId);
 
@@ -283,7 +285,7 @@ class pi_ratepay_order extends pi_ratepay_order_parent
      */
     private function _checkBasketCosts($id, $articleNumber)
     {
-        $basket = $this->_getDataProvider()->getSession()->getBasket();;
+        $basket = $this->getSession()->getBasket();
         if ($basket->getBruttoSum() > 0) {
             $this->_saveToRatepayOrderDetails($id, $articleNumber, 1);
         }
