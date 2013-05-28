@@ -1,7 +1,9 @@
 -- Update Script, updates 2.0.1.x DB RatePAY OXID Module to 2.5 DB
 
-ALTER TABLE `pi_ratepay_settings` ADD `PAYMENT_FIRSTDAY` BOOL NOT NULL DEFAULT '0',
-ADD `DUEDATE` INT NOT NULL DEFAULT '14';
+ALTER TABLE `pi_ratepay_settings`
+  ADD `PAYMENT_FIRSTDAY` BOOL NOT NULL DEFAULT '0',
+  ADD `DUEDATE` INT NOT NULL DEFAULT '14',
+  ADD `WHITELABEL` TINYINT( 1 ) NOT NULL DEFAULT '0';
 
 INSERT INTO `pi_ratepay_settings` (`profile_id`, `security_code`, `type`) VALUES ('', '', 'elv');
 
