@@ -8,6 +8,7 @@
  * @package pi_ratepay_rate_calculator
  * Code by PayIntelligent GmbH  <http://www.payintelligent.de/>
  */
+
 require_once 'PiRatepayRateCalcBase.php';
 
 /**

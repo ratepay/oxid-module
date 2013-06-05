@@ -282,12 +282,16 @@ class PiRatepayRateCalcBase
      */
     public function __construct($picalcdata = null)
     {
+
         if (!isset($picalcdata)) {
+
             require_once 'PiRatepayRateCalcData.php';
             $picalcdata = new PiRatepayRateCalcData();
+
         }
 
         $this->picalcdata = $picalcdata;
+
 
         $this->request_profile_id = $this->picalcdata->getProfileId();
 
