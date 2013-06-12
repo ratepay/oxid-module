@@ -31,7 +31,6 @@
     <tr>
         <td width="100%" align="center" valign="top">
 
-
             <form name="myedit" id="myedit" action="[{ $shop->selflink }]" method="post">
                 [{ $shop->hiddensid }]
                 <input type="hidden" name="cl" value="pi_ratepay_elv_settings">

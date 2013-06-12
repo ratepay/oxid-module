@@ -168,6 +168,26 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
     }
 
     /**
+     * Do a request profile request.
+     * @return array
+     */
+    public function profileRequest()
+    {
+        $operation = 'PROFILE_REQUEST';
+        $ratepay = $this->_getXmlService();
+        $request = $ratepay->getXMLObject();
+
+        $this->_setRatepayHead($request, $operation);
+
+        $requestProfile = array(
+            'request'  => $request,
+            'response' => $ratepay->paymentOperation($request, $this->_getPaymentMethod())
+        );
+
+        return $requestProfile;
+    }    
+
+    /**
      * Generate head node for request xml
      *
      * @param SimpleXMLExtended $request
@@ -180,7 +200,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
         $head = $request->addChild('head');
         $head->addChild('system-id', $this->_getRatepaySystemID());
 
-        if ($operation != 'PAYMENT_INIT' && $operation != 'CONFIGURATION_REQUEST') {
+        if ($operation != 'PAYMENT_INIT' && $operation != 'CONFIGURATION_REQUEST' && $operation != 'PROFILE_REQUEST') {
             $head->addChild('transaction-id', $this->_getDataProvider()->getTransactionId());
         }
 
