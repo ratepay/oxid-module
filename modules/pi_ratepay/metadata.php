@@ -33,11 +33,9 @@ $aModule = array(
     'author'       => 'PayIntelligent GmbH',
     'url'          => 'http://www.payintelligent.de/',
     'extend'       => array(
-        'oxorder'           => 'pi_ratepay/core/pi_ratepay_oxorder',
         'payment'           => 'pi_ratepay/views/pi_ratepay_payment',
         'order'             => 'pi_ratepay/views/pi_ratepay_order',
-        'thankyou'          => 'pi_ratepay/views/pi_ratepay_thankyou',
-        'pdfarticlesummary' => 'pi_ratepay/invoicepdf/pi_ratepay_pdf_article_summary'
+        'thankyou'          => 'pi_ratepay/views/pi_ratepay_thankyou'
     ),
     'blocks' => array(
         array(
@@ -77,14 +75,16 @@ $aModule = array(
         )
     ),
     'templates' => array(
-        'pi_ratepay_rechnung_settings.tpl' => 'pi_ratepay/out/admin/tpl/pi_ratepay_rechnung_settings.tpl',
-        'pi_ratepay_rate_settings.tpl'     => 'pi_ratepay/out/admin/tpl/pi_ratepay_rate_settings.tpl',
-        'pi_ratepay_elv_settings.tpl'      => 'pi_ratepay/out/admin/tpl/pi_ratepay_elv_settings.tpl',
-        'pi_ratepay_log.tpl'               => 'pi_ratepay/out/admin/tpl/pi_ratepay_log.tpl',
-        'pi_ratepay_details.tpl'           => 'pi_ratepay/out/admin/tpl/pi_ratepay_details.tpl',
-        'pi_ratepay_no_details.tpl'        => 'pi_ratepay/out/admin/tpl/pi_ratepay_no_details.tpl',
-        'pi_ratepay_configuration.tpl'     => 'pi_ratepay/out/admin/tpl/pi_ratepay_configuration.tpl',
-        'pi_ratepay_rate_calc.tpl'         => 'pi_ratepay/out/azure/tpl/pi_ratepay_rate_calc.tpl'
+        'pi_ratepay_rechnung_settings.tpl'      => 'pi_ratepay/out/admin/tpl/pi_ratepay_rechnung_settings.tpl',
+        'pi_ratepay_rate_settings.tpl'          => 'pi_ratepay/out/admin/tpl/pi_ratepay_rate_settings.tpl',
+        'pi_ratepay_elv_settings.tpl'           => 'pi_ratepay/out/admin/tpl/pi_ratepay_elv_settings.tpl',
+        'pi_ratepay_log.tpl'                    => 'pi_ratepay/out/admin/tpl/pi_ratepay_log.tpl',
+        'pi_ratepay_details.tpl'                => 'pi_ratepay/out/admin/tpl/pi_ratepay_details.tpl',
+        'pi_ratepay_no_details.tpl'             => 'pi_ratepay/out/admin/tpl/pi_ratepay_no_details.tpl',
+        'pi_ratepay_configuration.tpl'          => 'pi_ratepay/out/admin/tpl/pi_ratepay_configuration.tpl',
+        'pi_ratepay_profile.tpl'                => 'pi_ratepay/out/admin/tpl/pi_ratepay_profile.tpl',
+        'pi_ratepay_discount_main_custom.tpl'   => 'pi_ratepay/out/admin/tpl/pi_ratepay_discount_main_custom.tpl',
+        'pi_ratepay_rate_calc.tpl'              => 'pi_ratepay/out/azure/tpl/pi_ratepay_rate_calc.tpl'
     ),
     'files' => array(
         'pi_ratepay_admin_SettingsAbstract'     => 'pi_ratepay/admin/pi_ratepay_admin_settingsabstract.php',
@@ -94,6 +94,7 @@ $aModule = array(
         'pi_ratepay_Log'                        => 'pi_ratepay/admin/pi_ratepay_log.php',
         'pi_ratepay_Details'                    => 'pi_ratepay/admin/pi_ratepay_details.php',
         'pi_ratepay_Configuration'              => 'pi_ratepay/admin/pi_ratepay_configuration.php',
+        'pi_ratepay_Profile'                    => 'pi_ratepay/admin/pi_ratepay_profile.php',
         'pi_ratepay_DetailsViewData'            => 'pi_ratepay/core/pi_ratepay_detailsviewdata.php',
         'pi_ratepay_History'                    => 'pi_ratepay/core/pi_ratepay_history.php',
         'pi_ratepay_HistoryList'                => 'pi_ratepay/core/pi_ratepay_historylist.php',
