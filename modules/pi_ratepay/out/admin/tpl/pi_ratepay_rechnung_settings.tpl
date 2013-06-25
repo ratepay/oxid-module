@@ -97,20 +97,10 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td class="edittext"></td>
                                         <td class="edittext">
-                                            [{ oxmultilang ident="PI_RATEPAY_RECHNUNG_SETTINGS_DUEDATE" }]:&nbsp;
-                                        </td>
-                                        <td class="edittext">
-                                            <input type="text" class="editinput" size="50" name="duedate" value="[{$settings->pi_ratepay_settings__duedate->rawValue}]">
-                                            &nbsp;[{ oxmultilang ident="PI_RATEPAY_RECHNUNG_SETTINGS_DUEDATE_DAY" }]
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="edittext">
-                                            [{ oxmultilang ident="PI_RATEPAY_RECHNUNG_SETTINGS_RATEPAY" }]:&nbsp;
-                                        </td>
-                                        <td class="edittext">
-                                            <input type="text" class="editinput" size="50" name="ratepay_url" value="[{$settings->pi_ratepay_settings__ratepay_url->rawValue}]">
+                                            <br>
+                                            <input type="submit" class="edittext" name="[{ oxmultilang ident="PI_RATEPAY_RECHNUNG_SETTINGS_SAVE" }]" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[{ oxmultilang ident="PI_RATEPAY_RECHNUNG_SETTINGS_SAVE" }]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"><br>
                                         </td>
                                     </tr>
                                 </table>
@@ -176,13 +166,7 @@
                                             <textarea class="editinput" cols="140" rows="4"  id="invoice_field" name="invoice_field" onkeyup="check();">[{$settings->pi_ratepay_settings__invoice_field->rawValue}]</textarea>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td class="edittext"></td>
-                                        <td class="edittext">
-                                            <br>
-                                            <input type="submit" class="edittext" name="[{ oxmultilang ident="PI_RATEPAY_RECHNUNG_SETTINGS_SAVE" }]" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[{ oxmultilang ident="PI_RATEPAY_RECHNUNG_SETTINGS_SAVE" }]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"><br>
-                                        </td>
-                                    </tr>
+
                                 </table>
                             </fieldset>
                         </td>
