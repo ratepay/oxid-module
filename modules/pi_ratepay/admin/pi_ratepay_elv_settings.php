@@ -73,6 +73,7 @@ class pi_ratepay_elv_Settings extends pi_ratepay_admin_SettingsAbstract
             'logging'                 => $logging,
             'whitelabel'              => $whitelabel,
             'savebankdata'            => $saveBankData,
+            'duedate'                 => oxConfig::getParameter('duedate')            
         ));
 
         $settings->save();

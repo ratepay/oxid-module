@@ -69,6 +69,7 @@ class pi_ratepay_rechnung_Settings extends pi_ratepay_admin_SettingsAbstract
             'security_code'           => oxConfig::getParameter('security_code'),
             'sandbox'                 => $sandbox,
             'logging'                 => $logging,
+            'duedate'                 => oxConfig::getParameter('duedate')            
         ));
 
         $settings->save();
