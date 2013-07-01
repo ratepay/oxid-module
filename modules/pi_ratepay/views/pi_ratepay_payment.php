@@ -79,7 +79,8 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
 
         foreach (pi_ratepay_util_utilities::$_RATEPAY_PAYMENT_METHOD as $paymentMethod) {
             if (array_key_exists($paymentMethod, $paymentList)) {
-                if (!$ratePayAllowed) {
+                $ratePAYMethodCheck = $this->_checkRatePAYMethodCheck($paymentMethod);
+                if (!$ratePayAllowed || !$ratePAYMethodCheck) {
                     unset($paymentList[$paymentMethod]);
                 }
             }
@@ -88,6 +89,29 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         return $paymentList;
     }
 
+    private function _checkRatePAYMethodCheck($paymentMethod)
+    {
+        $paymentValid = true;
+
+        $settings = oxNew('pi_ratepay_settings');
+        $settings->loadByType(pi_ratepay_util_utilities::getPaymentMethod($paymentMethod));
+        $customer = $this->getUser();
+        $b2b_customer = $this->_checkCompany();
+        $adr_customer = !$this->_checkAddress();
+
+        $b2b_settings = ($settings->pi_ratepay_settings__b2b->rawValue == '1') ? true : false;
+        $adr_settings = ($settings->pi_ratepay_settings__delivery_address->rawValue == '1') ? true : false;
+
+        if(
+            ($b2b_customer && !$b2b_settings) ||
+            ($adr_customer && !$adr_settings)
+        ) {
+            $paymentValid = false;
+        }
+
+        return $paymentValid;
+    }    
+
     /**
      * Initialises smarty variables specific to RatePAY payment.
      *
@@ -95,7 +119,6 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
     private function _initRatepayTemplateVariables()
     {
         $settings = oxNew('pi_ratepay_settings');
-
 
         foreach (pi_ratepay_util_utilities::$_RATEPAY_PAYMENT_METHOD as $paymentMethod) {
 
@@ -145,6 +168,17 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                     . '_duedays',
                     $settings->pi_ratepay_settings__duedate->rawValue);
 
+                //$whitelabel = ($settings->pi_ratepay_settings__whitelabel->rawValue) ? true : false;
+                if($settings->pi_ratepay_settings__whitelabel->rawValue == '1') {
+                    $this->addTplParam($paymentMethod
+                    . '_whitelabel', true);
+                }
+
+                if($settings->pi_ratepay_settings__whitelabel->rawValue == '1') {
+                    $this->addTplParam($paymentMethod
+                    . '_whitelabel', true);
+                }                
+
                 if ($paymentMethod === 'pi_ratepay_rate') {
                     $this->addTplParam(
                         'pi_ratepay_rate_activateelv',
@@ -181,9 +215,7 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
             }
         }
 
-        if ($paymentMethod === 'pi_ratepay_elv'
-            || $paymentMethod === 'pi_ratepay_rate'
-        ) {
+        if ($paymentMethod === 'pi_ratepay_elv') { // || $paymentMethod === 'pi_ratepay_rate'
             $this->_setBankdata();
         }
 
@@ -274,6 +306,21 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         }
 
         return $isPrivacyChecked;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    private function _checkCompany()
+    {
+        $user = $this->getUser();
+
+        if (!empty($user->oxuser__oxcompany->value) || !empty($user->oxuser__oxustid->value)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -599,7 +646,7 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
      */
     private function _checkRatePAY()
     {
-        return $this->_checkCurrency() && $this->_checkCountry() && !$this->_checkDenied() && $this->_checkAge() && $this->_checkAddress();
+        return $this->_checkCurrency() && $this->_checkCountry() && !$this->_checkDenied() && $this->_checkAge();
     }
 
     /**
