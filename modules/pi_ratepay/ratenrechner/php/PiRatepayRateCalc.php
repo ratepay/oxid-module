@@ -86,7 +86,17 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
         try {
             $this->requestRateDetails($subtype);
             $this->setData(
-                    $this->getDetailsTotalAmount(), $this->getDetailsAmount(), $this->getDetailsInterestRate(), $this->getDetailsInterestAmount(), $this->getDetailsServiceCharge(), $this->getDetailsAnnualPercentageRate(), $this->getDetailsMonthlyDebitInterest(), $this->getDetailsNumberOfRates(), $this->getDetailsRate(), $this->getDetailsLastRate(), $this->getDetailsPaymentFirstday()
+                    $this->getDetailsTotalAmount(),
+                    $this->getDetailsAmount(),
+                    $this->getDetailsInterestRate(),
+                    $this->getDetailsInterestAmount(),
+                    $this->getDetailsServiceCharge(),
+                    $this->getDetailsAnnualPercentageRate(),
+                    $this->getDetailsMonthlyDebitInterest(),
+                    $this->getDetailsNumberOfRates(),
+                    $this->getDetailsRate(),
+                    $this->getDetailsLastRate(),
+                    $this->getDetailsPaymentFirstday()
             );
         } catch (Exception $e) {
             $this->unsetData();
@@ -115,6 +125,7 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
         $resultArray = array();
         $resultArray['totalAmount'] = number_format((double) $this->getDetailsTotalAmount(), 2, $decimalSeperator, $thousandSepeartor);
         $resultArray['amount'] = number_format((double) $this->getDetailsAmount(), 2, $decimalSeperator, $thousandSepeartor);
+        $resultArray['interestRate'] = number_format((double) $this->getDetailsInterestRate(), 2, $decimalSeperator, $thousandSepeartor);
         $resultArray['interestAmount'] = number_format((double) $this->getDetailsInterestAmount(), 2, $decimalSeperator, $thousandSepeartor);
         $resultArray['serviceCharge'] = number_format((double) $this->getDetailsServiceCharge(), 2, $decimalSeperator, $thousandSepeartor);
         $resultArray['annualPercentageRate'] = number_format((double) $this->getDetailsAnnualPercentageRate(), 2, $decimalSeperator, $thousandSepeartor);

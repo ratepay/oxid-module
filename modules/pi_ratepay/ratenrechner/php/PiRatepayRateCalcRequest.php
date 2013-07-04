@@ -13,9 +13,11 @@
     $pi_calculator = new PiRatepayRateCalc();
     $calcValue = $pi_calculator->getPostParameter('calcValue');
     $calcMethod = $pi_calculator->getPostParameter('calcMethod');
-    if ($calcValue != '' && $calcMethod != '') {
+    //if ($calcValue != '' && $calcMethod != '') {
         if ($calcMethod == "calculation-by-time" || $calcMethod == "calculation-by-rate") {
-            if ($calcMethod == "calculation-by-time" && is_numeric($calcValue)) {
+            if (empty($calcValue)) {
+                $pi_calculator->setErrorMsg('novalue');
+            } else if ($calcMethod == "calculation-by-time" && is_numeric($calcValue)) {
                 if (preg_match('/^[0-9]{1,3}$/', $calcValue)) {
                     $pi_calculator->setRequestCalculationValue($calcValue);
                     $pi_calculator->setRequestDueDay($pi_calculator->getPostParameter('dueDate'));
@@ -46,10 +48,11 @@
         } else {
             $pi_calculator->setErrorMsg('wrongsubtype');
         }
-    } else {
+    # Why?
+    /*} else {
         $pi_calculator->prepareDetailsData();
         $pi_resultArray = $pi_calculator->createFormattedResult();
-    }
+    }*/
 
     $pi_language = $pi_calculator->getLanguage();
     $pi_amount = $pi_calculator->getRequestAmount();
@@ -71,6 +74,8 @@
             echo "<div class='pirperror' id='pirperror'>" . $pi_lang_error . ":&nbsp;&nbsp;" . $pi_lang_server_off . "</div>";
         } else if ($pi_calculator->getErrorMsg() == 'wrongvalue') {
             echo "<div class='pirperror' id='pirperror'>" . $pi_lang_error . ":&nbsp;&nbsp;" . $pi_lang_wrong_value . "</div>";
+        } else if ($pi_calculator->getErrorMsg() == 'novalue') {
+                echo "<div class='pirperror' id='pirperror'>" . $pi_lang_error . ":&nbsp;&nbsp;" . $pi_lang_no_value . "</div>";
         } else {
             echo "<div class='pirperror' id='pirperror'>" . $pi_lang_error . ":&nbsp;&nbsp;" . $pi_lang_request_error_else . "</div>";
         }
@@ -81,7 +86,7 @@
             <div id="piRpNotfication">
                 <?php echo $pi_lang_information . ":<br/>" . $pi_lang_info[$pi_calculator->getCode()]; ?>
             </div>
-        <?php } ?>
+        <?php } if(empty($calcValue)) var_dump($calcValue); ?>
         <div id="piRpResult">
             <h2 class="pirpmid-heading"><b><?php echo $pi_lang_individual_rate_calculation; ?></b></h2>
 
@@ -147,7 +152,7 @@
                             </div>
                         </div>
                     </td>
-                    <td><?php echo $pi_resultArray['monthlyDebitInterest']; ?>%</td>
+                    <td><?php echo $pi_resultArray['interestRate']; ?>%</td>
                     <td></td>
                 </tr>
 
@@ -206,7 +211,7 @@
                     <td colspan="3" class="piRpPaddingRight piRpPaddingTop">
                         <b>
                             <?php echo $pi_resultArray['numberOfRatesFull']; ?>
-                            <?php if(!$pi_lang_months)echo '&nbsp;'; echo $pi_lang_months; ?>
+                            <?php if(!$pi_lang_months) echo '&nbsp;'; echo $pi_lang_months; ?>
                         </b>
                     </td>
                 </tr>

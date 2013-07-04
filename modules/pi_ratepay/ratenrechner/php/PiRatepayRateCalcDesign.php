@@ -89,7 +89,7 @@
                 <br class="piRpClearFix" />
                 <label for="secondInput">
                     <div class="piRpChooseInput" id="piRpChooseInputRuntime">
-                        <input id="secondInput" class="piRpFloatLeft" type="radio" name="Zahlmethode" value="runtime" onClick="switchRateOrRuntime('runtime');">
+                        <input id="secondInput" class="piRpFloatLeft" type="radio" name="Zahlmethode" value="runtime" onclick="switchRateOrRuntime('runtime');">
                     </div>
                     <div class="piRpNintyPercentWidth piRpFloatLeft"><?php echo $pi_lang_payment_text_runtime; ?></div>
                 </label>
@@ -129,7 +129,7 @@
             <span id="pirpspanruntime" class="pirpactive">
                 <?php echo $pi_lang_choose_runtime; ?> <?php echo $pi_lang_calculate_rate; ?>
             </span>
-                    <input name="" value="<?php echo $pi_lang_calculate_rate; ?>" type="button" class="piRpInput-button piRpContentSwitchInput ">
+                    A<input name="" value="<?php echo $pi_lang_calculate_rate; ?>" type="button" class="piRpInput-button piRpContentSwitchInput ">
                 </div>
                 <div id="piRpResultContainer"></div>
             </div>
