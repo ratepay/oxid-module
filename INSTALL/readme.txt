@@ -1,20 +1,20 @@
 ==Title==
-RatePAY OXID Module
+RatePAY OXID Module for Oxid CE 4.7.x
 
 ==Author==
-PayIntelligent GmbH
+Sören Martius, Aarne Welschlau
 
 ==Prefix==
 pi
 
 ==Version==
-2.1.0
+3.0.0
 
 ==Link==
-http://www.payintelligent.de/
+http://www.ratepay.com
 
 ==Mail==
-info@payintelligent.de
+info@ratepay.com
 
 ==Description==
 Adds RatePAY Invoice and RatePAY Installment as payment methods to OXID.

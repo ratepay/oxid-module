@@ -1,8 +1,13 @@
 ***********************************************************
+**********| Version 3.0.0 - Released 2013-07-02 |********
+***********************************************************
+-- new feature: one click configuration
+
+***********************************************************
 **********| Version 2.5.0.4 - Released 2013-06-05 |********
 ***********************************************************
--- changed depricated methods to new core methods
--- fixxed bootstrap bug for ratecalculator
+-- changed deprecated methods to new core methods
+-- fixed bootstrap bug for ratecalculator
 
 ***********************************************************
 **********| Version 2.5.0.3 - Released 2013-05-27 |********
@@ -11,7 +16,7 @@
 - disabled rate for b2b
 
 ***********************************************************
-**********| Vecrsion 2.5.0.2 - Released 2012-11-06 |********
+**********| Version 2.5.0.2 - Released 2012-11-06 |********
 ***********************************************************
 - minor fix in encryption library: Upgrade if you encounter problems with ELV.
 
