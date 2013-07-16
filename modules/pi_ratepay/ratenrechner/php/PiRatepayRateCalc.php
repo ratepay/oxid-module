@@ -139,11 +139,50 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
     }
 
     /**
+     * Sets data from pi_ratepay_rate_configuration.
+     * @throws Exception Throws exception on connection error or negative response.
+     */
+    private function requestRateConfig()
+    {
+        $rate_config = new oxBase();
+        $rate_config->init('pi_ratepay_rate_configuration');
+        $rate_config->load('1');
+
+        $interest_rate_min = (string) $rate_config->pi_ratepay_rate_configuration__interestrate_min->rawValue;
+        $interest_rate_default = (string) $rate_config->pi_ratepay_rate_configuration__interestrate_default->rawValue;
+        $interest_rate_max = (string) $rate_config->pi_ratepay_rate_configuration__interestrate_max->rawValue;
+        $month_number_min = (string) $rate_config->pi_ratepay_rate_configuration__month_number_min->rawValue;
+        $month_number_max = (string) $rate_config->pi_ratepay_rate_configuration__month_number_max->rawValue;
+        $month_longrun = (string) $rate_config->pi_ratepay_rate_configuration__month_longrun->rawValue;
+        $month_allowed = (string) $rate_config->pi_ratepay_rate_configuration__month_allowed->rawValue;
+        $payment_firstday = (string) $rate_config->pi_ratepay_rate_configuration__payment_firstday->rawValue;
+        $payment_amount = (string) $rate_config->pi_ratepay_rate_configuration__payment_amount->rawValue;
+        $payment_lastrate = (string) $rate_config->pi_ratepay_rate_configuration__payment_lastrate->rawValue;
+        $rate_min_normal = (string) $rate_config->pi_ratepay_rate_configuration__rate_min_normal->rawValue;
+        $rate_min_longrun = (string) $rate_config->pi_ratepay_rate_configuration__rate_min_longrun->rawValue;
+        $service_charge = (string) $rate_config->pi_ratepay_rate_configuration__service_charge->rawValue;
+
+        $this->setConfigInterestRateMin($interest_rate_min);
+        $this->setConfigInterestRateDefault($interest_rate_default);
+        $this->setConfigInterestRateMax($interest_rate_max);
+        $this->setConfigMonthNumberMin($month_number_min);
+        $this->setConfigMonthNumberMax($month_number_max);
+        $this->setConfigMonthLongrun($month_longrun);
+        $this->setConfigMonthAllowed($month_allowed);
+        $this->setConfigPaymentFirstday($payment_firstday);
+        $this->setConfigPaymentAmount($payment_amount);
+        $this->setConfigPaymentLastrate($payment_lastrate);
+        $this->setConfigRateMinNormal($rate_min_normal);
+        $this->setConfigRateMinLongrun($rate_min_longrun);
+        $this->setConfigServiceCharge($service_charge);
+    }
+
+    /** DEPRECATED
      * Creates, sends and validates the response of the config request. Sets
      * Data on success.
      * @throws Exception Throws exception on connection error or negative response.
      */
-    private function requestRateConfig()
+    private function requestRateConfigDEPRECATED() //
     {
         $this->setRequestOperation('CONFIGURATION_REQUEST');
         $this->setRequestOperationSubtype('');

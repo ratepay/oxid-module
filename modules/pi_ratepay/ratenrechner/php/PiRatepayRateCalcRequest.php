@@ -13,7 +13,7 @@
     $pi_calculator = new PiRatepayRateCalc();
     $calcValue = $pi_calculator->getPostParameter('calcValue');
     $calcMethod = $pi_calculator->getPostParameter('calcMethod');
-    //if ($calcValue != '' && $calcMethod != '') {
+    if ($calcValue != '' && $calcMethod != '') {
         if ($calcMethod == "calculation-by-time" || $calcMethod == "calculation-by-rate") {
             if (empty($calcValue)) {
                 $pi_calculator->setErrorMsg('novalue');
@@ -48,11 +48,10 @@
         } else {
             $pi_calculator->setErrorMsg('wrongsubtype');
         }
-    # Why?
-    /*} else {
+    } else {
         $pi_calculator->prepareDetailsData();
         $pi_resultArray = $pi_calculator->createFormattedResult();
-    }*/
+    }
 
     $pi_language = $pi_calculator->getLanguage();
     $pi_amount = $pi_calculator->getRequestAmount();
@@ -86,7 +85,7 @@
             <div id="piRpNotfication">
                 <?php echo $pi_lang_information . ":<br/>" . $pi_lang_info[$pi_calculator->getCode()]; ?>
             </div>
-        <?php } if(empty($calcValue)) var_dump($calcValue); ?>
+        <?php } ?>
         <div id="piRpResult">
             <h2 class="pirpmid-heading"><b><?php echo $pi_lang_individual_rate_calculation; ?></b></h2>
 
@@ -148,7 +147,7 @@
                         <div class="piRpFloatLeft"><?php echo $pi_lang_debit_rate; ?>:</div>
                         <div class="piRpRelativePosition">
                             <div class="piRpMouseoverInfo" id="piRpMouseoverInfoDebitRate">
-                                <?php echo $pi_lang_mouseover_debit_rate; ?>
+                                <?php echo $pi_lang_mouseover_interest_rate; ?>
                             </div>
                         </div>
                     </td>

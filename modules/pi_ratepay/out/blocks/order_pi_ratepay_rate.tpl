@@ -4,6 +4,7 @@
     <script type="text/javascript" src="modules/pi_ratepay/ratenrechner/js/path.js"></script>
     <script type="text/javascript" src="modules/pi_ratepay/ratenrechner/js/layout.js"></script>
     <script type="text/javascript" src="modules/pi_ratepay/ratenrechner/js/ajax.js"></script>
+    <script type="text/javascript" src="modules/pi_ratepay/ratenrechner/js/mouseaction.js"></script>
     <div id="pirpmain-cont">
 
     </div>

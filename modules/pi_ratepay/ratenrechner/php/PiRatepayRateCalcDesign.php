@@ -129,7 +129,7 @@
             <span id="pirpspanruntime" class="pirpactive">
                 <?php echo $pi_lang_choose_runtime; ?> <?php echo $pi_lang_calculate_rate; ?>
             </span>
-                    A<input name="" value="<?php echo $pi_lang_calculate_rate; ?>" type="button" class="piRpInput-button piRpContentSwitchInput ">
+                    <input name="" value="<?php echo $pi_lang_calculate_rate; ?>" type="button" class="piRpInput-button piRpContentSwitchInput ">
                 </div>
                 <div id="piRpResultContainer"></div>
             </div>
