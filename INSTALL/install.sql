@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `pi_ratepay_rate_configuration` (
   `MONTH_NUMBER_MIN` tinyint(2) NOT NULL,
   `MONTH_NUMBER_MAX` tinyint(2) NOT NULL,
   `MONTH_LONGRUN` tinyint(2) NOT NULL,
-  `MONTH_ALLOWED` varchar(50) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `MONTH_ALLOWED` varchar(255) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `VALID_PAYMENT_FIRSTDAYS` tinyint(2) NOT NULL,
   `PAYMENT_FIRSTDAY` tinyint(2) NOT NULL,
   `PAYMENT_AMOUNT` int(5) NOT NULL,

@@ -62,7 +62,7 @@
                 <br />
                 <label for="firstInput">
                     <div class="piRpChooseInput" id="piRpChooseInputRate">
-                        <input id="firstInput" class="piRpFloatLeft" type="radio" name="Zahlmethode" value="wishrate"  onClick="switchRateOrRuntime('rate');">
+                        <input id="firstInput" class="piRpFloatLeft" type="radio" name="Zahlmethode" value="wishrate" onClick="switchRateOrRuntime('rate');">
                     </div>
                     <div class="piRpNintyPercentWidth piRpFloatLeft"><?php echo $pi_lang_payment_text_wishrate; ?></div>
                 </label>
@@ -81,7 +81,7 @@
                     <br class="piRpClearFix" />
                     <div class="piRpMarginTop">
                         <span class="piRpVertAlignMiddle"><?php echo $pi_lang_please . " " . $pi_lang_insert_wishrate; ?>:</span>
-                        <input name="" id="rate" class="piRpInput-amount" type="text">
+                        <input name="" id="rate" class="piRpInput-amount" type="text" maxlength="6">
                         <span class="piRpCurrency"> &euro;</span>
                         <input name="" onclick="piRatepayRateCalculatorAction('rate');" value="<?php echo $pi_lang_calculate_runtime; ?>" id="piRpInput-button" class="piRpInput-button" type="button">
                     </div>

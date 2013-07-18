@@ -33,13 +33,13 @@
                     $pi_calculator->setRequestCalculationValue($pi_value);
                     $pi_calculator->setRequestDueDay($pi_calculator->getPostParameter('dueDate'));
                     $pi_resultArray = $pi_calculator->getRatepayRateDetails($calcMethod);
-                } else if (preg_match('/^[0-9]+(\,[0-9][0-9][0-9])?(.[0-9]{1,2})?$/', $calcValue)) {
+                /*} else if (preg_match('/^[0-9]+(\,[0-9][0-9][0-9])?(.[0-9]{1,2})?$/', $calcValue)) {
                     $pi_value = $calcValue;
                     $pi_value = str_replace(",", "", $pi_value);
                     $pi_calculator->setRequestCalculationValue($pi_value);
                     $pi_calculator->setRequestDueDay($pi_calculator->getPostParameter('dueDate'));
                     $pi_resultArray = $pi_calculator->getRatepayRateDetails($calcMethod);
-                } else {
+                */} else {
                     $pi_calculator->setErrorMsg('wrongvalue');
                 }
             } else {
