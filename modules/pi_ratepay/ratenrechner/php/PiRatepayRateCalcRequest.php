@@ -26,20 +26,20 @@
                     $pi_calculator->setErrorMsg('wrongvalue');
                 }
             } else if ($calcMethod == "calculation-by-rate") {
-                if (preg_match('/^[0-9]+(\.[0-9][0-9][0-9])?(,[0-9]{1,2})?$/', $calcValue)) {
-                    $pi_value = $calcValue;
+                $pi_value = trim($calcValue);
+                if (preg_match('/^\d+(,)?\d{0,2}/', $pi_value)) {
                     $pi_value = str_replace(".", "", $pi_value);
-                    $pi_value = str_replace(",", ".", $pi_value);
+                    $pi_value = (substr($pi_value, -1) != ",") ? str_replace(",", ".", $pi_value) : str_replace(",", "", $pi_value);
                     $pi_calculator->setRequestCalculationValue($pi_value);
                     $pi_calculator->setRequestDueDay($pi_calculator->getPostParameter('dueDate'));
                     $pi_resultArray = $pi_calculator->getRatepayRateDetails($calcMethod);
-                /*} else if (preg_match('/^[0-9]+(\,[0-9][0-9][0-9])?(.[0-9]{1,2})?$/', $calcValue)) {
-                    $pi_value = $calcValue;
+                } else if (preg_match('/^\d+(\.)?\d{0,2}/', $pi_value)) {
                     $pi_value = str_replace(",", "", $pi_value);
+                    $pi_value = (substr($pi_value, -1) != ".") ? str_replace(",", ".", $pi_value) : str_replace(",", "", $pi_value);
                     $pi_calculator->setRequestCalculationValue($pi_value);
                     $pi_calculator->setRequestDueDay($pi_calculator->getPostParameter('dueDate'));
                     $pi_resultArray = $pi_calculator->getRatepayRateDetails($calcMethod);
-                */} else {
+                } else {
                     $pi_calculator->setErrorMsg('wrongvalue');
                 }
             } else {
