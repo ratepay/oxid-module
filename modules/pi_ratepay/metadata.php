@@ -29,13 +29,12 @@ $aModule = array(
     ),
     'thumbnail'    => 'picture.png',
     'lang'         => 'en',
-    'version'      => '2.5.0.5',
+    'version'      => '2.5.0.6',
     'author'       => 'PayIntelligent GmbH',
     'url'          => 'http://www.payintelligent.de/',
     'extend'       => array(
         'payment'           => 'pi_ratepay/views/pi_ratepay_payment',
-        'order'             => 'pi_ratepay/views/pi_ratepay_order',
-        'thankyou'          => 'pi_ratepay/views/pi_ratepay_thankyou'
+        'order'             => 'pi_ratepay/views/pi_ratepay_order'
     ),
     'blocks' => array(
         array(
