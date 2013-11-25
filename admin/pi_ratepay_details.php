@@ -678,7 +678,7 @@ class pi_ratepay_details extends oxAdminDetails
 
             if ($quant > 0) {
                 $title = '';
-                $title = $this->removeSpecialChars(html_entity_decode($article['oxtitle']));
+                $title = $this->removeSpecialChars(html_entity_decode($article['title']));
                 $item = $items->addCDataChild('item', $title, $this->_isUtfMode());
                 $item->addAttribute('article-number', $article['artnum']);
                 $item->addAttribute('quantity', $quant);
@@ -755,7 +755,7 @@ class pi_ratepay_details extends oxAdminDetails
         foreach ($articles as $article) {
             if (oxConfig::getParameter($article['arthash']) > 0) {
 
-                $title = $this->removeSpecialChars(html_entity_decode($article['oxtitle']));
+                $title = $this->removeSpecialChars(html_entity_decode($article['title']));
                 $item = $items->addCDataChild('item', $title, $this->_isUtfMode());
 
                 $item->addAttribute('article-number', $article['artnum']);
