@@ -1,4 +1,31 @@
 ***********************************************************
+**********| Version 3.0.5 - Released 2013-12-02 |********
+***********************************************************
+-- fixed different basket item title (in CONFIRMATION_DELIVER & PAYMENT_CHANGE)
+-- fixed calculation of unit-price and tax in case of prices > 1000 (in CONFIRMATION_DELIVER & PAYMENT_CHANGE)
+
+***********************************************************
+**********| Version 3.0.4 - Released 2013-11-07 |********
+***********************************************************
+-- fixed PC bug (in case of aborted orders)
+
+***********************************************************
+**********| Version 3.0.3 - Released 2013-10-09 |********
+***********************************************************
+-- fixed request voucher bug
+
+***********************************************************
+**********| Version 3.0.2 - Released 2013-07-19 |********
+***********************************************************
+-- additional fixes in the rate calculator
+
+***********************************************************
+**********| Version 3.0.1 - Released 2013-07-16 |********
+***********************************************************
+-- few changes in the Ratenrechner
+-- cached installment configuration by one click config (profile request)
+
+***********************************************************
 **********| Version 3.0.0 - Released 2013-07-02 |********
 ***********************************************************
 -- new feature: one click configuration
