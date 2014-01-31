@@ -410,9 +410,17 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
 
         $bankAccount = $customer->addChild('bank-account');
         $bankAccount->addCDataChild('owner', $bankdata['owner']);
-        $bankAccount->addChild('bank-account-number', $bankdata['bankAccountNumber']);
-        $bankAccount->addChild('bank-code', $bankdata['bankCode']);
         $bankAccount->addCDataChild('bank-name', $bankdata['bankName']);
+        if (empty($bankdata['bankIban'])) {
+            $bankAccount->addChild('bank-account-number', $bankdata['bankAccountNumber']);
+            $bankAccount->addChild('bank-code', $bankdata['bankCode']);
+        } else {
+            $bankAccount->addChild('iban', $bankdata['bankIban']);
+            if (!empty($bankdata['bankBic'])) {
+                $bankAccount->addChild('bic-swift', $bankdata['bankBic']);
+            }
+        }
+
     }
 
     /**
@@ -680,9 +688,11 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
 
             $bankDataSessionKeys = array(
                 $this->_getPaymentType() . '_bank_owner',
+                $this->_getPaymentType() . '_bank_name',
                 $this->_getPaymentType() . '_bank_account_number',
                 $this->_getPaymentType() . '_bank_code',
-                $this->_getPaymentType() . '_bank_name'
+                $this->_getPaymentType() . '_bank_iban',
+                $this->_getPaymentType() . '_bank_bic'
             );
 
             foreach ($bankDataSessionKeys as $key) {

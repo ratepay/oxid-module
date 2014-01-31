@@ -108,7 +108,7 @@
                                             [{/if}]
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <!--<tr>
                                         <td class="edittext">
                                             [{ oxmultilang ident="PI_RATEPAY_RECHNUNG_SETTINGS_DUEDATE" }]:&nbsp;
                                         </td>
@@ -116,7 +116,7 @@
                                             <input type="text" class="editinput" size="2" name="duedate" value="[{$settings->pi_ratepay_settings__duedate->rawValue}]">
                                             [{ oxmultilang ident="PI_RATEPAY_RECHNUNG_SETTINGS_DUEDATE_DAY" }]
                                         </td>
-                                    </tr>                                     
+                                    </tr>-->
                                     <tr>
                                         <td colspan="2" class="edittext">
                                             <br>

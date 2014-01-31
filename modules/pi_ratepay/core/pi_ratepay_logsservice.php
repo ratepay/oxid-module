@@ -71,10 +71,12 @@ class pi_ratepay_LogsService extends oxSuperCfg
 
         if ($logging == 1) {
             if (($paymentMethod === 'ELV' || $paymentMethod === 'INSTALLMENT') && isset($request->content->customer->{"bank-account"})) {
-                $request->content->customer->{"bank-account"}->{"owner"} = "XXXXXX";
-                $request->content->customer->{"bank-account"}->{"bank-account-number"} = "XXXXXX";
-                $request->content->customer->{"bank-account"}->{"bank-code"} = "XXXXXX";
-                $request->content->customer->{"bank-account"}->{"bank-name"} = "XXXXXX";
+                $request->content->customer->{"bank-account"}->{"owner"} = "(hidden)";
+                $request->content->customer->{"bank-account"}->{"bank-account-number"} = "(hidden)";
+                $request->content->customer->{"bank-account"}->{"bank-code"} = "(hidden)";
+                $request->content->customer->{"bank-account"}->{"iban"} = "(hidden)";
+                $request->content->customer->{"bank-account"}->{"bic"} = "(hidden)";
+                $request->content->customer->{"bank-account"}->{"bank-name"} = "(hidden)";
             }
             $requestXml = $request->asXML();
             $responseXml = '';

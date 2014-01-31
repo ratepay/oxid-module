@@ -543,37 +543,58 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         $isBankDataValid = true;
 
         $ownerKey = $this->_selectedPaymentMethod . '_bank_owner';
-        $accountNumberKey =
-            $this->_selectedPaymentMethod
-            . '_bank_account_number';
-        $codeKey = $this->_selectedPaymentMethod . '_bank_code';
         $nameKey = $this->_selectedPaymentMethod . '_bank_name';
+        $ibanKey = $this->_selectedPaymentMethod . '_bank_iban';
+        $bicKey = $this->_selectedPaymentMethod . '_bank_bic';
+        $accountNumberKey = $this->_selectedPaymentMethod . '_bank_account_number';
+        $codeKey = $this->_selectedPaymentMethod . '_bank_code';
 
         $bankData = array(
-            $ownerKey         => oxConfig::getParameter($ownerKey),
+            $ownerKey         => utf8_encode(oxConfig::getParameter($ownerKey)),
+            $nameKey          => utf8_encode(oxConfig::getParameter($nameKey)),
             $accountNumberKey => oxConfig::getParameter($accountNumberKey),
+            $ibanKey          => oxConfig::getParameter($ibanKey),
             $codeKey          => oxConfig::getParameter($codeKey),
-            $nameKey          => oxConfig::getParameter($nameKey)
+            $bicKey           => oxConfig::getParameter($bicKey)
         );
 
         $bankErrors = array(
             $ownerKey         => '-500',
             $accountNumberKey => '-501',
+            $ibanKey          => '-501',
             $codeKey          => '-502',
+            $bicKey           => '-510',
             $nameKey          => '-503',
             'codekeyinvalid'  => '-509'
         );
 
-        if (!empty($bankData[$codeKey]) && strlen(trim($bankData[$codeKey])) != 8) {
-            $this->_errors[] = $bankErrors['codekeyinvalid'];
-            $isBankDataValid = false;
+
+        if(empty($bankData[$ibanKey]) && empty($bankData[$accountNumberKey])) {
+            $this->_errors[] = $bankErrors[$ibanKey];
+        } elseif (empty($bankData[$ibanKey])) {
+            if(empty($bankData[$codeKey])) {
+                $isBankDataValid = false;
+                $this->_errors[] = $bankErrors[$codeKey];
+            } elseif (strlen(trim($bankData[$codeKey])) != 8) {
+                $isBankDataValid = false;
+                $this->_errors[] = $bankErrors['codekeyinvalid'];
+            }
+        } else {
+            $iban = $this->_clearIban($bankData[$ibanKey]);
+            if($iban[1].$iban[2] != "DE" && (strlen($iban) < 20 && strlen($iban) > 22)) {
+                $isBankDataValid = false;
+                $this->_errors[] = $bankErrors[$ibanKey];
+            }
         }
 
-        foreach ($bankData as $bankDatumKey => $bankDatumValue) {
-            if (empty($bankDatumValue)) {
-                $isBankDataValid = false;
-                $this->_errors[] = $bankErrors[$bankDatumKey];
-            }
+        if(empty($bankData[$ownerKey])) {
+            $isBankDataValid = false;
+            $this->_errors[] = $bankErrors[$ownerKey];
+        }
+
+        if(empty($bankData[$nameKey])) {
+            $isBankDataValid = false;
+            $this->_errors[] = $bankErrors[$nameKey];
         }
 
         if ($isBankDataValid) {
@@ -586,14 +607,20 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
 
                 $insertArray = array(
                     'owner'         => $bankData[$ownerKey],
-                    'accountnumber' => $bankData[$accountNumberKey],
-                    'bankcode'      => $bankData[$codeKey],
                     'bankname'      => $bankData[$nameKey]
                 );
 
-                if (!isset($this->_bankdata)
-                    || $this->_bankdata != $insertArray
-                ) {
+                if(empty($bankData[$ibanKey])) {
+                    $insertArray['accountnumber'] = $bankData[$accountNumberKey];
+                    $insertArray['bankcode'] = $bankData[$codeKey];
+                } else {
+                    $insertArray['iban'] = $bankData[$ibanKey];
+                    if(!empty($bicKey)) {
+                        $insertArray['bic'] = $bankData[$bicKey];
+                    }
+                }
+
+                if (!isset($this->_bankdata) || $this->_bankdata != $insertArray) {
                     $userOxid = $this->getUser()->getId();
                     $encryptionService->saveBankdata(
                         $userOxid, $insertArray
@@ -715,7 +742,8 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
      */
     private function _checkCountry()
     {
-        return oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $this->getUser()->oxuser__oxcountryid->value . "'") == "DE";
+        $country = oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $this->getUser()->oxuser__oxcountryid->value . "'");
+        return $country == "DE" || $country == "AT";
     }
 
     /**
@@ -822,6 +850,15 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         return $this->_selectedPaymentMethod === 'pi_ratepay_rate'
                 && oxConfig::getParameter('pi_rp_rate_pay_method') === 'pi_ratepay_rate_radio_elv'
                 && $rateSettings->pi_ratepay_settings__activate_elv->rawValue == 1;
+    }
+
+    public function _clearIban($iban)
+    {
+        $iban = ltrim(strtoupper($iban));
+        $iban = preg_replace('/^IBAN/','',$iban);
+        $iban = preg_replace('/[^a-zA-Z0-9]/','',$iban);
+        $iban = strtoupper($iban);
+        return $iban;
     }
 
 }

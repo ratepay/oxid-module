@@ -96,7 +96,7 @@
                                             [{/if}]
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <!--<tr>
                                         <td class="edittext">
                                             [{ oxmultilang ident="PI_RATEPAY_SAVEBANKDATA" }]:&nbsp;
                                         </td>
@@ -107,8 +107,8 @@
                                             <input type="checkbox" name="savebankdata">
                                             [{/if}]
                                         </td>
-                                    </tr>
-                                    <tr>
+                                    </tr>-->
+                                    <!--<tr>
                                         <td class="edittext">
                                             [{ oxmultilang ident="PI_RATEPAY_RECHNUNG_SETTINGS_DUEDATE" }]:&nbsp;
                                         </td>
@@ -116,7 +116,7 @@
                                             <input type="text" class="editinput" size="50" name="duedate" value="[{$settings->pi_ratepay_settings__duedate->rawValue}]">
                                             &nbsp;[{ oxmultilang ident="PI_RATEPAY_RECHNUNG_SETTINGS_DUEDATE_DAY" }]
                                         </td>
-                                    </tr>
+                                    </tr>-->
                                     <tr>
                                         <td class="edittext">
                                             [{ oxmultilang ident="PI_RATEPAY_RECHNUNG_SETTINGS_RATEPAY" }]:&nbsp;

@@ -83,6 +83,9 @@
     [{if $pierror == "-509"}]
         <div class="status error">[{ oxmultilang ident="PI_RATEPAY_ELV_ERROR_BANKCODE_TO_SHORT" }]</div>
     [{/if}]
+    [{if $pierror == "-510"}]
+    <div class="status error">[{ oxmultilang ident="PI_RATEPAY_ELV_ERROR_BIC" }]</div>
+    [{/if}]
 
     <!-- All -->
     [{if $pierror == "-416"}]
