@@ -82,7 +82,7 @@ $aLang = array(
     'PI_RATEPAY_RECHNUNG_SETTINGS_DUEDATE_DAY' => "Days",
     'PI_RATEPAY_RATE_PAYMENTFIRSTDAY'          => "Activate payment due date for customer",
     'PI_RATEPAY_ELV_SETTINGS'                  => "Lastschrift Einstellungen",
-    'PI_RATEPAY_ELV_SETTINGS_TITLE'            => "RatePAY Lastschrift Einstellungen",
+    'PI_RATEPAY_ELV_SETTINGS_TITLE'            => "RatePAY SEPA-Lastschrift Einstellungen",
     'PI_RATEPAY_SAVEBANKDATA'                  => "Save bank data (encrypted)",
     'PI_RATEPAY_ACTIVATE_ELV'                  => "Lastschrift für Rate aktivieren"
 );

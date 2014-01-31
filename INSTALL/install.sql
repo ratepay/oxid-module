@@ -128,7 +128,7 @@ INSERT INTO oxpayments (OXID, OXACTIVE, OXDESC, OXADDSUM, OXADDSUMTYPE, OXFROMBO
 VALUES ('pi_ratepay_rate', 1, 'RatePAY Rate', 0, 'abs', 0, 200, 2000, '', 1, 'RatePAY Rate', '', '', '', '', '', '', '', '', '', 0, '');
 
 INSERT INTO oxpayments (OXID, OXACTIVE, OXDESC, OXADDSUM, OXADDSUMTYPE, OXFROMBONI, OXFROMAMOUNT, OXTOAMOUNT, OXVALDESC, OXCHECKED, OXDESC_1, OXVALDESC_1, OXDESC_2, OXVALDESC_2, OXDESC_3, OXVALDESC_3, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXSORT, OXTSPAYMENTID)
-VALUES ('pi_ratepay_elv', 1, 'RatePAY Lastschrift', 0, 'abs', 0, 20, 1500, '', 1, 'RatePAY Lastschrift', '', '', '', '', '', '', '', '', '', 0, '');
+VALUES ('pi_ratepay_elv', 1, 'RatePAY SEPA-Lastschrift', 0, 'abs', 0, 20, 1500, '', 1, 'RatePAY SEPA-Lastschrift', '', '', '', '', '', '', '', '', '', 0, '');
 
 INSERT INTO `pi_ratepay_rate_configuration` (`OXID`, `INTERESTRATE_MIN`, `INTERESTRATE_DEFAULT`, `INTERESTRATE_MAX`, `MONTH_NUMBER_MIN`, `MONTH_NUMBER_MAX`, `MONTH_LONGRUN`, `MONTH_ALLOWED`, `VALID_PAYMENT_FIRSTDAYS`, `PAYMENT_FIRSTDAY`, `PAYMENT_AMOUNT`, `PAYMENT_LASTRATE`, `RATE_MIN_NORMAL`, `RATE_MIN_LONGRUN`, `SERVICE_CHARGE`)
 VALUES (1, 0, 0, 0, 0, 0, 0, '0', 0, 0, 0, 0, 0, 0, 0);

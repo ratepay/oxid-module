@@ -21,18 +21,18 @@
 // -------------------------------
 $sLangName = "Deutsch";
 
-$piErrorAge = 'Um eine Zahlung per RatePAY Lastschrift durchzuf&uuml;hren, m&uuml;ssen Sie mindestens 18 Jahre alt sein.';
-$piErrorBirth = 'Um eine Zahlung per RatePAY Lastschrift durchzuf&uuml;hren, geben Sie bitte Ihr Geburtsdatum ein.';
-$piErrorPhone = 'Um eine Zahlung per RatePAY Lastschrift durchzuf&uuml;hren, geben Sie bitte Ihre Telefonnummer ein.';
+$piErrorAge = 'Um eine Zahlung per RatePAY SEPA-Lastschrift durchzuf&uuml;hren, m&uuml;ssen Sie mindestens 18 Jahre alt sein.';
+$piErrorBirth = 'Um eine Zahlung per RatePAY SEPA-Lastschrift durchzuf&uuml;hren, geben Sie bitte Ihr Geburtsdatum ein.';
+$piErrorPhone = 'Um eine Zahlung per RatePAY SEPA-Lastschrift durchzuf&uuml;hren, geben Sie bitte Ihre Telefonnummer ein.';
 $piErrorCompany = 'Geben Sie bitte Ihren Firmennamen und Ihre Umsatzsteuer-ID ein.';
 $piErrorBirthdayDigits = 'Geben Sie bitte Ihr Geburtsjahr vierstellig ein. (z.B. 1982)';
 
 $aLang = array(
     'charset'                                       => 'UTF-8',
     'PI_RATEPAY_ELV_VIEW_WHITELABEL_TEXT'           => 'Lastschrift',
-    'PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_1'        => ' stellt mit der Unterst&uuml;tzung von RatePAY die M&ouml;glichkeit der RatePAY-Lastschrift bereit. Sie nehmen damit einen Kauf auf Lastschrift vor. Die Lastschrift ist innerhalb von ',
+    'PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_1'        => ' stellt mit der Unterst&uuml;tzung von RatePAY die M&ouml;glichkeit der RatePAY SEPA-Lastschrift bereit. Sie nehmen damit einen Kauf auf Lastschrift vor. Die Lastschrift ist innerhalb von ',
     'PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_1_PART_2' => ' Tagen nach Rechnungsdatum zur Zahlung f&auml;llig.',
-    'PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_2'        => 'RatePAY-Lastschrift ist <b>ab einem Einkaufswert von ',
+    'PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_2'        => 'RatePAY SEPA-Lastschrift ist <b>ab einem Einkaufswert von ',
     'PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_3'        => ' &#8364;</b> und <b>bis zu einem Einkaufswert von ',
     'PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_4'        => ' &#8364;</b> m&ouml;glich (jeweils inklusive Mehrwertsteuer und Versandkosten).',
     'PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_5'        => 'Bitte beachten Sie, dass RatePAY-Lastschrift nur genutzt werden kann, wenn Lastschrifts- und Lieferaddresse identisch sind und Ihrem privaten Wohnort entsprechen. (keine Firmen- und keine Postfachadresse). Ihre Adresse muss im Gebiet der Bundesrepublik Deutschland liegen. Bitte gehen Sie gegebenenfalls zur&uuml;ck und korrigieren Sie Ihre Daten.',
@@ -62,10 +62,10 @@ $aLang = array(
     'PI_RATEPAY_ELV_VIEW_PAYMENT_UST'               => 'USt-IdNr.',
     'PI_RATEPAY_ERROR_BIRTHDAY_YEAR_DIGITS'         => $piErrorBirthdayDigits,
     'PI_RATEPAY_ERROR_COMPANY'                      => $piErrorCompany,
-    'PI_RATEPAY_ELV_ERROR_OWNER'                    => 'Um eine Zahlung per RatePAY Lastschrift durchzuf&uuml;hren, geben Sie bitte den Namen des Kontoinhabers ein.',
-    'PI_RATEPAY_ELV_ERROR_ACCOUNT_NUMBER'           => 'Um eine Zahlung per RatePAY Lastschrift durchzuf&uuml;hren, geben Sie bitte eine g&uuml;ltige IBAN bzw. Kontonummer eines inl&auml;ndischen Bankkontos ein.',
-    'PI_RATEPAY_ELV_ERROR_CODE'                     => 'Um eine Zahlung per RatePAY Lastschrift durchzuf&uuml;hren, geben Sie bitte die BLZ ein.',
-    'PI_RATEPAY_ELV_ERROR_NAME'                     => 'Um eine Zahlung per RatePAY Lastschrift durchzuf&uuml;hren, geben Sie bitte den Banknamen ein.',
+    'PI_RATEPAY_ELV_ERROR_OWNER'                    => 'Um eine Zahlung per SEPA-RatePAY Lastschrift durchzuf&uuml;hren, geben Sie bitte den Namen des Kontoinhabers ein.',
+    'PI_RATEPAY_ELV_ERROR_ACCOUNT_NUMBER'           => 'Um eine Zahlung per SEPA-RatePAY Lastschrift durchzuf&uuml;hren, geben Sie bitte eine g&uuml;ltige IBAN bzw. Kontonummer eines inl&auml;ndischen Bankkontos ein.',
+    'PI_RATEPAY_ELV_ERROR_CODE'                     => 'Um eine Zahlung per SEPA-RatePAY Lastschrift durchzuf&uuml;hren, geben Sie bitte die BLZ ein.',
+    'PI_RATEPAY_ELV_ERROR_NAME'                     => 'Um eine Zahlung per SEPA-RatePAY Lastschrift durchzuf&uuml;hren, geben Sie bitte den Banknamen ein.',
     'PI_RATEPAY_ELV_VIEW_BANK_OWNER'                => 'Vor- und Nachname Kontoinhaber',
     'PI_RATEPAY_ELV_VIEW_BANK_ACCOUNT_NUMBER'       => 'IBAN/Kontonummer',
     'PI_RATEPAY_ELV_VIEW_BANK_CODE'                 => 'BIC/Bankleitzahl',
