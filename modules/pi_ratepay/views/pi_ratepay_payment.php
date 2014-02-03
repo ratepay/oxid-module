@@ -550,8 +550,8 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         $codeKey = $this->_selectedPaymentMethod . '_bank_code';
 
         $bankData = array(
-            $ownerKey         => utf8_encode(oxConfig::getParameter($ownerKey)),
-            $nameKey          => utf8_encode(oxConfig::getParameter($nameKey)),
+            $ownerKey         => oxConfig::getParameter($ownerKey),
+            $nameKey          => oxConfig::getParameter($nameKey),
             $accountNumberKey => oxConfig::getParameter($accountNumberKey),
             $ibanKey          => oxConfig::getParameter($ibanKey),
             $codeKey          => oxConfig::getParameter($codeKey),
