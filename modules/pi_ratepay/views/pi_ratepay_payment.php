@@ -545,7 +545,7 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         $ownerKey = $this->_selectedPaymentMethod . '_bank_owner';
         $nameKey = $this->_selectedPaymentMethod . '_bank_name';
         $ibanKey = $this->_selectedPaymentMethod . '_bank_iban';
-        $bicKey = $this->_selectedPaymentMethod . '_bank_bic';
+        //$bicKey = $this->_selectedPaymentMethod . '_bank_bic';
         $accountNumberKey = $this->_selectedPaymentMethod . '_bank_account_number';
         $codeKey = $this->_selectedPaymentMethod . '_bank_code';
 
@@ -553,9 +553,7 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
             $ownerKey         => oxConfig::getParameter($ownerKey),
             $nameKey          => oxConfig::getParameter($nameKey),
             $accountNumberKey => oxConfig::getParameter($accountNumberKey),
-            $ibanKey          => oxConfig::getParameter($ibanKey),
             $codeKey          => oxConfig::getParameter($codeKey),
-            $bicKey           => oxConfig::getParameter($bicKey)
         );
 
         $bankErrors = array(
@@ -568,22 +566,24 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
             'codekeyinvalid'  => '-509'
         );
 
-
-        if(empty($bankData[$ibanKey]) && empty($bankData[$accountNumberKey])) {
+        if(empty($bankData[$accountNumberKey])) {
+            $isBankDataValid = false;
             $this->_errors[] = $bankErrors[$ibanKey];
-        } elseif (empty($bankData[$ibanKey])) {
-            if(empty($bankData[$codeKey])) {
-                $isBankDataValid = false;
-                $this->_errors[] = $bankErrors[$codeKey];
-            } elseif (strlen(trim($bankData[$codeKey])) != 8) {
+        } else {
+            $ibanAccno = $bankData[$accountNumberKey];
+            if (!is_numeric($ibanAccno)) {
+                $ibanAccno = $this->_clearIban($ibanAccno);
+                if($ibanAccno[0].$ibanAccno[1] != "DE" || (strlen($ibanAccno)<20 || strlen($ibanAccno)>22)) {
+                    $this->_errors[] = $bankErrors[$ibanKey];
+                    $isBankDataValid = false;
+                }
+                unset($bankData[$accountNumberKey]);
+                unset($bankData[$codeKey]);
+                $bankData[$ibanKey] = $ibanAccno;
+
+            } elseif (!is_numeric($bankData[$codeKey]) || strlen(trim($bankData[$codeKey])) <> 8) {
                 $isBankDataValid = false;
                 $this->_errors[] = $bankErrors['codekeyinvalid'];
-            }
-        } else {
-            $iban = $this->_clearIban($bankData[$ibanKey]);
-            if($iban[1].$iban[2] != "DE" && (strlen($iban) < 20 && strlen($iban) > 22)) {
-                $isBankDataValid = false;
-                $this->_errors[] = $bankErrors[$ibanKey];
             }
         }
 

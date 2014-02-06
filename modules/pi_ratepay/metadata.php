@@ -29,7 +29,7 @@ $aModule = array(
     ),
     'thumbnail'    => 'picture.png',
     'lang'         => 'en',
-    'version'      => '3.1.0',
+    'version'      => '3.1.1',
     'author'       => 'RatePAY GmbH',
     'url'          => 'http://www.ratepay.com/',
     'extend'       => array(

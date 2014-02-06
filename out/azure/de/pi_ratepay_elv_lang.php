@@ -29,7 +29,7 @@ $piErrorBirthdayDigits = 'Geben Sie bitte Ihr Geburtsjahr vierstellig ein. (z.B.
 
 $aLang = array(
     'charset'                                       => 'UTF-8',
-    'PI_RATEPAY_ELV_VIEW_WHITELABEL_TEXT'           => 'Lastschrift',
+    'PI_RATEPAY_ELV_VIEW_WHITELABEL_TEXT'           => 'SEPA-Lastschrift',
     'PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_1'        => ' stellt mit der Unterst&uuml;tzung von RatePAY die M&ouml;glichkeit der RatePAY SEPA-Lastschrift bereit. Sie nehmen damit einen Kauf auf Lastschrift vor. Die Lastschrift ist innerhalb von ',
     'PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_1_PART_2' => ' Tagen nach Rechnungsdatum zur Zahlung f&auml;llig.',
     'PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_2'        => 'RatePAY SEPA-Lastschrift ist <b>ab einem Einkaufswert von ',
@@ -66,9 +66,9 @@ $aLang = array(
     'PI_RATEPAY_ELV_ERROR_ACCOUNT_NUMBER'           => 'Um eine Zahlung per SEPA-RatePAY Lastschrift durchzuf&uuml;hren, geben Sie bitte eine g&uuml;ltige IBAN bzw. Kontonummer eines inl&auml;ndischen Bankkontos ein.',
     'PI_RATEPAY_ELV_ERROR_CODE'                     => 'Um eine Zahlung per SEPA-RatePAY Lastschrift durchzuf&uuml;hren, geben Sie bitte die BLZ ein.',
     'PI_RATEPAY_ELV_ERROR_NAME'                     => 'Um eine Zahlung per SEPA-RatePAY Lastschrift durchzuf&uuml;hren, geben Sie bitte den Banknamen ein.',
-    'PI_RATEPAY_ELV_VIEW_BANK_OWNER'                => 'Vor- und Nachname Kontoinhaber',
-    'PI_RATEPAY_ELV_VIEW_BANK_ACCOUNT_NUMBER'       => 'IBAN/Kontonummer',
-    'PI_RATEPAY_ELV_VIEW_BANK_CODE'                 => 'BIC/Bankleitzahl',
+    'PI_RATEPAY_ELV_VIEW_BANK_OWNER'                => 'Kontoinhaber',
+    'PI_RATEPAY_ELV_VIEW_BANK_ACCOUNT_NUMBER'       => 'IBAN / Kontonummer',
+    'PI_RATEPAY_ELV_VIEW_BANK_CODE'                 => 'BIC / BLZ',
     'PI_RATEPAY_ELV_VIEW_BANK_NAME'                 => 'Kreditinstitut',
     'PI_RATEPAY_ELV_ERROR_BANKCODE_TO_SHORT'        => 'Die Bankleitzahl muss acht Zeichen lang sein.'
 );
