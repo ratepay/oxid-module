@@ -1,4 +1,3 @@
-
 <?php
 
 /**
@@ -22,42 +21,17 @@
 // -------------------------------
 $sLangName = "Deutsch";
 
-$piErrorAge = 'Um eine Zahlung per RatePAY Rate durchzuf&uuml;hren, m&uuml;ssen Sie mindestens 18 Jahre alt sein.';
-$piErrorBirth = 'Um eine Zahlung per RatePAY Rate durchzuf&uuml;hren, geben Sie bitte Ihr Geburtsdatum ein.';
-$piErrorPhone = 'Um eine Zahlung per RatePAY Rate durchzuf&uuml;hren, geben Sie bitte Ihre Telefonnummer ein.';
-$piErrorCompany = 'Geben Sie bitte Ihren Firmennamen und Ihre Umsatzsteuer-ID ein.';
-$piErrorBirthdayDigits = 'Geben Sie bitte Ihr Geburtsjahr vierstellig ein. (z.B. 1982)';
-
 $aLang = array(
-    'charset'                                       => 'UTF-8',
-    'PI_RATEPAY_RATE_VIEW_WHITELABEL_TEXT'          => 'Ratenzahlung',
-    'PI_RATEPAY_RATE_VIEW_INFORMATION_TEXT_1'       => 'Mit RatePAY-Ratenzahlung w&auml;hlen Sie eine Bezahlung in Raten.',
-    'PI_RATEPAY_RATE_VIEW_INFORMATION_TEXT_2'       => 'RatePAY-Ratenzahlung kann <b>ab einem Einkaufswert von ',
-    'PI_RATEPAY_RATE_VIEW_INFORMATION_TEXT_3'       => ' &#8364;</b> und <b>bis zu einem Einkaufswert von ',
-    'PI_RATEPAY_RATE_VIEW_INFORMATION_TEXT_4'       => ' &#8364;</b> (jeweils inklusive Mehrwertsteuer und Versandkosten) genutzt werden.',
-    'PI_RATEPAY_RATE_VIEW_INFORMATION_TEXT_5'       => 'Bitte beachten Sie, dass RatePAY-Rate nur genutzt werden kann, wenn Rechnungs- und Lieferaddresse identisch sind und Ihrem privaten Wohnort entsprechen. (keine Firmen- und keine Postfachadresse). Ihre Adresse muss im Gebiet der Bundesrepublik Deutschland liegen. Bitte gehen Sie gegebenenfalls zur&uuml;ck und korrigieren Sie Ihre Daten.',
-    'PI_RATEPAY_RATE_VIEW_INFORMATION_TEXT_6'       => 'Ihre monatlichen Teilzahlungsrate, die Laufzeit der Teilzahlung und den entsprechenden Zinsaufschlag k&ouml;nnen Sie mit dem Ratenrechner im Anschluss ermitteln und festlegen.',
-    'PI_RATEPAY_RATE_VIEW_POLICY_TEXT_1'            => 'Ich habe die ',
-    'PI_RATEPAY_RATE_VIEW_POLICY_TEXT_2'            => ' zur Kenntnis genommen und erkl&auml;re mich mit deren Geltung einverstanden. Ich wurde &uuml;ber mein ',
-    'PI_RATEPAY_RATE_VIEW_POLICY_TEXT_3'            => ' informiert.',
-    'PI_RATEPAY_RATE_VIEW_POLICY_AGB'               => 'Allgemeinen Gesch&auml;ftsbedingungen',
-    'PI_RATEPAY_RATE_VIEW_POLICY_WIDER'             => 'Widerrufsrecht',
-    'PI_RATEPAY_RATE_VIEW_POLICY_PRIVACYPOLICY'     => 'RatePAY-Datenschutzerkl&auml;rung',
-    'PI_RATEPAY_RATE_ERROR'                         => 'Leider ist eine Bezahlung mit RatePAY nicht m&ouml;glich. Diese Entscheidung ist von RatePAY auf der Grundlage einer automatisierten Datenverarbeitung getroffen worden. Einzelheiten erfahren Sie in der ',
-    'PI_RATEPAY_RATE_ERROR_ADDRESS'                 => 'Bitte beachten Sie, dass RatePAY Rate nur genutzt werden kann, wenn Rechnungs- und Lieferaddresse identisch sind.',
-    'PI_RATEPAY_RATE_ERROR_BIRTH'                   => $piErrorBirth,
-    'PI_RATEPAY_RATE_ERROR_PHONE'                   => $piErrorPhone,
-    'PI_RATEPAY_RATE_AGBERROR'                      => 'Bitte akzeptieren Sie die Bedingungen.',
-    'PI_RATEPAY_RATE_SUCCESS'                       => 'Bestellung erfolgreich abgeschlossen',
-    'PI_RATEPAY_RATE_ERROR_AGE'                     => $piErrorAge,
-    'PI_RATEPAY_RATE_VIEW_PAYMENT_FON'              => 'Telefon:',
-    'PI_RATEPAY_RATE_VIEW_PAYMENT_MOBILFON'         => 'Mobiltelefon:',
-    'PI_RATEPAY_RATE_VIEW_PAYMENT_BIRTHDATE'        => 'Geburtsdatum:',
-    'PI_RATEPAY_RATE_VIEW_PAYMENT_BIRTHDATE_FORMAT' => '(tt.mm.jjjj)',
-    'PI_RATEPAY_RATE_VIEW_PAYMENT_FON_NOTE'         => 'Tragen Sie bitte entweder Ihr Telefon oder Mobiltelefon ein.',
-    'PI_RATEPAY_RATE_VIEW_PAYMENT_COMPANY'          => 'Firma:',
-    'PI_RATEPAY_RATE_VIEW_PAYMENT_UST'              => 'UST-ID:',
-    'PI_RATEPAY_ERROR_BIRTHDAY_YEAR_DIGITS'         => $piErrorBirthdayDigits,
-    'PI_RATEPAY_ERROR_COMPANY'                      => $piErrorCompany,
-    'PI_RATEPAY_RATE_ERROR_CALCULATE_TO_PROCEED'    => 'Um Fortfahren zu können erstellen Sie bitte zuerst einen Ratenplan.'
+    'charset'                                         => 'UTF-8',
+    'PI_RATEPAY_ERROR_CONNECTION_TIMEOUT'             => 'Leider ist die Verbindung zu RatePAY derzeit nicht m&ouml;glich, bitte versuchen Sie es zu einem sp&auml;teren Zeitpunkt erneut.',
+    'PI_RATEPAY_SHOW_MORE_INFORMATION'                => 'Mehr Informationen',
+    'PI_RATEPAY_HIDE_MORE_INFORMATION'                => 'Informationen ausblenden',
+    'PI_RATEPAY_ERROR_PRIVACY_AGREEMENT'              => 'Bitte akzeptieren Sie die RatePAY-Datenschutzerklärung',
+    'PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_TEXT_1'        => 'Ich erkl&auml;re hiermit meine Einwilligung zur Verwendung meiner Daten gem&auml;&szlig; der ',
+    'PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_TEXT_2'        => ' sowie der ',
+    'PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_TEXT_3'        => ' und bin insbesondere damit einverstanden, zum Zwecke der Durchf&uuml;hrung des Vertrags &uuml;ber die von mir angegebene E-Mail-Adresse kontaktiert zu werden.',
+    'PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_PRIVACYPOLICY' => 'RatePAY-Datenschutzerkl&auml;rung',
+    'PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_OWNERPOLICY'   => 'H&auml;ndler-Datenschutzerkl&auml;rung',
+    'PI_RATEPAY_VIEW_RADIO_LABEL_ELV'                 => 'Per elektronischem Lastschriftverfahren',
+    'PI_RATEPAY_VIEW_RADIO_PAYMENT_WIRE'              => 'Per Überweisung'
 );

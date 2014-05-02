@@ -12,26 +12,28 @@
         </b></label>
     </dt>
     <dd class="[{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]activePayment[{/if}]">
-        <div id="policy[{$sPaymentID}]" style="display: none;">
-            <p>
-                <font color="red">[{$oxcmp_shop->oxshops__oxname->value}]</font>
-                [{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_INFORMATION_TEXT_1"}]
-                [{$pi_ratepay_rechnung_duedays}]
-                [{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_INFORMATION_TEXT_1_PART_2"}]
-            </p>
-            <p>
-                [{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_INFORMATION_TEXT_2"}]
-                [{$pi_ratepay_rechnung_minimumAmount}]
-                [{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_INFORMATION_TEXT_3"}]
-                [{$pi_ratepay_rechnung_maximumAmount}]
-                [{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_INFORMATION_TEXT_4"}]
-            </p>
-            <p>[{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_INFORMATION_TEXT_5"}]</p>
-        </div>
-        <button id="policyButton[{$sPaymentID}]" class="submitButton largeButton" type="button">
-            <span class="policyButtonText[{$sPaymentID}]">[{oxmultilang ident="PI_RATEPAY_SHOW_MORE_INFORMATION"}]</span>
-            <span class="policyButtonText[{$sPaymentID}]" style="display: none;">[{oxmultilang ident="PI_RATEPAY_HIDE_MORE_INFORMATION"}]</span>
-        </button>
+        [{if !$pi_ratepay_rechnung_whitelabel}]
+            <div id="policy[{$sPaymentID}]" style="display: none;">
+                <p>
+                    <font color="red">[{$oxcmp_shop->oxshops__oxname->value}]</font>
+                    [{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_INFORMATION_TEXT_1"}]
+                    [{$pi_ratepay_rechnung_duedays}]
+                    [{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_INFORMATION_TEXT_1_PART_2"}]
+                </p>
+                <p>
+                    [{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_INFORMATION_TEXT_2"}]
+                    [{$pi_ratepay_rechnung_minimumAmount}]
+                    [{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_INFORMATION_TEXT_3"}]
+                    [{$pi_ratepay_rechnung_maximumAmount}]
+                    [{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_INFORMATION_TEXT_4"}]
+                </p>
+                <p>[{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_INFORMATION_TEXT_5"}]</p>
+            </div>
+            <button id="policyButton[{$sPaymentID}]" class="submitButton largeButton" type="button">
+                <span class="policyButtonText[{$sPaymentID}]">[{oxmultilang ident="PI_RATEPAY_SHOW_MORE_INFORMATION"}]</span>
+                <span class="policyButtonText[{$sPaymentID}]" style="display: none;">[{oxmultilang ident="PI_RATEPAY_HIDE_MORE_INFORMATION"}]</span>
+            </button>
+        [{/if}]
         <ul class="form">
             [{if isset($pi_ratepay_rechnung_fon_check)}]
             <li>
@@ -66,18 +68,6 @@
             </li>
             [{/if}]
         </ul>
-        <div style="margin: 15px 0;">
-            <input type="checkbox" name="pi_ratepay_rechnung_privacy" value="1" style="float: left;" />
-            <p>
-                [{oxmultilang ident="PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_TEXT_1"}]
-                <a href='[{$pi_ratepay_rechnung_ratepayurl}]' target='_blank' style="text-decoration:underline;">[{oxmultilang ident="PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_PRIVACYPOLICY"}]</a>
-                [{if $policyurl != '' }]
-                [{oxmultilang ident="PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_TEXT_2"}]
-                <a href='[{$policyurl}]' target='_blank' style="text-decoration:underline;">[{oxmultilang ident="PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_OWNERPOLICY"}]</a>
-                [{/if}]
-                [{oxmultilang ident="PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_TEXT_3"}]
-            </p>
-        </div>
     </dd>
 </dl>
 

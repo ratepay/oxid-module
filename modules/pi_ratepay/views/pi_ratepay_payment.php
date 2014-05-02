@@ -298,6 +298,10 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
      */
     private function _checkPrivacy()
     {
+        if ($this->_selectedPaymentMethod != "pi_ratepay_elv") {
+            return true;
+        }
+
         $privacyParameter = oxConfig::getParameter($this->_selectedPaymentMethod . '_privacy');
         $isPrivacyChecked = isset($privacyParameter) && $privacyParameter === '1';
 
