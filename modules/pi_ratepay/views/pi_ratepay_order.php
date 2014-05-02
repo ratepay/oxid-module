@@ -97,9 +97,9 @@ class pi_ratepay_order extends pi_ratepay_order_parent
                 if (!$this->_ratepayRequest()) {
                     if (!$this->getSession()->getVar($this->_paymentId . '_error_id') == $paymentMethodIds[$this->_paymentId]['connection_timeout'] &&
                         !$this->_isSandbox(pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId))) {
-                        $this->getSession()->setVar($this->_paymentId . '_error_id', $paymentMethodIds[$this->_paymentId]['denied']);
                         $this->getSession()->setVar('pi_ratepay_denied', 'denied');
                     }
+                    $this->getSession()->setVar($this->_paymentId . '_error_id', $paymentMethodIds[$this->_paymentId]['denied']);
                     oxRegistry::getUtils()->redirect($this->getConfig()->getSslShopUrl() . 'index.php?cl=payment', false);
                 }
 
