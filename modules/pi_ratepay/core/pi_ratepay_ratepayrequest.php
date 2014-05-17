@@ -543,8 +543,8 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
                 $item = $items->addCDataChild('item', $voucher->sVoucherNr, $this->_utfMode);
                 $item->addAttribute('article-number', $voucher->sVoucherNr);
                 $item->addAttribute('quantity', 1);
-                $item->addAttribute('unit-price', "" . number_format($voucher->dVoucherdiscount, 2, ".", ""));
-                $item->addAttribute('total-price', "" . number_format($voucher->dVoucherdiscount, 2, ".", ""));
+                $item->addAttribute('unit-price', "-" . number_format($voucher->dVoucherdiscount, 2, ".", ""));
+                $item->addAttribute('total-price', "-" . number_format($voucher->dVoucherdiscount, 2, ".", ""));
                 $item->addAttribute('tax', number_format("0", 2, ".", ""));
             }
         }
