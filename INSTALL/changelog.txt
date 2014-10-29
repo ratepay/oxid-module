@@ -1,7 +1,12 @@
 ***********************************************************
+***********| Version 3.1.4 - Released 2014-10-29 |*********
+***********************************************************
+-- new RatePAY Gateway URL
+
+***********************************************************
 ***********| Version 3.1.3 - Released 2014-05-20 |*********
 ***********************************************************
--- Fixed bug in positive voucher price
+-- fixed bug in positive voucher price
 
 ***********************************************************
 ***********| Version 3.1.2 - Released 2014-05-02 |*********
@@ -18,11 +23,9 @@
 ***********************************************************
 ***********| Version 3.1.0 - Released 2014-01-31 |*********
 ***********************************************************
-
 -- added SEPA functionality - includes IBAN and BIC fields, improved IBAN validation and new text blocks
 -- deactivated saving of user bank account data
 -- changes in sandbox mode - no decline of rp payment methods after negative response while sandbox mode
-
 
 ***********************************************************
 **********| Version 3.0.5 - Released 2013-12-02 |********

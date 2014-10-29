@@ -29,8 +29,8 @@
 class pi_ratepay_XmlService extends oxSuperCfg
 {
     private static $_server = array(
-        'live' => 'https://webservices.eos-payment.com/custom/ratepay/xml/1_0',
-        'sandbox' => 'https://webservices-int.eos-payment.com/custom/ratepay/xml/1_0'
+        'live' => 'https://gateway.ratepay.com/api/xml/1_0',
+        'sandbox' => 'https://gateway-int.ratepay.com/api/xml/1_0'
     );
 
     private static $_instance = null;
@@ -124,6 +124,7 @@ class pi_ratepay_XmlService extends oxSuperCfg
         curl_setopt($curl, CURLOPT_POSTFIELDS, $xmlRequest);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($curl, CURLOPT_SSLVERSION, 1);
         // Execute the connection
         $result = curl_exec($curl);
         // Close it
