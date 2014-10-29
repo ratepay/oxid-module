@@ -1,7 +1,7 @@
 RatePAY GmbH - OXID Payment Module
 ============================================
 
-|Module | RatePAY Magento Module for Magento
+|Module | RatePAY Payment Module for OXID
 |------|----------
 |Author | `Aarne Welschlau`
 |Prefix | `pi`
