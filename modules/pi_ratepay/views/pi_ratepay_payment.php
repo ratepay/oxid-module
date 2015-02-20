@@ -177,8 +177,9 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                 $settings->loadByType(pi_ratepay_util_utilities::getPaymentMethod($paymentMethod));
 
                 $customer = $this->getUser();
+                $country = strtolower(oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $customer->oxuser__oxcountryid->value . "'"));
 
-                $this->addTplParam($paymentMethod . '_country', oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $customer->oxuser__oxcountryid->value . "'"));
+                $this->addTplParam($paymentMethod . '_country', $country);
 
                 if (empty($customer->oxuser__oxfon->value)
                     && empty($customer->oxuser__oxprivfon->value)
@@ -232,8 +233,8 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                         $settings->pi_ratepay_settings__activate_elv->rawValue
                     );
                 }
-                $ratepayUrl = $settings->pi_ratepay_settings__ratepay_url->rawValue;
-                $this->addTplParam($paymentMethod . '_ratepayurl', $ratepayUrl);
+                $ratepayUrl = $settings->pi_ratepay_settings__url->rawValue;
+                $this->addTplParam($paymentMethod . '_url', $ratepayUrl . '-' . $country);
             }
 
 

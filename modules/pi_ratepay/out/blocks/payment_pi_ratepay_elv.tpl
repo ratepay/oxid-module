@@ -1,6 +1,6 @@
 [{if $sPaymentID == "pi_ratepay_elv"}]
 [{assign var="dynvalue" value=$oView->getDynValue()}]
-    [{if $pi_ratepay_elv_country == "DE"}]
+    [{if $pi_ratepay_elv_country == "de"}]
         <script type="text/javascript" src="[{$oViewConf->getModuleUrl('pi_ratepay')}]/out/blocks/src/js/libs/ratepay_elv.js"></script>
     [{/if}]
 <dl>
@@ -82,12 +82,12 @@
             </li>
             <li>
                 <label>
-                    [{if $pi_ratepay_elv_country == "DE"}][{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_ACCOUNT_NUMBER"}] /[{/if}]
+                    [{if $pi_ratepay_elv_country == "de"}][{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_ACCOUNT_NUMBER"}] /[{/if}]
                     [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_IBAN"}]:</label>
                 <input name='pi_ratepay_elv_bank_account_number' maxlength='50' size='37' type='text' value='[{if $piDbBankiban}][{$piDbBankiban}][{else}][{$piDbBankaccountnumber}][{/if}]' onkeyup="rpElvSwitch(this);" onchange="rpElvSwitch(this);" />            </li>
             <li id="PI_RATEPAY_ELV_VIEW_BANK_CODE" style="display: [{if $piDbBankiban}]none[{else}]inline-block[{/if}]">
                 <label>
-                    [{if $pi_ratepay_elv_country == "DE"}][{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_CODE"}] /[{/if}]
+                    [{if $pi_ratepay_elv_country == "de"}][{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_CODE"}] /[{/if}]
                     [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_BIC"}]:</label>
                 <input name='pi_ratepay_elv_bank_code' maxlength='255' size='37' type='text' value='[{$piDbBankcode}]'/>
             </li>
@@ -102,11 +102,7 @@
                         [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_1"}]
                         [{oxmultilang ident="PI_RATEPAY_VIEW_RATEPAY_ADDRESS"}]
                         [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_2"}]
-                        <a href='[{$pi_ratepay_elv_ratepayurl}]' target='_blank' style="text-decoration:underline;">[{oxmultilang ident="PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_PRIVACYPOLICY"}]</a>
-                        [{if $policyurl != '' }]
-                        [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_3"}]
-                        <a href='[{$policyurl}]' target='_blank' style="text-decoration:underline;">[{oxmultilang ident="PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_OWNERPOLICY"}]</a>
-                        [{/if}]
+                        <a href='[{$pi_ratepay_elv_url}]' target='_blank' style="text-decoration:underline;">[{oxmultilang ident="PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_PRIVACYPOLICY"}]</a>
                         [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_4"}]
                         <br/><br/>
                         [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_5"}]
