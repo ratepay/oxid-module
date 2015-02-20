@@ -56,7 +56,7 @@
     $pi_language = $pi_calculator->getLanguage();
     $pi_amount = $pi_calculator->getRequestAmount();
 
-    if ($pi_language == "DE") {
+    if ($pi_language == "DE" || $pi_language == "AT") {
         require 'languages/german.php';
         $pi_currency = 'EUR';
         $pi_decimalSeperator = ',';

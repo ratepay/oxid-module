@@ -76,7 +76,6 @@ class pi_ratepay_LogsService extends oxSuperCfg
                 $request->content->customer->{"bank-account"}->{"bank-code"} = "(hidden)";
                 $request->content->customer->{"bank-account"}->{"iban"} = "(hidden)";
                 $request->content->customer->{"bank-account"}->{"bic"} = "(hidden)";
-                $request->content->customer->{"bank-account"}->{"bank-name"} = "(hidden)";
             }
             $requestXml = $request->asXML();
             $responseXml = '';
@@ -94,7 +93,7 @@ class pi_ratepay_LogsService extends oxSuperCfg
 
             $logEntry = oxNew('pi_ratepay_Logs');
 
-            $oUtilsDate = oxUtilsDate::getInstance();
+            $oUtilsDate = oxRegistry::get("oxUtilsDate");
 
             $logEntry->assign(array(
                 'order_number'    => $orderId,

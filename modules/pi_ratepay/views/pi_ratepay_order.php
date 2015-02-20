@@ -81,7 +81,7 @@ class pi_ratepay_order extends pi_ratepay_order_parent
             }
 
             // for compatibility reasons for a while. will be removed in future
-            if (oxConfig::getRequestParameter('ord_custinfo') !== null && !oxConfig::getRequestParameter('ord_custinfo') && $this->isConfirmCustInfoActive()) {
+            if (oxRegistry::getConfig()->getRequestParameter('ord_custinfo') !== null && !oxRegistry::getConfig()->getRequestParameter('ord_custinfo') && $this->isConfirmCustInfoActive()) {
                 $this->_blConfirmCustInfoError = 1;
                 return;
             }
@@ -94,12 +94,21 @@ class pi_ratepay_order extends pi_ratepay_order_parent
             // get basket contents
             $oBasket = $this->getSession()->getBasket();
             if ($oBasket->getProductsCount()) {
-                if (!$this->_ratepayRequest()) {
-                    if (!$this->getSession()->getVar($this->_paymentId . '_error_id') == $paymentMethodIds[$this->_paymentId]['connection_timeout'] &&
+                if (!$this->_ratepayInitRequest()) {
+                    if (!$this->getSession()->getVariable($this->_paymentId . '_error_id') == $paymentMethodIds[$this->_paymentId]['connection_timeout'] &&
                         !$this->_isSandbox(pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId))) {
-                        $this->getSession()->setVar('pi_ratepay_denied', 'denied');
+                        $this->getSession()->setVariable('pi_ratepay_denied', 'denied');
                     }
-                    $this->getSession()->setVar($this->_paymentId . '_error_id', $paymentMethodIds[$this->_paymentId]['denied']);
+                    $this->getSession()->setVariable($this->_paymentId . '_error_id', $paymentMethodIds[$this->_paymentId]['denied']);
+                    oxRegistry::getUtils()->redirect($this->getConfig()->getSslShopUrl() . 'index.php?cl=payment', false);
+                }
+
+                if (!$this->_ratepayRequest()) {
+                    if (!$this->getSession()->getVariable($this->_paymentId . '_error_id') == $paymentMethodIds[$this->_paymentId]['connection_timeout'] &&
+                        !$this->_isSandbox(pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId))) {
+                        $this->getSession()->setVariable('pi_ratepay_denied', 'denied');
+                    }
+                    $this->getSession()->setVariable($this->_paymentId . '_error_id', $paymentMethodIds[$this->_paymentId]['denied']);
                     oxRegistry::getUtils()->redirect($this->getConfig()->getSslShopUrl() . 'index.php?cl=payment', false);
                 }
 
@@ -113,7 +122,7 @@ class pi_ratepay_order extends pi_ratepay_order_parent
                     $oUser->onOrderExecute($oBasket, $iSuccess);
                     $this->_saveRatepayOrder($oBasket->getOrderId());
                     $oid = $oBasket->getOrderId();
-                    $tid = $this->getSession()->getVar($this->_paymentId . '_trans_id');
+                    $tid = $this->getSession()->getVariable($this->_paymentId . '_trans_id');
 
                     $orderLogs = pi_ratepay_LogsService::getInstance()->getLogsList("transaction_id = " . oxDb::getDb(true)->quote($tid));
                     foreach($orderLogs as $log) {
@@ -146,7 +155,44 @@ class pi_ratepay_order extends pi_ratepay_order_parent
      */
     public function piIsFourPointSixShop()
     {
-        return substr(oxConfig::getInstance()->getVersion(), 0, 3) === '4.6';
+        return substr(oxRegistry::getConfig()->getVersion(), 0, 3) === '4.6';
+    }
+
+
+
+    /**
+     * Do init payment request redirect to order on succes, on failure redirect back to payment.
+     */
+    private function _ratepayInitRequest()
+    {
+        $ratepayRequest = $this->_getRatepayRequest($this->_paymentId);
+
+        $paymentMethod = pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId);
+
+        $name = $this->getUser()->oxuser__oxfname->value;
+        $surname = $this->getUser()->oxuser__oxlname->value;
+
+        $initPayment = $ratepayRequest->initPayment();
+
+        $transactionId = '';
+
+        pi_ratepay_LogsService::getInstance()->logRatepayTransaction('', $transactionId, $paymentMethod, 'PAYMENT_INIT', '', $initPayment['request'], $name, $surname, $initPayment['response']);
+
+        if ($initPayment['response']) {
+            if ((string) $initPayment['response']->head->processing->status->attributes()->code == "OK" && (string) $initPayment['response']->head->processing->result->attributes()->code == "350") {
+                $transactionId = (string) $initPayment['response']->head->{'transaction-id'};
+                $this->getSession()->setVariable($this->_paymentId . '_trans_id', (string) $initPayment['response']->head->{'transaction-id'});
+                $this->getSession()->setVariable($this->_paymentId . '_trans_short_id', (string) $initPayment['response']->head->{'transaction-short-id'});
+
+                return true;
+            } else {
+                $this->getSession()->setVariable($this->_paymentId . '_error_id', "-400");
+            }
+        } else {
+            $this->getSession()->setVariable($this->_paymentId . '_error_id', "-418");
+        }
+
+        return false;
     }
 
     /**
@@ -166,11 +212,10 @@ class pi_ratepay_order extends pi_ratepay_order_parent
     {
         $ratepayRequest = $this->_getRatepayRequest($this->_paymentId, $this->getBasket());
 
-
         $paymentMethod = pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId);
 
         $requestPayment = $ratepayRequest->requestPayment();
-        $transactionId = $this->getSession()->getVar($this->_paymentId . '_trans_id');
+        $transactionId = $this->getSession()->getVariable($this->_paymentId . '_trans_id');
         $paymentRequestType = 'PAYMENT_REQUEST';
 
         $name = $this->getUser()->oxuser__oxfname->value;
@@ -181,11 +226,11 @@ class pi_ratepay_order extends pi_ratepay_order_parent
         if ($requestPayment['response']) {
             if (((string) $requestPayment['response']->head->processing->status->attributes()->code) == "OK" && ((string) $requestPayment['response']->head->processing->result->attributes()->code) == "402") {
                 $descriptor = (string) $requestPayment['response']->content->payment->descriptor;
-                $this->getSession()->setVar($this->_paymentId . '_descriptor', $descriptor);
+                $this->getSession()->setVariable($this->_paymentId . '_descriptor', $descriptor);
                 return true;
             }
         } else {
-            $this->getSession()->setVar($this->_paymentId . '_error_id', "-418");
+            $this->getSession()->setVariable($this->_paymentId . '_error_id', "-418");
         }
 
         return false;
@@ -199,9 +244,9 @@ class pi_ratepay_order extends pi_ratepay_order_parent
      */
     private function _saveRatepayOrder($id)
     {
-        $transid = $this->getSession()->getVar($this->_paymentId . '_trans_id');
-        $transshortid = $this->getSession()->getVar($this->_paymentId . '_trans_short_id');
-        $descriptor = $this->getSession()->getVar($this->_paymentId . '_descriptor');
+        $transid = $this->getSession()->getVariable($this->_paymentId . '_trans_id');
+        $transshortid = $this->getSession()->getVariable($this->_paymentId . '_trans_short_id');
+        $descriptor = $this->getSession()->getVariable($this->_paymentId . '_descriptor');
         $userbirthdate = $this->getUser()->oxuser__oxbirthdate->value;
 
         $ratepayOrder = oxNew('pi_ratepay_orders');
@@ -218,15 +263,15 @@ class pi_ratepay_order extends pi_ratepay_order_parent
         $ratepayOrder->save();
 
         if ($this->_paymentId === 'pi_ratepay_rate') {
-            $totalAmount = oxSession::getInstance()->getVar('pi_ratepay_rate_total_amount');
-            $amount = oxSession::getInstance()->getVar('pi_ratepay_rate_amount');
-            $interestAmount = oxSession::getInstance()->getVar('pi_ratepay_rate_interest_amount');
-            $service_charge = oxSession::getInstance()->getVar('pi_ratepay_rate_service_charge');
-            $annualPercentageRate = oxSession::getInstance()->getVar('pi_ratepay_rate_annual_percentage_rate');
-            $monthlyDebitInterest = oxSession::getInstance()->getVar('pi_ratepay_rate_monthly_debit_interest');
-            $numberOfRates = oxSession::getInstance()->getVar('pi_ratepay_rate_number_of_rates');
-            $rate = oxSession::getInstance()->getVar('pi_ratepay_rate_rate');
-            $lastRate = oxSession::getInstance()->getVar('pi_ratepay_rate_last_rate');
+            $totalAmount = $this->getSession()->getVariable('pi_ratepay_rate_total_amount');
+            $amount = $this->getSession()->getVariable('pi_ratepay_rate_amount');
+            $interestAmount = $this->getSession()->getVariable('pi_ratepay_rate_interest_amount');
+            $service_charge = $this->getSession()->getVariable('pi_ratepay_rate_service_charge');
+            $annualPercentageRate = $this->getSession()->getVariable('pi_ratepay_rate_annual_percentage_rate');
+            $monthlyDebitInterest = $this->getSession()->getVariable('pi_ratepay_rate_monthly_debit_interest');
+            $numberOfRates = $this->getSession()->getVariable('pi_ratepay_rate_number_of_rates');
+            $rate = $this->getSession()->getVariable('pi_ratepay_rate_rate');
+            $lastRate = $this->getSession()->getVariable('pi_ratepay_rate_last_rate');
 
             $ratepayRateDetails = oxNew('pi_ratepay_ratedetails');
             $ratepayRateDetails->loadByOrderId($id);
@@ -321,12 +366,24 @@ class pi_ratepay_order extends pi_ratepay_order_parent
     }
 
     /**
+     * Get RatePAY Request object.
+     * @return  pi_ratepay_ratepayrequest
+     */
+    protected function _getRatepayRequestOLD($paymentType)
+    {
+        $requestDataProvider = oxNew('pi_ratepay_requestdatafrontend', $paymentType);
+        $ratepayRequest = oxNew('pi_ratepay_ratepayrequest', $this->_selectedPaymentMethod, $requestDataProvider, null, array('country' => pi_ratepay_util_utilities::getCountry($this->getUser()->oxuser__oxcountryid->value)));
+
+        return $ratepayRequest;
+    }
+
+    /**
      * Get Ratepay Request object.
      * @param string $paymentType
      * @param oxbasket $basket
      * @return pi_ratepay_ratepayrequest
      */
-    protected function _getRatepayRequest($paymentType, $basket)
+    protected function _getRatepayRequest($paymentType, $basket = null)
     {
         $requestDataProvider = oxNew('pi_ratepay_requestdatafrontend', $paymentType, $basket);
         return oxNew('pi_ratepay_ratepayrequest', $paymentType, $requestDataProvider);
@@ -349,7 +406,7 @@ class pi_ratepay_order extends pi_ratepay_order_parent
 
         $confirmPayment = $ratepayRequest->confirmPayment();
 
-        pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->_oBasket->getOrderId(), $this->getSession()->getVar($this->_ratepayPaymentType . '_trans_id'), pi_ratepay_util_utilities::getPaymentMethod($this->_ratepayPaymentType), 'PAYMENT_CONFIRM', '', $confirmPayment['request'], $name, $surname, $confirmPayment['response']);
+        pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->_oBasket->getOrderId(), $this->getSession()->getVariable($this->_ratepayPaymentType . '_trans_id'), pi_ratepay_util_utilities::getPaymentMethod($this->_ratepayPaymentType), 'PAYMENT_CONFIRM', '', $confirmPayment['request'], $name, $surname, $confirmPayment['response']);
 
         if ($confirmPayment['response'] && ((string) $confirmPayment['response']->head->processing->status->attributes()->code) == "OK" && ((string) $confirmPayment['response']->head->processing->result->attributes()->code) == "400") {
             return true;

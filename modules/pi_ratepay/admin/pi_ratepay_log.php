@@ -93,16 +93,16 @@ class pi_ratepay_Log extends oxAdminView
      */
     private function _getSortedArray()
     {
-        $sortType = oxConfig::getParameter('sortType');
-        $sortMethod = oxConfig::getParameter('sortmethod');
+        $sortType = oxRegistry::getConfig()->getRequestParameter('sortType');
+        $sortMethod = oxRegistry::getConfig()->getRequestParameter('sortmethod');
 
-        if (oxConfig::getParameter('sortmethod') === null) {
+        if (oxRegistry::getConfig()->getRequestParameter('sortmethod') === null) {
             $sortMethod = 'sortDate';
         }
-        if (oxConfig::getParameter('sortType') === null || oxConfig::getParameter('sortType') == "asc") {
+        if (oxRegistry::getConfig()->getRequestParameter('sortType') === null || oxRegistry::getConfig()->getRequestParameter('sortType') == "asc") {
             $sortType = "desc";
         }
-        if (oxConfig::getParameter('sortType') !== null && oxConfig::getParameter('sortType') == "desc") {
+        if (oxRegistry::getConfig()->getRequestParameter('sortType') !== null && oxRegistry::getConfig()->getRequestParameter('sortType') == "desc") {
             $sortType = 'asc';
         }
 
@@ -139,12 +139,12 @@ class pi_ratepay_Log extends oxAdminView
      */
     public function deleteLogs()
     {
-        if (preg_match("/^[0-9]{1,2}$/", oxConfig::getParameter('logdays'))) {
-            $days = oxConfig::getParameter('logdays');
+        if (preg_match("/^[0-9]{1,2}$/", oxRegistry::getConfig()->getRequestParameter('logdays'))) {
+            $days = oxRegistry::getConfig()->getRequestParameter('logdays');
             if ($days == 0) {
                 oxDb::getDb()->execute("delete from pi_ratepay_logs");
             } else {
-                $days = oxConfig::getParameter('logdays');
+                $days = oxRegistry::getConfig()->getRequestParameter('logdays');
                 $sql = "DELETE FROM pi_ratepay_logs WHERE TO_DAYS(now()) - TO_DAYS(date) > " . $days;
                 oxDb::getDb()->execute($sql);
             }

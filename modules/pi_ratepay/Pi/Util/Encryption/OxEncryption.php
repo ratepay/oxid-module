@@ -22,7 +22,6 @@ class Pi_Util_Encryption_OxEncryption extends Pi_Util_Encryption_EncryptionAbstr
                 'owner' => $this->_convertHexToBinary($decryptedData[0]),
                 'accountnumber' => $this->_convertHexToBinary($decryptedData[1]),
                 'bankcode' => $this->_convertHexToBinary($decryptedData[2]),
-                'bankname' => $this->_convertHexToBinary($decryptedData[3])
             );
         }
 

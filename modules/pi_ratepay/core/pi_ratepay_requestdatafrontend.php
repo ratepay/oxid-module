@@ -100,7 +100,7 @@ class pi_ratepay_RequestDataFrontend extends pi_ratepay_RequestAbstract
      */
     public function getTransactionId()
     {
-        return $this->getSession()->getVar($this->_paymentType . '_trans_id');
+        return $this->getSession()->getVariable($this->_paymentType . '_trans_id');
     }
 
     /**
@@ -150,7 +150,7 @@ class pi_ratepay_RequestDataFrontend extends pi_ratepay_RequestAbstract
      */
     public function getInstallmentAmount()
     {
-        return $this->getSession()->getVar('pi_ratepay_rate_total_amount');
+        return $this->getSession()->getVariable('pi_ratepay_rate_total_amount');
     }
 
     /**

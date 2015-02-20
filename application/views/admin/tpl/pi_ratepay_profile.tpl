@@ -17,7 +17,7 @@
 [{include file="headitem.tpl" titre="[ratepay]"}]
 
 <script type="text/javascript" src="../../out/admin/src/js/libs/jquery.min.js"></script>
-<script type="text/javascript" src="../../out/admin/src/js/libs/ratepay_profile.js"></script>
+<script type="text/javascript" src="[{$oViewConf->getModuleUrl('pi_ratepay')}]/out/admin/src/js/libs/ratepay_profile.js"></script>
 <script type="text/javascript">
     countries = [[{foreach item=country from=$allCountries}] '[{$country}]',[{/foreach}]];
     activeCountries = [[{foreach item=country from=$activeCountries}] '[{$country}]',[{/foreach}]];
@@ -111,16 +111,6 @@
                                                             <input type="checkbox" name="rp_logging_[{$method}]_[{$country}]" checked='checked' value='on'>
                                                             [{else}]
                                                             <input type="checkbox" name="rp_logging_[{$method}]_[{$country}]">
-                                                            [{/if}]
-                                                        </td>
-                                                    </tr><tr>
-                                                        <td class="edittext">
-                                                            [{oxmultilang ident="PI_RATEPAY_PROFILE_SETTINGS_WHITELABEL"}]:
-                                                        </td><td class="edittext">
-                                                            [{if $methodValue.whitelabel === true}]
-                                                        <input type="checkbox" name="rp_whitelabel_[{$method}]_[{$country}]" checked='checked' value='on'>
-                                                            [{else}]
-                                                        <input type="checkbox" name="rp_whitelabel_[{$method}]_[{$country}]">
                                                             [{/if}]
                                                         </td>
                                                     </tr><tr>

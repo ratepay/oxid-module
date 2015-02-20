@@ -5,7 +5,7 @@
         <input id="payment_[{$sPaymentID}]" type="radio" name="paymentid" value="[{$sPaymentID}]" [{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]checked[{/if}] style="position:relative; [{if !$pi_ratepay_rate_whitelabel}]top:-17px;[{/if}]">
         <label for="payment_[{$sPaymentID}]"><b>
             [{if !$pi_ratepay_rate_whitelabel}]
-                <img src="[{$oViewConf->getImageUrl('pi_ratepay_rate_checkout_logo.png')}]" title="RatePAY [{oxmultilang ident="PI_RATEPAY_RATE_VIEW_WHITELABEL_TEXT"}]" alt="RatePAY [{oxmultilang ident="PI_RATEPAY_RATE_VIEW_WHITELABEL_TEXT"}]" />
+                <img src="[{$oViewConf->getModuleUrl('pi_ratepay')}]out/blocks/img/pi_ratepay_rate_checkout_logo.png" title="RatePAY [{oxmultilang ident="PI_RATEPAY_RATE_VIEW_WHITELABEL_TEXT"}]" alt="RatePAY [{oxmultilang ident="PI_RATEPAY_RATE_VIEW_WHITELABEL_TEXT"}]" />
             [{else}]
                 [{oxmultilang ident="PI_RATEPAY_RATE_VIEW_WHITELABEL_TEXT"}]
             [{/if}]
@@ -87,10 +87,6 @@
             <li>
                 <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_CODE"}]:</label>
                 <input name='pi_ratepay_rate_bank_code' maxlength='255' size='37' type='text' value='[{$piDbBankcode}]'/>
-            </li>
-            <li>
-                <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_NAME"}]:</label>
-                <input name='pi_ratepay_rate_bank_name' maxlength='255' size='37' type='text' value='[{$piDbBankname}]'/>
             </li>
         </ul>
         [{/if}]

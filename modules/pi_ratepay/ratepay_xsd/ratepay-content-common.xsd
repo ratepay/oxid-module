@@ -308,7 +308,6 @@
             <xs:element name="iban" type="rp:ibanType" minOccurs="0"/>
             <xs:element name="bank-code" type="rp:bankCodeType"/>
             <xs:element name="bic" type="rp:bicType" minOccurs="0"/>
-            <xs:element name="bank-name" type="rp:bankNameType"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -339,12 +338,6 @@
     <xs:simpleType name="bicType">
         <xs:restriction base="xs:string">
             <xs:pattern value="[a-zA-Z]{4}[A-Z]{2}[0-9a-zA-Z]{2}([0-9a-zA-Z]{3})?"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:simpleType name="bankNameType">
-        <xs:restriction base="xs:string">
-            <xs:maxLength value="255"/>
         </xs:restriction>
     </xs:simpleType>
 

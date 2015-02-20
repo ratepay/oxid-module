@@ -84,6 +84,35 @@ abstract class pi_ratepay_RequestAbstract extends oxSuperCfg
     }
 
     /**
+     * Get complete delivery address.
+     * @return array
+     */
+    public function getDeliveryAddress()
+    {
+        $order = oxNew('oxorder');
+        $deliveryAddress = $order->getDelAddressInfo();
+
+        if (is_null($deliveryAddress)){
+            return false;
+        }
+
+        $countryCode = oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $deliveryAddress->oxaddress__oxcountryid->value . "'");
+
+        $address = array(
+            'first-name'    => $deliveryAddress->oxaddress__oxfname->value,
+            'last-name'     => $deliveryAddress->oxaddress__oxlname->value,
+            'company'       => $deliveryAddress->oxaddress__oxcompany->value,
+            'street'        => $deliveryAddress->oxaddress__oxstreet->value,
+            'street-number' => $deliveryAddress->oxaddress__oxstreetnr->value,
+            'zip-code'      => $deliveryAddress->oxaddress__oxzip->value,
+            'city'          => $deliveryAddress->oxaddress__oxcity->value,
+            'country-code'  => $countryCode
+        );
+
+        return $address;
+    }
+
+    /**
      * Get company name of customer, or false if customer has none.
      * @return string|boolean
      */
@@ -167,17 +196,15 @@ abstract class pi_ratepay_RequestAbstract extends oxSuperCfg
     public function getCustomerBankdata($paymentType)
     {
         //$owner = $this->_getOwner($paymentType);
-        $owner = $this->getSession()->getVar($paymentType . '_bank_owner');
-        $bankName = $this->getSession()->getVar($paymentType . '_bank_name');
-        $bankAccountNumber = $this->getSession()->getVar($paymentType . '_bank_account_number');
-        $bankCode = $this->getSession()->getVar($paymentType . '_bank_code');
-        $bankIban = $this->getSession()->getVar($paymentType . '_bank_iban');
-        $bankBic = $this->getSession()->getVar($paymentType . '_bank_bic');
+        $owner = $this->getSession()->getVariable($paymentType . '_bank_owner');
+        $bankAccountNumber = $this->getSession()->getVariable($paymentType . '_bank_account_number');
+        $bankCode = $this->getSession()->getVariable($paymentType . '_bank_code');
+        $bankIban = $this->getSession()->getVariable($paymentType . '_bank_iban');
+        $bankBic = $this->getSession()->getVariable($paymentType . '_bank_bic');
 
 
         $bankData = array(
             'owner' => $owner,
-            'bankName' => $bankName
         );
 
         if (empty($bankIban)) {
@@ -217,10 +244,9 @@ abstract class pi_ratepay_RequestAbstract extends oxSuperCfg
 
     protected function _getOwner($paymentType)
     {
-        $oxSession = oxSession::getInstance();
         $owner = null;
-        if ($this->getSession()->hasVar($paymentType . '_bank_owner')) {
-            $owner = $oxSession->getVar($paymentType . 'elv_bank_owner');
+        if ($this->getSession()->hasVariable($paymentType . '_bank_owner')) {
+            $owner = $this->getSession()->getVariable($paymentType . 'elv_bank_owner');
         } else {
             $owner = $this->getCustomerFirstName() .
                 ' ' .

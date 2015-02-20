@@ -19,7 +19,7 @@
     $pi_language = $pi_calculator->getLanguage();
     $pi_firstday = $pi_calculator->getRequestFirstday();
 
-    if ($pi_language == "DE") {
+    if ($pi_language == "DE" || $pi_language == "AT") {
         require_once 'languages/german.php';
         $pi_currency = 'EUR';
         $pi_decimalSeperator = ',';

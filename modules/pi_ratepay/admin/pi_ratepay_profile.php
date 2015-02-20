@@ -93,17 +93,17 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
             foreach ($methods as $methodDB => $methodShop) {
                 $settings->loadByType($methodDB, $country);
 
-                $methodActive = (bool) $this->_isParameterCheckedOn(oxConfig::getParameter('rp_active_' . $methodShop . '_' . $country));
-                $profileId = oxConfig::getParameter('rp_profile_id_' . $methodShop . '_' . $country);
-                $securityCode = oxConfig::getParameter('rp_security_code_' . $methodShop . '_' . $country);
+                $methodActive = (bool) $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_active_' . $methodShop . '_' . $country));
+                $profileId = oxRegistry::getConfig()->getRequestParameter('rp_profile_id_' . $methodShop . '_' . $country);
+                $securityCode = oxRegistry::getConfig()->getRequestParameter('rp_security_code_' . $methodShop . '_' . $country);
 
                 $firstSaveArray = array(
                     'profile_id' => $profileId,
                     'security_code' => $securityCode,
-                    'sandbox' => $this->_isParameterCheckedOn(oxConfig::getParameter('rp_sandbox_' . $methodShop . '_' . $country)),
-                    'logging' => $this->_isParameterCheckedOn(oxConfig::getParameter('rp_logging_' . $methodShop . '_' . $country)),
-                    'whitelabel' => $this->_isParameterCheckedOn(oxConfig::getParameter('rp_whitelabel_' . $methodShop . '_' . $country)),
-                    'duedate' => (int) oxConfig::getParameter('rp_duedate_' . $methodShop . '_' . $country)
+                    'sandbox' => $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_sandbox_' . $methodShop . '_' . $country)),
+                    'logging' => $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_logging_' . $methodShop . '_' . $country)),
+                    'whitelabel' => $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_whitelabel_' . $methodShop . '_' . $country)),
+                    'duedate' => (int) oxRegistry::getConfig()->getRequestParameter('rp_duedate_' . $methodShop . '_' . $country)
                 );
 
                 $settings->assign($firstSaveArray);

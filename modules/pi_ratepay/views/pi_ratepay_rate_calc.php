@@ -78,7 +78,7 @@ class pi_ratepay_rate_Calc extends oxUBase
         if ($myConfig->getConfigParam('blPsBasketReservationEnabled')
             && (!$oBasket || ( $oBasket && !$oBasket->getProductsCount() ))
         ) {
-            oxUtils::getInstance()->redirect(
+            oxRegistry::getUtils()->redirect(
                 $myConfig->getShopHomeURL() . 'cl=basket'
             );
         }
@@ -88,7 +88,7 @@ class pi_ratepay_rate_Calc extends oxUBase
             || !$oUser
             || ( $oBasket && !$oBasket->getProductsCount() )
         ) {
-            oxUtils::getInstance()->redirect(
+            oxRegistry::getUtils()->redirect(
                 $myConfig->getShopHomeURL() . 'cl=start'
             );
         }
@@ -116,8 +116,8 @@ class pi_ratepay_rate_Calc extends oxUBase
         );
 
         foreach ($ratepaySessionVariables as $sessionVariable) {
-            if (!$this->getSession()->hasVar($sessionVariable)
-                || $this->getSession()->getVar($sessionVariable) == ''
+            if (!$this->getSession()->hasVariable($sessionVariable)
+                || $this->getSession()->getVariable($sessionVariable) == ''
             ) {
                 $checking = false;
                 break;
@@ -125,11 +125,11 @@ class pi_ratepay_rate_Calc extends oxUBase
         }
 
         if ($checking) {
-            oxUtils::getInstance()->redirect(
+            oxRegistry::getUtils()->redirect(
                 $myConfig->getShopHomeURL() . 'cl=order'
             );
         } else {
-            oxUtils::getInstance()->redirect(
+            oxRegistry::getUtils()->redirect(
                 $myConfig->getShopHomeURL()
                 . 'cl=pi_ratepay_rate_calc&fnc=calculateError'
             );

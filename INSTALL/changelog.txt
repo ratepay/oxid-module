@@ -1,7 +1,13 @@
 ***********************************************************
-***********| Version 3.2.0 - Released 2015-02-10 |*********
+***********| Version 3.2.0 - Released 2015-02-19 |*********
 ***********************************************************
 -- compatibility with AT (CH ready) with different credentials via PR
+-- support of OXID 4.9.x while retaining support of OXID 4.7.x and 4.8.x
+-- bundled PI und PR
+-- simplified directory structure
+-- removed customer and payment block at payment changes
+-- fixed elv bank owner bug in case of latin1 db setting
+-- fixed bug in delivery address
 
 ***********************************************************
 ***********| Version 3.1.4 - Released 2014-10-29 |*********
@@ -34,34 +40,34 @@
 -- changes in sandbox mode - no decline of rp payment methods after negative response while sandbox mode
 
 ***********************************************************
-**********| Version 3.0.5 - Released 2013-12-02 |********
+**********| Version 3.0.5 - Released 2013-12-02 |**********
 ***********************************************************
 -- fixed different basket item title (in CONFIRMATION_DELIVER & PAYMENT_CHANGE)
 -- fixed calculation of unit-price and tax in case of prices > 1000 (in CONFIRMATION_DELIVER & PAYMENT_CHANGE)
 
 ***********************************************************
-**********| Version 3.0.4 - Released 2013-11-07 |********
+**********| Version 3.0.4 - Released 2013-11-07 |**********
 ***********************************************************
 -- fixed PC bug (in case of aborted orders)
 
 ***********************************************************
-**********| Version 3.0.3 - Released 2013-10-09 |********
+**********| Version 3.0.3 - Released 2013-10-09 |**********
 ***********************************************************
 -- fixed request voucher bug
 
 ***********************************************************
-**********| Version 3.0.2 - Released 2013-07-19 |********
+**********| Version 3.0.2 - Released 2013-07-19 |**********
 ***********************************************************
 -- additional fixes in the rate calculator
 
 ***********************************************************
-**********| Version 3.0.1 - Released 2013-07-16 |********
+**********| Version 3.0.1 - Released 2013-07-16 |**********
 ***********************************************************
 -- few changes in the Ratenrechner
 -- cached installment configuration by one click config (profile request)
 
 ***********************************************************
-**********| Version 3.0.0 - Released 2013-07-02 |********
+**********| Version 3.0.0 - Released 2013-07-02 |**********
 ***********************************************************
 -- new feature: one click configuration
 
@@ -122,7 +128,7 @@
 Many under the hood improvements.
 
 ***********************************************************
-**********| Version 1.3.0 RC1 - Released 2012-02-01 |**********
+********| Version 1.3.0 RC1 - Released 2012-02-01 |********
 ***********************************************************
 
 - fixed [RPOX-12] - telephone number or birthdate only saved if both telephone number and birthdate is given

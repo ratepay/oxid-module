@@ -27,10 +27,11 @@ $aModule = array(
         'de' => 'Bezahlung mit RatePAY',
         'en' => 'Payment with RatePAY'
     ),
-    'thumbnail'    => 'picture.png',
+    'thumbnail'    => 'ratepay_logo.png',
     'lang'         => 'en',
     'version'      => '3.2.0',
     'author'       => 'RatePAY GmbH',
+    'email'        => 'integration@ratepay.com',
     'url'          => 'http://www.ratepay.com/',
     'extend'       => array(
         'payment'           => 'pi_ratepay/views/pi_ratepay_payment',
@@ -74,21 +75,14 @@ $aModule = array(
         )
     ),
     'templates' => array(
-        'pi_ratepay_rechnung_settings.tpl'      => 'pi_ratepay/out/admin/tpl/pi_ratepay_rechnung_settings.tpl',
-        'pi_ratepay_rate_settings.tpl'          => 'pi_ratepay/out/admin/tpl/pi_ratepay_rate_settings.tpl',
-        'pi_ratepay_elv_settings.tpl'           => 'pi_ratepay/out/admin/tpl/pi_ratepay_elv_settings.tpl',
-        'pi_ratepay_log.tpl'                    => 'pi_ratepay/out/admin/tpl/pi_ratepay_log.tpl',
-        'pi_ratepay_details.tpl'                => 'pi_ratepay/out/admin/tpl/pi_ratepay_details.tpl',
-        'pi_ratepay_no_details.tpl'             => 'pi_ratepay/out/admin/tpl/pi_ratepay_no_details.tpl',
-        'pi_ratepay_profile.tpl'                => 'pi_ratepay/out/admin/tpl/pi_ratepay_profile.tpl',
-        'pi_ratepay_discount_main_custom.tpl'   => 'pi_ratepay/out/admin/tpl/pi_ratepay_discount_main_custom.tpl',
+        'pi_ratepay_log.tpl'                    => 'pi_ratepay/views/admin/tpl/pi_ratepay_log.tpl',
+        'pi_ratepay_details.tpl'                => 'pi_ratepay/views/admin/tpl/pi_ratepay_details.tpl',
+        'pi_ratepay_no_details.tpl'             => 'pi_ratepay/views/admin/tpl/pi_ratepay_no_details.tpl',
+        'pi_ratepay_profile.tpl'                => 'pi_ratepay/views/admin/tpl/pi_ratepay_profile.tpl',
         'pi_ratepay_rate_calc.tpl'              => 'pi_ratepay/out/azure/tpl/pi_ratepay_rate_calc.tpl'
     ),
     'files' => array(
         'pi_ratepay_admin_SettingsAbstract'     => 'pi_ratepay/admin/pi_ratepay_admin_settingsabstract.php',
-        'pi_ratepay_rechnung_Settings'          => 'pi_ratepay/admin/pi_ratepay_rechnung_settings.php',
-        'pi_ratepay_rate_Settings'              => 'pi_ratepay/admin/pi_ratepay_rate_settings.php',
-        'pi_ratepay_elv_Settings'               => 'pi_ratepay/admin/pi_ratepay_elv_settings.php',
         'pi_ratepay_Log'                        => 'pi_ratepay/admin/pi_ratepay_log.php',
         'pi_ratepay_Details'                    => 'pi_ratepay/admin/pi_ratepay_details.php',
         'pi_ratepay_Profile'                    => 'pi_ratepay/admin/pi_ratepay_profile.php',

@@ -23,8 +23,8 @@ abstract class pi_ratepay_admin_SettingsAbstract extends oxAdminView
     {
         $sReturn = parent::render();
 
-        if (oxConfig::getParameter('stoken') != null) {
-            $this->addTplParam('stoken', oxConfig::getParameter('stoken'));
+        if (oxRegistry::getConfig()->getRequestParameter('stoken') != null) {
+            $this->addTplParam('stoken', oxRegistry::getConfig()->getRequestParameter('stoken'));
         } else {
             $this->addTplParam('stoken', '');
         }

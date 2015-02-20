@@ -241,7 +241,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
             $securityCode = $this->_getSecurityCode();
         } else {
             $paymentMethod = strtolower($this->_getPaymentMethod());
-            $country = $this->_getCountry();
+            $country = $this->_getCountry($this->getUser()->oxuser__oxcountryid->value);
             $settings = oxNew('pi_ratepay_settings');
             if ($country) {
                 $settings->loadByType($paymentMethod, $country);
@@ -400,9 +400,12 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
         $addresses = $customer->addChild('addresses');
 
         $customerAddress = $this->_getDataProvider()->getCustomerAddress();
+        $deliveryAddress = $this->_getDataProvider()->getDeliveryAddress();
 
-        $this->_setRatepayContentCustomerAddresses($addresses, 'BILLING', $customerAddress);
-        $this->_setRatepayContentCustomerAddresses($addresses, 'DELIVERY', $customerAddress);
+        $this->_setRatepayContentCustomerAddressesBilling($addresses, $customerAddress);
+        if ($deliveryAddress) {
+            $this->_setRatepayContentCustomerAddressesDelivery($addresses, $deliveryAddress);
+        }
     }
 
     /**
@@ -410,18 +413,43 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
      *
      * @param SimpleXMLExtended $addresses
      */
-    private function _setRatepayContentCustomerAddresses($addresses, $type, $customerAddress)
+    private function _setRatepayContentCustomerAddressesBilling($addresses, $address)
     {
-        $street = $this->_removeSpecialChars($customerAddress['street']);
-        $city = $this->_removeSpecialChars($customerAddress['city']);
+        $street = $this->_removeSpecialChars($address['street']);
+        $city = $this->_removeSpecialChars($address['city']);
 
         $billingAddress = $addresses->addChild('address');
-        $billingAddress->addAttribute('type', $type);
+        $billingAddress->addAttribute('type', 'BILLING');
         $billingAddress->addCDataChild('street', $street, $this->_utfMode);
-        $billingAddress->addChild('street-number', $customerAddress['street-number']);
-        $billingAddress->addChild('zip-code', $customerAddress['zip-code']);
+        $billingAddress->addChild('street-number', $address['street-number']);
+        $billingAddress->addChild('zip-code', $address['zip-code']);
         $billingAddress->addCDataChild('city', $city, $this->_utfMode);
-        $billingAddress->addChild('country-code', $customerAddress['country-code']);
+        $billingAddress->addChild('country-code', $address['country-code']);
+    }
+
+    /**
+     * Adds customer delivery address to request xml
+     *
+     * @param SimpleXMLExtended $addresses
+     */
+    private function _setRatepayContentCustomerAddressesDelivery($addresses, $address)
+    {
+        $firstname = $this->_removeSpecialChars($address['first-name']);
+        $lastname  = $this->_removeSpecialChars($address['last-name']);
+        $company   = $this->_removeSpecialChars($address['company']);
+        $street    = $this->_removeSpecialChars($address['street']);
+        $city      = $this->_removeSpecialChars($address['city']);
+
+        $deliveryAddress = $addresses->addChild('address');
+        $deliveryAddress->addAttribute('type', 'DELIVERY');
+        $deliveryAddress->addCDataChild('first-name', $firstname, $this->_utfMode);
+        $deliveryAddress->addCDataChild('last-name', $lastname, $this->_utfMode);
+        $deliveryAddress->addCDataChild('company', $company, $this->_utfMode);
+        $deliveryAddress->addCDataChild('street', $street, $this->_utfMode);
+        $deliveryAddress->addChild('street-number', $deliveryAddress['street-number']);
+        $deliveryAddress->addChild('zip-code', $address['zip-code']);
+        $deliveryAddress->addCDataChild('city', $city, $this->_utfMode);
+        $deliveryAddress->addChild('country-code', $address['country-code']);
     }
 
     /**
@@ -433,8 +461,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
         $bankdata = $this->_getDataProvider()->getCustomerBankdata($this->_getPaymentType());
 
         $bankAccount = $customer->addChild('bank-account');
-        $bankAccount->addCDataChild('owner', $bankdata['owner']);
-        $bankAccount->addCDataChild('bank-name', $bankdata['bankName']);
+        $bankAccount->addCDataChild('owner', (!mb_detect_encoding($bankdata['owner'], 'UTF-8', true)) ? utf8_encode($bankdata['owner']) : $bankdata['owner']);
         if (empty($bankdata['bankIban'])) {
             $bankAccount->addChild('bank-account-number', $bankdata['bankAccountNumber']);
             $bankAccount->addChild('bank-code', $bankdata['bankCode']);

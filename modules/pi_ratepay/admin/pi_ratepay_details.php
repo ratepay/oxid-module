@@ -205,8 +205,8 @@ class pi_ratepay_Details extends oxAdminDetails
      */
     public function credit()
     {
-        $voucherAmount = oxConfig::getParameter('voucherAmount');
-        $voucherKomma = oxConfig::getParameter('voucherAmountKomma');
+        $voucherAmount = oxRegistry::getConfig()->getRequestParameter('voucherAmount');
+        $voucherKomma = oxRegistry::getConfig()->getRequestParameter('voucherAmountKomma');
 
         $this->_initRatepayDetails($this->getEditObject());
 
@@ -295,7 +295,7 @@ class pi_ratepay_Details extends oxAdminDetails
             'oxorderid' => $orderId,
             'oxuserid' => $order->getFieldData("oxuserid"),
             'oxdiscount' => $this->piRatepayVoucher,
-            'oxdateused' => date('Y-m-d', oxUtilsDate::getInstance()->getTime()),
+            'oxdateused' => date('Y-m-d', oxRegistry::get("oxUtilsDate")->getTime()),
             'oxvouchernr' => $voucherNr
         ));
 
@@ -358,8 +358,8 @@ class pi_ratepay_Details extends oxAdminDetails
             $articles = $this->getPreparedOrderArticles();
             $articleList = array();
             foreach ($articles as $article) {
-                if (oxConfig::getParameter($article['arthash']) > 0) {
-                    $quant = oxConfig::getParameter($article['arthash']);
+                if (oxRegistry::getConfig()->getRequestParameter($article['arthash']) > 0) {
+                    $quant = oxRegistry::getConfig()->getRequestParameter($article['arthash']);
                     $artid = $article['artid'];
                     if ($subtype == "partial-cancellation" || $subtype == "full-cancellation") {
                         oxDb::getDb()->execute("update $this->pi_ratepay_order_details set cancelled=cancelled+$quant where order_number='" . $this->_getOrderId() . "' and article_number='$artid'");
@@ -368,7 +368,7 @@ class pi_ratepay_Details extends oxAdminDetails
                     }
                     $this->_logHistory($this->_getOrderId(), $artid, $quant, $operation, $subtype);
                     if ($article['oxid'] != "") {
-                        $articleList[$article['oxid']] = array('oxamount' => $article['ordered'] - $article['cancelled'] - $article['returned'] - oxConfig::getParameter($article['arthash']));
+                        $articleList[$article['oxid']] = array('oxamount' => $article['ordered'] - $article['cancelled'] - $article['returned'] - oxRegistry::getConfig()->getRequestParameter($article['arthash']));
                     } else {
                         $oOrder = $this->getEditObject();
 
@@ -405,7 +405,7 @@ class pi_ratepay_Details extends oxAdminDetails
         $articles = $this->getPreparedOrderArticles();
 
         foreach ($articles as $article) {
-            if (oxConfig::getParameter($article['arthash']) != $article['ordered']) {
+            if (oxRegistry::getConfig()->getRequestParameter($article['arthash']) != $article['ordered']) {
                 $full = false;
             }
         }
@@ -427,8 +427,8 @@ class pi_ratepay_Details extends oxAdminDetails
         if ($response && (string) $response->head->processing->result->attributes()->code == '404') {
             $articles = $this->getPreparedOrderArticles();
             foreach ($articles as $article) {
-                if (oxConfig::getParameter($article['arthash']) > 0) {
-                    $quant = oxConfig::getParameter($article['arthash']);
+                if (oxRegistry::getConfig()->getRequestParameter($article['arthash']) > 0) {
+                    $quant = oxRegistry::getConfig()->getRequestParameter($article['arthash']);
                     $artid = $article['artid'];
                     // @todo this can be done better
                     oxDb::getDb()->execute("update $this->pi_ratepay_order_details set shipped=shipped+$quant where order_number='" . $this->_getOrderId() . "' and article_number='$artid'");
@@ -495,7 +495,7 @@ class pi_ratepay_Details extends oxAdminDetails
             'quantity'       => $quant,
             'method'         => $operation,
             'submethod'      => $subtype,
-            'date'           => date('Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime())
+            'date'           => date('Y-m-d H:i:s', oxRegistry::get("oxUtilsDate")->getTime())
         ));
         $ratepayHistory->save();
     }
@@ -543,8 +543,8 @@ class pi_ratepay_Details extends oxAdminDetails
         $systems = $meta->addChild('systems');
         $system = $systems->addChild('system');
 
-        $system->addAttribute('name', 'OXID_' . oxConfig::getInstance()->getEdition());
-        $system->addAttribute('version', oxConfig::getInstance()->getVersion() . '_' . pi_ratepay_util_utilities::PI_MODULE_VERSION);
+        $system->addAttribute('name', 'OXID_' . oxRegistry::getConfig()->getEdition());
+        $system->addAttribute('version', oxRegistry::getConfig()->getVersion() . '_' . pi_ratepay_util_utilities::PI_MODULE_VERSION);
     }
 
     /**
@@ -594,9 +594,7 @@ class pi_ratepay_Details extends oxAdminDetails
             $this->setRatepayContentBasket($content);
         } else if ($operation == "PAYMENT_CHANGE") {
             $total = $this->_orderTotalAmount($subtype);
-            $this->setRatepayContentCustomer($content);
             $this->setRatepayContentBasketChange($content, $subtype, $total);
-            $this->setRatepayContentPayment($content, $total);
         }
     }
 
@@ -617,7 +615,7 @@ class pi_ratepay_Details extends oxAdminDetails
             if ($subtype == "credit") {
                 $total = $total + (($article['ordered'] - $article['cancelled'] - $article['returned']) * $article['unitprice']);
             } else {
-                $total = $total + (($article['ordered'] - $article['cancelled'] - $article['returned'] - oxConfig::getParameter($article['arthash'])) * $article['unitprice']);
+                $total = $total + (($article['ordered'] - $article['cancelled'] - $article['returned'] - oxRegistry::getConfig()->getRequestParameter($article['arthash'])) * $article['unitprice']);
             }
         }
 
@@ -673,7 +671,7 @@ class pi_ratepay_Details extends oxAdminDetails
             if ($subtype == "credit") {
                 $quant = $article['ordered'] - $article['cancelled'] - $article['returned'];
             } else {
-                $quant = $article['ordered'] - $article['cancelled'] - $article['returned'] - (int) oxConfig::getParameter($article['arthash']);
+                $quant = $article['ordered'] - $article['cancelled'] - $article['returned'] - (int) oxRegistry::getConfig()->getRequestParameter($article['arthash']);
             }
 
             if ($quant > 0) {
@@ -723,8 +721,8 @@ class pi_ratepay_Details extends oxAdminDetails
         $articles = $this->getPreparedOrderArticles();
         $total = 0;
         foreach ($articles as $article) {
-            if (oxConfig::getParameter($article['arthash']) > 0) {
-                $total = $total + (oxConfig::getParameter($article['arthash']) * $article['unitprice']);
+            if (oxRegistry::getConfig()->getRequestParameter($article['arthash']) > 0) {
+                $total = $total + (oxRegistry::getConfig()->getRequestParameter($article['arthash']) * $article['unitprice']);
             }
         }
         $shoppingBasket = $content->addChild('shopping-basket');
@@ -754,11 +752,11 @@ class pi_ratepay_Details extends oxAdminDetails
     {
         $articles = $this->getPreparedOrderArticles();
         foreach ($articles as $article) {
-            if (oxConfig::getParameter($article['arthash']) > 0) {
+            if (oxRegistry::getConfig()->getRequestParameter($article['arthash']) > 0) {
 
                 $title = $this->removeSpecialChars(html_entity_decode($article['title']));
                 $item = $items->addCDataChild('item', $title, $this->_isUtfMode());
-                $quant = (int) oxConfig::getParameter($article['arthash']);
+                $quant = (int) oxRegistry::getConfig()->getRequestParameter($article['arthash']);
 
                 $item->addAttribute('article-number', $article['artnum']);
                 $item->addAttribute('quantity', $quant);
@@ -767,151 +765,6 @@ class pi_ratepay_Details extends oxAdminDetails
                 $item->addAttribute('tax', ($this->_convertNumber($article['unitprice']) - $this->_convertNumber($article['unitPriceNetto'])) * $quant);
             }
         }
-    }
-
-    /**
-     * Adds customer Information to the request xml
-     *
-     * @param SimpleXMLExtended $content
-     */
-    private function setRatepayContentCustomer($content)
-    {
-        $customer = $content->addChild('customer');
-
-        $gender = $this->_requestDataBackend->getGender();
-
-        $cid = oxDb::getDb()->getOne("select OXBILLCOUNTRYID from oxorder where oxid='" . $this->_getOrderId() . "'");
-        $country = oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '$cid'");
-
-        $fname = $this->removeSpecialChars(html_entity_decode(oxDb::getDb()->getOne("select OXBILLFNAME from oxorder where oxid='" . $this->_getOrderId() . "'")));
-        $customer->addCDataChild('first-name', $fname, $this->_isUtfMode());
-        $lname = $this->removeSpecialChars(html_entity_decode(oxDb::getDb()->getOne("select OXBILLLNAME from oxorder where oxid='" . $this->_getOrderId() . "'")));
-        $customer->addCDataChild('last-name', $lname, $this->_isUtfMode());
-
-        $customer->addChild('gender', $gender);
-
-        $ratepayOrder = oxNew('pi_ratepay_orders');
-        $ratepayOrder->loadByOrderNumber($this->_getOrderId());
-
-        $userBirth = $ratepayOrder->pi_ratepay_orders__userbirthdate->rawValue;
-        $customer->addChild('date-of-birth', $userBirth);
-
-        $billcompany = oxDb::getDb()->getOne("select OXBILLCOMPANY from oxorder where oxid='" . $this->_getOrderId() . "'");
-        $billustid = oxDb::getDb()->getOne("select OXBILLUSTID from oxorder where oxid='" . $this->_getOrderId() . "'");
-
-        if ($billcompany != '' && $billustid != '') {
-            $customer->addCDataChild('company-name', $billcompany, $this->_isUtfMode());
-            $customer->addChild('vat-id', $billustid);
-        }
-
-        $this->setRatepayContentCustomerContacts($customer);
-        $this->setRatepayContentCustomerAddress($customer);
-
-        $customer->addChild('nationality', $country);
-        $customer->addChild('customer-allow-credit-inquiry', 'yes');
-    }
-
-    /**
-     * Adds customer contact information to request xml.
-     *
-     * @param SimpleXMLExtended $customer
-     */
-    private function setRatepayContentCustomerContacts($customer)
-    {
-        $contacts = $customer->addChild('contacts');
-        $contacts->addChild('email', oxDb::getDb()->getOne("select oxbillemail from oxorder where oxid='" . $this->_getOrderId() . "'"));
-
-        $this->setRatepayContentCustomerContactsPhone($contacts);
-    }
-
-    /**
-     * Adds customers' phone number to the request xml
-     *
-     * @param SimpleXMLExtended $contacts
-     */
-    private function setRatepayContentCustomerContactsPhone($contacts)
-    {
-        $phone = $contacts->addChild('phone');
-        $phone->addChild('direct-dial', oxDb::getDb()->getOne("select oxbillfon from oxorder where oxid='" . $this->_getOrderId() . "'"));
-    }
-
-    /**
-     * Adds customer addresses to request xml
-     * @uses setRatepayContentCustomerAddressBilling
-     * @uses setRatepayContentCustomerAddressShipping
-     *
-     * @param SimpleXMLExtended $customer
-     */
-    private function setRatepayContentCustomerAddress($customer)
-    {
-        $addresses = $customer->addChild('addresses');
-
-        $this->setRatepayContentCustomerAddressBilling($addresses);
-        $this->setRatepayContentCustomerAddressShipping($addresses);
-    }
-
-    /**
-     * Adds customer billding address to request xml
-     *
-     * @param SimpleXMLExtended $addresses
-     */
-    private function setRatepayContentCustomerAddressBilling($addresses)
-    {
-        $orderId = $this->_getOrderId();
-        $billingAddress = $addresses->addChild('address');
-        $billingAddress->addAttribute('type', 'BILLING');
-        $street = $this->removeSpecialChars(html_entity_decode(oxDb::getDb()->getOne("select OXBILLSTREET from oxorder where oxid='$orderId'")));
-        $billingAddress->addCDataChild('street', $street, $this->_isUtfMode());
-
-        $billingAddress->addChild('street-number', oxDb::getDb()->getOne("select OXBILLSTREETNR from oxorder where oxid='$orderId'"));
-        $billingAddress->addChild('zip-code', oxDb::getDb()->getOne("select OXBILLZIP from oxorder where oxid='$orderId'"));
-
-        $city = $this->removeSpecialChars(html_entity_decode(oxDb::getDb()->getOne("select OXBILLCITY from oxorder where oxid='$orderId'")));
-        $billingAddress->addCDataChild('city', $city, $this->_isUtfMode());
-
-        $cid = oxDb::getDb()->getOne("select OXBILLCOUNTRYID from oxorder where oxid='$orderId'");
-        $country = oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '$cid'");
-        $billingAddress->addChild('country-code', $country);
-    }
-
-    /**
-     * Adds customer shipping address to request xml
-     *
-     * @param SimpleXMLExtended $addresses
-     */
-    private function setRatepayContentCustomerAddressShipping($addresses)
-    {
-        $orderId = $this->_getOrderId();
-        $shippingAddress = $addresses->addChild('address');
-        $shippingAddress->addAttribute('type', 'DELIVERY');
-
-        $street = $this->removeSpecialChars(html_entity_decode(oxDb::getDb()->getOne("select OXBILLSTREET from oxorder where oxid='$orderId'")));
-        $shippingAddress->addCDataChild('street', $street, $this->_isUtfMode());
-
-        $shippingAddress->addChild('street-number', oxDb::getDb()->getOne("select OXBILLSTREETNR from oxorder where oxid='$orderId'"));
-        $shippingAddress->addChild('zip-code', oxDb::getDb()->getOne("select OXBILLZIP from oxorder where oxid='$orderId'"));
-
-        $city = $this->removeSpecialChars(html_entity_decode(oxDb::getDb()->getOne("select OXBILLCITY from oxorder where oxid='$orderId'")));
-        $shippingAddress->addCDataChild('city', $city, $this->_isUtfMode());
-
-        $cid = oxDb::getDb()->getOne("select OXBILLCOUNTRYID from oxorder where oxid='$orderId'");
-        $country = oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '$cid'");
-        $shippingAddress->addChild('country-code', $country);
-    }
-
-    /**
-     * Adds payment informations to request xml
-     *
-     * @param SimpleXMLExtended $content
-     * @param string $subtype
-     */
-    private function setRatepayContentPayment($content, $total)
-    {
-        $payment = $content->addChild('payment');
-
-        $payment->addAttribute('method', $this->_paymentMethod);
-        $payment->addAttribute('currency', 'EUR');
-        $payment->addChild('amount', number_format($total, 2, ".", ""));
     }
 
     /**

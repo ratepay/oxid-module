@@ -92,8 +92,7 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
     public function createFormattedResult()
     {
         if ($this->getLanguage() == 'DE' ||
-            $this->getLanguage() == 'AT' ||
-            $this->getLanguage() == 'CH') {
+            $this->getLanguage() == 'AT') {
             $currency = '&euro;';
             $decimalSeperator = ',';
             $thousandSepeartor = '.';
@@ -127,7 +126,7 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
     public function getRatepayRateMonthAllowed()
     {
         $settings = oxNew('pi_ratepay_settings');
-        $settings->loadByType('installment', oxSuperCfg::getSession()->getVariable('pi_ratepay_rate_usr_country'));
+        $settings->loadByType('installment', oxRegistry::getSession()->getVariable('pi_ratepay_rate_usr_country'));
 
         return $settings->pi_ratepay_settings__month_allowed->rawValue;
     }

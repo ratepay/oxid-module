@@ -56,9 +56,9 @@ class pi_ratepay_util_Utilities
         return $paymentMethod;
     }
 
-    public function getCountry()
+    public static function getCountry($countryId)
     {
-        return strtolower(oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $this->getUser()->oxuser__oxcountryid->value . "'"));
+        return strtolower(oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $countryId . "'"));
     }
 
 }

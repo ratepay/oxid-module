@@ -76,7 +76,7 @@ class pi_ratepay_Settings extends oxBase
     private function _getCountry()
     {
         if ($this->_country === null) {
-            $this->_country = pi_ratepay_util_utilities::getCountry();
+            $this->_country = pi_ratepay_util_utilities::getCountry($this->getUser()->oxuser__oxcountryid->value);
         }
         return $this->_country;
     }

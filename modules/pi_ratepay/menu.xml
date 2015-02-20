@@ -7,8 +7,8 @@
             </SUBMENU>
         </MAINMENU>
         <MAINMENU id="PI_RATEPAY_RATEPAY">
-            <SUBMENU id="PI_RATEPAY_ADMIN_MENU_SETTINGS" cl="pi_ratepay_Profile"></SUBMENU>
-            <SUBMENU id="PI_RATEPAY_LOGGING" cl="pi_ratepay_Log"></SUBMENU>
+            <SUBMENU id="PI_RATEPAY_ADMIN_MENU_SETTINGS" cl="pi_ratepay_profile"></SUBMENU>
+            <SUBMENU id="PI_RATEPAY_LOGGING" cl="pi_ratepay_log"></SUBMENU>
         </MAINMENU>
     </OXMENU>
 </OX>

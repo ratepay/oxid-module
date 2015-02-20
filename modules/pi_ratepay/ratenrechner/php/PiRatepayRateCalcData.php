@@ -161,7 +161,7 @@ class PiRatepayRateCalcData implements PiRatepayRateCalcDataInterface
     {
         $oxLangInstance = oxRegistry::getLang();
         $languageAbbervation = strtoupper($oxLangInstance->getLanguageAbbr($oxLangInstance->getBaseLanguage()));
-        if ($languageAbbervation == 'DEU')
+        if ($languageAbbervation == 'DEU' || $languageAbbervation == 'AUT')
             return 'DE';
         return $languageAbbervation;
     }

@@ -1,12 +1,14 @@
 [{if $sPaymentID == "pi_ratepay_elv"}]
-[{oxscript include="js/libs/ratepay.js"}]
 [{assign var="dynvalue" value=$oView->getDynValue()}]
+    [{if $pi_ratepay_elv_country == "DE"}]
+        <script type="text/javascript" src="[{$oViewConf->getModuleUrl('pi_ratepay')}]/out/blocks/src/js/libs/ratepay_elv.js"></script>
+    [{/if}]
 <dl>
     <dt>
         <input id="payment_[{$sPaymentID}]" type="radio" name="paymentid" value="[{$sPaymentID}]" [{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]checked[{/if}] style="position:relative; [{if !$pi_ratepay_elv_whitelabel}]top:-18px;[{/if}]">
         <label for="payment_[{$sPaymentID}]"><b>
             [{if !$pi_ratepay_elv_whitelabel}]
-                <img src="[{$oViewConf->getImageUrl('pi_ratepay_elv_checkout_logo.png')}]" title="RatePAY [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_WHITELABEL_TEXT"}]" alt="RatePAY [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_WHITELABEL_TEXT"}]" />
+                <img src="[{$oViewConf->getModuleUrl('pi_ratepay')}]out/blocks/img/pi_ratepay_elv_checkout_logo.png" title="RatePAY [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_WHITELABEL_TEXT"}]" alt="RatePAY [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_WHITELABEL_TEXT"}]" />
             [{else}]
                 [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_WHITELABEL_TEXT"}]
             [{/if}]
@@ -79,15 +81,15 @@
                 <input name='pi_ratepay_elv_bank_owner' maxlength='255' size='37' type='text' value='[{$piDbBankowner}]'/>
             </li>
             <li>
-                <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_ACCOUNT_NUMBER"}]:</label>
+                <label>
+                    [{if $pi_ratepay_elv_country == "DE"}][{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_ACCOUNT_NUMBER"}] /[{/if}]
+                    [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_IBAN"}]:</label>
                 <input name='pi_ratepay_elv_bank_account_number' maxlength='50' size='37' type='text' value='[{if $piDbBankiban}][{$piDbBankiban}][{else}][{$piDbBankaccountnumber}][{/if}]' onkeyup="rpElvSwitch(this);" onchange="rpElvSwitch(this);" />            </li>
             <li id="PI_RATEPAY_ELV_VIEW_BANK_CODE" style="display: [{if $piDbBankiban}]none[{else}]inline-block[{/if}]">
-                <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_CODE"}]:</label>
+                <label>
+                    [{if $pi_ratepay_elv_country == "DE"}][{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_CODE"}] /[{/if}]
+                    [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_BIC"}]:</label>
                 <input name='pi_ratepay_elv_bank_code' maxlength='255' size='37' type='text' value='[{$piDbBankcode}]'/>
-            </li>
-            <li>
-                <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_NAME"}]:</label>
-                <input name='pi_ratepay_elv_bank_name' maxlength='255' size='37' type='text' value='[{$piDbBankname}]'/>
             </li>
         </ul>
         <div style="margin: 15px 0;">

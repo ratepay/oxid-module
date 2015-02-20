@@ -57,9 +57,6 @@
     [{if $pierror == "-502"}]
         <div class="status error">[{ oxmultilang ident="PI_RATEPAY_ELV_ERROR_CODE" }]</div>
     [{/if}]
-    [{if $pierror == "-503"}]
-        <div class="status error">[{ oxmultilang ident="PI_RATEPAY_ELV_ERROR_NAME" }]</div>
-    [{/if}]
     [{if $pierror == "-504"}]
         <div class="status error">[{ oxmultilang ident="PI_RATEPAY_ELV_ERROR" }]<a href="[{$policyurl}]" target="_blank">[{ oxmultilang ident="PI_RATEPAY_ELV_VIEW_POLICY_PRIVACYPOLICY" }]</a>.</div>
     [{/if}]

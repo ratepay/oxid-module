@@ -178,6 +178,8 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
 
                 $customer = $this->getUser();
 
+                $this->addTplParam($paymentMethod . '_country', oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $customer->oxuser__oxcountryid->value . "'"));
+
                 if (empty($customer->oxuser__oxfon->value)
                     && empty($customer->oxuser__oxprivfon->value)
                     && empty($customer->oxuser__oxmobfon->value)
@@ -236,25 +238,25 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
 
 
             // @todo here for compatibility reasons will be removed in the future.
-            if ($this->getSession()->hasVar($paymentMethod . '_error_id')) {
-                if ($this->getSession()->hasVar($paymentMethod . '_errors')) {
-                    $sessionErrors = $this->getSession()->getVar($paymentMethod . '_errors');
+            if ($this->getSession()->hasVariable($paymentMethod . '_error_id')) {
+                if ($this->getSession()->hasVariable($paymentMethod . '_errors')) {
+                    $sessionErrors = $this->getSession()->getVariable($paymentMethod . '_errors');
                 } else {
                     $sessionErrors = array();
                 }
-                $sessionErrors[] = $this->getSession()->getVar($paymentMethod . '_error_id');
-                $this->getSession()->setVar($paymentMethod . '_errors', $sessionErrors);
-                $this->getSession()->deleteVar($paymentMethod . '_error_id');
+                $sessionErrors[] = $this->getSession()->getVariable($paymentMethod . '_error_id');
+                $this->getSession()->setVariable($paymentMethod . '_errors', $sessionErrors);
+                $this->getSession()->deleteVariable($paymentMethod . '_error_id');
             }
 
-            if ($this->getSession()->hasVar($paymentMethod . '_errors')) {
+            if ($this->getSession()->hasVariable($paymentMethod . '_errors')) {
                 $this->_sPaymentError = '-600';
                 $this->_sPaymentErrorText = 'A RatePAY Error occurred';
 
                 $this->addTplParam('piRatepayErrors',
-                    $this->getSession()->getVar($paymentMethod . '_errors'));
+                    $this->getSession()->getVariable($paymentMethod . '_errors'));
 
-                $this->getSession()->deleteVar($paymentMethod . '_errors');
+                $this->getSession()->deleteVariable($paymentMethod . '_errors');
 
                 $settings = $this->_getRatePaySettings($paymentMethod);
             }
@@ -294,8 +296,8 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
      */
     public function validatePayment()
     {
-        if (!($paymentId = oxConfig::getParameter('paymentid'))) {
-            $paymentId = oxSession::getVar('paymentid');
+        if (!($paymentId = oxRegistry::getConfig()->getRequestParameter('paymentid'))) {
+            $paymentId = oxSession::getVariable('paymentid');
         }
 
         $this->_selectedPaymentMethod = $paymentId;
@@ -309,19 +311,18 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                 $this->_checkBirthdate(),
                 $this->_checkCompanyData(),
                 $this->_checkBankData(),
-                $this->_checkPrivacy(),
-                $this->_ratepayInitRequest()
+                $this->_checkPrivacy()
             );
 
             foreach ($isValid as $validationValue) {
                 if (!$validationValue) {
-                    $this->getSession()->setVar($paymentId . '_errors', array_unique($this->_errors));
-                    oxUtils::getInstance()->redirect($this->getConfig()->getSslShopUrl() . 'index.php?cl=payment', false);
+                    $this->getSession()->setVariable($paymentId . '_errors', array_unique($this->_errors));
+                    oxRegistry::getUtils()->redirect($this->getConfig()->getSslShopUrl() . 'index.php?cl=payment', false);
                 }
             }
 
             if ($this->_selectedPaymentMethod === 'pi_ratepay_rate') {
-                $this->getSession()->setVar('pi_ratepay_rate_usr_country', $this->_getCountry());
+                $this->getSession()->setVariable('pi_ratepay_rate_usr_country', $this->_getCountry());
                 $nextStep = 'pi_ratepay_rate_calc';
             }
         }
@@ -339,7 +340,7 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
             return true;
         }
 
-        $privacyParameter = oxConfig::getParameter($this->_selectedPaymentMethod . '_privacy');
+        $privacyParameter = oxRegistry::getConfig()->getRequestParameter($this->_selectedPaymentMethod . '_privacy');
         $isPrivacyChecked = isset($privacyParameter) && $privacyParameter === '1';
 
         if (!$isPrivacyChecked) {
@@ -380,13 +381,13 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
             return true;
         }
 
-        $ustId = oxConfig::getParameter($this->_selectedPaymentMethod . '_ust');
+        $ustId = oxRegistry::getConfig()->getRequestParameter($this->_selectedPaymentMethod . '_ust');
         if (!empty($ustId)) {
             $user->oxuser__oxustid->value = $ustId;
             $isCompanyDataValid = true;
         }
 
-        $company = oxConfig::getParameter($this->_selectedPaymentMethod . '_company');
+        $company = oxRegistry::getConfig()->getRequestParameter($this->_selectedPaymentMethod . '_company');
         if (!empty($company)) {
             $user->oxuser__oxcompany->value = $company;
             $isCompanyDataValid = true;
@@ -416,9 +417,9 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
             return true;
         }
 
-        $day = oxConfig::getParameter($this->_selectedPaymentMethod . '_birthdate_day');
-        $month = oxConfig::getParameter($this->_selectedPaymentMethod . '_birthdate_month');
-        $year = oxConfig::getParameter($this->_selectedPaymentMethod . '_birthdate_year');
+        $day = oxRegistry::getConfig()->getRequestParameter($this->_selectedPaymentMethod . '_birthdate_day');
+        $month = oxRegistry::getConfig()->getRequestParameter($this->_selectedPaymentMethod . '_birthdate_month');
+        $year = oxRegistry::getConfig()->getRequestParameter($this->_selectedPaymentMethod . '_birthdate_year');
 
         if ($this->_checkBirthdateValues($day, $month, $year)) {
             $user->oxuser__oxbirthdate->value = date("Y-m-d", mktime(0, 0, 0, $month, $day, $year));
@@ -518,8 +519,8 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         }
 
         $phoneNumbers = array(
-            'fon'   => oxConfig::getParameter($this->_selectedPaymentMethod . '_fon'),
-            'mobil' => oxConfig::getParameter($this->_selectedPaymentMethod . '_mobilfon')
+            'fon'   => oxRegistry::getConfig()->getRequestParameter($this->_selectedPaymentMethod . '_fon'),
+            'mobil' => oxRegistry::getConfig()->getRequestParameter($this->_selectedPaymentMethod . '_mobilfon')
         );
 
         foreach ($phoneNumbers as $type => $phoneNumber) {
@@ -567,7 +568,7 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         if (!$this->_isRateElv()
             && $this->_selectedPaymentMethod != 'pi_ratepay_elv'
         ) {
-            $this->getSession()->setVar(
+            $this->getSession()->setVariable(
                 'pi_rp_rate_pay_method',
                 'noelv'
             );
@@ -575,26 +576,27 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         }
 
         if ($this->_isRateElv()) {
-            $this->getSession()->setVar(
+            $this->getSession()->setVariable(
                 'pi_rp_rate_pay_method',
                 'pi_ratepay_rate_radio_elv'
             );
         }
 
+        $user = $this->getUser();
+        $country = oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $user->oxuser__oxcountryid->value . "'");
         $isBankDataValid = true;
 
         $ownerKey = $this->_selectedPaymentMethod . '_bank_owner';
-        $nameKey = $this->_selectedPaymentMethod . '_bank_name';
         $ibanKey = $this->_selectedPaymentMethod . '_bank_iban';
-        //$bicKey = $this->_selectedPaymentMethod . '_bank_bic';
+        $bicKey = $this->_selectedPaymentMethod . '_bank_bic';
         $accountNumberKey = $this->_selectedPaymentMethod . '_bank_account_number';
         $codeKey = $this->_selectedPaymentMethod . '_bank_code';
 
         $bankData = array(
-            $ownerKey         => oxConfig::getParameter($ownerKey),
-            $nameKey          => oxConfig::getParameter($nameKey),
-            $accountNumberKey => oxConfig::getParameter($accountNumberKey),
-            $codeKey          => oxConfig::getParameter($codeKey),
+            $ownerKey         => oxRegistry::getConfig()->getRequestParameter($ownerKey),
+            $accountNumberKey => oxRegistry::getConfig()->getRequestParameter($accountNumberKey),
+            $ibanKey => oxRegistry::getConfig()->getRequestParameter($ibanKey),
+            $codeKey          => oxRegistry::getConfig()->getRequestParameter($codeKey),
         );
 
         $bankErrors = array(
@@ -603,24 +605,46 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
             $ibanKey          => '-501',
             $codeKey          => '-502',
             $bicKey           => '-510',
-            $nameKey          => '-503',
             'codekeyinvalid'  => '-509'
         );
 
-        if(empty($bankData[$accountNumberKey])) {
+        if(empty($bankData[$accountNumberKey]) && empty($bankData[$ibanKey])) {
+            $isBankDataValid = false;
+            $this->_errors[] = $bankErrors[$ibanKey];
+        } elseif (is_numeric($bankData[$accountNumberKey]) && $country == "AT") {
             $isBankDataValid = false;
             $this->_errors[] = $bankErrors[$ibanKey];
         } else {
-            $ibanAccno = $bankData[$accountNumberKey];
+            $ibanAccno = (empty($bankData[$accountNumberKey])) ? $bankData[$ibanKey] : $bankData[$accountNumberKey];
             if (!is_numeric($ibanAccno)) {
                 $ibanAccno = $this->_clearIban($ibanAccno);
-                if($ibanAccno[0].$ibanAccno[1] != "DE" || (strlen($ibanAccno)<20 || strlen($ibanAccno)>22)) {
+                $countryPrefix = strtoupper($ibanAccno[0].$ibanAccno[1]);
+                if ($countryPrefix != $country) {
                     $this->_errors[] = $bankErrors[$ibanKey];
                     $isBankDataValid = false;
+                } else {
+                    if ($countryPrefix == "DE" && strlen($ibanAccno) <> 22) {
+                        $this->_errors[] = $bankErrors[$ibanKey];
+                        $isBankDataValid = false;
+                    }
+                    if ($countryPrefix == "AT" && strlen($ibanAccno) <> 20) {
+                        $this->_errors[] = $bankErrors[$ibanKey];
+                        $isBankDataValid = false;
+                    }
                 }
-                unset($bankData[$accountNumberKey]);
-                unset($bankData[$codeKey]);
+
                 $bankData[$ibanKey] = $ibanAccno;
+                unset($bankData[$accountNumberKey]);
+
+                if ((empty($bankData[$codeKey]) || is_numeric($bankData[$codeKey])) && $country == "AT") {
+                    $this->_errors[] = $bankErrors[$bicKey];
+                    $isBankDataValid = false;
+                } elseif ($country == "DE") {
+                    unset($bankData[$codeKey]);
+                } else {
+                    $bankData[$bicKey] = $bankData[$codeKey];
+                    unset($bankData[$codeKey]);
+                }
 
             } elseif (!is_numeric($bankData[$codeKey]) || strlen(trim($bankData[$codeKey])) <> 8) {
                 $isBankDataValid = false;
@@ -633,22 +657,16 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
             $this->_errors[] = $bankErrors[$ownerKey];
         }
 
-        if(empty($bankData[$nameKey])) {
-            $isBankDataValid = false;
-            $this->_errors[] = $bankErrors[$nameKey];
-        }
-
         if ($isBankDataValid) {
             foreach ($bankData as $bankDatumKey => $bankDatumValue) {
-                $this->getSession()->setVar($bankDatumKey, $bankDatumValue);
+                $this->getSession()->setVariable($bankDatumKey, $bankDatumValue);
             }
 
             if ($this->_isSaveBankDataSet()) {
                 $encryptionService = new Pi_Util_Encryption_OxEncryption();
 
                 $insertArray = array(
-                    'owner'         => $bankData[$ownerKey],
-                    'bankname'      => $bankData[$nameKey]
+                    'owner'         => $bankData[$ownerKey]
                 );
 
                 if(empty($bankData[$ibanKey])) {
@@ -656,7 +674,7 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                     $insertArray['bankcode'] = $bankData[$codeKey];
                 } else {
                     $insertArray['iban'] = $bankData[$ibanKey];
-                    if(!empty($bicKey)) {
+                    if($country == "AT") {
                         $insertArray['bic'] = $bankData[$bicKey];
                     }
                 }
@@ -671,40 +689,6 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         }
 
         return $isBankDataValid;
-    }
-
-    /**
-     * Do init payment request redirect to order on succes, on failure redirect back to payment.
-     */
-    private function _ratepayInitRequest()
-    {
-        $isInitSuccessful = false;
-        $paymentMethod = pi_ratepay_util_utilities::getPaymentMethod($this->_selectedPaymentMethod);
-
-        $name = $this->getUser()->oxuser__oxfname->value;
-        $surname = $this->getUser()->oxuser__oxlname->value;
-
-        $ratepayRequest = $this->_getRatepayRequest();
-        $initPayment = $ratepayRequest->initPayment();
-
-        $transactionId = '';
-
-        if ($initPayment['response']) {
-            if ((string) $initPayment['response']->head->processing->status->attributes()->code == "OK" && (string) $initPayment['response']->head->processing->result->attributes()->code == "350") {
-                $transactionId = (string) $initPayment['response']->head->{'transaction-id'};
-                $this->getSession()->setVar($this->_selectedPaymentMethod . '_trans_id', (string) $initPayment['response']->head->{'transaction-id'});
-                $this->getSession()->setVar($this->_selectedPaymentMethod . '_trans_short_id', (string) $initPayment['response']->head->{'transaction-short-id'});
-                $isInitSuccessful = true;
-            } else {
-                $this->_errors[] = '-400';
-            }
-        } else {
-            $this->_errors[] = '-418';
-        }
-
-        pi_ratepay_LogsService::getInstance()->logRatepayTransaction('', $transactionId, $paymentMethod, 'PAYMENT_INIT', '', $initPayment['request'], $name, $surname, $initPayment['response']);
-
-        return $isInitSuccessful;
     }
 
     /**
@@ -763,7 +747,7 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
     private function _checkDenied()
     {
         $session = $this->getSession();
-        return $session->hasVar('pi_ratepay_denied') && $session->getVar('pi_ratepay_denied') == 'denied';
+        return $session->hasVariable('pi_ratepay_denied') && $session->getVariable('pi_ratepay_denied') == 'denied';
     }
 
     /**
@@ -817,6 +801,15 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
     }
 
     /**
+     * Makes the address check available for later processing
+     *
+     * @return boolean
+     */
+    public function isShippingAddressSet() {
+        return $this->_checkAddress();
+    }
+
+    /**
      * Returns delivery address information from db if $this->_oDelAddress is null.
      *
      * @return oxaddress
@@ -836,7 +829,6 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         $owner = '';
         $accountnumber = '';
         $bankcode = '';
-        $bankname = '';
 
         $encryptService = new Pi_Util_Encryption_OxEncryption();
         if ($encryptService->isBankdataSetForUser($this->getUser()->getId())) {
@@ -845,13 +837,11 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
             $owner = $this->_bankdata['owner'];
             $accountnumber = $this->_bankdata['accountnumber'];
             $bankcode = $this->_bankdata['bankcode'];
-            $bankname = $this->_bankdata['bankname'];
         }
 
         $this->addTplParam('piDbBankowner', $owner);
         $this->addTplParam('piDbBankaccountnumber', $accountnumber);
         $this->addTplParam('piDbBankcode', $bankcode);
-        $this->addTplParam('piDbBankname', $bankname);
     }
 
     private function _isSaveBankDataSet()
@@ -862,23 +852,11 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         return $saveBankData != 0;
     }
 
-    /**
-     * Get RatePAY Request object.
-     * @return  pi_ratepay_ratepayrequest
-     */
-    protected function _getRatepayRequest()
-    {
-        $requestDataProvider = oxNew('pi_ratepay_requestdatafrontend', $this->_selectedPaymentMethod);
-        $ratepayRequest = oxNew('pi_ratepay_ratepayrequest', $this->_selectedPaymentMethod, $requestDataProvider, null, array('country' => pi_ratepay_util_utilities::getCountry()));
-
-        return $ratepayRequest;
-    }
-
     private function _isRateElv()
     {
         $rateSettings = $this->_getRatePaySettings('pi_ratepay_rate');
         return $this->_selectedPaymentMethod === 'pi_ratepay_rate'
-                && oxConfig::getParameter('pi_rp_rate_pay_method') === 'pi_ratepay_rate_radio_elv'
+                && oxRegistry::getConfig()->getRequestParameter('pi_rp_rate_pay_method') === 'pi_ratepay_rate_radio_elv'
                 && $rateSettings->pi_ratepay_settings__activate_elv->rawValue == 1;
     }
 
