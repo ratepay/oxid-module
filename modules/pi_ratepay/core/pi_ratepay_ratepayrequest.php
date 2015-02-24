@@ -446,7 +446,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
         $deliveryAddress->addCDataChild('last-name', $lastname, $this->_utfMode);
         $deliveryAddress->addCDataChild('company', $company, $this->_utfMode);
         $deliveryAddress->addCDataChild('street', $street, $this->_utfMode);
-        $deliveryAddress->addChild('street-number', $deliveryAddress['street-number']);
+        $deliveryAddress->addChild('street-number', $address['street-number']);
         $deliveryAddress->addChild('zip-code', $address['zip-code']);
         $deliveryAddress->addCDataChild('city', $city, $this->_utfMode);
         $deliveryAddress->addChild('country-code', $address['country-code']);
