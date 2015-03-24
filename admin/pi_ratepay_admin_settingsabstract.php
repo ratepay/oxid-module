@@ -16,54 +16,5 @@
  * @copyright (C) 2011 PayIntelligent GmbH  <http://www.payintelligent.de/>
  * @license	http://www.gnu.org/licenses/  GNU General Public License 3
  */
-abstract class pi_ratepay_admin_SettingsAbstract extends oxAdminView
-{
 
-    public function render()
-    {
-        $sReturn = parent::render();
-
-        if (oxRegistry::getConfig()->getRequestParameter('stoken') != null) {
-            $this->addTplParam('stoken', oxRegistry::getConfig()->getRequestParameter('stoken'));
-        } else {
-            $this->addTplParam('stoken', '');
-        }
-
-        $this->addTplParam('moduleVersion', pi_ratepay_util_utilities::PI_MODULE_VERSION);
-
-        return $sReturn;
-    }
-
-    /**
-     * Check if checkbox has been set to on for given parameter.
-     *
-     * @param string $parameter
-     * @return int 0 for false and 1 for true
-     */
-    protected function _isParameterCheckedOn($parameter)
-    {
-        $checked = 0;
-
-        if ($parameter != null && $parameter == 'on') {
-            $checked = 1;
-        }
-
-        return $checked;
-    }
-
-    /**
-     * Check if checkbox has been set to on for given parameter.
-     *
-     * @param string $parameter
-     * @return int 0 for false and 1 for true
-     */
-    protected function _isParameterCheckedYes($parameter)
-    {
-        $checked = 0;
-        if ($parameter != null && $parameter == 'yes') {
-            $checked = 1;
-        }
-        return $checked;
-    }
-
-}
+include_once($sBasePath . '/modules/pi_ratepay/admin/pi_ratepay_admin_settingsabstract.php');
