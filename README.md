@@ -6,8 +6,8 @@ RatePAY GmbH - OXID Payment Module
 |Author | `Aarne Welschlau`
 |Prefix | `pi`
 |Shop Version | `CE` `4.7.x-4.9.x`
-|Version | `3.2.0`
+|Version | `3.2.1`
 |Link | `http://www.ratepay.com`
 |Mail | `integration@ratepay.com`
-|Description | `compatibility with AT (CH ready) with different credentials via PR`
+|Description | `fixed default basket items. added customer number in PR`
 |Installation | `see separate installation manual`

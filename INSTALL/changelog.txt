@@ -1,4 +1,13 @@
 ***********************************************************
+***********| Version 3.2.1 - Released 2015-03-24 |*********
+***********************************************************
+
+-- fixed missing delivery cost
+-- fixed empty basket items (wrapping, delivery, tsprotection)
+-- added default item oxgiftcard
+-- added customer number in PAYMENT REQUEST
+
+***********************************************************
 ***********| Version 3.2.0 - Released 2015-02-19 |*********
 ***********************************************************
 -- compatibility with AT (CH ready) with different credentials via PR

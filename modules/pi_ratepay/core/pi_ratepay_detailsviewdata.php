@@ -123,6 +123,40 @@ class pi_ratepay_DetailsViewData
             $i++;
         }
 
+        if ($values->OXGIFTCARDCOST != 0) {
+            $sql2 = "SELECT * from `$this->pi_ratepay_order_details` where order_number='$orderId' and article_number='oxgiftcard'";
+            $result2 = mysql_query($sql2);
+            $values2 = mysql_fetch_object($result2);
+
+            $giftcardprice = oxNew('oxprice');
+            $giftcardprice->setBruttopriceMode(true);
+            $giftcardprice->setVat($values->OXGIFTCARDVAT);
+            $giftcardprice->setPrice($values->OXGIFTCARDCOST);
+
+            $articleList[$i]['oxid'] = "";
+            $articleList[$i]['artid'] = "oxgiftcard";
+            $articleList[$i]['arthash'] = md5($values->oxartid);
+            $articleList[$i]['artnum'] = "oxgiftcard";
+            $articleList[$i]['title'] = "Giftcard Cost";
+            $articleList[$i]['oxtitle'] = "Giftcard Cost";
+            $articleList[$i]['vat'] = number_format($values->OXGIFTCARDVAT, 0);
+            $articleList[$i]['unitprice'] = number_format($values->OXGIFTCARDCOST, 2);
+            $articleList[$i]['unitPriceNetto'] = number_format($giftcardprice->getNettoPrice(), 2);
+            $articleList[$i]['amount'] = 1 - $values2->SHIPPED - $values2->CANCELLED;
+            $articleList[$i]['ordered'] = $values2->ORDERED;
+            $articleList[$i]['shipped'] = $values2->SHIPPED;
+            $articleList[$i]['returned'] = $values2->RETURNED;
+            $articleList[$i]['cancelled'] = $values2->CANCELLED;
+
+            if (($values2->ORDERED - $values2->RETURNED - $values2->CANCELLED) > 0) {
+                $articleList[$i]['totalprice'] = number_format($values->OXGIFTCARDCOST, 2);
+            } else {
+                $articleList[$i]['totalprice'] = number_format(0, 2);
+            }
+
+            $i++;
+        }
+
         if ($values->OXPAYCOST != 0) {
             $sql2 = "SELECT * from `$this->pi_ratepay_order_details` where order_number='$orderId' and article_number='oxpayment'";
             $result2 = mysql_query($sql2);
@@ -186,10 +220,10 @@ class pi_ratepay_DetailsViewData
             $i++;
         }
 
-        $sql2 = "SELECT * from `$this->pi_ratepay_order_details` where order_number='$orderId' and article_number='oxdelivery'";
-        $result2 = mysql_query($sql2);
-
-        if ($values2 = mysql_fetch_object($result2)) {
+        if ($values->OXDELCOST != 0) {
+            $sql2 = "SELECT * from `$this->pi_ratepay_order_details` where order_number='$orderId' and article_number='oxdelivery'";
+            $result2 = mysql_query($sql2);
+            $values2 = mysql_fetch_object($result2);
 
             $delprice = oxNew('oxprice');
             $delprice->setBruttopriceMode(true);
@@ -220,10 +254,10 @@ class pi_ratepay_DetailsViewData
             $i++;
         }
 
-        $sql2 = "SELECT * from `$this->pi_ratepay_order_details` where order_number='$orderId' and article_number='oxtsprotection'";
-        $result2 = mysql_query($sql2);
-
-        if ($values2 = mysql_fetch_object($result2)) {
+        if ($values->OXTSPROTECTCOSTS != 0) {
+            $sql2 = "SELECT * from `$this->pi_ratepay_order_details` where order_number='$orderId' and article_number='oxtsprotection'";
+            $result2 = mysql_query($sql2);
+            $values2 = mysql_fetch_object($result2);
 
             $tsprotectprice = oxNew('oxprice');
             $tsprotectprice->setBruttopriceMode(true);
@@ -259,7 +293,7 @@ class pi_ratepay_DetailsViewData
 		WHERE prrod.order_number = '" . $orderId . "'
 		AND ov.oxorderid = prrod.order_number
 		AND prrod.article_number = ov.oxid
-                AND ovs.oxid = ov.OXVOUCHERSERIEID";
+        AND ovs.oxid = ov.OXVOUCHERSERIEID";
 
         $result2 = mysql_query($sql2);
 

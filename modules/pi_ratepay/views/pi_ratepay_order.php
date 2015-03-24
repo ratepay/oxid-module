@@ -312,7 +312,7 @@ class pi_ratepay_order extends pi_ratepay_order_parent
             $this->_saveToRatepayOrderDetails($id, $articlenumber, $quantity);
         }
 
-        $articleNumbers = array('oxwrapping', 'oxdelivery', 'oxpayment', 'oxtsprotection');
+        $articleNumbers = array('oxwrapping', 'oxgiftcard', 'oxdelivery', 'oxpayment', 'oxtsprotection');
 
         foreach ($articleNumbers as $articleNumber) {
             $this->_checkBasketCosts($id, $articleNumber);

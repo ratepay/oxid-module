@@ -23,6 +23,15 @@ abstract class pi_ratepay_RequestAbstract extends oxSuperCfg
 {
 
     /**
+     * Get customer number.
+     * @return string|boolean
+     */
+    public function getCustomerNumber()
+    {
+        return $this->getUser()->oxuser__oxcustnr->value;
+    }
+
+    /**
      * Get fax number of customer, or false if customer has none.
      * @return string|boolean
      */

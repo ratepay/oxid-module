@@ -378,6 +378,8 @@ class pi_ratepay_Details extends oxAdminDetails
                             $oOrder->oxorder__oxpaycost->setValue(0);
                         } else if ($article['artid'] == "oxwrapping") {
                             $oOrder->oxorder__oxwrapcost->setValue(0);
+                        } else if ($article['artid'] == "oxgiftcard") {
+                            $oOrder->oxorder__oxgiftcardcost->setValue(0);
                         } else if ($article['artid'] == "oxtsprotection") {
                             $oOrder->oxorder__oxtsprotectcosts->setValue(0);
                         } else if ($article['artid'] == "Discount") {

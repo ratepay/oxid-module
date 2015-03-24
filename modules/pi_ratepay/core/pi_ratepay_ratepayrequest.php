@@ -117,6 +117,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
         $request = $ratepay->getXMLObject();
 
         $head = $this->_setRatepayHead($request, $operation);
+        $this->_setRatepayHeadExternal($head, $operation);
         $this->_setRatepayHeadCustomerDevice($head);
         $this->_setRatepayHeadMeta($head);
 
@@ -154,7 +155,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
         $request = $ratepay->getXMLObject();
 
         $head = $this->_setRatepayHead($request, $operation);
-        $this->_setRatepayHeadExternal($head);
+        $this->_setRatepayHeadExternal($head, $operation);
         $this->_setRatepayHeadMeta($head);
 
         $confirmPayment = array(
@@ -260,11 +261,17 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
      *
      * @param SimpleXMLExtended $head
      */
-    private function _setRatepayHeadExternal($head)
+    private function _setRatepayHeadExternal($head, $operation)
     {
         $external = $head->addChild('external');
 
-        $external->addChild('order-id', $this->_getDataProvider()->getOrderId());
+        if ($operation == 'PAYMENT_CONFIRM') {
+            $external->addChild('order-id', $this->_getDataProvider()->getOrderId());
+        }
+
+        if ($operation == 'PAYMENT_REQUEST') {
+            $external->addChild('merchant-consumer-id', $this->_getDataProvider()->getCustomerNumber());
+        }
     }
 
     /**
@@ -525,68 +532,49 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
 
         $basket = $this->_getDataProvider()->getSession()->getBasket();
 
-        if ($basket->getFWrappingCosts() != 0) {
+        if ($basket->getWrappingCost() && $basket->getWrappingCost()->getPrice() != 0) {
             $item = $items->addChild('item', 'Wrapping Cost');
             $item->addAttribute('article-number', 'oxwrapping');
             $item->addAttribute('quantity', 1);
-            $item->addAttribute('unit-price', number_format($basket->getWrappCostNet(), 2, ".", ""));
-            $item->addAttribute('total-price', number_format($basket->getWrappCostNet(), 2, ".", ""));
-            $item->addAttribute('tax', number_format($basket->getWrappCostNet(), 2, ".", ""));
-        } else {
-            $item = $items->addChild('item', 'Wrapping Cost');
-            $item->addAttribute('article-number', 'oxwrapping');
-            $item->addAttribute('quantity', 1);
-            $item->addAttribute('unit-price', number_format(0, 2, ".", ""));
-            $item->addAttribute('total-price', number_format(0, 2, ".", ""));
-            $item->addAttribute('tax', number_format(0, 2, ".", ""));
+            $item->addAttribute('unit-price', number_format($basket->getWrappingCost()->getNettoPrice(), 2, ".", ""));
+            $item->addAttribute('total-price', number_format($basket->getWrappingCost()->getNettoPrice(), 2, ".", ""));
+            $item->addAttribute('tax', number_format($basket->getWrappingCost()->getVatValue(), 2, ".", ""));
         }
 
-        if ($basket->getDelCostNet() != 0) {
+        if ($basket->getGiftCardCost() && $basket->getGiftCardCost()->getPrice() != 0) {
+            $item = $items->addChild('item', 'Giftcard Cost');
+            $item->addAttribute('article-number', 'oxwgiftcard');
+            $item->addAttribute('quantity', 1);
+            $item->addAttribute('unit-price', number_format($basket->getGiftCardCost()->getNettoPrice(), 2, ".", ""));
+            $item->addAttribute('total-price', number_format($basket->getGiftCardCost()->getNettoPrice(), 2, ".", ""));
+            $item->addAttribute('tax', number_format($basket->getGiftCardCost()->getVatValue(), 2, ".", ""));
+        }
+
+        if ($basket->getDeliveryCost() && $basket->getDeliveryCost()->getPrice() != 0) {
             $item = $items->addChild('item', 'Delivery Cost');
             $item->addAttribute('article-number', 'oxdelivery');
             $item->addAttribute('quantity', 1);
-            $item->addAttribute('unit-price', number_format($basket->getDelCostNet(), 2, ".", ""));
-            $item->addAttribute('total-price', number_format($basket->getDelCostNet(), 2, ".", ""));
-            $item->addAttribute('tax', number_format($basket->getDelCostVat(), 2, ".", ""));
-        } else {
-            $item = $items->addChild('item', 'Delivery Cost');
-            $item->addAttribute('article-number', 'oxdelivery');
-            $item->addAttribute('quantity', 1);
-            $item->addAttribute('unit-price', number_format(0, 2, ".", ""));
-            $item->addAttribute('total-price', number_format(0, 2, ".", ""));
-            $item->addAttribute('tax', number_format(0, 2, ".", ""));
+            $item->addAttribute('unit-price', number_format($basket->getDeliveryCost()->getNettoPrice(), 2, ".", ""));
+            $item->addAttribute('total-price', number_format($basket->getDeliveryCost()->getNettoPrice(), 2, ".", ""));
+            $item->addAttribute('tax', number_format($basket->getDeliveryCost()->getVatValue(), 2, ".", ""));
         }
 
-        if ($basket->getPayCostNet() != 0) {
+        if ($basket->getPaymentCost() && $basket->getPaymentCost()->getPrice() != 0) {
             $item = $items->addChild('item', 'Payment Cost');
             $item->addAttribute('article-number', 'oxpayment');
             $item->addAttribute('quantity', 1);
-            $item->addAttribute('unit-price', number_format($basket->getPayCostNet(), 2, ".", ""));
-            $item->addAttribute('total-price', number_format($basket->getPayCostNet(), 2, ".", ""));
-            $item->addAttribute('tax', number_format($basket->getPayCostVat(), 2, ".", ""));
-        } else {
-            $item = $items->addChild('item', 'Payment Cost');
-            $item->addAttribute('article-number', 'oxpayment');
-            $item->addAttribute('quantity', 1);
-            $item->addAttribute('unit-price', number_format(0, 2, ".", ""));
-            $item->addAttribute('total-price', number_format(0, 2, ".", ""));
-            $item->addAttribute('tax', number_format(0, 2, ".", ""));
+            $item->addAttribute('unit-price', number_format($basket->getPaymentCost()->getNettoPrice(), 2, ".", ""));
+            $item->addAttribute('total-price', number_format($basket->getPaymentCost()->getNettoPrice(), 2, ".", ""));
+            $item->addAttribute('tax', number_format($basket->getPaymentCost()->getVatValue(), 2, ".", ""));
         }
 
-        if ($basket->getTsProtectionNet() != 0) {
+        if ($basket->getTrustedShopProtectionCost() && $basket->getTrustedShopProtectionCost()->getPrice() != 0) {
             $item = $items->addChild('item', 'TS Protection Cost');
             $item->addAttribute('article-number', 'oxtsprotection');
             $item->addAttribute('quantity', 1);
-            $item->addAttribute('unit-price', number_format($basket->getTsProtectionNet(), 2, ".", ""));
-            $item->addAttribute('total-price', number_format($basket->getTsProtectionNet(), 2, ".", ""));
-            $item->addAttribute('tax', number_format($basket->getTsProtectionVat(), 2, ".", ""));
-        } else {
-            $item = $items->addChild('item', 'TS Protection Cost');
-            $item->addAttribute('article-number', 'oxtsprotection');
-            $item->addAttribute('quantity', 1);
-            $item->addAttribute('unit-price', number_format(0, 2, ".", ""));
-            $item->addAttribute('total-price', number_format(0, 2, ".", ""));
-            $item->addAttribute('tax', number_format(0, 2, ".", ""));
+            $item->addAttribute('unit-price', number_format($basket->getTrustedShopProtectionCost()->getNettoPrice(), 2, ".", ""));
+            $item->addAttribute('total-price', number_format($basket->getTrustedShopProtectionCost()->getNettoPrice(), 2, ".", ""));
+            $item->addAttribute('tax', number_format($basket->getTrustedShopProtectionCost()->getVatValue(), 2, ".", ""));
         }
 
         if (count($basket->getVouchers())) {
@@ -600,7 +588,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
             }
         }
 
-        if ($basket->getTotalDiscount()->getBruttoPrice() > 0) {
+        if ($basket->getTotalDiscount() && $basket->getTotalDiscount()->getBruttoPrice() > 0) {
             $item = $items->addChild('item', "Discount");
             $item->addAttribute('article-number', "Discount");
             $item->addAttribute('quantity', 1);
