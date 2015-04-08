@@ -203,7 +203,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['title'] = "Discount";
             $articleList[$i]['oxtitle'] = "Discount";
             $articleList[$i]['vat'] = "0";
-            $articleList[$i]['unitprice'] = number_format($values->OXDISCOUNT, 2);
+            $articleList[$i]['unitprice'] = number_format("-" . $values->OXDISCOUNT, 2);
             $articleList[$i]['unitPriceNetto'] = number_format("-" . $values->OXDISCOUNT, 2);
             $articleList[$i]['amount'] = 1 - $values2->SHIPPED - $values2->CANCELLED;
             $articleList[$i]['ordered'] = $values2->ORDERED;

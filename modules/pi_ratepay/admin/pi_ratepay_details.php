@@ -764,7 +764,7 @@ class pi_ratepay_Details extends oxAdminDetails
                 $item->addAttribute('quantity', $quant);
                 $item->addAttribute('unit-price', $this->_convertNumber($article['unitPriceNetto']));
                 $item->addAttribute('total-price', $this->_convertNumber($article['unitPriceNetto']) * $quant);
-                $item->addAttribute('tax', ($this->_convertNumber($article['unitprice']) - $this->_convertNumber($article['unitPriceNetto'])) * $quant);
+                $item->addAttribute('tax', (abs($this->_convertNumber($article['unitPriceNetto']) * $quant)) * ($article['tax'] / 100));
             }
         }
     }

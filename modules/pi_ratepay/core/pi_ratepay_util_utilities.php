@@ -61,4 +61,13 @@ class pi_ratepay_util_Utilities
         return strtolower(oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $countryId . "'"));
     }
 
+    public function getFormattedNumber($str, $decimal = 2, $dec_point = ".", $thousands_sep = "") {
+        if(strstr($str, ",")) {
+            $str = str_replace(".", "", $str); // replace dots (thousand seps) with blancs
+            $str = str_replace(",", ".", $str); // replace ',' with '.'
+        }
+
+        return number_format($str, $decimal, $dec_point, $thousands_sep);
+    }
+
 }

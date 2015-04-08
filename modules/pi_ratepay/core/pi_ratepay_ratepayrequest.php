@@ -490,7 +490,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
     private function _setRatepayContentBasket($content)
     {
         $shoppingBasket = $content->addChild('shopping-basket');
-        $shoppingBasket->addAttribute('amount', number_format($this->_getDataProvider()->getBasketAmount(), 2, ".", ""));
+        $shoppingBasket->addAttribute('amount', $this->_getFormattedNumber($this->_getDataProvider()->getBasketAmount()));
         $shoppingBasket->addAttribute('currency', 'EUR');
         $this->_setRatepayContentBasketItems($shoppingBasket);
         return $content;
@@ -521,9 +521,9 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
             $item = $items->addCDataChild('item', $article->getTitle(), $this->_utfMode);
             $item->addAttribute('article-number', $article->getArticleNumber());
             $item->addAttribute('quantity', $article->getQuantity());
-            $item->addAttribute('unit-price', number_format($article->getUnitPrice(), 2, ".", ""));
-            $item->addAttribute('total-price', number_format($article->getPrice(), 2, ".", ""));
-            $item->addAttribute('tax', number_format($article->getVatValue(), 2, ".", ""));
+            $item->addAttribute('unit-price', $this->_getFormattedNumber($article->getUnitPrice()));
+            $item->addAttribute('total-price', $this->_getFormattedNumber($article->getPrice()));
+            $item->addAttribute('tax', $this->_getFormattedNumber($article->getVatValue()));
         }
 
         /**
@@ -553,9 +553,9 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
             $item = $items->addChild('item', 'Wrapping Cost');
             $item->addAttribute('article-number', 'oxwrapping');
             $item->addAttribute('quantity', 1);
-            $item->addAttribute('unit-price', number_format($wrappingNettoPrice, 2, ".", ""));
-            $item->addAttribute('total-price', number_format($wrappingNettoPrice, 2, ".", ""));
-            $item->addAttribute('tax', number_format($wrappingVatValue, 2, ".", ""));
+            $item->addAttribute('unit-price', $this->_getFormattedNumber($wrappingNettoPrice));
+            $item->addAttribute('total-price', $this->_getFormattedNumber($wrappingNettoPrice));
+            $item->addAttribute('tax', $this->_getFormattedNumber($wrappingVatValue));
         }
 
         if (method_exists($basket, 'getGiftCardCost') && $basket->getGiftCardCost()) {
@@ -579,9 +579,9 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
             $item = $items->addChild('item', 'Giftcard Cost');
             $item->addAttribute('article-number', 'oxwgiftcard');
             $item->addAttribute('quantity', 1);
-            $item->addAttribute('unit-price', number_format($giftcardNettoPrice, 2, ".", ""));
-            $item->addAttribute('total-price', number_format($giftcardNettoPrice, 2, ".", ""));
-            $item->addAttribute('tax', number_format($giftcardVatValue, 2, ".", ""));
+            $item->addAttribute('unit-price', $this->_getFormattedNumber($giftcardNettoPrice));
+            $item->addAttribute('total-price', $this->_getFormattedNumber($giftcardNettoPrice));
+            $item->addAttribute('tax', $this->_getFormattedNumber($giftcardVatValue));
         }
 
         if (method_exists($basket, 'getDeliveryCost') && $basket->getDeliveryCost()) {
@@ -605,9 +605,9 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
             $item = $items->addChild('item', 'Delivery Cost');
             $item->addAttribute('article-number', 'oxdelivery');
             $item->addAttribute('quantity', 1);
-            $item->addAttribute('unit-price', number_format($deliveryNettoPrice, 2, ".", ""));
-            $item->addAttribute('total-price', number_format($deliveryNettoPrice, 2, ".", ""));
-            $item->addAttribute('tax', number_format($deliveryVatValue, 2, ".", ""));
+            $item->addAttribute('unit-price', $this->_getFormattedNumber($deliveryNettoPrice));
+            $item->addAttribute('total-price', $this->_getFormattedNumber($deliveryNettoPrice));
+            $item->addAttribute('tax', $this->_getFormattedNumber($deliveryVatValue));
         }
         
         if (method_exists($basket, 'getPaymentCost') && $basket->getPaymentCost()) {
@@ -631,9 +631,9 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
             $item = $items->addChild('item', 'Payment Cost');
             $item->addAttribute('article-number', 'oxpayment');
             $item->addAttribute('quantity', 1);
-            $item->addAttribute('unit-price', number_format($paymentNettoPrice, 2, ".", ""));
-            $item->addAttribute('total-price', number_format($paymentNettoPrice, 2, ".", ""));
-            $item->addAttribute('tax', number_format($paymentVatValue, 2, ".", ""));
+            $item->addAttribute('unit-price', $this->_getFormattedNumber($paymentNettoPrice));
+            $item->addAttribute('total-price', $this->_getFormattedNumber($paymentNettoPrice));
+            $item->addAttribute('tax', $this->_getFormattedNumber($paymentVatValue));
         }
 
         if (method_exists($basket, 'getTrustedShopProtectionCost')) {
@@ -665,9 +665,9 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
             $item = $items->addChild('item', 'TS Protection Cost');
             $item->addAttribute('article-number', 'oxtsprotection');
             $item->addAttribute('quantity', 1);
-            $item->addAttribute('unit-price', number_format($tsProtectionNettoPrice, 2, ".", ""));
-            $item->addAttribute('total-price', number_format($tsProtectionNettoPrice, 2, ".", ""));
-            $item->addAttribute('tax', number_format($tsProtectionVatValue, 2, ".", ""));
+            $item->addAttribute('unit-price', $this->_getFormattedNumber($tsProtectionNettoPrice));
+            $item->addAttribute('total-price', $this->_getFormattedNumber($tsProtectionNettoPrice));
+            $item->addAttribute('tax', $this->_getFormattedNumber($tsProtectionVatValue));
         }
 
         if (count($basket->getVouchers())) {
@@ -675,9 +675,9 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
                 $item = $items->addCDataChild('item', $voucher->sVoucherNr, $this->_utfMode);
                 $item->addAttribute('article-number', $voucher->sVoucherNr);
                 $item->addAttribute('quantity', 1);
-                $item->addAttribute('unit-price', "" . number_format($voucher->dVoucherdiscount, 2, ".", ""));
-                $item->addAttribute('total-price', "" . number_format($voucher->dVoucherdiscount, 2, ".", ""));
-                $item->addAttribute('tax', number_format("0", 2, ".", ""));
+                $item->addAttribute('unit-price', "" . $this->_getFormattedNumber($voucher->dVoucherdiscount));
+                $item->addAttribute('total-price', "" . $this->_getFormattedNumber($voucher->dVoucherdiscount));
+                $item->addAttribute('tax', $this->_getFormattedNumber("0"));
             }
         }
 
@@ -685,10 +685,12 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
             $item = $items->addChild('item', "Discount");
             $item->addAttribute('article-number', "Discount");
             $item->addAttribute('quantity', 1);
-            $item->addAttribute('unit-price', "-" . number_format($basket->getTotalDiscount()->getNettoPrice(), 2, ".", ""));
-            $item->addAttribute('total-price', "-" . number_format($basket->getTotalDiscount()->getNettoPrice(), 2, ".", ""));
-            $item->addAttribute('tax', number_format("0", 2, ".", ""));
+            $item->addAttribute('unit-price', "-" . $this->_getFormattedNumber($basket->getTotalDiscount()->getNettoPrice()));
+            $item->addAttribute('total-price', "-" . $this->_getFormattedNumber($basket->getTotalDiscount()->getNettoPrice()));
+            $item->addAttribute('tax', $this->_getFormattedNumber("0"));
         }
+
+        $a2 = 2;
     }
 
     /**
@@ -704,7 +706,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
 
         $payment->addAttribute('currency', 'EUR');
         $payment->addAttribute('method', $this->_getPaymentMethod());
-        $payment->addChild('amount', number_format($this->_getDataProvider()->getPaymentAmount(), 2, ".", ""));
+        $payment->addChild('amount', $this->_getFormattedNumber($this->_getDataProvider()->getPaymentAmount()));
 
         return $payment;
     }
@@ -716,10 +718,10 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
      */
     private function _setRatepayContentPaymentInstallment($installment)
     {
-        $installment->addChild('installment-number', number_format($this->getSession()->getVariable('pi_ratepay_rate_number_of_rates'), 0));
-        $installment->addChild('installment-amount', number_format($this->getSession()->getVariable('pi_ratepay_rate_rate'), 2, ".", ""));
-        $installment->addChild('last-installment-amount', number_format($this->getSession()->getVariable('pi_ratepay_rate_last_rate'), 2, ".", ""));
-        $installment->addChild('interest-rate', number_format($this->getSession()->getVariable('pi_ratepay_rate_interest_rate'), 2, ".", ""));
+        $installment->addChild('installment-number', $this->_getFormattedNumber($this->getSession()->getVariable('pi_ratepay_rate_number_of_rates'), 0));
+        $installment->addChild('installment-amount', $this->_getFormattedNumber($this->getSession()->getVariable('pi_ratepay_rate_rate')));
+        $installment->addChild('last-installment-amount', $this->_getFormattedNumber($this->getSession()->getVariable('pi_ratepay_rate_last_rate')));
+        $installment->addChild('interest-rate', $this->_getFormattedNumber($this->getSession()->getVariable('pi_ratepay_rate_interest_rate')));
         $installment->addChild('payment-firstday', $this->getSession()->getVariable('pi_ratepay_rate_payment_firstday'));
     }
 
@@ -796,6 +798,19 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
     private function _getPaymentMethod()
     {
         return pi_ratepay_util_utilities::getPaymentMethod($this->_getPaymentType());
+    }
+
+    /**
+     * Get formattet number
+     * @param string $str
+     * @param int $decimal
+     * @param string $dec_point
+     * @param string $thousands_sep
+     * @return string
+     */
+    private function _getFormattedNumber($str, $decimal = 2, $dec_point = ".", $thousands_sep = "")
+    {
+        return pi_ratepay_util_utilities::getFormattedNumber($str, $decimal, $dec_point, $thousands_sep);
     }
 
     /**
