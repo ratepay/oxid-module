@@ -90,10 +90,11 @@ class pi_ratepay_DetailsViewData
         $result = mysql_query($sql);
         $values = mysql_fetch_object($result);
 
-        $sql2 = "SELECT * from `$this->pi_ratepay_order_details` where order_number='$orderId' and article_number='oxwrapping'";
-        $result2 = mysql_query($sql2);
+        if ($values->OXWRAPCOST != 0) {
+            $sql2 = "SELECT * from `$this->pi_ratepay_order_details` where order_number='$orderId' and article_number='oxwrapping'";
+            $result2 = mysql_query($sql2);
+            $values2 = mysql_fetch_object($result2);
 
-        if ($values2 = mysql_fetch_object($result2)) {
             $wrapprice = oxNew('oxprice');
             $wrapprice->setBruttopriceMode(true);
             $wrapprice->setVat($values->OXWRAPVAT);
