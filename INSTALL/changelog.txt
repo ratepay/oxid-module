@@ -1,11 +1,12 @@
 ***********************************************************
-***********| Version 3.2.1 - Released 2015-03-24 |*********
+***********| Version 3.2.1 - Released 2015-04-09 |*********
 ***********************************************************
 
 -- fixed missing delivery cost
 -- fixed empty basket items (wrapping, delivery, tsprotection)
 -- added default item oxgiftcard
 -- added customer number in PAYMENT REQUEST
+-- fixed wrong discount tax calculation
 
 ***********************************************************
 ***********| Version 3.2.0 - Released 2015-02-19 |*********

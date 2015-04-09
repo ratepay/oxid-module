@@ -689,8 +689,6 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
             $item->addAttribute('total-price', "-" . $this->_getFormattedNumber($basket->getTotalDiscount()->getNettoPrice()));
             $item->addAttribute('tax', $this->_getFormattedNumber("0"));
         }
-
-        $a2 = 2;
     }
 
     /**
