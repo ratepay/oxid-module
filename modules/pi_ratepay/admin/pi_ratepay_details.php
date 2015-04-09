@@ -129,7 +129,7 @@ class pi_ratepay_Details extends oxAdminDetails
 
         $this->_requestDataBackend = oxNew('pi_ratepay_requestdatabackend', $this->getEditObject());
 
-        $this->addTplParam('pitotalamount', number_format($order->getTotalOrderSum(), 2));
+        $this->addTplParam('pitotalamount', $this->_getFormattedNumber($order->getTotalOrderSum()));
 
         $this->addTplParam('pi_ratepay_payment_type', $this->_paymentMethod);
         $this->addTplParam('articleList', $this->getPreparedOrderArticles());
@@ -149,15 +149,15 @@ class pi_ratepay_Details extends oxAdminDetails
             $pirpratevalue = $ratepayRateDetails->pi_ratepay_rate_details__rate->rawValue;
             $pirplastratevalue = $ratepayRateDetails->pi_ratepay_rate_details__lastrate->rawValue;
 
-            $pirptotalamountvalue = str_replace(".", ",", number_format($pirptotalamountvalue, 2, ".", "")) . " EUR";
-            $pirpamountvalue = str_replace(".", ",", number_format($pirpamountvalue, 2, ".", "")) . " EUR";
-            $pirpinterestamountvalue = str_replace(".", ",", number_format($pirpinterestamountvalue, 2, ".", "")) . " EUR";
-            $pirpservicechargevalue = str_replace(".", ",", number_format($pirpservicechargevalue, 2, ".", "")) . " EUR";
-            $pirpannualpercentageratevalue = str_replace(".", ",", number_format($pirpannualpercentageratevalue, 2, ".", "")) . "%";
-            $pirpdebitinterestvalue = str_replace(".", ",", number_format($pirpdebitinterestvalue, 2, ".", "")) . "%";
-            $pirpnumberofratesvalue = str_replace(".", ",", number_format($pirpnumberofratesvalue, 2, ".", "")) . " Monate";
-            $pirpratevalue = str_replace(".", ",", number_format($pirpratevalue, 2, ".", "")) . " EUR";
-            $pirplastratevalue = str_replace(".", ",", number_format($pirplastratevalue, 2, ".", "")) . " EUR";
+            $pirptotalamountvalue = str_replace(".", ",", $this->_getFormattedNumber($pirptotalamountvalue)) . " EUR";
+            $pirpamountvalue = str_replace(".", ",", $this->_getFormattedNumber($pirpamountvalue)) . " EUR";
+            $pirpinterestamountvalue = str_replace(".", ",", $this->_getFormattedNumber($pirpinterestamountvalue)) . " EUR";
+            $pirpservicechargevalue = str_replace(".", ",", $this->_getFormattedNumber($pirpservicechargevalue)) . " EUR";
+            $pirpannualpercentageratevalue = str_replace(".", ",", $this->_getFormattedNumber($pirpannualpercentageratevalue)) . "%";
+            $pirpdebitinterestvalue = str_replace(".", ",", $this->_getFormattedNumber($pirpdebitinterestvalue)) . "%";
+            $pirpnumberofratesvalue = str_replace(".", ",", $this->_getFormattedNumber($pirpnumberofratesvalue)) . " Monate";
+            $pirpratevalue = str_replace(".", ",", $this->_getFormattedNumber($pirpratevalue)) . " EUR";
+            $pirplastratevalue = str_replace(".", ",", $this->_getFormattedNumber($pirplastratevalue)) . " EUR";
 
             $this->addTplParam('pirptotalamountvalue', $pirptotalamountvalue);
             $this->addTplParam('pirpamountvalue', $pirpamountvalue);
@@ -640,7 +640,7 @@ class pi_ratepay_Details extends oxAdminDetails
     private function setRatepayContentBasketChange($content, $subtype, $total)
     {
         $shoppingBasket = $content->addChild('shopping-basket');
-        $shoppingBasket->addAttribute('amount', number_format($total, 2, ".", ""));
+        $shoppingBasket->addAttribute('amount', $this->_getFormattedNumber($total));
         $shoppingBasket->addAttribute('currency', 'EUR');
         $this->setRatepayContentBasketItemsChange($shoppingBasket, $subtype);
     }
@@ -694,9 +694,9 @@ class pi_ratepay_Details extends oxAdminDetails
             $item = $items->addChild('item', "Anbieter Gutschrift");
             $item->addAttribute('article-number', $vouchertitel);
             $item->addAttribute('quantity', 1);
-            $item->addAttribute('unit-price', "-" . number_format($this->piRatepayVoucher, 2, ".", ""));
-            $item->addAttribute('total-price', "-" . number_format($this->piRatepayVoucher, 2, ".", ""));
-            $item->addAttribute('tax', number_format(0, 2, ".", ""));
+            $item->addAttribute('unit-price', "-" . $this->_getFormattedNumber($this->piRatepayVoucher));
+            $item->addAttribute('total-price', "-" . $this->_getFormattedNumber($this->piRatepayVoucher));
+            $item->addAttribute('tax', $this->_getFormattedNumber(0));
         }
     }
 
@@ -728,7 +728,7 @@ class pi_ratepay_Details extends oxAdminDetails
             }
         }
         $shoppingBasket = $content->addChild('shopping-basket');
-        $shoppingBasket->addAttribute('amount', number_format($total, 2, ".", ""));
+        $shoppingBasket->addAttribute('amount', $this->_getFormattedNumber($total));
         $shoppingBasket->addAttribute('currency', 'EUR');
         $this->setRatepayContentBasketItems($shoppingBasket);
     }
@@ -762,9 +762,12 @@ class pi_ratepay_Details extends oxAdminDetails
 
                 $item->addAttribute('article-number', $article['artnum']);
                 $item->addAttribute('quantity', $quant);
-                $item->addAttribute('unit-price', $this->_convertNumber($article['unitPriceNetto']));
-                $item->addAttribute('total-price', $this->_convertNumber($article['unitPriceNetto']) * $quant);
-                $item->addAttribute('tax', (abs($this->_convertNumber($article['unitPriceNetto']) * $quant)) * ($article['tax'] / 100));
+                $item->addAttribute('unit-price', $this->_getFormattedNumber($article['unitPriceNetto']));
+                $item->addAttribute('total-price', $this->_getFormattedNumber($article['unitPriceNetto']) * $quant);
+                $total = $this->_convertNumber($article['unitPriceNetto']) * $quant;
+                $stax = ($article['vat'] / 100);
+                $tax = (abs($this->_convertNumber($article['unitPriceNetto']) * $quant) * ($article['vat'] / 100));
+                $item->addAttribute('tax', $this->_getFormattedNumber((abs($this->_convertNumber($article['unitPriceNetto']) * $quant)) * ($article['vat'] / 100)));
             }
         }
     }
@@ -953,6 +956,19 @@ class pi_ratepay_Details extends oxAdminDetails
     private function _convertNumber($number)
     {
         return (float) str_replace(',', '', $number);
+    }
+
+    /**
+     * Get formattet number
+     * @param string $str
+     * @param int $decimal
+     * @param string $dec_point
+     * @param string $thousands_sep
+     * @return string
+     */
+    private function _getFormattedNumber($str, $decimal = 2, $dec_point = ".", $thousands_sep = "")
+    {
+        return pi_ratepay_util_utilities::getFormattedNumber($str, $decimal, $dec_point, $thousands_sep);
     }
 
 }
