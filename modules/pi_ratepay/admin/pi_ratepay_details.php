@@ -556,10 +556,29 @@ class pi_ratepay_Details extends oxAdminDetails
      */
     private function setRatepayHeadCredentials($head)
     {
+        /*$credential = $head->addChild('credential');
+
+        $paymentMethod = strtolower($this->_getPaymentMethod());
+        $country = $this->_getCountryCodeById($this->getUser()->oxuser__oxcountryid->value);
+        $settings = oxNew('pi_ratepay_settings');
+        if ($country) {
+            $settings->loadByType($paymentMethod, $country);
+        } else {
+            $settings->loadByType($paymentMethod);
+        }
+        $profileId = $settings->pi_ratepay_settings__profile_id->rawValue;
+        $securityCode = $settings->pi_ratepay_settings__security_code->rawValue;
+
+        $credential->addChild('profile-id', $profileId);
+        $credential->addChild('securitycode', $securityCode);*/
+
+
+        #########################
+
         $credential = $head->addChild('credential');
 
-        $settings = $this->_getSettings();
-
+        $country = $this->_getCountryCodeById($this->_requestDataBackend->getUser()->oxuser__oxcountryid->value);
+        $settings = $this->_getSettings($country);
         $profileId = $settings->pi_ratepay_settings__profile_id->rawValue;
         $securityCode = $settings->pi_ratepay_settings__security_code->rawValue;
 
@@ -938,10 +957,10 @@ class pi_ratepay_Details extends oxAdminDetails
      * Get Settings according to RatePAY payment type
      * @return pi_ratepay_Settings
      */
-    private function _getSettings()
+    private function _getSettings($country = null)
     {
         $settings = oxNew('pi_ratepay_settings');
-        $settings->loadByType(pi_ratepay_util_utilities::getPaymentMethod($this->_getPaymentSid()));
+        $settings->loadByType(pi_ratepay_util_utilities::getPaymentMethod($this->_getPaymentSid()), $country);
 
         return $settings;
     }
@@ -966,6 +985,10 @@ class pi_ratepay_Details extends oxAdminDetails
     private function _getFormattedNumber($str, $decimal = 2, $dec_point = ".", $thousands_sep = "")
     {
         return pi_ratepay_util_utilities::getFormattedNumber($str, $decimal, $dec_point, $thousands_sep);
+    }
+
+    private function _getCountryCodeById($countryId) {
+        return oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $countryId . "'");
     }
 
 }

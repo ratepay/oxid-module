@@ -16,8 +16,8 @@
 *-->
 [{include file="headitem.tpl" titre="[ratepay]"}]
 
-<script type="text/javascript" src="../../out/admin/src/js/libs/jquery.min.js"></script>
-<script type="text/javascript" src="[{$oViewConf->getModuleUrl('pi_ratepay')}]/out/admin/src/js/libs/ratepay_profile.js"></script>
+<script type="text/javascript" src="../out/admin/src/js/libs/jquery.min.js"></script>
+<script type="text/javascript" src="[{$oViewConf->getModuleUrl('pi_ratepay')}]out/admin/src/js/libs/ratepay_profile.js"></script>
 <script type="text/javascript">
     countries = [[{foreach item=country from=$allCountries}] '[{$country}]',[{/foreach}]];
     activeCountries = [[{foreach item=country from=$activeCountries}] '[{$country}]',[{/foreach}]];

@@ -242,7 +242,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
             $securityCode = $this->_getSecurityCode();
         } else {
             $paymentMethod = strtolower($this->_getPaymentMethod());
-            $country = $this->_getCountry($this->getUser()->oxuser__oxcountryid->value);
+            $country = $this->_getCountryCodeById($this->getUser()->oxuser__oxcountryid->value);
             $settings = oxNew('pi_ratepay_settings');
             if ($country) {
                 $settings->loadByType($paymentMethod, $country);
@@ -675,8 +675,8 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
                 $item = $items->addCDataChild('item', $voucher->sVoucherNr, $this->_utfMode);
                 $item->addAttribute('article-number', $voucher->sVoucherNr);
                 $item->addAttribute('quantity', 1);
-                $item->addAttribute('unit-price', "" . $this->_getFormattedNumber($voucher->dVoucherdiscount));
-                $item->addAttribute('total-price', "" . $this->_getFormattedNumber($voucher->dVoucherdiscount));
+                $item->addAttribute('unit-price', "-" . $this->_getFormattedNumber($voucher->dVoucherdiscount));
+                $item->addAttribute('total-price', "-" . $this->_getFormattedNumber($voucher->dVoucherdiscount));
                 $item->addAttribute('tax', $this->_getFormattedNumber("0"));
             }
         }
@@ -874,6 +874,10 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
         }
 
         return $isRateElv;
+    }
+
+    private function _getCountryCodeById($countryId) {
+        return oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $countryId . "'");
     }
 
 }
