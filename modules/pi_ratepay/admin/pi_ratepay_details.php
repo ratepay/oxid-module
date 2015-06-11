@@ -971,7 +971,7 @@ class pi_ratepay_Details extends oxAdminDetails
      */
     private function _convertNumber($number)
     {
-        return (float) str_replace(',', '', $number);
+        return  floatval(str_replace(',', '.', str_replace('.', '',(string) $number)));
     }
 
     /**
