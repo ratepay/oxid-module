@@ -556,25 +556,6 @@ class pi_ratepay_Details extends oxAdminDetails
      */
     private function setRatepayHeadCredentials($head)
     {
-        /*$credential = $head->addChild('credential');
-
-        $paymentMethod = strtolower($this->_getPaymentMethod());
-        $country = $this->_getCountryCodeById($this->getUser()->oxuser__oxcountryid->value);
-        $settings = oxNew('pi_ratepay_settings');
-        if ($country) {
-            $settings->loadByType($paymentMethod, $country);
-        } else {
-            $settings->loadByType($paymentMethod);
-        }
-        $profileId = $settings->pi_ratepay_settings__profile_id->rawValue;
-        $securityCode = $settings->pi_ratepay_settings__security_code->rawValue;
-
-        $credential->addChild('profile-id', $profileId);
-        $credential->addChild('securitycode', $securityCode);*/
-
-
-        #########################
-
         $credential = $head->addChild('credential');
 
         $country = $this->_getCountryCodeById($this->_requestDataBackend->getUser()->oxuser__oxcountryid->value);
@@ -701,9 +682,9 @@ class pi_ratepay_Details extends oxAdminDetails
                 $item = $items->addCDataChild('item', $title, $this->_isUtfMode());
                 $item->addAttribute('article-number', $article['artnum']);
                 $item->addAttribute('quantity', $quant);
-                $item->addAttribute('unit-price', $this->_convertNumber($article['unitPriceNetto']));
-                $item->addAttribute('total-price', $this->_convertNumber($article['unitPriceNetto']) * $quant);
-                $item->addAttribute('tax', ($this->_convertNumber($article['unitprice']) - $this->_convertNumber($article['unitPriceNetto'])) * $quant);
+                $item->addAttribute('unit-price', $this->_getFormattedNumber($article['unitPriceNetto']));
+                $item->addAttribute('total-price', $this->_getFormattedNumber($article['unitPriceNetto']) * $quant);
+                $item->addAttribute('tax', ($this->_getFormattedNumber($article['unitprice']) - $this->_getFormattedNumber($article['unitPriceNetto'])) * $quant);
             }
         }
 
@@ -715,7 +696,7 @@ class pi_ratepay_Details extends oxAdminDetails
             $item->addAttribute('quantity', 1);
             $item->addAttribute('unit-price', "-" . $this->_getFormattedNumber($this->piRatepayVoucher));
             $item->addAttribute('total-price', "-" . $this->_getFormattedNumber($this->piRatepayVoucher));
-            $item->addAttribute('tax', $this->_getFormattedNumber(0));
+            $item->addAttribute('tax', 0);
         }
     }
 
@@ -783,7 +764,7 @@ class pi_ratepay_Details extends oxAdminDetails
                 $item->addAttribute('quantity', $quant);
                 $item->addAttribute('unit-price', $this->_getFormattedNumber($article['unitPriceNetto']));
                 $item->addAttribute('total-price', $this->_getFormattedNumber($article['unitPriceNetto']) * $quant);
-                $item->addAttribute('tax', $this->_getFormattedNumber((abs($this->_convertNumber($article['unitPriceNetto']) * $quant)) * ($article['vat'] / 100)));
+                $item->addAttribute('tax', $this->_getFormattedNumber((abs($this->_getFormattedNumber($article['unitPriceNetto']) * $quant)) * ($article['vat'] / 100)));
             }
         }
     }
@@ -963,15 +944,6 @@ class pi_ratepay_Details extends oxAdminDetails
         $settings->loadByType(pi_ratepay_util_utilities::getPaymentMethod($this->_getPaymentSid()), $country);
 
         return $settings;
-    }
-
-    /**
-     * Convert number with thousands separator to calculable float numbers
-     * @return float
-     */
-    private function _convertNumber($number)
-    {
-        return (float) str_replace(',', '', $number);
     }
 
     /**

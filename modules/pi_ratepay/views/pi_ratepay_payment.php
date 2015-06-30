@@ -128,7 +128,7 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         $limitMin = (int) $settings->pi_ratepay_settings__limit_min->rawValue;
         $limitMax = (int) $settings->pi_ratepay_settings__limit_max->rawValue;
         $basketAmount = $this->getSession()->getBasket()->getPrice()->getNettoPrice();
-        return ($basketAmount >= $limitMin && $limitMin <= $limitMax);
+        return ($basketAmount >= $limitMin && $basketAmount <= $limitMax);
     }
     /**
      * Checks if b2b is used and allowed.

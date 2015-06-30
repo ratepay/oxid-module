@@ -68,8 +68,8 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['title'] = $values->title;
             $articleList[$i]['oxtitle'] = $values->oxtitle;
             $articleList[$i]['vat'] = $values->oxvat;
-            $articleList[$i]['unitprice'] = number_format($values->oxbprice, 2);
-            $articleList[$i]['unitPriceNetto'] = number_format($values->oxnprice, 2);
+            $articleList[$i]['unitprice'] = (float) $values->oxbprice;
+            $articleList[$i]['unitPriceNetto'] = (float) $values->oxnprice;
             $articleList[$i]['amount'] = $values->ordered - $values->shipped - $values->cancelled;
             $articleList[$i]['ordered'] = $values->ordered;
             $articleList[$i]['shipped'] = $values->shipped;
@@ -77,9 +77,9 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['cancelled'] = $values->cancelled;
 
             if (($values->ordered - $values->returned - $values->cancelled) > 0) {
-                $articleList[$i]['totalprice'] = number_format($values->oxbrutprice, 2);
+                $articleList[$i]['totalprice'] = (float) $values->oxbrutprice;
             } else {
-                $articleList[$i]['totalprice'] = number_format(0, 2);
+                $articleList[$i]['totalprice'] = 0;
             }
 
             $i++;
@@ -106,9 +106,9 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['artnum'] = "oxwrapping";
             $articleList[$i]['title'] = "Wrapping Cost";
             $articleList[$i]['oxtitle'] = "Wrapping Cost";
-            $articleList[$i]['vat'] = number_format($values->OXWRAPVAT, 0);
-            $articleList[$i]['unitprice'] = number_format($values->OXWRAPCOST, 2);
-            $articleList[$i]['unitPriceNetto'] = number_format($wrapprice->getNettoPrice(), 2);
+            $articleList[$i]['vat'] = (float) $values->OXWRAPVAT;
+            $articleList[$i]['unitprice'] = (float) $values->OXWRAPCOST;
+            $articleList[$i]['unitPriceNetto'] = (float) $wrapprice->getNettoPrice();
             $articleList[$i]['amount'] = 1 - $values2->SHIPPED - $values2->CANCELLED;
             $articleList[$i]['ordered'] = $values2->ORDERED;
             $articleList[$i]['shipped'] = $values2->SHIPPED;
@@ -116,9 +116,9 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['cancelled'] = $values2->CANCELLED;
 
             if (($values2->ORDERED - $values2->RETURNED - $values2->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = number_format($values->OXWRAPCOST, 2);
+                $articleList[$i]['totalprice'] = (float) $values->OXWRAPCOST;
             } else {
-                $articleList[$i]['totalprice'] = number_format(0, 2);
+                $articleList[$i]['totalprice'] = 0;
             }
 
             $i++;
@@ -140,9 +140,9 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['artnum'] = "oxgiftcard";
             $articleList[$i]['title'] = "Giftcard Cost";
             $articleList[$i]['oxtitle'] = "Giftcard Cost";
-            $articleList[$i]['vat'] = number_format($values->OXGIFTCARDVAT, 0);
-            $articleList[$i]['unitprice'] = number_format($values->OXGIFTCARDCOST, 2);
-            $articleList[$i]['unitPriceNetto'] = number_format($giftcardprice->getNettoPrice(), 2);
+            $articleList[$i]['vat'] = (float) $values->OXGIFTCARDVAT;
+            $articleList[$i]['unitprice'] = (float) $values->OXGIFTCARDCOST;
+            $articleList[$i]['unitPriceNetto'] = (float) $giftcardprice->getNettoPrice();
             $articleList[$i]['amount'] = 1 - $values2->SHIPPED - $values2->CANCELLED;
             $articleList[$i]['ordered'] = $values2->ORDERED;
             $articleList[$i]['shipped'] = $values2->SHIPPED;
@@ -150,9 +150,9 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['cancelled'] = $values2->CANCELLED;
 
             if (($values2->ORDERED - $values2->RETURNED - $values2->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = number_format($values->OXGIFTCARDCOST, 2);
+                $articleList[$i]['totalprice'] = (float) $values->OXGIFTCARDCOST;
             } else {
-                $articleList[$i]['totalprice'] = number_format(0, 2);
+                $articleList[$i]['totalprice'] = 0;
             }
 
             $i++;
@@ -174,9 +174,9 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['artnum'] = "oxpayment";
             $articleList[$i]['title'] = "Payment Cost";
             $articleList[$i]['oxtitle'] = "Payment Cost";
-            $articleList[$i]['vat'] = number_format($values->OXPAYVAT, 0);
-            $articleList[$i]['unitprice'] = number_format($values->OXPAYCOST, 2);
-            $articleList[$i]['unitPriceNetto'] = number_format($payprice->getNettoPrice(), 2);
+            $articleList[$i]['vat'] = (float) $values->OXPAYVAT;
+            $articleList[$i]['unitprice'] = (float) $values->OXPAYCOST;
+            $articleList[$i]['unitPriceNetto'] = (float) $payprice->getNettoPrice();
             $articleList[$i]['amount'] = 1 - $values2->SHIPPED - $values2->CANCELLED;
             $articleList[$i]['ordered'] = $values2->ORDERED;
             $articleList[$i]['shipped'] = $values2->SHIPPED;
@@ -184,9 +184,9 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['cancelled'] = $values2->CANCELLED;
 
             if (($values2->ORDERED - $values2->RETURNED - $values2->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = number_format($values->OXPAYCOST, 2);
+                $articleList[$i]['totalprice'] = (float) $values->OXPAYCOST;
             } else {
-                $articleList[$i]['totalprice'] = number_format(0, 2);
+                $articleList[$i]['totalprice'] = 0;
             }
 
             $i++;
@@ -204,8 +204,8 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['title'] = "Discount";
             $articleList[$i]['oxtitle'] = "Discount";
             $articleList[$i]['vat'] = "0";
-            $articleList[$i]['unitprice'] = number_format("-" . $values->OXDISCOUNT, 2);
-            $articleList[$i]['unitPriceNetto'] = number_format("-" . $values->OXDISCOUNT, 2);
+            $articleList[$i]['unitprice'] = (float) $values->OXDISCOUNT * -1;
+            $articleList[$i]['unitPriceNetto'] = (float) $values->OXDISCOUNT * -1;
             $articleList[$i]['amount'] = 1 - $values2->SHIPPED - $values2->CANCELLED;
             $articleList[$i]['ordered'] = $values2->ORDERED;
             $articleList[$i]['shipped'] = $values2->SHIPPED;
@@ -213,9 +213,9 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['cancelled'] = $values2->CANCELLED;
 
             if (($values2->ORDERED - $values2->RETURNED - $values2->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = number_format("-" . $values->OXDISCOUNT, 2);
+                $articleList[$i]['totalprice'] = (float) $values->OXDISCOUNT * -1;
             } else {
-                $articleList[$i]['totalprice'] = number_format(0, 2);
+                $articleList[$i]['totalprice'] = 0;
             }
 
             $i++;
@@ -237,9 +237,9 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['artnum'] = "oxdelivery";
             $articleList[$i]['title'] = "Delivery Cost";
             $articleList[$i]['oxtitle'] = "Delivery Cost";
-            $articleList[$i]['vat'] = number_format($values->OXDELVAT, 0);
-            $articleList[$i]['unitprice'] = number_format($values->OXDELCOST, 2);
-            $articleList[$i]['unitPriceNetto'] = number_format($delprice->getNettoPrice(), 2);
+            $articleList[$i]['vat'] = (float) $values->OXDELVAT;
+            $articleList[$i]['unitprice'] = (float) $values->OXDELCOST;
+            $articleList[$i]['unitPriceNetto'] = (float) $delprice->getNettoPrice();
             $articleList[$i]['amount'] = 1 - $values2->SHIPPED - $values2->CANCELLED;
             $articleList[$i]['ordered'] = $values2->ORDERED;
             $articleList[$i]['shipped'] = $values2->SHIPPED;
@@ -247,9 +247,9 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['cancelled'] = $values2->CANCELLED;
 
             if (($values2->ORDERED - $values2->RETURNED - $values2->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = number_format($values->OXDELCOST, 2);
+                $articleList[$i]['totalprice'] = (float) $values->OXDELCOST;
             } else {
-                $articleList[$i]['totalprice'] = number_format(0, 2);
+                $articleList[$i]['totalprice'] = 0;
             }
 
             $i++;
@@ -271,9 +271,9 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['artnum'] = "oxtsprotection";
             $articleList[$i]['title'] = "TS Protection Cost";
             $articleList[$i]['oxtitle'] = "TS Protection Cost";
-            $articleList[$i]['vat'] = number_format($values->OXTSPROTECTVAT, 0);
-            $articleList[$i]['unitprice'] = number_format($values->OXTSPROTECTCOST, 2);
-            $articleList[$i]['unitPriceNetto'] = number_format($tsprotectprice->getNettoPrice(), 2);
+            $articleList[$i]['vat'] = (float) $values->OXTSPROTECTVAT;
+            $articleList[$i]['unitprice'] = (float) $values->OXTSPROTECTCOST;
+            $articleList[$i]['unitPriceNetto'] = (float) $tsprotectprice->getNettoPrice();
             $articleList[$i]['amount'] = 1 - $values2->SHIPPED - $values2->CANCELLED;
             $articleList[$i]['ordered'] = $values2->ORDERED;
             $articleList[$i]['shipped'] = $values2->SHIPPED;
@@ -281,9 +281,9 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['cancelled'] = $values2->CANCELLED;
 
             if (($values2->ORDERED - $values2->RETURNED - $values2->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = number_format($values->OXTSPROTECTCOST, 2);
+                $articleList[$i]['totalprice'] = (float) $values->OXTSPROTECTCOST;
             } else {
-                $articleList[$i]['totalprice'] = number_format(0, 2);
+                $articleList[$i]['totalprice'] = 0;
             }
 
             $i++;
@@ -306,8 +306,8 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['title'] = $values2->seriesTitle;
             $articleList[$i]['oxtitle'] = $values2->seriesTitle;
             $articleList[$i]['vat'] = "0";
-            $articleList[$i]['unitprice'] = "-" . number_format($values2->price, 2);
-            $articleList[$i]['unitPriceNetto'] = "-" . number_format($values2->price, 2);
+            $articleList[$i]['unitprice'] = "-" . (float) $values2->price;
+            $articleList[$i]['unitPriceNetto'] = "-" . (float) $values2->price;
             $articleList[$i]['amount'] = 1 - $values2->shipped - $values2->cancelled;
             $articleList[$i]['ordered'] = $values2->ordered;
             $articleList[$i]['shipped'] = $values2->shipped;
@@ -315,9 +315,9 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['cancelled'] = $values2->cancelled;
 
             if (($values2->ordered - $values2->returned - $values2->cancelled) > 0) {
-                $articleList[$i]['totalprice'] = "-" . number_format($values2->price, 2);
+                $articleList[$i]['totalprice'] = (float) $values2->price * -1;
             } else {
-                $articleList[$i]['totalprice'] = number_format(0, 2);
+                $articleList[$i]['totalprice'] = 0;
             }
 
             $i++;
