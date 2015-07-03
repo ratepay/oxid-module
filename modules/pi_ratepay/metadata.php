@@ -75,10 +75,10 @@ $aModule = array(
         )
     ),
     'templates' => array(
-        'pi_ratepay_log.tpl'                    => 'pi_ratepay/views/admin/tpl/pi_ratepay_log.tpl',
-        'pi_ratepay_details.tpl'                => 'pi_ratepay/views/admin/tpl/pi_ratepay_details.tpl',
-        'pi_ratepay_no_details.tpl'             => 'pi_ratepay/views/admin/tpl/pi_ratepay_no_details.tpl',
-        'pi_ratepay_profile.tpl'                => 'pi_ratepay/views/admin/tpl/pi_ratepay_profile.tpl',
+        'pi_ratepay_log.tpl'                    => 'pi_ratepay/out/admin/tpl/pi_ratepay_log.tpl',
+        'pi_ratepay_details.tpl'                => 'pi_ratepay/out/admin/tpl/pi_ratepay_details.tpl',
+        'pi_ratepay_no_details.tpl'             => 'pi_ratepay/out/admin/tpl/pi_ratepay_no_details.tpl',
+        'pi_ratepay_profile.tpl'                => 'pi_ratepay/out/admin/tpl/pi_ratepay_profile.tpl',
         'pi_ratepay_rate_calc.tpl'              => 'pi_ratepay/out/azure/tpl/pi_ratepay_rate_calc.tpl'
     ),
     'files' => array(
