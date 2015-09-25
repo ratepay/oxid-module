@@ -204,25 +204,20 @@ abstract class pi_ratepay_RequestAbstract extends oxSuperCfg
      */
     public function getCustomerBankdata($paymentType)
     {
-        //$owner = $this->_getOwner($paymentType);
-        $owner = $this->getSession()->getVariable($paymentType . '_bank_owner');
+        $bankData          = array();
+        $bankDataType      = $this->getSession()->getVariable($paymentType . '_bank_datatype');
         $bankAccountNumber = $this->getSession()->getVariable($paymentType . '_bank_account_number');
-        $bankCode = $this->getSession()->getVariable($paymentType . '_bank_code');
-        $bankIban = $this->getSession()->getVariable($paymentType . '_bank_iban');
-        $bankBic = $this->getSession()->getVariable($paymentType . '_bank_bic');
+        $bankCode          = $this->getSession()->getVariable($paymentType . '_bank_code');
+        $bankIban          = $this->getSession()->getVariable($paymentType . '_bank_iban');
+        $bankBic           = $this->getSession()->getVariable($paymentType . '_bank_bic');
 
-
-        $bankData = array(
-            'owner' => $owner,
-        );
-
-        if (empty($bankIban)) {
+        if ($bankDataType == 'classic') {
             $bankData['bankAccountNumber'] = $bankAccountNumber;
-            $bankData['bankCode']= $bankCode;
+            $bankData['bankCode']          = $bankCode;
         } else {
-            $bankData['bankIban']= $bankIban;
+            $bankData['bankIban'] = $bankIban;
             if (!empty($bankBic)) {
-                $bankData['bankBic']= $bankBic;
+                $bankData['bankBic'] = $bankBic;
             }
         }
 

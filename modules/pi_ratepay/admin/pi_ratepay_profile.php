@@ -55,6 +55,9 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                             $profileRequest['installment_configuration'] = $this->_changeKeyFormat($profileRequest['installment_configuration']);
                             $config[$country][$methodShop]['installment_configuration'] = $profileRequest['installment_configuration'];
                         }
+                        if ($methodShop == 'elv' && $country == 'de') {
+                            $config[$country][$methodShop]['iban_only'] = (bool) $settings->pi_ratepay_settings__iban_only->rawValue;
+                        }
                     } else {
                         $errMsg[$country][$methodShop] = "PI_RATEPAY_PROFILE_ERROR_CREDENTIALS_INVALID_";
                         $errMsg[$country][$methodShop] .= ($config[$country][$methodShop]['sandbox']) ? "INT" : "LIVE";
@@ -141,7 +144,9 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                         'limit_min' => (int) $profileRequest['profile']['tx-limit-' . $methodDB . '-min'],
                         'limit_max' => (int) $profileRequest['profile']['tx-limit-' . $methodDB . '-max'],
                         'b2b' => $this->_isParameterCheckedYes($profileRequest['profile']['b2b-' . $methodDB]),
-                        'ala' => $this->_isParameterCheckedYes($profileRequest['profile']['delivery-address-' . $methodDB])
+                        'ala' => $this->_isParameterCheckedYes($profileRequest['profile']['delivery-address-' . $methodDB]),
+                        'dfp' => $this->_isParameterCheckedYes($profileRequest['profile']['eligibility-device-fingerprint']),
+                        'dfp_snippet_id' => $profileRequest['profile']['device-fingerprint-snippet-id']
                     );
 
                     $settings->assign($secondSaveArray);
@@ -162,6 +167,15 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                     );
 
                     $settings->assign($installmentSaveArray);
+                    $settings->save();
+                }
+
+                if ($methodShop == 'elv' && $country == 'de') {
+                    $elvSaveArray = array(
+                        'iban_only' => $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_iban_only_' . $methodShop . '_' . $country))
+                    );
+
+                    $settings->assign($elvSaveArray);
                     $settings->save();
                 }
             }

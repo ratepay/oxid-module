@@ -28,11 +28,6 @@
  */
 class pi_ratepay_XmlService extends oxSuperCfg
 {
-    /*private static $_server = array(
-        'live' => 'https://webservices.eos-payment.com/custom/ratepay/xml/1_0',
-        'sandbox' => 'https://webservices-int.eos-payment.com/custom/ratepay/xml/1_0'
-    );*/
-
     private static $_server = array(
         'live' => 'https://gateway.ratepay.com/api/xml/1_0',
         'sandbox' => 'https://gateway-int.ratepay.com/api/xml/1_0'

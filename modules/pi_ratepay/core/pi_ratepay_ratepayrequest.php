@@ -299,27 +299,22 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
     private function _setRatepayHeadCustomerDevice($head)
     {
         $customerDevice = $head->addChild('customer-device');
-        $this->_setRatepayHeadCustomerDeviceHttpHeader($customerDevice);
+        $this->_setRatepayHeadCustomerDeviceDeviceToken($customerDevice);
     }
 
     /**
-     * Adds device information to the header of the request. defaults to 'x86' and 'UA-CPU'.
-     * Also adds type 'text/xml' and charset 'utf-8'.
+     * Adds device information to the header of the device fingerprint token
      *
      * @param SimpleXMLExtended $customerDevice
      */
-    private function _setRatepayHeadCustomerDeviceHttpHeader($customerDevice)
+    private function _setRatepayHeadCustomerDeviceDeviceToken($customerDevice)
     {
-        $httpHeaderList = $customerDevice->addChild('http-header-list');
+        $DeviceFingerprintToken = $this->getSession()->getVariable('pi_ratepay_dfp_token');
 
-        $httpHeaderListAttr = $httpHeaderList->addChild('header', 'text/xml');
-        $httpHeaderListAttr->addAttribute('name', 'Accept');
-
-        $httpHeaderListAttr = $httpHeaderList->addChild('header', 'utf-8');
-        $httpHeaderListAttr->addAttribute('name', 'Accept-Charset');
-
-        $httpHeaderListAttr = $httpHeaderList->addChild('header', 'x86');
-        $httpHeaderListAttr->addAttribute('name', 'UA-CPU');
+        if (!empty($DeviceFingerprintToken)) {
+            $customerDevice->addChild('device-token', $DeviceFingerprintToken);
+            $this->getSession()->deleteVariable('pi_ratepay_dfp_token');
+        }
     }
 
     /**
@@ -376,7 +371,6 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
         $contacts->addChild('email', $this->_getDataProvider()->getCustomerEmail());
 
         $this->_setRatepayContenCustomerContactsPhoneNumbers($contacts, 'phone', $this->_getDataProvider()->getCustomerPhone());
-        $this->_setRatepayContenCustomerContactsPhoneNumbers($contacts, 'fax', $this->_getDataProvider()->getCustomerFax());
         $this->_setRatepayContenCustomerContactsPhoneNumbers($contacts, 'mobile', $this->_getDataProvider()->getCustomerMobilePhone());
     }
 
@@ -466,19 +460,22 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
     private function _setRatepayContentCustomerBankAccount($customer)
     {
         $bankdata = $this->_getDataProvider()->getCustomerBankdata($this->_getPaymentType());
+        $bankAccountOwner = $this->_removeSpecialChars($this->_getDataProvider()->getCustomerFirstName()) . " " . $this->_removeSpecialChars($this->_getDataProvider()->getCustomerLastName());
 
         $bankAccount = $customer->addChild('bank-account');
-        $bankAccount->addCDataChild('owner', (!mb_detect_encoding($bankdata['owner'], 'UTF-8', true)) ? utf8_encode($bankdata['owner']) : $bankdata['owner']);
-        if (empty($bankdata['bankIban'])) {
+        $bankAccount->addCDataChild('owner', (!mb_detect_encoding($bankAccountOwner, 'UTF-8', true)) ? utf8_encode($bankAccountOwner) : $bankAccountOwner);
+        if (isset($bankdata['bankAccountNumber'])) {
             $bankAccount->addChild('bank-account-number', $bankdata['bankAccountNumber']);
-            $bankAccount->addChild('bank-code', $bankdata['bankCode']);
-        } else {
-            $bankAccount->addChild('iban', $bankdata['bankIban']);
-            if (!empty($bankdata['bankBic'])) {
-                $bankAccount->addChild('bic-swift', $bankdata['bankBic']);
-            }
         }
-
+        if (isset($bankdata['bankCode'])) {
+            $bankAccount->addChild('bank-code', $bankdata['bankCode']);
+        }
+        if (isset($bankdata['bankIban'])) {
+            $bankAccount->addChild('iban', $bankdata['bankIban']);
+        }
+        if (isset($bankdata['bankBic'])) {
+            $bankAccount->addChild('bic-swift', $bankdata['bankBic']);
+        }
     }
 
     /**

@@ -1,13 +1,14 @@
 [{$smarty.block.parent}]
+
 [{foreach from=$piRatepayErrors item=pierror}]
 
     [{if $pierror == "-300"}]
-        <div class="status error">[{ oxmultilang ident="PI_RATEPAY_RATE_ERROR" }]<a href="[{$pi_ratepay_elv_ratepayurl}]" target="_blank">[{ oxmultilang ident="PI_RATEPAY_RATE_VIEW_POLICY_PRIVACYPOLICY" }]</a>.</div>
+        <div class="status error">[{ oxmultilang ident="PI_RATEPAY_RATE_ERROR" }]<a href="[{$pi_ratepay_elv_url}]" target="_blank">[{ oxmultilang ident="PI_RATEPAY_RATE_VIEW_POLICY_PRIVACYPOLICY" }]</a>.</div>
     [{/if}]
 
     <!-- Rechnung -->
     [{if $pierror == "-400"}]
-        <div class="status error">[{ oxmultilang ident="PI_RATEPAY_RECHNUNG_ERROR" }]<a href="[{$pi_ratepay_rechnung_ratepayurl}]" target="_blank">[{ oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_POLICY_PRIVACYPOLICY" }]</a>.</div>
+        <div class="status error">[{ oxmultilang ident="PI_RATEPAY_RECHNUNG_ERROR" }]<a href="[{$pi_ratepay_rechnung_url}]" target="_blank">[{ oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_POLICY_PRIVACYPOLICY" }]</a>.</div>
     [{/if}]
 
     [{if $pierror == "-401"}]
@@ -28,7 +29,7 @@
 
     <!-- Rate -->
     [{if $pierror == "-407"}]
-        <div class="status error">[{ oxmultilang ident="PI_RATEPAY_RATE_ERROR" }]<a href="[{$pi_ratepay_rate_ratepayurl}]" target="_blank">[{ oxmultilang ident="PI_RATEPAY_RATE_VIEW_POLICY_PRIVACYPOLICY" }]</a>.</div>
+        <div class="status error">[{ oxmultilang ident="PI_RATEPAY_RATE_ERROR" }]<a href="[{$pi_ratepay_rate_url}]" target="_blank">[{ oxmultilang ident="PI_RATEPAY_RATE_VIEW_POLICY_PRIVACYPOLICY" }]</a>.</div>
     [{/if}]
 
     [{if $pierror == "-408"}]
@@ -58,7 +59,7 @@
         <div class="status error">[{ oxmultilang ident="PI_RATEPAY_ELV_ERROR_CODE" }]</div>
     [{/if}]
     [{if $pierror == "-504"}]
-        <div class="status error">[{ oxmultilang ident="PI_RATEPAY_ELV_ERROR" }]<a href="[{$policyurl}]" target="_blank">[{ oxmultilang ident="PI_RATEPAY_ELV_VIEW_POLICY_PRIVACYPOLICY" }]</a>.</div>
+        <div class="status error">[{ oxmultilang ident="PI_RATEPAY_ELV_ERROR" }]<a href="[{$pi_ratepay_elv_url}]" target="_blank">[{ oxmultilang ident="PI_RATEPAY_ELV_VIEW_POLICY_PRIVACYPOLICY" }]</a>.</div>
     [{/if}]
 
     [{if $pierror == "-505"}]

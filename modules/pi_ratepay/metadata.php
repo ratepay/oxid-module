@@ -45,6 +45,11 @@ $aModule = array(
         ),
         array(
             'template' => 'page/checkout/payment.tpl',
+            'block'    => 'checkout_payment_errors',
+            'file'     => 'payment_pi_ratepay_dfp.tpl'
+        ),
+        array(
+            'template' => 'page/checkout/payment.tpl',
             'block'    => 'select_payment',
             'file'     => 'payment_pi_ratepay_rechnung.tpl'
         ),
