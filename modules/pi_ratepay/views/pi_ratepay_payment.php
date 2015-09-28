@@ -149,7 +149,9 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
     private function _checkALA($paymentMethod) {
         $settings = $this->_getRatePaySettings($paymentMethod);
         $ala = (bool) $settings->pi_ratepay_settings__ala->rawValue;
-        return ($ala || $this->_checkAddress());
+        $checkAddress = $this->_checkAddress();
+        $checkAddressCountry = $this->_checkAddressCountry();
+        return ($checkAddressCountry && ($ala || $checkAddress));
     }
     /**
      * Checks if the current payment method is activated.
@@ -765,6 +767,25 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                 return false;
             }
             if ($oUser->oxuser__oxsal->value != $oDelAddress->oxaddress__oxsal->rawValue) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if delivery address country is the same as invoice address country.
+     *
+     * @return boolean
+     */
+    private function _checkAddressCountry()
+    {
+        $oUser = $this->getUser();
+        $oDelAddress = $this->getDelAddress();
+
+        if ($oDelAddress != "") {
+            if ($oUser->oxuser__oxcountryid->value != $oDelAddress->oxaddress__oxcountryid->value) {
                 return false;
             }
         }

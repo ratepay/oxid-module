@@ -306,15 +306,16 @@ class pi_ratepay_order extends pi_ratepay_order_parent
     {
         oxDb::getDb()->execute("DELETE FROM `pi_ratepay_order_details` where order_number = ?", array($id));
         $articles = $this->getBasket()->getContents();
+
         foreach ($articles as $article) {
             $articlenumber = $article->getArticle()->getId();
             $quantity = $article->getAmount();
             $this->_saveToRatepayOrderDetails($id, $articlenumber, $quantity);
         }
 
-        $articleNumbers = array('oxwrapping', 'oxgiftcard', 'oxdelivery', 'oxpayment', 'oxtsprotection');
+        $specialItems = array('oxwrapping', 'oxgiftcard', 'oxdelivery', 'oxpayment', 'oxtsprotection');
 
-        foreach ($articleNumbers as $articleNumber) {
+        foreach ($specialItems as $articleNumber) {
             $this->_checkBasketCosts($id, $articleNumber);
         }
 
@@ -340,9 +341,9 @@ class pi_ratepay_order extends pi_ratepay_order_parent
      */
     private function _checkBasketCosts($id, $articleNumber)
     {
-        $basket = $this->getSession()->getBasket();
-        if ($basket->getBruttoSum() > 0) {
-            $this->_saveToRatepayOrderDetails($id, $articleNumber, 1);
+        $articlePrice = $this->getBasket()->getCosts($articleNumber);
+        if ($articlePrice instanceof oxPrice && $articlePrice->getBruttoPrice() > 0) {
+            $this->_saveToRatepayOrderDetails($id, $articleNumber, 1, $articlePrice->getBruttoPrice(), $articlePrice->getVatValue());
         }
     }
 
@@ -352,13 +353,15 @@ class pi_ratepay_order extends pi_ratepay_order_parent
      * @param string $articleNumber
      * @param int $quantity
      */
-    private function _saveToRatepayOrderDetails($id, $articleNumber, $quantity)
+    private function _saveToRatepayOrderDetails($id, $articleNumber, $quantity, $price = 0, $vat = 0)
     {
         $ratepayOrderDetails = oxNew('pi_ratepay_orderdetails');
 
         $ratepayOrderDetails->assign(array(
             'order_number' => $id,
             'article_number' => $articleNumber,
+            'price' => $price,
+            'vat' => $vat,
             'ordered' => $quantity
         ));
 

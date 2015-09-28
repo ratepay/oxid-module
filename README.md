@@ -6,12 +6,21 @@
 |Author | `Aarne Welschlau`
 |Prefix | `pi`
 |Shop Version | `CE` `4.7.x-4.9.x`
-|Version | `3.2.2`
+|Version | `3.2.3`
 |Link | `http://www.ratepay.com`
 |Mail | `integration@ratepay.com`
 |Installation | `see separate installation manual`
 
 ## Changelog
+
+### Version 3.2.3 - Released 2015-10-01
+* Device Fingerprint implemented
+* SEPA form revised
+* fixed AT ELV bug
+* IBAN only configurable
+* fixed bug in order history
+* added order information table
+* persisted non article items in order details table
 
 ### Version 3.2.2 - Released 2015-07-03
 * fixed bug in case of item prices > 1000

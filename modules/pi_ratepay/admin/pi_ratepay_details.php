@@ -77,18 +77,6 @@ class pi_ratepay_Details extends oxAdminDetails
     private $_requestDataBackend;
 
     /**
-     * payment change subtypes
-     *
-     * @var array
-     */
-    private $_paymentChangeSubtype = array(
-        'cancel' => 'partial-cancellation',
-        'cancelfull' => 'full-cancellation',
-        'return' => 'partial-return',
-        'returnfull' => 'full-return'
-    );
-
-    /**
      * Is shop set to UTF8 Mode
      * @var bool
      */
@@ -129,7 +117,15 @@ class pi_ratepay_Details extends oxAdminDetails
 
         $this->_requestDataBackend = oxNew('pi_ratepay_requestdatabackend', $this->getEditObject());
 
-        $this->addTplParam('pitotalamount', $this->_getFormattedNumber($order->getTotalOrderSum()));
+        $ratepayOrder = oxNew('pi_ratepay_orders');
+        $ratepayOrder->loadByOrderNumber($this->_getOrderId());
+
+        $transactionId = $ratepayOrder->pi_ratepay_orders__transaction_id->rawValue;
+        $descriptor = $ratepayOrder->pi_ratepay_orders__descriptor->rawValue;
+        $this->addTplParam('pi_transaction_id', $transactionId);
+        $this->addTplParam('pi_descriptor', $descriptor);
+
+        $this->addTplParam('pi_total_amount', $this->_getFormattedNumber($order->getTotalOrderSum()));
 
         $this->addTplParam('pi_ratepay_payment_type', $this->_paymentMethod);
         $this->addTplParam('articleList', $this->getPreparedOrderArticles());
@@ -186,7 +182,7 @@ class pi_ratepay_Details extends oxAdminDetails
     public function cancel()
     {
         $this->_initRatepayDetails($this->getEditObject());
-        $this->paymentChangeRequest('cancel');
+        $this->paymentChangeRequest('cancellation');
     }
 
     /**
@@ -256,7 +252,7 @@ class pi_ratepay_Details extends oxAdminDetails
                 'title'          => $title,
                 'quantity'       => $historyItem->pi_ratepay_history__quantity->rawValue,
                 'method'         => $historyItem->pi_ratepay_history__method->rawValue,
-                'subtype'        => $historyItem->pi_ratepay_history__subtype->rawValue,
+                'subtype'        => $historyItem->pi_ratepay_history__submethod->rawValue,
                 'date'           => $historyItem->pi_ratepay_history__date->rawValue
             ));
         }
@@ -347,11 +343,7 @@ class pi_ratepay_Details extends oxAdminDetails
     {
         $operation = 'PAYMENT_CHANGE';
 
-        $full = $this->_isPaymentChangeFull()? 'full' : '';
-
-        $subtype = $this->_paymentChangeSubtype[$paymentChangeType . $full];
-
-        $response = $this->ratepayRequest($operation, $subtype);
+        $response = $this->ratepayRequest($operation, $paymentChangeType);
 
         $isSuccess = 'pierror';
         if ($response && (string) $response->head->processing->result->attributes()->code == '403') {
@@ -361,12 +353,12 @@ class pi_ratepay_Details extends oxAdminDetails
                 if (oxRegistry::getConfig()->getRequestParameter($article['arthash']) > 0) {
                     $quant = oxRegistry::getConfig()->getRequestParameter($article['arthash']);
                     $artid = $article['artid'];
-                    if ($subtype == "partial-cancellation" || $subtype == "full-cancellation") {
+                    if ($paymentChangeType == "cancellation") {
                         oxDb::getDb()->execute("update $this->pi_ratepay_order_details set cancelled=cancelled+$quant where order_number='" . $this->_getOrderId() . "' and article_number='$artid'");
-                    } else if ($subtype == "partial-return" || $subtype == "full-return") {
+                    } else if ($paymentChangeType == "return") {
                         oxDb::getDb()->execute("update $this->pi_ratepay_order_details set returned=returned+$quant where order_number='" . $this->_getOrderId() . "' and article_number='$artid'");
                     }
-                    $this->_logHistory($this->_getOrderId(), $artid, $quant, $operation, $subtype);
+                    $this->_logHistory($this->_getOrderId(), $artid, $quant, $operation, $paymentChangeType);
                     if ($article['oxid'] != "") {
                         $articleList[$article['oxid']] = array('oxamount' => $article['ordered'] - $article['cancelled'] - $article['returned'] - oxRegistry::getConfig()->getRequestParameter($article['arthash']));
                     } else {
@@ -391,10 +383,10 @@ class pi_ratepay_Details extends oxAdminDetails
                     }
                 }
             }
-            $this->updateOrder($articleList, $full);
+            $this->updateOrder($articleList, $this->_isPaymentChangeFull());
             $isSuccess = 'pisuccess';
         }
-        $this->addTplParam($isSuccess, $subtype);
+        $this->addTplParam($isSuccess, $paymentChangeType);
     }
 
     /**

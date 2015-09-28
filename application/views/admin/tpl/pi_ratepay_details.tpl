@@ -77,51 +77,68 @@
 [{/if}]
 [{/if}]
 <div id="message" class="messagebox" style="visibility:hidden;">[{oxmultilang ident="PI_RATEPAY_ERRORTYPING"}]</div>
-[{if $pi_ratepay_payment_type === "INSTALLMENT"}]
 <fieldset style="padding-left: 5px; padding-right: 5px;">
-    <legend>Ratendetails</legend><br/>
+    <legend>Transaktionssdetails</legend><br/>
     <table>
         <tr>
-            <td>Gesamtbetrag:</td>
-            <td>[{$pirptotalamountvalue}]</td>
+            <td>Transanction Id:</td>
+            <td>[{$pi_transaction_id}]</td>
         </tr>
         <tr>
-            <td>Barzahlungspreis:</td>
-            <td>[{$pirpamountvalue}]</td>
+            <td>Verwendungszweck/<br/>Descriptor:</td>
+            <td>[{$pi_descriptor}]</td>
         </tr>
+        [{if $pi_ratepay_payment_type === "INSTALLMENT"}]
         <tr>
-            <td>Zinsbetrag:</td>
-            <td>[{$pirpinterestamountvalue}]</td>
+            <td colspan="2">
+                <fieldset style="padding-left: 5px; padding-right: 5px;">
+                    <legend>Ratendetails</legend><br/>
+                    <table>
+                        <tr>
+                            <td>Gesamtbetrag:</td>
+                            <td>[{$pirptotalamountvalue}]</td>
+                        </tr>
+                        <tr>
+                            <td>Barzahlungspreis:</td>
+                            <td>[{$pirpamountvalue}]</td>
+                        </tr>
+                        <tr>
+                            <td>Zinsbetrag:</td>
+                            <td>[{$pirpinterestamountvalue}]</td>
+                        </tr>
+                        <tr>
+                            <td>Vertragsabschlussgebühr:</td>
+                            <td>[{$pirpservicechargevalue}]</td>
+                        </tr>
+                        <tr>
+                            <td>Effektiver Jahreszins:</td>
+                            <td>[{$pirpannualpercentageratevalue}]</td>
+                        </tr>
+                        <tr>
+                            <td>Sollzinssatz pro Monat:</td>
+                            <td>[{$pirpmonthlydebitinterestvalue}]</td>
+                        </tr>
+                        <tr>
+                            <td>Laufzeit:</td>
+                            <td>[{$pirpnumberofratesvalue}]</td>
+                        </tr>
+                        <tr>
+                            <td>[{$pirpnumberofratesvalue-1}]&nbsp;monatliche Raten à:</td>
+                            <td>[{$pirpratevalue}]</td>
+                        </tr>
+                        <tr>
+                            <td>zzgl. einer Abschlussrate à:</td>
+                            <td>[{$pirplastratevalue}]</td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </td>
         </tr>
-        <tr>
-            <td>Vertragsabschlussgebühr:</td>
-            <td>[{$pirpservicechargevalue}]</td>
-        </tr>
-        <tr>
-            <td>Effektiver Jahreszins:</td>
-            <td>[{$pirpannualpercentageratevalue}]</td>
-        </tr>
-        <tr>
-            <td>Sollzinssatz pro Monat:</td>
-            <td>[{$pirpmonthlydebitinterestvalue}]</td>
-        </tr>
-        <tr>
-            <td>Laufzeit:</td>
-            <td>[{$pirpnumberofratesvalue}]</td>
-        </tr>
-        <tr>
-            <td>[{$pirpnumberofratesvalue-1}]&nbsp;monatliche Raten à:</td>
-            <td>[{$pirpratevalue}]</td>
-        </tr>
-        <tr>
-            <td>zzgl. einer Abschlussrate à:</td>
-            <td>[{$pirplastratevalue}]</td>
-        </tr>
+        [{/if}]
     </table>
 </fieldset>
 
 <br/>
-[{/if}]
 [{assign var="storniert_versendet" value="0"}]
 [{foreach from=$articleList item=article}]
 [{if $article.amount > 0}]
@@ -184,7 +201,7 @@
                 <td valign="top" class="[{$listclass}]">&nbsp;</td>
                 <td valign="top" class="[{$listclass}]">&nbsp;</td>
                 <td valign="top" class="[{$listclass}]">&nbsp;</td>
-                <td valign="top" class="[{$listclass}]">[{$pitotalamount}] EUR</td>
+                <td valign="top" class="[{$listclass}]">[{$pi_total_amount}] EUR</td>
                 <td valign="top" class="[{$listclass}]">&nbsp;</td>
                 <td valign="top" class="[{$listclass}]">&nbsp;</td>
                 <td valign="top" class="[{$listclass}]">&nbsp;</td>
@@ -303,24 +320,18 @@
             <td valign="top" class="[{$listclass}]">[{$history.title|strip_tags}]</td>
             <td valign="top" class="[{$listclass}]">
                 [{if $history.method == "CONFIRMATION_DELIVER"}]
-                [{oxmultilang ident="PI_RATEPAY_CONFIRMDELIVER"}]
+                    [{oxmultilang ident="PI_RATEPAY_CONFIRMDELIVER"}]
                 [{/if}]
                 [{if $history.method == "PAYMENT_CHANGE"}]
-                [{if $history.subtype == "credit"}]
-                [{oxmultilang ident="PI_RATEPAY_GOODWILL"}]
-                [{/if}]
-                [{if $history.subtype == "partial-return"}]
-                [{oxmultilang ident="PI_RATEPAY_PARTIALRETURN"}]
-                [{/if}]
-                [{if $history.subtype == "full-return"}]
-                [{oxmultilang ident="PI_RATEPAY_FULLRETURN"}]
-                [{/if}]
-                [{if $history.subtype == "partial-cancellation"}]
-                [{oxmultilang ident="PI_RATEPAY_PARTIALCANCELLATION"}]
-                [{/if}]
-                [{if $history.subtype == "full-cancellation"}]
-                [{oxmultilang ident="PI_RATEPAY_FULLCANCELLATION"}]
-                [{/if}]
+                    [{if $history.subtype == "credit"}]
+                        [{oxmultilang ident="PI_RATEPAY_GOODWILL"}]
+                    [{/if}]
+                    [{if strstr($history.subtype, "return")}]
+                        [{oxmultilang ident="PI_RATEPAY_RETURN"}]
+                    [{/if}]
+                    [{if strstr($history.subtype, "cancellation")}]
+                        [{oxmultilang ident="PI_RATEPAY_CANCELLATION"}]
+                    [{/if}]
                 [{/if}]
             </td>
             <td valign="top" class="[{$listclass}]">[{$history.date}]</td>

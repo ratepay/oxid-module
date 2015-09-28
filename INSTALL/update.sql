@@ -29,6 +29,9 @@ CREATE TABLE IF NOT EXISTS `pi_ratepay_settings` (
   PRIMARY KEY (`OXID`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
+ALTER TABLE `pi_ratepay_order_details` ADD `PRICE` DOUBLE NOT NULL DEFAULT '0' AFTER `ARTICLE_NUMBER`;
+ALTER TABLE `pi_ratepay_order_details` ADD `VAT` DOUBLE NOT NULL DEFAULT '0' AFTER `PRICE`;
+
 INSERT INTO `pi_ratepay_settings` (`country`, `url`, `sandbox`, `logging`, `type`, `duedate`) VALUES ('DE', 'http://www.ratepay.com/zusaetzliche-geschaeftsbedingungen-und-datenschutzhinweis', 1, 1, 'invoice', 14);
 INSERT INTO `pi_ratepay_settings` (`country`, `url`, `sandbox`, `logging`, `type`, `duedate`) VALUES ('DE', 'http://www.ratepay.com/zusaetzliche-geschaeftsbedingungen-und-datenschutzhinweis', 1, 1, 'elv', 14);
 INSERT INTO `pi_ratepay_settings` (`country`, `url`, `sandbox`, `logging`, `type`, `duedate`) VALUES ('DE', 'http://www.ratepay.com/zusaetzliche-geschaeftsbedingungen-und-datenschutzhinweis', 1, 1, 'installment', 14);
