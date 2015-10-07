@@ -582,9 +582,9 @@ class pi_ratepay_Details extends oxAdminDetails
     {
         $content = $request->addChild('content');
         if ($operation == "CONFIRMATION_DELIVER") {
-            if ($this->_getPaymentSid() === 'pi_ratepay_rechnung' || $this->_getPaymentSid() === 'pi_ratepay_elv') {
+            /*if ($this->_getPaymentSid() === 'pi_ratepay_rechnung' || $this->_getPaymentSid() === 'pi_ratepay_elv') {
                 $this->_setContentInvoicing($content);
-            }
+            }*/
             $this->setRatepayContentBasket($content);
         } else if ($operation == "PAYMENT_CHANGE") {
             $total = $this->_orderTotalAmount($subtype);

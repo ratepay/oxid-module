@@ -29,7 +29,7 @@ $aModule = array(
     ),
     'thumbnail'    => 'ratepay_logo.png',
     'lang'         => 'en',
-    'version'      => '3.2.2',
+    'version'      => '3.2.3',
     'author'       => 'RatePAY GmbH',
     'email'        => 'integration@ratepay.com',
     'url'          => 'http://www.ratepay.com/',
@@ -41,12 +41,7 @@ $aModule = array(
         array(
             'template' => 'page/checkout/payment.tpl',
             'block'    => 'checkout_payment_errors',
-            'file'     => 'payment_pi_ratepay_error.tpl'
-        ),
-        array(
-            'template' => 'page/checkout/payment.tpl',
-            'block'    => 'checkout_payment_errors',
-            'file'     => 'payment_pi_ratepay_dfp.tpl'
+            'file'     => 'payment_pi_ratepay_error_dfp.tpl'
         ),
         array(
             'template' => 'page/checkout/payment.tpl',

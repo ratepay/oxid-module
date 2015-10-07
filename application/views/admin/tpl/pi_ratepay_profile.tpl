@@ -127,14 +127,14 @@
                                                         </td>
                                                     </tr>
                                                     [{/if}]
-                                                    <tr>
+                                                    <!--<tr>
                                                         <td class="edittext">
                                                             [{oxmultilang ident="PI_RATEPAY_PROFILE_SETTINGS_DUEDATE"}]:
                                                         </td><td class="edittext">
                                                             <input type="text" class="editinput" size="3" maxlength="2" name="rp_duedate_[{$method}]_[{$country}]" value="[{$methodValue.duedate}]">
                                                             &nbsp;[{oxmultilang ident="PI_RATEPAY_PROFILE_SETTINGS_DUEDATE_DAY"}]
                                                         </td>
-                                                    </tr>
+                                                    </tr>-->
                                                     [{if isset($methodValue.installment_configuration)}]
                                                         <tr>
                                                             <td class="edittext" colspan="2">
