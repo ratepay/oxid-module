@@ -679,8 +679,8 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
         }
 
         if ($basket->getTotalDiscount() && $basket->getTotalDiscount()->getBruttoPrice() > 0) {
-            $item = $items->addChild('item', "Discount");
-            $item->addAttribute('article-number', "Discount");
+            $item = $items->addChild('item', "discount");
+            $item->addAttribute('article-number', "discount");
             $item->addAttribute('quantity', 1);
             $item->addAttribute('unit-price', "-" . $this->_getFormattedNumber($basket->getTotalDiscount()->getNettoPrice()));
             $item->addAttribute('total-price', "-" . $this->_getFormattedNumber($basket->getTotalDiscount()->getNettoPrice()));

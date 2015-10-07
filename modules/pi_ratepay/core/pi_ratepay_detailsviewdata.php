@@ -54,11 +54,28 @@ class pi_ratepay_DetailsViewData
         $articleList = array();
 
         # Get order articles
-        $articlesSql = "SELECT oa.oxid,oa.oxartid,oa.oxartnum,oa.oxvat,oa.oxbprice,oa.oxnprice,oa.oxtitle, oa.oxbrutprice,oa.oxamount, prrod.ordered, prrod.cancelled, prrod.returned, prrod.shipped, if(oa.OXSELVARIANT != '',concat(oa.oxtitle,', ',oa.OXSELVARIANT),oa.oxtitle) as title
-				FROM `oxorderarticles` oa, $this->pi_ratepay_order_details prrod
-				WHERE prrod.order_number = '$orderId'
-				AND prrod.order_number = oa.oxorderid
-				AND oa.oxartid = prrod.article_number";
+        $articlesSql = "SELECT
+              oa.oxid,
+              oa.oxartid,
+              oa.oxartnum,
+              oa.oxvat,
+              oa.oxbprice,
+              oa.oxnprice,
+              oa.oxtitle,
+              oa.oxbrutprice,
+              oa.oxamount,
+              prrod.ordered,
+              prrod.cancelled,
+              prrod.returned,
+              prrod.shipped,
+              if(oa.OXSELVARIANT != '',concat(oa.oxtitle,', ',oa.OXSELVARIANT),oa.oxtitle) as title
+            FROM
+              `oxorderarticles` oa,
+              $this->pi_ratepay_order_details prrod
+            WHERE
+              prrod.order_number = '$orderId'
+              AND prrod.order_number = oa.oxorderid
+              AND oa.oxartid = prrod.article_number";
         $articlesResult = mysql_query($articlesSql);
         $i = 0;
 
@@ -181,35 +198,6 @@ class pi_ratepay_DetailsViewData
             $i++;
         }
 
-        if ($orderValues->OXDISCOUNT != 0) {
-            $rpOrderDetailsDiscountsSql = "SELECT * from `$this->pi_ratepay_order_details` where order_number='$orderId' and article_number='Discount'";
-            $rpOrderDetailsDiscountsResult = mysql_query($rpOrderDetailsDiscountsSql);
-            $rpOrderDetailsDiscountsValues = mysql_fetch_object($rpOrderDetailsDiscountsResult);
-
-            $articleList[$i]['oxid'] = "";
-            $articleList[$i]['artid'] = "Discount";
-            $articleList[$i]['arthash'] = md5($orderValues->oxartid);
-            $articleList[$i]['artnum'] = "Discount";
-            $articleList[$i]['title'] = "Discount";
-            $articleList[$i]['oxtitle'] = "Discount";
-            $articleList[$i]['vat'] = "0";
-            $articleList[$i]['unitprice'] = (float) $orderValues->OXDISCOUNT * -1;
-            $articleList[$i]['unitPriceNetto'] = (float) $orderValues->OXDISCOUNT * -1;
-            $articleList[$i]['amount'] = 1 - $rpOrderDetailsDiscountsValues->SHIPPED - $rpOrderDetailsDiscountsValues->CANCELLED;
-            $articleList[$i]['ordered'] = $rpOrderDetailsDiscountsValues->ORDERED;
-            $articleList[$i]['shipped'] = $rpOrderDetailsDiscountsValues->SHIPPED;
-            $articleList[$i]['returned'] = $rpOrderDetailsDiscountsValues->RETURNED;
-            $articleList[$i]['cancelled'] = $rpOrderDetailsDiscountsValues->CANCELLED;
-
-            if (($rpOrderDetailsDiscountsValues->ORDERED - $rpOrderDetailsDiscountsValues->RETURNED - $rpOrderDetailsDiscountsValues->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = (float) $orderValues->OXDISCOUNT * -1;
-            } else {
-                $articleList[$i]['totalprice'] = 0;
-            }
-
-            $i++;
-        }
-
         $rpOrderDetailsDeliverySql = "SELECT * from `$this->pi_ratepay_order_details` where order_number='$orderId' and article_number='oxdelivery'";
         $rpOrderDetailsDeliveryResult = mysql_query($rpOrderDetailsDeliverySql);
         $rpOrderDetailsDeliveryValues = mysql_fetch_object($rpOrderDetailsDeliveryResult);
@@ -269,12 +257,69 @@ class pi_ratepay_DetailsViewData
             $i++;
         }
 
-        $vouchersSql = "SELECT ov.oxdiscount AS price, prrod.article_number AS artnr, ov.oxvouchernr AS title, prrod.ordered, prrod.cancelled, prrod.returned, prrod.shipped, ovs.OXSERIENR as seriesTitle, ovs.OXSERIEDESCRIPTION as seriesDescription
-		FROM `oxvouchers` ov, " . $this->pi_ratepay_order_details . " prrod, oxvoucherseries ovs
-		WHERE prrod.order_number = '" . $orderId . "'
-		AND ov.oxorderid = prrod.order_number
-		AND prrod.article_number = ov.oxid
-        AND ovs.oxid = ov.OXVOUCHERSERIEID";
+        //$rpOrderDetailsDiscountsSql = "SELECT * from `$this->pi_ratepay_order_details` where order_number='$orderId' and article_number='discount'";
+
+        $rpOrderDetailsDiscountsSql = "SELECT
+          od.oxid AS ARTID,
+          od.oxtitle AS TITLE,
+          prrod.price AS PRICE,
+          prrod.ordered AS ORDERED,
+          prrod.cancelled AS CANCELLED,
+          prrod.returned AS RETURNED,
+          prrod.shipped AS SHIPPED
+		FROM
+		  `oxdiscount` od,
+		  " . $this->pi_ratepay_order_details . " prrod
+		WHERE
+		  prrod.order_number = '" . $orderId . "'
+		  AND prrod.article_number = od.oxid";
+        $rpOrderDetailsDiscountsResult = mysql_query($rpOrderDetailsDiscountsSql);
+        $rpOrderDetailsDiscountsValues = mysql_fetch_object($rpOrderDetailsDiscountsResult);
+
+        if ($rpOrderDetailsDiscountsValues->PRICE != 0) {
+
+            $articleList[$i]['oxid'] = "";
+            $articleList[$i]['artid'] = $rpOrderDetailsDiscountsValues->ARTID;
+            $articleList[$i]['arthash'] = md5($orderValues->oxartid);
+            $articleList[$i]['artnum'] = "discount";
+            $articleList[$i]['title'] = $rpOrderDetailsDiscountsValues->TITLE;
+            $articleList[$i]['oxtitle'] = $rpOrderDetailsDiscountsValues->TITLE;
+            $articleList[$i]['vat'] = "0";
+            $articleList[$i]['unitprice'] = (float) $rpOrderDetailsDiscountsValues->PRICE;
+            $articleList[$i]['unitPriceNetto'] = (float) $rpOrderDetailsDiscountsValues->PRICE;
+            $articleList[$i]['amount'] = 1 - $rpOrderDetailsDiscountsValues->SHIPPED - $rpOrderDetailsDiscountsValues->CANCELLED;
+            $articleList[$i]['ordered'] = $rpOrderDetailsDiscountsValues->ORDERED;
+            $articleList[$i]['shipped'] = $rpOrderDetailsDiscountsValues->SHIPPED;
+            $articleList[$i]['returned'] = $rpOrderDetailsDiscountsValues->RETURNED;
+            $articleList[$i]['cancelled'] = $rpOrderDetailsDiscountsValues->CANCELLED;
+
+            if (($rpOrderDetailsDiscountsValues->ORDERED - $rpOrderDetailsDiscountsValues->RETURNED - $rpOrderDetailsDiscountsValues->CANCELLED) > 0) {
+                $articleList[$i]['totalprice'] = $rpOrderDetailsDiscountsValues->PRICE;
+            } else {
+                $articleList[$i]['totalprice'] = 0;
+            }
+
+            $i++;
+        }
+
+        $vouchersSql = "SELECT
+          ov.oxdiscount AS price,
+          prrod.article_number AS artnr,
+          ov.oxvouchernr AS title,
+          prrod.ordered, prrod.cancelled,
+          prrod.returned,
+          prrod.shipped,
+          ovs.OXSERIENR as seriesTitle,
+          ovs.OXSERIEDESCRIPTION as seriesDescription
+		FROM
+		  `oxvouchers` ov,
+		  " . $this->pi_ratepay_order_details . " prrod,
+		  oxvoucherseries ovs
+		WHERE
+		  prrod.order_number = '" . $orderId . "'
+		  AND ov.oxorderid = prrod.order_number
+		  AND prrod.article_number = ov.oxid
+          AND ovs.oxid = ov.OXVOUCHERSERIEID";
 
         $vouchersResult = mysql_query($vouchersSql);
 

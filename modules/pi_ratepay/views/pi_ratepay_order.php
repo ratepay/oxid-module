@@ -328,9 +328,9 @@ class pi_ratepay_order extends pi_ratepay_order_parent
         }
 
         if ($this->getBasket()->getDiscounts()) {
-            $articlenumber = "Discount";
-            $quantity = 1;
-            $this->_saveToRatepayOrderDetails($id, $articlenumber, $quantity);
+            foreach ($this->getBasket()->getDiscounts() as $discount) {
+                $this->_saveToRatepayOrderDetails($id, $discount->sOXID, 1, $discount->dDiscount * -1);
+            }
         }
     }
 

@@ -374,7 +374,7 @@ class pi_ratepay_Details extends oxAdminDetails
                             $oOrder->oxorder__oxgiftcardcost->setValue(0);
                         } else if ($article['artid'] == "oxtsprotection") {
                             $oOrder->oxorder__oxtsprotectcosts->setValue(0);
-                        } else if ($article['artid'] == "Discount") {
+                        } else if ($article['artid'] == "discount") {
                             $oOrder->oxorder__oxdiscount->setValue(0);
                         } else {
                             $value = $oOrder->oxorder__oxvoucherdiscount->getRawValue() + $article['totalprice'];
