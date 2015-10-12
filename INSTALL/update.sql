@@ -1,5 +1,5 @@
 -- Update Script, updates DB RatePAY OXID Module to >=3.2 DB
-DROP TABLE `pi_ratepay_rate_configuration`;
+DROP TABLE IF EXISTS `pi_ratepay_rate_configuration`;
 DROP TABLE `pi_ratepay_settings`;
 
 CREATE TABLE IF NOT EXISTS `pi_ratepay_settings` (
@@ -28,9 +28,6 @@ CREATE TABLE IF NOT EXISTS `pi_ratepay_settings` (
   PRIMARY KEY (`OXID`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-ALTER TABLE `pi_ratepay_order_details` ADD `PRICE` DOUBLE NOT NULL DEFAULT '0' AFTER `ARTICLE_NUMBER`;
-ALTER TABLE `pi_ratepay_order_details` ADD `VAT` DOUBLE NOT NULL DEFAULT '0' AFTER `PRICE`;
-
 INSERT INTO `pi_ratepay_settings` (`country`, `url`, `sandbox`, `logging`, `type`, `duedate`) VALUES ('DE', 'http://www.ratepay.com/zusaetzliche-geschaeftsbedingungen-und-datenschutzhinweis', 1, 1, 'invoice', 14);
 INSERT INTO `pi_ratepay_settings` (`country`, `url`, `sandbox`, `logging`, `type`, `duedate`) VALUES ('DE', 'http://www.ratepay.com/zusaetzliche-geschaeftsbedingungen-und-datenschutzhinweis', 1, 1, 'elv', 14);
 INSERT INTO `pi_ratepay_settings` (`country`, `url`, `sandbox`, `logging`, `type`, `duedate`) VALUES ('DE', 'http://www.ratepay.com/zusaetzliche-geschaeftsbedingungen-und-datenschutzhinweis', 1, 1, 'installment', 14);
@@ -42,3 +39,6 @@ INSERT INTO `pi_ratepay_settings` (`country`, `url`, `sandbox`, `logging`, `type
 INSERT INTO `pi_ratepay_settings` (`country`, `url`, `sandbox`, `logging`, `type`, `duedate`) VALUES ('CH', 'http://www.ratepay.com/zusaetzliche-geschaeftsbedingungen-und-datenschutzhinweis', 1, 1, 'installment', 14);
 
 UPDATE `oxpayments` SET `OXACTIVE` = 1, `OXFROMAMOUNT` = 0, `OXTOAMOUNT` = 999999999, OXCHECKED = 1 WHERE `oxpayments`.`OXID` IN ('pi_ratepay_rechnung', 'pi_ratepay_rate', 'pi_ratepay_elv');
+
+ALTER TABLE `pi_ratepay_order_details` ADD `PRICE` DOUBLE NOT NULL DEFAULT '0' AFTER `ARTICLE_NUMBER`;
+ALTER TABLE `pi_ratepay_order_details` ADD `VAT` DOUBLE NOT NULL DEFAULT '0' AFTER `PRICE`;
