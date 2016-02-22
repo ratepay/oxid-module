@@ -53,7 +53,6 @@ class pi_ratepay_rate_Calc extends oxUBase
         $this->checkUser();
 
         $basket = $this->getSession()->getBasket();
-
         $this->addTplParam(
             'piTotalAmount',
             number_format($basket->getPrice()->getBruttoPrice(), 2, ",", "")

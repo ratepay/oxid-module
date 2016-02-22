@@ -147,8 +147,9 @@ class PiRatepayRateCalcData implements PiRatepayRateCalcDataInterface
      */
     public function getAmount()
     {
-        $basket = oxRegistry::getSession()->getBasket();
-        return $basket->getPriceForPayment();
+        $basket = oxRegistry::getSession()->getVariable('basketAmount');
+
+        return $basket;
     }
 
     /**
@@ -321,8 +322,10 @@ class PiRatepayRateCalcData implements PiRatepayRateCalcDataInterface
      */
     private function _getSettings()
     {
-        $settings = oxNew('pi_ratepay_settings');
-        $settings->loadByType(strtolower('installment'));
+        $shopId = oxRegistry::getSession()->getVariable('shopId');
+
+        $settings = oxNew('pi_ratepay_Settings');
+        $settings->loadByType(strtolower('installment'), null, $shopId);
 
         return $settings;
     }

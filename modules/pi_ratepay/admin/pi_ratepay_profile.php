@@ -18,6 +18,7 @@
  */
 class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
 {
+    protected $_tableName = 'pi_ratepay_settings';
 
     public function render()
     {
@@ -28,12 +29,13 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
 
         $config = array();
         $activeCountries = array('de' => 'de');
+        $shopId = $this->getConfig()->getShopId();
 
         $settings = oxNew('pi_ratepay_Settings');
         foreach ($countries as $country) {
 
             foreach ($methods as $methodDB => $methodShop) {
-                $settings->loadByType($methodDB, $country);
+                $settings->loadByType($methodDB, $country, $shopId);
 
                 $config[$country][$methodShop]['active'] = (bool) $settings->pi_ratepay_settings__active->rawValue;
                 $config[$country][$methodShop]['profile_id'] = $settings->pi_ratepay_settings__profile_id->rawValue;
@@ -44,7 +46,7 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                 $config[$country][$methodShop]['duedate'] = $settings->pi_ratepay_settings__duedate->rawValue;
 
                 if (!empty($config[$country][$methodShop]['profile_id']) && !empty($config[$country][$methodShop]['security_code'])) {
-                    $extendedData = array('country' => $country);
+                    $extendedData = array('profileId' => $config[$country][$methodShop]['profile_id'], 'securityCode' => $config[$country][$methodShop]['security_code'], 'country' => $country);
                     $profileRequest = $this->_callProfileRequest('pi_ratepay_' . $methodShop, $extendedData);
 
                     if ($profileRequest) {
@@ -69,6 +71,7 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                 }
             }
         }
+        //die(print_r($config));
         $this->addTplParam('config', $config);
 
         if (count($errMsg) > 0) {
@@ -94,7 +97,8 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
         foreach ($countries as $country) {
 
             foreach ($methods as $methodDB => $methodShop) {
-                $settings->loadByType($methodDB, $country);
+                $shopId = $this->getConfig()->getShopId();
+                $settings->loadByType($methodDB, $country, $shopId);
 
                 $methodActive = (bool) $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_active_' . $methodShop . '_' . $country));
                 $profileId = oxRegistry::getConfig()->getRequestParameter('rp_profile_id_' . $methodShop . '_' . $country);
@@ -103,13 +107,18 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                 $firstSaveArray = array(
                     'profile_id' => $profileId,
                     'security_code' => $securityCode,
+                    'url' => 'https://www.ratepay.com/zusaetzliche-geschaeftsbedingungen-und-datenschutzhinweis-dach',
                     'sandbox' => $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_sandbox_' . $methodShop . '_' . $country)),
                     'logging' => $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_logging_' . $methodShop . '_' . $country)),
                     'whitelabel' => $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_whitelabel_' . $methodShop . '_' . $country)),
                 );//'duedate' => (int) oxRegistry::getConfig()->getRequestParameter('rp_duedate_' . $methodShop . '_' . $country)
 
-                $settings->assign($firstSaveArray);
-                $settings->save();
+                if ($this->_checkOnShopId($shopId, $country, $methodDB) == false){
+                    $insertSql = $this->_createInsertSql($shopId, $country, $methodDB);
+                    $this->_insertSettings($insertSql);
+                }
+                $insertSql = $this->_createUpdateSql($firstSaveArray, $shopId, $country, $methodDB);
+                $this->_insertSettings($insertSql);
 
                 if (!empty($profileId) && !empty($securityCode)) {
                     $extendedData = array('profileId' => $profileId, 'securityCode' => $securityCode, 'country' => $country);
@@ -148,16 +157,16 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                         'dfp_snippet_id' => $profileRequest['profile']['device-fingerprint-snippet-id']
                     );
 
-                    $settings->assign($secondSaveArray);
-                    $settings->save();
+                    $insertSql = $this->_createUpdateSql($secondSaveArray, $shopId, $country, $methodDB);
+                    $this->_insertSettings($insertSql);
                 }
 
                 $thirdSaveArray = array(
                     'active' => $methodActive
                 );
 
-                $settings->assign($thirdSaveArray);
-                $settings->save();
+                $insertSql = $this->_createUpdateSql($thirdSaveArray, $shopId, $country, $methodDB);
+                $this->_insertSettings($insertSql);
 
                 // save installment configuration
                 if ($methodShop == 'rate' && $methodActive && $profileRequest) {
@@ -165,8 +174,8 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                         'month_allowed' => "[" . $profileRequest['installment_configuration']['month-allowed'] . "]"
                     );
 
-                    $settings->assign($installmentSaveArray);
-                    $settings->save();
+                    $insertSql = $this->_createUpdateSql($installmentSaveArray, $shopId, $country, $methodDB);
+                    $this->_insertSettings($insertSql);
                 }
 
                 if ($methodShop == 'elv' && $country == 'de') {
@@ -174,8 +183,8 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                         'iban_only' => $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_iban_only_' . $methodShop . '_' . $country))
                     );
 
-                    $settings->assign($elvSaveArray);
-                    $settings->save();
+                    $insertSql = $this->_createUpdateSql($elvSaveArray, $shopId, $country, $methodDB);
+                    $this->_insertSettings($insertSql);
                 }
             }
         }
@@ -213,5 +222,42 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
             }
         }
         return $array;
+    }
+
+    private function _createInsertSql($shopid, $country, $method){
+        $insertSql = 'INSERT INTO ' . $this->_tableName . '(shopid, country, type) VALUES (' . $shopid . ', "'. strtoupper($country) . '", "' . $method . '")';
+        return $insertSql;
+
+    }
+
+    private function _createUpdateSql($settingsArray, $shopid, $country, $method){
+        $updateSql = 'UPDATE '. $this->_tableName . ' SET';
+        foreach($settingsArray as $key => $value) {
+          $updateSql .= ' ' . $key . ' = "' . $value . '",';
+        }
+        $updateSql = substr($updateSql, 0, -1); // Removing last comma
+
+        $updateSql .= ' WHERE shopid = "' . $shopid . '" AND country = "' . $country . '" AND type = "' . $method . '"';
+
+        return $updateSql;
+    }
+
+    private function _checkOnShopId($shopid, $country, $method){
+
+        $oDb = oxDb::getDb();
+        $sqlResult = $oDb->getAssoc('SELECT * FROM ' .$this->_tableName .' WHERE shopid = "' . $shopid .'" AND country = "' . $country .'" AND type = "' . $method .'"');
+
+        return count($sqlResult) > 0;
+    }
+
+    private function _insertSettings($insertSql){
+        $oDb = oxDb::getDb();
+        $oDb->Execute($insertSql);
+    }
+
+    private function _getMasterShopSettings($country, $method){
+        $oDB = oxDB::getDB();
+        $masterSettings = $oDB->getAssoc('SELECT * FROM ' .$this->_tableName .' WHERE shopid = "1" AND country = "' . $country . '" AND type = "' . $method . '"');
+        return $masterSettings;
     }
 }

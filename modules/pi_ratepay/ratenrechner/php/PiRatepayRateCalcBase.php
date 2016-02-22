@@ -1139,6 +1139,7 @@ class PiRatepayRateCalcBase
         $this->setDetailsNumberOfRates($array['number_of_rates']);
         $this->setDetailsRate($array['rate']);
         $this->setDetailsLastRate($array['last_rate']);
+
     }
 
     /**

@@ -55,7 +55,7 @@ class pi_ratepay_Settings extends oxBase
      * @param string $type 'invoice' | 'installment'
      * @return boolean
      */
-    public function loadByType($type, $country = null)
+    public function loadByType($type, $country = null, $shopId = 1)
     {
         if ($country !== null) {
             $this->_setCountry($country);
@@ -64,6 +64,7 @@ class pi_ratepay_Settings extends oxBase
         //getting at least one field before lazy loading the object
         $this->_addField('oxid', 0);
         $whereClause = array(
+            $this->getViewName() . ".shopid" => $shopId,
             $this->getViewName() . ".type" => strtolower($type),
             $this->getViewName() . ".country" => $this->_getCountry()
         );

@@ -46,7 +46,6 @@
                         [{if $saved === true}]
                             <span style="font-weight: bold; color: #FFFFFF; background-color: #0B610B">[{oxmultilang ident="PI_RATEPAY_PROFILE_SAVED"}]</span><br/><br/>
                         [{/if}]
-
                         [{foreach key=country item=countryValue from=$config}]
                             [{if $country != 'de'}]
                                 [{if isset($activeCountries.$country)}]
