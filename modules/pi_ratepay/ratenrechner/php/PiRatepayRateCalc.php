@@ -125,7 +125,7 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
      */
     public function getRatepayRateMonthAllowed()
     {
-        $settings = oxNew('pi_ratepay_settings');
+        $settings = oxNew('pi_ratepay_Settings');
         $settings->loadByType('installment', oxRegistry::getSession()->getVariable('pi_ratepay_rate_usr_country'), oxRegistry::getSession()->getVariable('shopId'));
 
         return $settings->pi_ratepay_settings__month_allowed->rawValue;
@@ -142,10 +142,11 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
         $this->setRequestOperation('CALCULATION_REQUEST');
         $this->setRequestOperationSubtype($subtype);
         $request = $this->ratepay->getXMLObject();
+        $shopId = oxRegistry::getSession()->getVariable('shopId');
 
         $this->setRatepayHead($request);
         $this->setRatepayContentCalculation($request);
-        $response = $this->ratepay->paymentOperation($request, $this->_paymentMethod);
+        $response = $this->ratepay->paymentOperation($request, $this->_paymentMethod, $shopId);
         $request_reason_msg = 'serveroff';
 
         if ($response) {

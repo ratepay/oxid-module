@@ -56,6 +56,13 @@ class pi_ratepay_Details extends oxAdminDetails
     private $_paymentMethod;
 
     /**
+     * shopId
+     *
+     * @var int
+     */
+    private $_shopId;
+
+    /**
      * Order Model Object
      * An representation of the order whicht get edited.
      *
@@ -112,6 +119,7 @@ class pi_ratepay_Details extends oxAdminDetails
     private function _initRatepayDetails(oxOrder $order)
     {
         $this->_paymentMethod = pi_ratepay_util_utilities::getPaymentMethod($this->_getPaymentSid());
+        $this->_shopId = $this->getConfig()->getShopId();
 
         $this->pi_ratepay_order_details = 'pi_ratepay_order_details';
 
@@ -416,6 +424,7 @@ class pi_ratepay_Details extends oxAdminDetails
         $subtype = '';
 
         $response = $this->ratepayRequest($operation, $subtype);
+        //die(var_dump($response));
 
         $isSuccess = 'pierror';
         if ($response && (string) $response->head->processing->result->attributes()->code == '404') {
@@ -449,11 +458,10 @@ class pi_ratepay_Details extends oxAdminDetails
         $this->setRatepayHead($request, $operation, $subtype);
         $this->setRatepayContent($request, $operation, $subtype);
 
-        $response = $ratepay->paymentOperation($request, $this->_paymentMethod);
+        $response = $ratepay->paymentOperation($request, $this->_paymentMethod, $this->_shopId);
 
         $ratepayOrder = oxNew('pi_ratepay_orders');
         $ratepayOrder->loadByOrderNumber($this->_getOrderId());
-
         $transId = $ratepayOrder->pi_ratepay_orders__transaction_id->rawValue;
 
         $fname = $this->removeSpecialChars(html_entity_decode($this->_requestDataBackend->getCustomerFirstName()));
@@ -933,7 +941,7 @@ class pi_ratepay_Details extends oxAdminDetails
     private function _getSettings($country = null)
     {
         $settings = oxNew('pi_ratepay_settings');
-        $settings->loadByType(pi_ratepay_util_utilities::getPaymentMethod($this->_getPaymentSid()), $country);
+        $settings->loadByType(pi_ratepay_util_utilities::getPaymentMethod($this->_getPaymentSid()), $country, $this->getConfig()->getShopId());
 
         return $settings;
     }

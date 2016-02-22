@@ -49,6 +49,7 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                     $extendedData = array('profileId' => $config[$country][$methodShop]['profile_id'], 'securityCode' => $config[$country][$methodShop]['security_code'], 'country' => $country);
                     $profileRequest = $this->_callProfileRequest('pi_ratepay_' . $methodShop, $extendedData);
 
+
                     if ($profileRequest) {
                         $profileRequest['profile'] = $this->_changeKeyFormat($profileRequest['profile']);
                         $profileRequest['profile'] = $this->_deleteNegativeValues($profileRequest['profile'], $methodDB);

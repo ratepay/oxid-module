@@ -3,15 +3,20 @@
 
 |Module | RatePAY Payment Module for OXID
 |------|----------
-|Author | `Aarne Welschlau`
+|Author | `Sebastian Neumann`
 |Prefix | `pi`
 |Shop Version | `CE` `4.7.x-4.9.x`
-|Version | `3.2.3`
+|Version | `3.3.0`
 |Link | `http://www.ratepay.com`
 |Mail | `integration@ratepay.com`
 |Installation | `see separate installation manual`
 
 ## Changelog
+
+### Version 3.3.0 -
+* Oxid EE compatibility implemented
+* added shopId to ratepay settings table
+* fixed rate calculator bug in subshops
 
 ### Version 3.2.3 - Released 2015-10-01
 * Device Fingerprint implemented

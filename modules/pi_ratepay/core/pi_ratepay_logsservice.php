@@ -145,7 +145,7 @@ class pi_ratepay_LogsService extends oxSuperCfg
         $settings = oxNew('pi_ratepay_settings');
 
         if ($paymentMethod == 'INVOICE' || $paymentMethod == 'INSTALLMENT' || $paymentMethod == 'ELV') {
-            $settings->loadByType($paymentMethod);
+            $settings->loadByType($paymentMethod, null, $this->getConfig()->getShopId());
             return $settings->pi_ratepay_settings__logging->rawValue;
         }
 

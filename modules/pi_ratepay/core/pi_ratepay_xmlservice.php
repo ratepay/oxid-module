@@ -64,19 +64,20 @@ class pi_ratepay_XmlService extends oxSuperCfg
      * @param string $paymentMethod 'INVOICE' or 'INSTALLMENT'
      * @return string
      */
-    public function getRatepayServer($paymentMethod, $country = null)
+    public function getRatepayServer($paymentMethod, $shopId, $country = null)
     {
         $paymentMethod = strtoupper($paymentMethod);
 
         if ($paymentMethod == 'INVOICE' || $paymentMethod == 'INSTALLMENT' || $paymentMethod == 'ELV') {
             $settings = oxNew('pi_ratepay_settings');
             if ($country === null) {
-                $settings->loadByType($paymentMethod);
+                $settings->loadByType($paymentMethod, null, $shopId);
             } else {
-                $settings->loadByType($paymentMethod, $country);
+                $settings->loadByType($paymentMethod, $country, $shopId);
             }
 
             if ($settings->pi_ratepay_settings__sandbox->rawValue != '1') {
+
                 return self::$_server['live'];
             }
         }
@@ -91,9 +92,9 @@ class pi_ratepay_XmlService extends oxSuperCfg
      * @param string $paymentMethod
      * @return boolean|SimpleXMLElement
      */
-    public function paymentOperation($xmlRequest, $paymentMethod, $country = null)
+    public function paymentOperation($xmlRequest, $paymentMethod, $shopId, $country = null)
     {
-        $response = $this->_httpsPost($xmlRequest->asXML(), $this->getRatepayServer($paymentMethod, $country));
+        $response = $this->_httpsPost($xmlRequest->asXML(), $this->getRatepayServer($paymentMethod, $shopId, $country));
 
         return $response? new SimpleXMLElement($response) : false;
     }

@@ -29,7 +29,7 @@ $aModule = array(
     ),
     'thumbnail'    => 'ratepay_logo.png',
     'lang'         => 'en',
-    'version'      => '3.2.3',
+    'version'      => '3.3.0',
     'author'       => 'RatePAY GmbH',
     'email'        => 'integration@ratepay.com',
     'url'          => 'http://www.ratepay.com/',

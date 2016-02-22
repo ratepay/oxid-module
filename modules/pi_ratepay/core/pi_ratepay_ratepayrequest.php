@@ -47,11 +47,19 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
      * @var string
      */
     private $_country;
+
+    /**
+     * shopId
+     * @var int
+     */
+    private $_shopId;
+
     /**
      * Profile Id
      * @var string
      */
     private $_profileId;
+
     /**
      * Security Coce
      * @var string
@@ -76,6 +84,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
 
         $this->_paymentType = $paymentType;
         $this->_country = ($extendedData['country']) ? $extendedData['country'] : false;
+        $this->_shopId = $this->getConfig()->getShopId();
         $this->_profileId = ($extendedData['profileId']) ? $extendedData['profileId'] : false;
         $this->_securityCode = ($extendedData['securityCode']) ? $extendedData['securityCode'] : false;
         $this->_dataProvider = $dataProvider;
@@ -99,7 +108,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
 
         $initPayment = array(
             'request'  => $request,
-            'response' => $ratepay->paymentOperation($request, $this->_getPaymentMethod())
+            'response' => $ratepay->paymentOperation($request, $this->_getPaymentMethod(), $this->_shopId)
         );
 
         return $initPayment;
@@ -138,7 +147,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
 
         $requestPayment = array(
             'request'  => $request,
-            'response' => $ratepay->paymentOperation($request, $this->_getPaymentMethod())
+            'response' => $ratepay->paymentOperation($request, $this->_getPaymentMethod(), $this->_shopId)
         );
 
         return $requestPayment;
@@ -160,7 +169,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
 
         $confirmPayment = array(
             'request'  => $request,
-            'response' => $ratepay->paymentOperation($request, $this->_getPaymentMethod())
+            'response' => $ratepay->paymentOperation($request, $this->_getPaymentMethod(), $this->_shopId)
         );
 
         return $confirmPayment;
@@ -181,7 +190,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
 
         $confirmPayment = array(
             'request'  => $request,
-            'response' => $ratepay->paymentOperation($request, $this->_getPaymentMethod())
+            'response' => $ratepay->paymentOperation($request, $this->_getPaymentMethod(), $this->_shopId)
         );
 
         return $confirmPayment;
@@ -199,7 +208,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
         $this->_setRatepayHead($request, $operation);
         $requestProfile = array(
             'request' => $request,
-            'response' => $ratepay->paymentOperation($request, $this->_getPaymentMethod(), $country)
+            'response' => $ratepay->paymentOperation($request, $this->_getPaymentMethod(), $this->_shopId, $country)
         );
         return $requestProfile;
     }
@@ -245,9 +254,9 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
             $country = $this->_getCountryCodeById($this->getUser()->oxuser__oxcountryid->value);
             $settings = oxNew('pi_ratepay_settings');
             if ($country) {
-                $settings->loadByType($paymentMethod, $country);
+                $settings->loadByType($paymentMethod, $country, oxRegistry::getSession()->getVariable('shopId'));
             } else {
-                $settings->loadByType($paymentMethod);
+                $settings->loadByType($paymentMethod, null, oxRegistry::getSession()->getVariable('shopId'));
             }
             $profileId = $settings->pi_ratepay_settings__profile_id->rawValue;
             $securityCode = $settings->pi_ratepay_settings__security_code->rawValue;
@@ -846,7 +855,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
     {
         $isRateElv = false;
         $settings = oxNew('pi_ratepay_settings');
-        $settings->loadByType($this->_getPaymentMethod('pi_ratepay_rate'));
+        $settings->loadByType($this->_getPaymentMethod('pi_ratepay_rate'), null, oxSession::getVariable('shopId'));
 
         if ($this->getSession()->getVariable('pi_rp_rate_pay_method') === 'pi_ratepay_rate_radio_elv'
             && $settings->pi_ratepay_settings__activate_elv->rawValue == 1
