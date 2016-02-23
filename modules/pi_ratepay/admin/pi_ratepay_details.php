@@ -120,6 +120,7 @@ class pi_ratepay_Details extends oxAdminDetails
     {
         $this->_paymentMethod = pi_ratepay_util_utilities::getPaymentMethod($this->_getPaymentSid());
         $this->_shopId = $this->getConfig()->getShopId();
+        $this->_shopId = oxNew('pi_ratepay_settings')->setShopIdToOne($this->_shopId);
 
         $this->pi_ratepay_order_details = 'pi_ratepay_order_details';
 
@@ -424,7 +425,6 @@ class pi_ratepay_Details extends oxAdminDetails
         $subtype = '';
 
         $response = $this->ratepayRequest($operation, $subtype);
-        //die(var_dump($response));
 
         $isSuccess = 'pierror';
         if ($response && (string) $response->head->processing->result->attributes()->code == '404') {
@@ -941,7 +941,9 @@ class pi_ratepay_Details extends oxAdminDetails
     private function _getSettings($country = null)
     {
         $settings = oxNew('pi_ratepay_settings');
-        $settings->loadByType(pi_ratepay_util_utilities::getPaymentMethod($this->_getPaymentSid()), $country, $this->getConfig()->getShopId());
+        $shopId = $this->getConfig()->getShopId();
+        $shopId = $settings->setShopIdToOne($shopId);
+        $settings->loadByType(pi_ratepay_util_utilities::getPaymentMethod($this->_getPaymentSid()), $shopId, $country);
 
         return $settings;
     }

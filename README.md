@@ -15,8 +15,7 @@
 
 ### Version 3.3.0 -
 * Oxid EE compatibility implemented
-* added shopId to ratepay settings table
-* fixed rate calculator bug in subshops
+* descriptor field in database, size changed from 20 to 128
 
 ### Version 3.2.3 - Released 2015-10-01
 * Device Fingerprint implemented

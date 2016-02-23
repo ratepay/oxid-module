@@ -85,6 +85,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
         $this->_paymentType = $paymentType;
         $this->_country = ($extendedData['country']) ? $extendedData['country'] : false;
         $this->_shopId = $this->getConfig()->getShopId();
+        $this->_shopId = oxNew('pi_ratepay_settings')->setShopIdToOne($this->_shopId);
         $this->_profileId = ($extendedData['profileId']) ? $extendedData['profileId'] : false;
         $this->_securityCode = ($extendedData['securityCode']) ? $extendedData['securityCode'] : false;
         $this->_dataProvider = $dataProvider;
@@ -254,9 +255,9 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
             $country = $this->_getCountryCodeById($this->getUser()->oxuser__oxcountryid->value);
             $settings = oxNew('pi_ratepay_settings');
             if ($country) {
-                $settings->loadByType($paymentMethod, $country, oxRegistry::getSession()->getVariable('shopId'));
+                $settings->loadByType($paymentMethod, oxRegistry::getSession()->getVariable('shopId'), $country);
             } else {
-                $settings->loadByType($paymentMethod, null, oxRegistry::getSession()->getVariable('shopId'));
+                $settings->loadByType($paymentMethod, oxRegistry::getSession()->getVariable('shopId'));
             }
             $profileId = $settings->pi_ratepay_settings__profile_id->rawValue;
             $securityCode = $settings->pi_ratepay_settings__security_code->rawValue;
@@ -855,7 +856,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
     {
         $isRateElv = false;
         $settings = oxNew('pi_ratepay_settings');
-        $settings->loadByType($this->_getPaymentMethod('pi_ratepay_rate'), null, oxSession::getVariable('shopId'));
+        $settings->loadByType($this->_getPaymentMethod('pi_ratepay_rate'), oxSession::getVariable('shopId'));
 
         if ($this->getSession()->getVariable('pi_rp_rate_pay_method') === 'pi_ratepay_rate_radio_elv'
             && $settings->pi_ratepay_settings__activate_elv->rawValue == 1

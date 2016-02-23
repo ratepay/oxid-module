@@ -22,7 +22,6 @@
                     $pi_calculator->setRequestCalculationValue($calcValue);
                     $pi_calculator->setRequestDueDay($pi_calculator->getPostParameter('dueDate'));
                     $pi_resultArray = $pi_calculator->getRatepayRateDetails($calcMethod);
-
                 } else {
                     $pi_calculator->setErrorMsg('wrongvalue');
                 }
@@ -34,7 +33,6 @@
                     $pi_calculator->setRequestCalculationValue($pi_value);
                     $pi_calculator->setRequestDueDay($pi_calculator->getPostParameter('dueDate'));
                     $pi_resultArray = $pi_calculator->getRatepayRateDetails($calcMethod);
-
                 } else if (preg_match('/^\d+(\.)?\d{0,2}/', $pi_value)) {
                     $pi_value = str_replace(",", "", $pi_value);
                     $pi_value = (substr($pi_value, -1) != ".") ? str_replace(",", ".", $pi_value) : str_replace(",", "", $pi_value);

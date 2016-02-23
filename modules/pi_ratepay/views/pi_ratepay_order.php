@@ -432,8 +432,8 @@ class pi_ratepay_order extends pi_ratepay_order_parent
 
     protected function _isSandbox($method)
     {
-        $settings = oxNew('pi_ratepay_Settings');
-        $settings->loadByType(strtolower($method), null, oxRegistry::getSession()->getVariable('shopId'));
+        $settings = oxNew('pi_ratepay_settings');
+        $settings->loadByType(strtolower($method), oxRegistry::getSession()->getVariable('shopId'));
         return ($settings->pi_ratepay_settings__sandbox->rawValue);
     }
 }

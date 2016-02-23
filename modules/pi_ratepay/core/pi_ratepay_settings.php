@@ -50,12 +50,27 @@ class pi_ratepay_Settings extends oxBase
     }
 
     /**
+     * CE Shop uses 'oxbaseshop' as default shopId
+     *
+     * set shopId to '1' if shopId is 'oxbaseshop'
+     * @return int
+     */
+    public function setShopIdToOne($shopId)
+    {
+        if($shopId == 'oxbaseshop'){
+            $shopId = 1;
+        }
+
+        return $shopId;
+    }
+
+    /**
      * Load either invoice or installment settings
      *
      * @param string $type 'invoice' | 'installment'
      * @return boolean
      */
-    public function loadByType($type, $country = null, $shopId = 1)
+    public function loadByType($type, $shopId, $country = null)
     {
         if ($country !== null) {
             $this->_setCountry($country);

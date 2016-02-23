@@ -171,18 +171,19 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
      */
     private function _initRatepayTemplateVariables()
     {
-        $basketAmount = $this->getSession()->getBasket();
-        $basketAmount = $basketAmount->getPrice()->getBruttoPrice();
-        $shopId = $this->getConfig()->getShopId();
-        oxSession::setVariable('shopId', $shopId);
+        $basket = $this->getSession()->getBasket();
+        $basketAmount = $basket->getPrice()->getBruttoPrice();
         oxSession::setVariable('basketAmount', $basketAmount);
 
         $settings = oxNew('pi_ratepay_settings');
+        $shopId = $this->getConfig()->getShopId();
+        $shopId = $settings->setShopIdToOne($shopId);
+        oxSession::setVariable('shopId', $shopId);
 
         foreach (pi_ratepay_util_utilities::$_RATEPAY_PAYMENT_METHOD as $paymentMethod) {
 
             if ($this->_firstTime) {
-                $settings->loadByType(pi_ratepay_util_utilities::getPaymentMethod($paymentMethod), null, $this->getConfig()->getShopId());
+                $settings->loadByType(pi_ratepay_util_utilities::getPaymentMethod($paymentMethod), $shopId);
 
                 $customer = $this->getUser();
                 $country = strtolower(oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $customer->oxuser__oxcountryid->value . "'"));
@@ -265,7 +266,9 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
     private function _getRatePaySettings($paymentMethod)
     {
         $settings = oxNew('pi_ratepay_settings');
-        $settings->loadByType(pi_ratepay_util_utilities::getPaymentMethod($paymentMethod), null, $this->getConfig()->getShopId());
+        $shopId = $this->getConfig()->getShopId();
+        $shopId = $settings->setShopIdToOne($shopId);
+        $settings->loadByType(pi_ratepay_util_utilities::getPaymentMethod($paymentMethod), $shopId);
 
         return $settings;
     }
@@ -861,8 +864,10 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
      * @param string $paymentMethod
      */
     private function _setDeviceFingerPrint($paymentMethod) {
+        $shopId = $this->getConfig()->getShopId();
         $settings = oxNew('pi_ratepay_settings');
-        $settings->loadByType(pi_ratepay_util_utilities::getPaymentMethod($paymentMethod));
+        $shopId = $settings->setShopIdToOne($shopId);
+        $settings->loadByType(pi_ratepay_util_utilities::getPaymentMethod($paymentMethod), $shopId);
 
         $DeviceFingerprintToken     = $this->getSession()->getVariable('pi_ratepay_dfp_token');
         $DeviceFingerprint          = (bool) $settings->pi_ratepay_settings__dfp->rawValue;

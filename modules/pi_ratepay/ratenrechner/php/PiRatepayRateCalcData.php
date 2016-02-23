@@ -323,8 +323,8 @@ class PiRatepayRateCalcData implements PiRatepayRateCalcDataInterface
     private function _getSettings()
     {
 
-        $settings = oxNew('pi_ratepay_Settings');
-        $settings->loadByType(strtolower('installment'), null, oxRegistry::getSession()->getVariable('shopId'));
+        $settings = oxNew('pi_ratepay_settings');
+        $settings->loadByType(strtolower('installment'), oxRegistry::getSession()->getVariable('shopId'));
 
 
         return $settings;

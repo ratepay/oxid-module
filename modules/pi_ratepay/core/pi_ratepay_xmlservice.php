@@ -71,9 +71,9 @@ class pi_ratepay_XmlService extends oxSuperCfg
         if ($paymentMethod == 'INVOICE' || $paymentMethod == 'INSTALLMENT' || $paymentMethod == 'ELV') {
             $settings = oxNew('pi_ratepay_settings');
             if ($country === null) {
-                $settings->loadByType($paymentMethod, null, $shopId);
+                $settings->loadByType($paymentMethod, $shopId);
             } else {
-                $settings->loadByType($paymentMethod, $country, $shopId);
+                $settings->loadByType($paymentMethod, $shopId, $country);
             }
 
             if ($settings->pi_ratepay_settings__sandbox->rawValue != '1') {
