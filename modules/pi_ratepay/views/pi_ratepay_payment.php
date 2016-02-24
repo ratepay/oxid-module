@@ -865,7 +865,8 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
      */
     private function _setDeviceFingerPrint($paymentMethod) {
         $deviceFingerprintToken = $this->getSession()->getVariable('pi_ratepay_dfp_token');
-        if ($deviceFingerprintToken) {
+
+        if (!$deviceFingerprintToken) {
             $shopId = $this->getConfig()->getShopId();
             $settings = oxNew('pi_ratepay_settings');
             $shopId = $settings->setShopIdToOne($shopId);
