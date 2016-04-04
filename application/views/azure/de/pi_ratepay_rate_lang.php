@@ -45,6 +45,7 @@ $aLang = array(
     'PI_RATEPAY_RATE_VIEW_POLICY_PRIVACYPOLICY'     => 'RatePAY-Datenschutzerkl&auml;rung',
     'PI_RATEPAY_RATE_ERROR'                         => 'Leider ist eine Bezahlung mit RatePAY nicht m&ouml;glich. Diese Entscheidung ist von RatePAY auf der Grundlage einer automatisierten Datenverarbeitung getroffen worden. Einzelheiten erfahren Sie in der ',
     'PI_RATEPAY_RATE_ERROR_ADDRESS'                 => 'Bitte beachten Sie, dass RatePAY Rate nur genutzt werden kann, wenn Rechnungs- und Lieferaddresse identisch sind.',
+    'PI_RATEPAY_RATE_ERROR_ZIP'                     => 'Bitte geben Sie Ihre korrekte Postleitzahl ein.',
     'PI_RATEPAY_RATE_ERROR_BIRTH'                   => $piErrorBirth,
     'PI_RATEPAY_RATE_ERROR_PHONE'                   => $piErrorPhone,
     'PI_RATEPAY_RATE_AGBERROR'                      => 'Bitte akzeptieren Sie die Bedingungen.',

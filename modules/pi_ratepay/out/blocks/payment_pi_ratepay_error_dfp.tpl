@@ -34,6 +34,10 @@
         <div class="status error">[{ oxmultilang ident="PI_RATEPAY_RECHNUNG_ERROR_ADDRESS" }]</div>
     [{/if}]
 
+    [{if $pierror == "-406"}]
+    <div class="status error">[{ oxmultilang ident="PI_RATEPAY_RECHNUNG_ERROR_ZIP" }]</div>
+    [{/if}]
+
     [{if $pierror == "-414"}]
         <div class="status error">[{ oxmultilang ident="PI_RATEPAY_RECHNUNG_ERROR_AGE" }]</div>
     [{/if}]
@@ -49,6 +53,10 @@
 
     [{if $pierror == "-412"}]
         <div class="status error">[{ oxmultilang ident="PI_RATEPAY_RATE_ERROR_ADDRESS" }]</div>
+    [{/if}]
+
+    [{if $pierror == "-413"}]
+    <div class="status error">[{ oxmultilang ident="PI_RATEPAY_RATE_ERROR_ZIP" }]</div>
     [{/if}]
 
     [{if $pierror == "-415"}]
@@ -94,6 +102,10 @@
     [{/if}]
     [{if $pierror == "-510"}]
     <div class="status error">[{ oxmultilang ident="PI_RATEPAY_ELV_ERROR_BIC" }]</div>
+    [{/if}]
+
+    [{if $pierror == "-511"}]
+    <div class="status error">[{ oxmultilang ident="PI_RATEPAY_ELV_ERROR_ZIP" }]</div>
     [{/if}]
 
     <!-- All -->

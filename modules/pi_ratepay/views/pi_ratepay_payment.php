@@ -214,7 +214,7 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                 $this->addTplParam($paymentMethod . '_duedays', $settings->pi_ratepay_settings__duedate->rawValue);
                 $this->addTplParam($paymentMethod . '_whitelabel', (bool) $settings->pi_ratepay_settings__whitelabel->rawValue);
                 $this->addTplParam($paymentMethod . '_iban_only', (bool) $settings->pi_ratepay_settings__iban_only->rawValue);
-                $this->addTplParam($paymentMethod . '_url', $settings->pi_ratepay_settings__url->rawValue . '-' . $country);
+                $this->addTplParam($paymentMethod . '_url', $settings->pi_ratepay_settings__url->rawValue);
 
                 $this->addTplParam($paymentMethod . '_sandbox_notification', (bool) $settings->pi_ratepay_settings__sandbox->rawValue);
 
@@ -303,7 +303,8 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                 $this->_checkBirthdate(),
                 $this->_checkCompanyData(),
                 $this->_checkBankData(),
-                $this->_checkPrivacy()
+                $this->_checkPrivacy(),
+                $this->_checkZip()
             );
 
             foreach ($isValid as $validationValue) {
@@ -496,6 +497,38 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
      *
      * @return boolean
      */
+    private function _checkZip()
+    {
+        $isZipValid = false;
+        $user = $this->getUser();
+        $country = $this->_getCountry();
+
+        if($country=="DE" && strlen($user->oxuser__oxzip->value)==5){
+            $isZipValid = true;
+        }elseif(($country=='AT'||$country=='CH')&& strlen($user->oxuser__oxzip)==4){
+            $isZipValid = true;
+        }else{
+            switch($this->_selectedPaymentMethod){
+                case 'pi_ratepay_rechnung':
+                    $this->_errors[]= '-406';
+                    break;
+                case 'pi_ratepay_rate':
+                    $this->_errors[]= '-413';
+                    break;
+                case 'pi_ratepay_elv':
+                    $this->_errors[]= '-511';
+                    break;
+                default;
+                    break;
+            }
+        }
+        return $isZipValid;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
     private function _checkFon()
     {
         $isFonValid = false;
@@ -506,7 +539,11 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
 
         foreach ($phoneNumbers as $phoneNumber) {
             if (!empty($phoneNumber)) {
-                return true;
+                $phoneNumber = preg_replace("/\D+/", "", $phoneNumber);
+                if (strlen($phoneNumber) >= 6) {
+                    return true;
+
+                }
             }
         }
 

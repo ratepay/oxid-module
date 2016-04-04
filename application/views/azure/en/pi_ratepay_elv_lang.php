@@ -51,6 +51,7 @@ $aLang = array(
     'PI_RATEPAY_ELV_ERROR_BIRTH'                   => $piErrorBirth,
     'PI_RATEPAY_ELV_ERROR_PHONE'                   => $piErrorPhone,
     'PI_RATEPAY_ELV_ERROR_ADDRESS'                 => 'Please note that RatePAY SEPA-Lastschrift can only be used as a payment method when billing and shipping address entered are equal.',
+    'PI_RATEPAY_ELV_ERROR_ZIP'                     => 'Please enter your correct zipcode.',
     'PI_RATEPAY_ELV_ERROR_AGE'                     => $piErrorAge,
     'PI_RATEPAY_ELV_VIEW_PAYMENT_FON'              => 'Fon:',
     'PI_RATEPAY_ELV_VIEW_PAYMENT_MOBILFON'         => 'Mobilfon:',

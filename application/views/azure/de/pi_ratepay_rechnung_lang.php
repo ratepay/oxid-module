@@ -51,6 +51,7 @@ $aLang = array(
     'PI_RATEPAY_RECHNUNG_AGBERROR'                       => 'Bitte akzeptieren Sie die Bedingungen.',
     'PI_RATEPAY_RECHNUNG_SUCCESS'                        => 'Bestellung erfolgreich abgeschlossen',
     'PI_RATEPAY_RECHNUNG_ERROR_ADDRESS'                  => 'Bitte beachten Sie, dass RatePAY Rate nur genutzt werden kann, wenn Rechnungs- und Lieferaddresse identisch sind.',
+    'PI_RATEPAY_RECHNUNG_ERROR_ZIP'                      => 'Bitte geben Sie Ihre korrekte Postleitzahl ein.',
     'PI_RATEPAY_RECHNUNG_ERROR_BIRTH'                    => $piErrorBirth,
     'PI_RATEPAY_RECHNUNG_ERROR_PHONE'                    => $piErrorPhone,
     'PI_RATEPAY_RECHNUNG_ERROR_AGE'                      => $piErrorAge,
