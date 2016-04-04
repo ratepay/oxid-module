@@ -216,6 +216,8 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                 $this->addTplParam($paymentMethod . '_iban_only', (bool) $settings->pi_ratepay_settings__iban_only->rawValue);
                 $this->addTplParam($paymentMethod . '_url', $settings->pi_ratepay_settings__url->rawValue . '-' . $country);
 
+                $this->addTplParam($paymentMethod . '_sandbox_notification', (bool) $settings->pi_ratepay_settings__sandbox->rawValue);
+
                 if ($paymentMethod === 'pi_ratepay_rate') {
                     $this->addTplParam('pi_ratepay_rate_activateelv', $settings->pi_ratepay_settings__activate_elv->rawValue);
                 }

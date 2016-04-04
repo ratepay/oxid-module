@@ -29,6 +29,7 @@ $piErrorBirthdayDigits = 'Geben Sie bitte Ihr Geburtsjahr vierstellig ein. (z.B.
 
 $aLang = array(
     'charset'                                       => 'UTF-8',
+    'PI_RATEPAY_RATE_VIEW_SANDBOX_NOTIFICATION'     => 'Testmodus aktiviert, bitte nutzen Sie diese Zahlart NICHT f&uuml;r die Bestellung und informieren den H&auml;ndler &uuml;ber diese Nachricht.',
     'PI_RATEPAY_RATE_VIEW_WHITELABEL_TEXT'          => 'Ratenzahlung',
     'PI_RATEPAY_RATE_VIEW_INFORMATION_TEXT_1'       => 'Mit RatePAY-Ratenzahlung w&auml;hlen Sie eine Bezahlung in Raten.',
     'PI_RATEPAY_RATE_VIEW_INFORMATION_TEXT_2'       => 'RatePAY-Ratenzahlung kann <b>ab einem Einkaufswert von ',

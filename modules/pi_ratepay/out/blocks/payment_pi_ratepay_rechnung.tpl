@@ -12,6 +12,14 @@
         </b></label>
     </dt>
     <dd class="[{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]activePayment[{/if}]">
+        [{if $pi_ratepay_rechnung_sandbox_notification == 1 }]
+        <div id="sandbox_notification[{$sPaymentID}]" style="background: yellow; color: black; border: 3px dashed red; font-weight: bold; text-align: center; font-size:14px; padding-top: 10px; ">
+            <p>
+                [{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_SANDBOX_NOTIFICATION"}]
+            </p>
+        </div>
+        [{/if}]
+        </br>
         [{if !$pi_ratepay_rechnung_whitelabel}]
             <div id="policy[{$sPaymentID}]" style="display: none;">
                 <p>

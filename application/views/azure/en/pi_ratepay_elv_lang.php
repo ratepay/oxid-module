@@ -29,6 +29,7 @@ $piErrorBirthdayDigits = 'Geben Sie bitte Ihr Geburtsjahr vierstellig ein. (z.B.
 
 $aLang = array(
     'charset'                                      => 'UTF-8',
+    'PI_RATEPAY_ELV_VIEW_SANDBOX_NOTIFICATION'     => 'Testmode activated, please DONT use this payment method and get in contact with the merchant.',
     'PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_1'       => ' offers the payment method RatePAY SEPA-Lastschrift in cooperation with RatePAY. You are purchasing on account.',
     'PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_2'       => 'RatePAY SEPA-Lastschrift can be used as a payment method <b>from a minimum shopping basket value of ',
     'PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_3'       => ' &#8364;</b><b> to a maximum shopping basket value of ',

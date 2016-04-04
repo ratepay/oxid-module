@@ -29,6 +29,7 @@ $piErrorBirthdayDigits = 'Geben Sie bitte Ihr Geburtsjahr vierstellig ein. (z.B.
 
 $aLang = array(
     'charset'                                            => 'UTF-8',
+    'PI_RATEPAY_RECHNUNG_VIEW_SANDBOX_NOTIFICATION'      => 'Testmode activated, please DONT use this payment method and get in contact with the merchant.',
     'PI_RATEPAY_RECHNUNG_VIEW_INFORMATION_TEXT_1'        => ' offers the payment method RatePAY Invoicing in cooperation with RatePAY. You are purchasing on account. The invoice is die for payment within ',
     'PI_RATEPAY_RECHNUNG_VIEW_INFORMATION_TEXT_1_PART_2' => ' days after invoice date.',
     'PI_RATEPAY_RECHNUNG_VIEW_INFORMATION_TEXT_2'        => 'RatePAY Invoicing can be used as a payment method <b>from a minimum shopping basket value of ',
