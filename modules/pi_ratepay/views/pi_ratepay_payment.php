@@ -224,6 +224,8 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                 if ($paymentMethod === 'pi_ratepay_elv') {
                     $this->addTplParam('pi_ratepay_elv_bank_account_owner', $customer->oxuser__oxfname->rawValue . " " . $customer->oxuser__oxlname->rawValue);
                 }
+
+                $this->_setDeviceFingerPrint($settings);
             }
 
             // @todo here for compatibility reasons will be removed in the future.
@@ -248,8 +250,6 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
 
                 $settings = $this->_getRatePaySettings($paymentMethod);
             }
-
-            $this->_setDeviceFingerPrint($paymentMethod);
         }
 
         if ($paymentMethod === 'pi_ratepay_elv') { // || $paymentMethod === 'pi_ratepay_rate'
@@ -932,28 +932,19 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
      *
      * @param string $paymentMethod
      */
-    private function _setDeviceFingerPrint($paymentMethod) {
-        $deviceFingerprintToken = $this->getSession()->getVariable('pi_ratepay_dfp_token');
+    private function _setDeviceFingerPrint($settings) {
+        $DeviceFingerprintToken     = $this->getSession()->getVariable('pi_ratepay_dfp_token');
+        $DeviceFingerprint          = (bool) $settings->pi_ratepay_settings__dfp->rawValue;
 
-        if (!$deviceFingerprintToken) {
-            $shopId = $this->getConfig()->getShopId();
-            $settings = oxNew('pi_ratepay_settings');
-            $shopId = $settings->setShopIdToOne($shopId);
-            $settings->loadByType(pi_ratepay_util_utilities::getPaymentMethod($paymentMethod), $shopId);
+        if ($DeviceFingerprint === true && empty($DeviceFingerprintToken)) {
+            $snippetId = $settings->pi_ratepay_settings__dfp_snippet_id->rawValue;
+            $timestamp = microtime();
+            $sessionId = $this->getSession()->getId();
+            $token = md5($sessionId . "_" . $timestamp);
 
-            $methodActive = (bool) $settings->pi_ratepay_settings__active->rawValue;
-            $deviceFingerprint = (bool) $settings->pi_ratepay_settings__dfp->rawValue;
-
-            if ($methodActive === true && $deviceFingerprint === true) {
-                $snippetId = $settings->pi_ratepay_settings__dfp_snippet_id->rawValue;
-                $timestamp = microtime();
-                $sessionId = $this->getSession()->getId();
-                $token = md5($sessionId . "_" . $timestamp);
-
-                $this->getSession()->setVariable('pi_ratepay_dfp_token', $token);
-                $this->addTplParam('pi_ratepay_dfp_token', $token);
-                $this->addTplParam('pi_ratepay_dfp_snippet_id', $snippetId);
-            }
+            $this->getSession()->setVariable('pi_ratepay_dfp_token', $token);
+            $this->addTplParam('pi_ratepay_dfp_token', $token);
+            $this->addTplParam('pi_ratepay_dfp_snippet_id', $snippetId);
         }
     }
 
