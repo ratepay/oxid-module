@@ -25,9 +25,9 @@
                 <h4>[{oxmultilang ident="PI_RATEPAY_RATE_VIEW_INFORMATION_TEXT_1"}]</h4>
                 <p>
                     [{oxmultilang ident="PI_RATEPAY_RATE_VIEW_INFORMATION_TEXT_2"}]
-                    [{$pi_ratepay_rate_minimumAmount}]
+                    [{$pi_ratepay_rate_minimumAmount}] [{$currency->sign}]
                     [{oxmultilang ident="PI_RATEPAY_RATE_VIEW_INFORMATION_TEXT_3"}]
-                    [{$pi_ratepay_rate_maximumAmount}]
+                    [{$pi_ratepay_rate_maximumAmount}] [{$currency->sign}]
                     [{oxmultilang ident="PI_RATEPAY_RATE_VIEW_INFORMATION_TEXT_4"}]
                 </p>
                 <p>[{oxmultilang ident="PI_RATEPAY_RATE_VIEW_INFORMATION_TEXT_6"}]</p>

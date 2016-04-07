@@ -35,7 +35,7 @@ class pi_ratepay_util_Utilities
      * Static array of supported countries.
      * @var array
      */
-    public static $_RATEPAY_ALLOWED_COUNTRIES = array('de', 'at'); //, 'ch');
+    public static $_RATEPAY_ALLOWED_COUNTRIES = array('de', 'at', 'ch');
 
     const PI_MODULE_VERSION = '3.3.0';
 

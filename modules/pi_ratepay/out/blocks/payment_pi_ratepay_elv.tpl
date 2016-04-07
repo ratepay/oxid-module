@@ -46,9 +46,9 @@
             </p>
             <p>
                 [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_2"}]
-                [{$pi_ratepay_elv_minimumAmount}]
+                [{$pi_ratepay_elv_minimumAmount}] [{$currency->sign}]
                 [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_3"}]
-                [{$pi_ratepay_elv_maximumAmount}]
+                [{$pi_ratepay_elv_maximumAmount}] [{$currency->sign}]
                 [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_4"}]
             </p>
         </div>

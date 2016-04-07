@@ -115,7 +115,7 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
 
     private function _checkRatePAYMethodCheck($paymentMethod)
     {
-        return $this->_checkActivation($paymentMethod) && $this->_checkLimit($paymentMethod) && $this->_checkALA($paymentMethod) && $this->_checkB2B($paymentMethod);
+        return $this->_checkCurrency($paymentMethod) && $this->_checkActivation($paymentMethod) && $this->_checkLimit($paymentMethod) && $this->_checkALA($paymentMethod) && $this->_checkB2B($paymentMethod);
     }
 
     /**
@@ -304,7 +304,8 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                 $this->_checkCompanyData(),
                 $this->_checkBankData(),
                 $this->_checkPrivacy(),
-                $this->_checkZip()
+                $this->_checkZip(),
+                $this->_checkAlaZip()
             );
 
             foreach ($isValid as $validationValue) {
@@ -502,27 +503,55 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         $isZipValid = false;
         $user = $this->getUser();
         $country = $this->_getCountry();
-
-        if($country=="DE" && strlen($user->oxuser__oxzip->value)==5){
+        if ($country == "DE" && strlen($user->oxuser__oxzip->value) == 5) {
             $isZipValid = true;
-        }elseif(($country=='AT'||$country=='CH')&& strlen($user->oxuser__oxzip)==4){
+        } elseif (($country == 'AT' || $country == 'CH') && strlen($user->oxuser__oxzip) == 4) {
             $isZipValid = true;
-        }else{
-            switch($this->_selectedPaymentMethod){
+        } else {
+            switch ($this->_selectedPaymentMethod) {
                 case 'pi_ratepay_rechnung':
-                    $this->_errors[]= '-406';
+                    $this->_errors[] = '-406';
                     break;
                 case 'pi_ratepay_rate':
-                    $this->_errors[]= '-413';
+                    $this->_errors[] = '-413';
                     break;
                 case 'pi_ratepay_elv':
-                    $this->_errors[]= '-511';
+                    $this->_errors[] = '-511';
                     break;
                 default;
                     break;
             }
         }
         return $isZipValid;
+    }
+
+    private function _checkAlaZip(){
+        $isAlaZipValid = true;
+        $blShowShippingAddress = (bool) oxRegistry::getSession()->getVariable( 'blshowshipaddress' );
+        if($blShowShippingAddress == true) {
+            $country = oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $this->getDelAddress()->oxaddress__oxcountryid->value . "'");
+            if ($country == "DE" && strlen($this->getDelAddress()->oxaddress__oxzip->value) == 5) {
+            } elseif (($country == 'AT' || $country == 'CH') && strlen($this->getDelAddress()->oxaddress__oxzip) == 4) {
+            } else {
+                switch ($this->_selectedPaymentMethod) {
+                    case 'pi_ratepay_rechnung':
+                        $this->_errors[] = '-406';
+                        $isAlaZipValid = false;
+                        break;
+                    case 'pi_ratepay_rate':
+                        $this->_errors[] = '-413';
+                        $isAlaZipValid = false;
+                        break;
+                    case 'pi_ratepay_elv':
+                        $this->_errors[] = '-511';
+                        $isAlaZipValid = false;
+                        break;
+                    default;
+                        break;
+                }
+            }
+        }
+        return $isAlaZipValid;
     }
 
     /**
@@ -720,7 +749,7 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
      */
     private function _checkRatePAY()
     {
-        return $this->_checkCurrency() && !$this->_checkDenied() && $this->_checkAge();
+        return !$this->_checkDenied() && $this->_checkAge();
     }
 
     /**
@@ -777,9 +806,10 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
      *
      * @return boolean
      */
-    private function _checkCurrency()
+    private function _checkCurrency($paymentMethod)
     {
-        return $this->getActCurrency()->name == "EUR";
+        $settings = $this->_getRatePaySettings($paymentMethod);
+        return strstr($settings->pi_ratepay_settings__currencies->rawValue, $this->getActCurrency()->name);
     }
 
     /**

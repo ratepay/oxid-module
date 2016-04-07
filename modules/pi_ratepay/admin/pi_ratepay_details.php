@@ -134,7 +134,7 @@ class pi_ratepay_Details extends oxAdminDetails
         $this->addTplParam('pi_transaction_id', $transactionId);
         $this->addTplParam('pi_descriptor', $descriptor);
 
-        $this->addTplParam('pi_total_amount', $this->_getFormattedNumber($order->getTotalOrderSum()));
+        $this->addTplParam('pi_total_amount', $this->_getFormattedNumber($order->getTotalOrderSum(), 2, ','));
 
         $this->addTplParam('pi_ratepay_payment_type', $this->_paymentMethod);
         $this->addTplParam('articleList', $this->getPreparedOrderArticles());

@@ -50,6 +50,11 @@ class pi_ratepay_RequestDataFrontend extends pi_ratepay_RequestAbstract
         return $this->_basket->getPrice()->getBruttoPrice();
     }
 
+    public function getActBasketCurrency()
+    {
+        return $this->_basket->getBasketCurrency();
+    }
+
     /**
      * Get article Data for consumption in requests.
      * @return article

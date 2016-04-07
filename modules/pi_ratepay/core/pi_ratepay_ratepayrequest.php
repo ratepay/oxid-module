@@ -498,7 +498,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
     {
         $shoppingBasket = $content->addChild('shopping-basket');
         $shoppingBasket->addAttribute('amount', $this->_getFormattedNumber($this->_getDataProvider()->getBasketAmount()));
-        $shoppingBasket->addAttribute('currency', 'EUR');
+        $shoppingBasket->addAttribute('currency', $this->_getDataProvider()->getActBasketCurrency()->name);
         $this->_setRatepayContentBasketItems($shoppingBasket);
         return $content;
     }
@@ -709,7 +709,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
     {
         $payment = $content->addChild('payment');
 
-        $payment->addAttribute('currency', 'EUR');
+        $payment->addAttribute('currency', $this->_getDataProvider()->getActBasketCurrency()->name);
         $payment->addAttribute('method', $this->_getPaymentMethod());
         $payment->addChild('amount', $this->_getFormattedNumber($this->_getDataProvider()->getPaymentAmount()));
 

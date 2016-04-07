@@ -36,6 +36,9 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
 
         foreach ($countries as $country) {
             foreach ($methods as $methodDB => $methodShop) {
+                if($country == 'ch' && $methodDB !== 'invoice' ){
+                    continue;
+                }
                 $settings->loadByType($methodDB, $shopId, $country);
 
                 $config[$country][$methodShop]['active'] = (bool) $settings->pi_ratepay_settings__active->rawValue;
@@ -49,10 +52,11 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                 if (!empty($config[$country][$methodShop]['profile_id']) && !empty($config[$country][$methodShop]['security_code'])) {
                     $extendedData = array('profileId' => $config[$country][$methodShop]['profile_id'], 'securityCode' => $config[$country][$methodShop]['security_code'], 'country' => $country);
                     $profileRequest = $this->_callProfileRequest('pi_ratepay_' . $methodShop, $extendedData);
-
                     if ($profileRequest) {
-                        $profileRequest['profile'] = $this->_changeKeyFormat($profileRequest['profile']);
                         $profileRequest['profile'] = $this->_deleteNegativeValues($profileRequest['profile'], $methodDB);
+                        $profileRequest['profile']['currencies'] = $settings->pi_ratepay_settings__currencies->rawValue;
+                        $profileRequest['profile']['delivery countries'] = $settings->pi_ratepay_settings__delivery_countries->rawValue;
+                        $profileRequest['profile'] = $this->_changeKeyFormat($profileRequest['profile']);
                         $config[$country][$methodShop]['details'] = $profileRequest['profile'];
                         if ($methodShop == 'rate') {
                             $profileRequest['installment_configuration'] = $this->_changeKeyFormat($profileRequest['installment_configuration']);
@@ -157,7 +161,9 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                         'b2b' => $this->_isParameterCheckedYes($profileRequest['profile']['b2b-' . $methodDB]),
                         'ala' => $this->_isParameterCheckedYes($profileRequest['profile']['delivery-address-' . $methodDB]),
                         'dfp' => $this->_isParameterCheckedYes($profileRequest['profile']['eligibility-device-fingerprint']),
-                        'dfp_snippet_id' => $profileRequest['profile']['device-fingerprint-snippet-id']
+                        'dfp_snippet_id' => $profileRequest['profile']['device-fingerprint-snippet-id'],
+                        'currencies' => $profileRequest['profile']['currency'],
+                        'delivery_countries' => $profileRequest['profile']['country-code-delivery']
                     );
 
                     $insertSql = $this->_createUpdateSql($secondSaveArray, $shopId, $country, $methodDB);

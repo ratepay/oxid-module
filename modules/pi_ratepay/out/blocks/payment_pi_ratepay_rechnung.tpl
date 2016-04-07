@@ -30,9 +30,9 @@
                 </p>
                 <p>
                     [{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_INFORMATION_TEXT_2"}]
-                    [{$pi_ratepay_rechnung_minimumAmount}]
+                    [{$pi_ratepay_rechnung_minimumAmount}] [{$currency->sign}]
                     [{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_INFORMATION_TEXT_3"}]
-                    [{$pi_ratepay_rechnung_maximumAmount}]
+                    [{$pi_ratepay_rechnung_maximumAmount}] [{$currency->sign}]
                     [{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_INFORMATION_TEXT_4"}]
                 </p>
                 <p>[{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_INFORMATION_TEXT_5"}]</p>
