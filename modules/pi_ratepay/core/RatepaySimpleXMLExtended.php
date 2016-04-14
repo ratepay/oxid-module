@@ -25,7 +25,7 @@
  * @package PayIntelligent_RatePAY
  * @extends SimpleXMLElement
  */
-class RateSimpleXMLExtended extends SimpleXMLElement
+class RatepaySimpleXMLExtended extends SimpleXMLElement
 {
 
     /**

@@ -146,8 +146,8 @@ class pi_ratepay_XmlService extends oxSuperCfg
     public function getXMLObject()
     {
         $xmlString = '<?xml version="1.0" encoding="UTF-8"?>' . '<request version="1.0" xmlns="urn://www.ratepay.com/payment/1_0"></request>';
-        require_once('RateSimpleXMLExtended.php');
-        $xml = new RateSimpleXMLExtended($xmlString);
+        require_once('RatepaySimpleXMLExtended.php');
+        $xml = new RatepaySimpleXMLExtended($xmlString);
 
         return $xml;
     }
