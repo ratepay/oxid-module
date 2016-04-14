@@ -63,7 +63,7 @@ class pi_ratepay_DetailsViewData
               oa.oxbprice,
               oa.oxnprice,
               oa.oxtitle,
-              oa.oxbrutprice,
+              oa.oxnetprice,
               oa.oxamount,
               prrod.ordered,
               prrod.cancelled,
@@ -89,9 +89,9 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['artnum'] = $articlesValues->oxartnum;
             $articleList[$i]['title'] = $articlesValues->title;
             $articleList[$i]['oxtitle'] = $articlesValues->oxtitle;
-            $articleList[$i]['vat'] = $this->_getFormattedNumber($articlesValues->oxvat, 2, ',');
-            $articleList[$i]['unitprice'] = $this->_getFormattedNumber((float)$articlesValues->oxbprice, 2, ',');
-            $articleList[$i]['unitPriceNetto'] = $this->_getFormattedNumber((float)$articlesValues->oxnprice, 2, ',');
+            $articleList[$i]['vat'] = $articlesValues->oxvat;
+            $articleList[$i]['unitprice'] = (float) $articlesValues->oxnprice;
+            //$articleList[$i]['unitPriceNetto'] = $this->_getFormattedNumber((float) $articlesValues->oxnprice, 2, ',');
             $articleList[$i]['amount'] = $articlesValues->ordered - $articlesValues->shipped - $articlesValues->cancelled;
             $articleList[$i]['ordered'] = $articlesValues->ordered;
             $articleList[$i]['shipped'] = $articlesValues->shipped;
@@ -100,7 +100,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['currency'] = $articlesValues->oxcurrency;
 
             if (($articlesValues->ordered - $articlesValues->returned - $articlesValues->cancelled) > 0) {
-                $articleList[$i]['totalprice'] = $this->_getFormattedNumber((float) $articlesValues->oxbrutprice, 2, ',');
+                $articleList[$i]['totalprice'] = ((float) $articlesValues->oxbprice) * $articleList[$i]['amount'];
             } else {
                 $articleList[$i]['totalprice'] = 0;
             }
@@ -126,8 +126,8 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['artnum']    = "oxwrapping";
             $articleList[$i]['title']     = "Wrapping Cost";
             $articleList[$i]['oxtitle']   = "Wrapping Cost";
-            $articleList[$i]['vat']       = $this->_getFormattedNumber((float) $rpOrderDetailsWrappingValues->VAT, 2, ',');
-            $articleList[$i]['unitprice'] = $this->_getFormattedNumber((float) $rpOrderDetailsWrappingValues->PRICE, 2, ',');
+            $articleList[$i]['vat']       = round((float) $rpOrderDetailsWrappingValues->VAT);
+            $articleList[$i]['unitprice'] = (float) $rpOrderDetailsWrappingValues->PRICE;
             $articleList[$i]['amount']    = 1 - $rpOrderDetailsWrappingValues->SHIPPED - $rpOrderDetailsWrappingValues->CANCELLED;
             $articleList[$i]['ordered']   = $rpOrderDetailsWrappingValues->ORDERED;
             $articleList[$i]['shipped']   = $rpOrderDetailsWrappingValues->SHIPPED;
@@ -136,7 +136,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['currency'] = $rpOrderDetailsWrappingValues->oxcurrency;
 
             if (($rpOrderDetailsWrappingValues->ORDERED - $rpOrderDetailsWrappingValues->RETURNED - $rpOrderDetailsWrappingValues->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = $this->_getFormattedNumber((float) $rpOrderDetailsWrappingValues->PRICE, 2, ',');
+                $articleList[$i]['totalprice'] = (float) $rpOrderDetailsWrappingValues->PRICE+((float) $rpOrderDetailsWrappingValues->PRICE*round((float) $rpOrderDetailsWrappingValues->VAT)/100);
             } else {
                 $articleList[$i]['totalprice'] = 0;
             }
@@ -156,8 +156,8 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['artnum'] = "oxgiftcard";
             $articleList[$i]['title'] = "Giftcard Cost";
             $articleList[$i]['oxtitle'] = "Giftcard Cost";
-            $articleList[$i]['vat'] = $this->_getFormattedNumber((float) $rpOrderDetailsGiftcardsValues->VAT, 2, ',');
-            $articleList[$i]['unitprice'] = $this->_getFormattedNumber((float) $rpOrderDetailsGiftcardsValues->PRICE, 2, ',');
+            $articleList[$i]['vat'] = (float) $rpOrderDetailsGiftcardsValues->VAT;
+            $articleList[$i]['unitprice'] = (float) $rpOrderDetailsGiftcardsValues->PRICE;
             $articleList[$i]['amount'] = 1 - $rpOrderDetailsGiftcardsValues->SHIPPED - $rpOrderDetailsGiftcardsValues->CANCELLED;
             $articleList[$i]['ordered'] = $rpOrderDetailsGiftcardsValues->ORDERED;
             $articleList[$i]['shipped'] = $rpOrderDetailsGiftcardsValues->SHIPPED;
@@ -166,7 +166,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['currency'] = $rpOrderDetailsGiftcardsValues->oxcurrency;
 
             if (($rpOrderDetailsGiftcardsValues->ORDERED - $rpOrderDetailsGiftcardsValues->RETURNED - $rpOrderDetailsGiftcardsValues->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = $this->_getFormattedNumber((float) $rpOrderDetailsGiftcardsValues->PRICE, 2, ',');
+                $articleList[$i]['totalprice'] = (float) $rpOrderDetailsGiftcardsValues->PRICE+((float) $rpOrderDetailsGiftcardsValues->PRICE*(float) $rpOrderDetailsGiftcardsValues->VAT)/100;
             } else {
                 $articleList[$i]['totalprice'] = 0;
             }
@@ -187,8 +187,8 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['artnum'] = "oxpayment";
             $articleList[$i]['title'] = "Payment Cost";
             $articleList[$i]['oxtitle'] = "Payment Cost";
-            $articleList[$i]['vat'] = $this->_getFormattedNumber((float) $rpOrderDetailsPaymentValues->VAT, 2, ',');
-            $articleList[$i]['unitprice'] = $this->_getFormattedNumber((float) $rpOrderDetailsPaymentValues->PRICE, 2, ',');
+            $articleList[$i]['vat'] = (float) $rpOrderDetailsPaymentValues->VAT;
+            $articleList[$i]['unitprice'] = (float) $rpOrderDetailsPaymentValues->PRICE;
             $articleList[$i]['amount'] = 1 - $rpOrderDetailsPaymentValues->SHIPPED - $rpOrderDetailsPaymentValues->CANCELLED;
             $articleList[$i]['ordered'] = $rpOrderDetailsPaymentValues->ORDERED;
             $articleList[$i]['shipped'] = $rpOrderDetailsPaymentValues->SHIPPED;
@@ -197,7 +197,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['currency'] = $rpOrderDetailsPaymentValues->oxcurrency;
 
             if (($rpOrderDetailsPaymentValues->ORDERED - $rpOrderDetailsPaymentValues->RETURNED - $rpOrderDetailsPaymentValues->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = $this->_getFormattedNumber((float) $rpOrderDetailsPaymentValues->PRICE, 2, ',');
+                $articleList[$i]['totalprice'] = (float) $rpOrderDetailsPaymentValues->PRICE+((float) $rpOrderDetailsPaymentValues->PRICE*(float) $rpOrderDetailsPaymentValues->VAT)/100;
             } else {
                 $articleList[$i]['totalprice'] = 0;
             }
@@ -217,8 +217,8 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['artnum']    = "oxdelivery";
             $articleList[$i]['title']     = "Delivery Cost";
             $articleList[$i]['oxtitle']   = "Delivery Cost";
-            $articleList[$i]['vat']       = $this->_getFormattedNumber((float) $rpOrderDetailsDeliveryValues->VAT, 2, ',');
-            $articleList[$i]['unitprice'] = $this->_getFormattedNumber((float) $rpOrderDetailsDeliveryValues->PRICE, 2, ',');
+            $articleList[$i]['vat']       = (float) $rpOrderDetailsDeliveryValues->VAT;
+            $articleList[$i]['unitprice'] = (float) $rpOrderDetailsDeliveryValues->PRICE;
             $articleList[$i]['amount']    = 1 - $rpOrderDetailsDeliveryValues->SHIPPED - $rpOrderDetailsDeliveryValues->CANCELLED;
             $articleList[$i]['ordered']   = $rpOrderDetailsDeliveryValues->ORDERED;
             $articleList[$i]['shipped']   = $rpOrderDetailsDeliveryValues->SHIPPED;
@@ -227,7 +227,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['currency'] = $rpOrderDetailsDeliveryValues->oxcurrency;
 
             if (($rpOrderDetailsDeliveryValues->ORDERED - $rpOrderDetailsDeliveryValues->RETURNED - $rpOrderDetailsDeliveryValues->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = $this->_getFormattedNumber((float) $rpOrderDetailsDeliveryValues->PRICE, 2, ',');
+                $articleList[$i]['totalprice'] = (float) $rpOrderDetailsDeliveryValues->PRICE + ((float) $rpOrderDetailsDeliveryValues->PRICE * (float) $rpOrderDetailsDeliveryValues->VAT) / 100;
             } else {
                 $articleList[$i]['totalprice'] = 0;
             }
@@ -248,8 +248,8 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['artnum'] = "oxtsprotection";
             $articleList[$i]['title'] = "TS Protection Cost";
             $articleList[$i]['oxtitle'] = "TS Protection Cost";
-            $articleList[$i]['vat'] = $this->_getFormattedNumber((float) $rpOrderDetailsProtectionValues->VAT, 2, ',');
-            $articleList[$i]['unitprice'] = $this->_getFormattedNumber((float) $rpOrderDetailsProtectionValues->PRICE, 2, ',');
+            $articleList[$i]['vat'] = (float) $rpOrderDetailsProtectionValues->VAT;
+            $articleList[$i]['unitprice'] = (float) $rpOrderDetailsProtectionValues->PRICE;
             $articleList[$i]['amount'] = 1 - $rpOrderDetailsProtectionValues->SHIPPED - $rpOrderDetailsProtectionValues->CANCELLED;
             $articleList[$i]['ordered'] = $rpOrderDetailsProtectionValues->ORDERED;
             $articleList[$i]['shipped'] = $rpOrderDetailsProtectionValues->SHIPPED;
@@ -258,7 +258,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['currency'] = $rpOrderDetailsProtectionValues->oxcurrency;
 
             if (($rpOrderDetailsProtectionValues->ORDERED - $rpOrderDetailsProtectionValues->RETURNED - $rpOrderDetailsProtectionValues->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = $this->_getFormattedNumber((float) $rpOrderDetailsProtectionValues->PRICE, 2, ',');
+                $articleList[$i]['totalprice'] = (float) $rpOrderDetailsProtectionValues->PRICE + ((float) $rpOrderDetailsProtectionValues->PRICE * (float) $rpOrderDetailsProtectionValues->VAT) / 100;
             } else {
                 $articleList[$i]['totalprice'] = 0;
             }
@@ -297,8 +297,8 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['title'] = $rpOrderDetailsDiscountsValues->TITLE;
             $articleList[$i]['oxtitle'] = $rpOrderDetailsDiscountsValues->TITLE;
             $articleList[$i]['vat'] = "0";
-            $articleList[$i]['unitprice'] = $this->_getFormattedNumber((float) $rpOrderDetailsDiscountsValues->PRICE, 2, ',');
-            $articleList[$i]['unitPriceNetto'] = $this->_getFormattedNumber((float) $rpOrderDetailsDiscountsValues->PRICE, 2, ',');
+            $articleList[$i]['unitprice'] = (float) $rpOrderDetailsDiscountsValues->PRICE;
+            //$articleList[$i]['unitPriceNetto'] = $this->_getFormattedNumber((float) $rpOrderDetailsDiscountsValues->PRICE, 2, ',');
             $articleList[$i]['amount'] = 1 - $rpOrderDetailsDiscountsValues->SHIPPED - $rpOrderDetailsDiscountsValues->CANCELLED;
             $articleList[$i]['ordered'] = $rpOrderDetailsDiscountsValues->ORDERED;
             $articleList[$i]['shipped'] = $rpOrderDetailsDiscountsValues->SHIPPED;
@@ -307,7 +307,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['currency'] = $rpOrderDetailsDiscountsValues->oxcurrency;
 
             if (($rpOrderDetailsDiscountsValues->ORDERED - $rpOrderDetailsDiscountsValues->RETURNED - $rpOrderDetailsDiscountsValues->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = $this->_getFormattedNumber($rpOrderDetailsDiscountsValues->PRICE, 2, ',');
+                $articleList[$i]['totalprice'] = $rpOrderDetailsDiscountsValues->PRICE;
             } else {
                 $articleList[$i]['totalprice'] = 0;
             }
@@ -347,8 +347,8 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['title'] = $vouchersValues->seriesTitle;
             $articleList[$i]['oxtitle'] = $vouchersValues->seriesTitle;
             $articleList[$i]['vat'] = "0";
-            $articleList[$i]['unitprice'] = "-" . $this->_getFormattedNumber((float) $vouchersValues->price, 2, ',');
-            $articleList[$i]['unitPriceNetto'] = "-" . $this->_getFormattedNumber((float) $vouchersValues->price, 2, ',');
+            $articleList[$i]['unitprice'] = "-" . (float) $vouchersValues->price;
+            //$articleList[$i]['unitPriceNetto'] = "-" . $this->_getFormattedNumber((float) $vouchersValues->price, 2, ',');
             $articleList[$i]['amount'] = 1 - $vouchersValues->shipped - $vouchersValues->cancelled;
             $articleList[$i]['ordered'] = $vouchersValues->ordered;
             $articleList[$i]['shipped'] = $vouchersValues->shipped;
@@ -357,7 +357,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['currency'] = $vouchersValues->oxcurrency;
 
             if (($vouchersValues->ordered - $vouchersValues->returned - $vouchersValues->cancelled) > 0) {
-                $articleList[$i]['totalprice'] = $this->_getFormattedNumber((float) $vouchersValues->price * -1, 2, ',');
+                $articleList[$i]['totalprice'] = (float) $vouchersValues->price * -1;
             } else {
                 $articleList[$i]['totalprice'] = 0;
             }

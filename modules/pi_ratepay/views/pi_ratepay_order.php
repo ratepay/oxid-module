@@ -343,7 +343,7 @@ class pi_ratepay_order extends pi_ratepay_order_parent
     {
         $articlePrice = $this->getBasket()->getCosts($articleNumber);
         if ($articlePrice instanceof oxPrice && $articlePrice->getBruttoPrice() > 0) {
-            $this->_saveToRatepayOrderDetails($id, $articleNumber, 1, $articlePrice->getBruttoPrice(), $articlePrice->getVatValue());
+            $this->_saveToRatepayOrderDetails($id, $articleNumber, 1, $articlePrice->getNettoPrice(), round($articlePrice->getVat()));
         }
     }
 

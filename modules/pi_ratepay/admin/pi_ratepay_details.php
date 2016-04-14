@@ -118,6 +118,7 @@ class pi_ratepay_Details extends oxAdminDetails
      */
     private function _initRatepayDetails(oxOrder $order)
     {
+
         $this->_paymentMethod = pi_ratepay_util_utilities::getPaymentMethod($this->_getPaymentSid());
         $this->_shopId = $this->getConfig()->getShopId();
         $this->_shopId = oxNew('pi_ratepay_settings')->setShopIdToOne($this->_shopId);
@@ -134,7 +135,8 @@ class pi_ratepay_Details extends oxAdminDetails
         $this->addTplParam('pi_transaction_id', $transactionId);
         $this->addTplParam('pi_descriptor', $descriptor);
 
-        $this->addTplParam('pi_total_amount', $this->_getFormattedNumber($order->getTotalOrderSum(), 2, ','));
+        $this->addTplParam('pi_total_amount', $order->oxorder__oxtotalordersum->getRawValue());
+
 
         $this->addTplParam('pi_ratepay_payment_type', $this->_paymentMethod);
         $this->addTplParam('articleList', $this->getPreparedOrderArticles());
@@ -379,20 +381,20 @@ class pi_ratepay_Details extends oxAdminDetails
                             $oOrder->oxorder__oxpaycost->setValue(0);
                         } else if ($article['artid'] == "oxwrapping") {
                             $oOrder->oxorder__oxwrapcost->setValue(0);
-                        } else if ($article['artid'] == "oxgiftcard") {
-                            $oOrder->oxorder__oxgiftcardcost->setValue(0);
-                        } else if ($article['artid'] == "oxtsprotection") {
+                        }else if ($article['artid'] == "oxgiftcard") {
+                                $oOrder->oxorder__oxgiftcardcost->setValue(0);
+                        }  else if ($article['artid'] == "oxtsprotection") {
                             $oOrder->oxorder__oxtsprotectcosts->setValue(0);
                         } else if ($article['artid'] == "discount") {
                             $oOrder->oxorder__oxdiscount->setValue(0);
-                        } else {
+                        }else {
                             $value = $oOrder->oxorder__oxvoucherdiscount->getRawValue() + $article['totalprice'];
                             $oOrder->oxorder__oxvoucherdiscount->setValue($value);
                         }
                     }
                 }
             }
-            $this->updateOrder($articleList, $this->_isPaymentChangeFull());
+            var_dump($this->updateOrder($articleList, $this->_isPaymentChangeFull()));
             $isSuccess = 'pisuccess';
         }
         $this->addTplParam($isSuccess, $paymentChangeType);
@@ -678,13 +680,13 @@ class pi_ratepay_Details extends oxAdminDetails
 
             if ($quant > 0) {
                 $title = $this->removeSpecialChars(html_entity_decode($article['title']));
-                $articles_tmp[$article]['title'] = $this->removeSpecialChars(html_entity_decode($article['title']));
+                //$articles_tmp[$article]['title'] = $this->removeSpecialChars(html_entity_decode($article['title']));
                 $item = $items->addCDataChild('item', $title, $this->_isUtfMode());
                 $item->addAttribute('article-number', $article['artnum']);
                 $item->addAttribute('quantity', $quant);
-                $item->addAttribute('unit-price', $this->_getFormattedNumber($article['unitPriceNetto']));
-                $item->addAttribute('total-price', $this->_getFormattedNumber($article['unitPriceNetto']) * $quant);
-                $item->addAttribute('tax', ($this->_getFormattedNumber($article['unitprice']) - $this->_getFormattedNumber($article['unitPriceNetto'])) * $quant);
+                $item->addAttribute('unit-price', $this->_getFormattedNumber($article['unitprice']));
+                $item->addAttribute('total-price', $this->_getFormattedNumber($article['unitprice']) * $quant);
+                $item->addAttribute('tax', $this->_getFormattedNumber(($article['unitprice'] * $article['vat'] / 100) * $quant));
             }
         }
 
@@ -720,13 +722,9 @@ class pi_ratepay_Details extends oxAdminDetails
      */
     private function setRatepayContentBasket($content)
     {
-        $articles = $this->getPreparedOrderArticles();
-        $total = 0;
-        foreach ($articles as $article) {
-            if (oxRegistry::getConfig()->getRequestParameter($article['arthash']) > 0) {
-                $total = $total + (oxRegistry::getConfig()->getRequestParameter($article['arthash']) * $article['unitprice']);
-            }
-        }
+        $oOrder = $this->getEditObject();
+        $total = $oOrder->oxorder__oxtotalordersum->getRawValue();
+
         $shoppingBasket = $content->addChild('shopping-basket');
         $shoppingBasket->addAttribute('amount', $this->_getFormattedNumber($total));
         $shoppingBasket->addAttribute('currency', 'EUR');
@@ -762,9 +760,9 @@ class pi_ratepay_Details extends oxAdminDetails
 
                 $item->addAttribute('article-number', $article['artnum']);
                 $item->addAttribute('quantity', $quant);
-                $item->addAttribute('unit-price', $this->_getFormattedNumber($article['unitPriceNetto']));
-                $item->addAttribute('total-price', $this->_getFormattedNumber($article['unitPriceNetto']) * $quant);
-                $item->addAttribute('tax', $this->_getFormattedNumber((abs($this->_getFormattedNumber($article['unitPriceNetto']) * $quant)) * ($article['vat'] / 100)));
+                $item->addAttribute('unit-price', $this->_getFormattedNumber($article['unitprice']));
+                $item->addAttribute('total-price', $this->_getFormattedNumber($article['unitprice']) * $quant);
+                $item->addAttribute('tax', $this->_getFormattedNumber($article['unitprice'] * $article['vat'] / 100) * $quant);
             }
         }
     }
@@ -786,7 +784,7 @@ class pi_ratepay_Details extends oxAdminDetails
             $blUseStock = $myConfig->getConfigParam('blUseStock');
             if ($fullCancellation) {
                 $oOrder->oxorder__oxstorno = new oxField(1);
-            }
+               }
 
             $oOrder->save();
 

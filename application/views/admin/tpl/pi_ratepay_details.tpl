@@ -181,9 +181,9 @@
                 [{/if}]
                 <td valign="top" class="[{$listclass}]">[{$article.artnum}]</td>
                 <td valign="top" class="[{$listclass}]">[{$article.title|strip_tags}]</td>
-                <td valign="top" class="[{$listclass}]">[{$article.unitprice}]</td>
+                <td valign="top" class="[{$listclass}]">[{$article.unitprice|number_format:2:",":""}]</td>
                 <td valign="top" class="[{$listclass}]">[{$article.vat}] %</td>
-                <td valign="top" class="[{$listclass}]">[{$article.totalprice}] [{$article.currency}]</td>
+                <td valign="top" class="[{$listclass}]">[{$article.totalprice|number_format:2:",":""}] [{$article.currency}]</td>
                 <td valign="top" class="[{$listclass}]">[{$article.ordered}]</td>
                 <td valign="top" class="[{$listclass}]">[{$article.shipped}]</td>
                 <td valign="top" class="[{$listclass}]">[{$article.cancelled}]</td>
@@ -201,7 +201,7 @@
                 <td valign="top" class="[{$listclass}]">&nbsp;</td>
                 <td valign="top" class="[{$listclass}]">&nbsp;</td>
                 <td valign="top" class="[{$listclass}]">&nbsp;</td>
-                <td valign="top" class="[{$listclass}]">[{$pi_total_amount}] [{$article.currency}]</td>
+                <td valign="top" class="[{$listclass}]">[{$pi_total_amount|number_format:2:",":""}] [{$article.currency}]</td>
                 <td valign="top" class="[{$listclass}]">&nbsp;</td>
                 <td valign="top" class="[{$listclass}]">&nbsp;</td>
                 <td valign="top" class="[{$listclass}]">&nbsp;</td>
