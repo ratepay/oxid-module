@@ -39,6 +39,9 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                 if($country == 'ch' && $methodDB !== 'invoice' ){
                     continue;
                 }
+                elseif($country == 'nl' && $methodDB == 'installment'){
+                    continue;
+                }
                 $settings->loadByType($methodDB, $shopId, $country);
 
                 $config[$country][$methodShop]['active'] = (bool) $settings->pi_ratepay_settings__active->rawValue;
@@ -110,10 +113,16 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                 $profileId = oxRegistry::getConfig()->getRequestParameter('rp_profile_id_' . $methodShop . '_' . $country);
                 $securityCode = oxRegistry::getConfig()->getRequestParameter('rp_security_code_' . $methodShop . '_' . $country);
 
+                if ($country == 'nl') {
+                    $url = pi_ratepay_util_Utilities::$_RATEPAY_PRIVACY_NOTICE_URL_NL;
+                }
+                else{
+                    $url = pi_ratepay_util_Utilities::$_RATEPAY_PRIVACY_NOTICE_URL_DACH;
+                }
                 $firstSaveArray = array(
                     'profile_id' => $profileId,
                     'security_code' => $securityCode,
-                    'url' => pi_ratepay_util_Utilities::$_RATEPAY_PRIVACY_NOTICE_URL,
+                    'url' => $url,
                     'sandbox' => $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_sandbox_' . $methodShop . '_' . $country)),
                     'logging' => $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_logging_' . $methodShop . '_' . $country)),
                     'whitelabel' => $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_whitelabel_' . $methodShop . '_' . $country)),

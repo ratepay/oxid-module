@@ -4,7 +4,7 @@
     <dt>
         <input id="payment_[{$sPaymentID}]" type="radio" name="paymentid" value="[{$sPaymentID}]" [{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]checked[{/if}] style="position:relative; [{if !$pi_ratepay_rechnung_whitelabel}]top:-17px;[{/if}]">
         <label for="payment_[{$sPaymentID}]"><b>
-            [{if !$pi_ratepay_rechnung_whitelabel}]
+            [{if !$pi_ratepay_rechnung_whitelabel && $oView->getActiveLangAbbr() == 'de' || $oView->getActiveLangAbbr() == 'en'}]
                 <img src="[{$oViewConf->getModuleUrl('pi_ratepay')}]out/blocks/img/pi_ratepay_rechnung_checkout_logo.png" title="RatePAY [{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_WHITELABEL_TEXT"}]" alt="RatePAY [{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_WHITELABEL_TEXT"}]" style="height: 40px" />
             [{else}]
                 [{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_WHITELABEL_TEXT"}]
@@ -20,7 +20,7 @@
         </div>
         [{/if}]
         </br>
-        [{if !$pi_ratepay_rechnung_whitelabel}]
+        [{if !$pi_ratepay_rechnung_whitelabel && $oView->getActiveLangAbbr() == 'de' || $oView->getActiveLangAbbr() == 'en'}]
             <div id="policy[{$sPaymentID}]" style="display: none;">
                 <p>
                     <font color="red">[{$oxcmp_shop->oxshops__oxname->value}]</font>

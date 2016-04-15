@@ -82,8 +82,9 @@ abstract class pi_ratepay_RequestAbstract extends oxSuperCfg
         $countryCode = oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $this->getUser()->oxuser__oxcountryid->value . "'");
 
         $address = array(
-            'street'        => $this->getUser()->oxuser__oxstreet->value,
-            'street-number' => $this->getUser()->oxuser__oxstreetnr->value,
+            'street'            => $this->getUser()->oxuser__oxstreet->value,
+            'street-additional' => $this->getUser()->oxuser__oxaddinfo->value,
+            'street-number'     => $this->getUser()->oxuser__oxstreetnr->value,
             'zip-code'      => $this->getUser()->oxuser__oxzip->value,
             'city'          => $this->getUser()->oxuser__oxcity->value,
             'country-code'  => $countryCode

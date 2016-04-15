@@ -432,6 +432,9 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
         $billingAddress = $addresses->addChild('address');
         $billingAddress->addAttribute('type', 'BILLING');
         $billingAddress->addCDataChild('street', $street, $this->_utfMode);
+        if(!empty($address['street-additional'])){
+            $billingAddress->addCDataChild('street-additional', $address['street-additional']);
+        }
         $billingAddress->addChild('street-number', $address['street-number']);
         $billingAddress->addChild('zip-code', $address['zip-code']);
         $billingAddress->addCDataChild('city', $city, $this->_utfMode);

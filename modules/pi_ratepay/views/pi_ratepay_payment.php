@@ -507,6 +507,10 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
             $isZipValid = true;
         } elseif (($country == 'AT' || $country == 'CH') && strlen($user->oxuser__oxzip) == 4) {
             $isZipValid = true;
+        }
+        elseif ($country == 'NL'){
+            $isZipValid = true;
+
         } else {
             switch ($this->_selectedPaymentMethod) {
                 case 'pi_ratepay_rechnung':
@@ -531,7 +535,8 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         if($blShowShippingAddress == true) {
             $country = oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $this->getDelAddress()->oxaddress__oxcountryid->value . "'");
             if ($country == "DE" && strlen($this->getDelAddress()->oxaddress__oxzip->value) == 5) {
-            } elseif (($country == 'AT' || $country == 'CH') && strlen($this->getDelAddress()->oxaddress__oxzip) == 4) {
+            } elseif (($country == 'AT' || $country == 'CH' || $country == 'NL') && strlen($this->getDelAddress()->oxaddress__oxzip) == 4) {
+            }  elseif ($country == 'NL'){
             } else {
                 switch ($this->_selectedPaymentMethod) {
                     case 'pi_ratepay_rechnung':
@@ -692,6 +697,9 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                 $isBankDataValid = false;
                 $this->_errors[] = '-501';
             } elseif ($countryPrefix == "AT" && strlen($iban) <> 20) {
+                $isBankDataValid = false;
+                $this->_errors[] = '-501';
+            }elseif ($countryPrefix == "NL" && strlen($iban) <> 18) {
                 $isBankDataValid = false;
                 $this->_errors[] = '-501';
             }

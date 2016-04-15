@@ -28,14 +28,16 @@ class pi_ratepay_util_Utilities
         'elv' => "elv"
     ); // 'prepayment' => "vorkasse"
 
-    public static $_RATEPAY_PRIVACY_NOTICE_URL = 'https://www.ratepay.com/zusaetzliche-geschaeftsbedingungen-und-datenschutzhinweis-dach';
+    public static $_RATEPAY_PRIVACY_NOTICE_URL_DACH = 'https://www.ratepay.com/zusaetzliche-geschaeftsbedingungen-und-datenschutzhinweis-dach';
+
+    public static $_RATEPAY_PRIVACY_NOTICE_URL_NL =  'https://www.ratepay.com/aanvullende-voorwaarden-en-privacybeleid-nl';
 
 
     /**
      * Static array of supported countries.
      * @var array
      */
-    public static $_RATEPAY_ALLOWED_COUNTRIES = array('de', 'at', 'ch');
+    public static $_RATEPAY_ALLOWED_COUNTRIES = array('de', 'at', 'ch', 'nl');
 
     const PI_MODULE_VERSION = '3.3.0';
 

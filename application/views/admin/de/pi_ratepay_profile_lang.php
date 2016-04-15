@@ -29,6 +29,7 @@ $aLang = array(
     'PI_RATEPAY_PROFILE_COUNTRY_DE'      => "Deutschland",
     'PI_RATEPAY_PROFILE_COUNTRY_AT'      => "&Ouml;sterreich",
     'PI_RATEPAY_PROFILE_COUNTRY_CH'      => "Schweiz",
+    'PI_RATEPAY_PROFILE_COUNTRY_NL'      => "Niederlande",
 
     'PI_RATEPAY_PROFILE_MERCHANTNAME'    => "H&auml;ndler",
     'PI_RATEPAY_PROFILE_MERCHANTSTATUS'  => "H&auml;ndlerstatus",
