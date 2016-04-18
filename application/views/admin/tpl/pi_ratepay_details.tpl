@@ -288,7 +288,7 @@
         <input type="hidden" name="cl" value="pi_ratepay_details">
         <input type="hidden" name="fnc" value="credit">
         <span>Wert: </span>
-        <input id='voucherAmount' type='text' style="float:none;" maxlength='4' name='voucherAmount' size='4' value='0' onkeyup="check_voucher('[{$pitotalamount}]');" onFocus="this.select();">[{oxmultilang ident="PI_RATEPAY_KOMMA"}]<input style='float:none;' id='voucherAmountKomma' type='text' maxlength='2' name='voucherAmountKomma' size='2' value='00' onkeyup="check_voucher('[{$pitotalamount}]');" onFocus="hideMessageBox();this.select();" onBlur="hideMessageBox();">EUR<br><br>
+        <input id='voucherAmount' type='text' style="float:none;" maxlength='4' name='voucherAmount' size='4' value='0' onkeyup="check_voucher('[{$pi_total_amount}]');" onFocus="this.select();">[{oxmultilang ident="PI_RATEPAY_KOMMA"}]<input style='float:none;' id='voucherAmountKomma' type='text' maxlength='2' name='voucherAmountKomma' size='2' value='00' onkeyup="check_voucher('[{$pi_total_amount}]');" onFocus="hideMessageBox();this.select();" onBlur="hideMessageBox();">[{$article.currency}]<br><br>
         <input type='submit' name='voucher' value='&nbsp;&nbsp;[{oxmultilang ident="PI_RATEPAY_VOUCHER"}]&nbsp;&nbsp;'">
     </form>
 </fieldset>
