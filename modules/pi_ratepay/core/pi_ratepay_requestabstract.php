@@ -21,7 +21,6 @@
  */
 abstract class pi_ratepay_RequestAbstract extends oxSuperCfg
 {
-
     /**
      * Get customer number.
      * @return string|boolean

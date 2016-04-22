@@ -681,8 +681,10 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
         }
 
         if (count($basket->getVouchers())) {
+
             foreach ($basket->getVouchers() as $voucher) {
-                $item = $items->addCDataChild('item', $voucher->sVoucherNr, $this->_utfMode);
+                $vNr=$voucher->sVoucherId;
+                $item = $items->addCDataChild('item', $this->_getVoucherTitle($vNr), $this->_utfMode);
                 $item->addAttribute('article-number', $voucher->sVoucherNr);
                 $item->addAttribute('quantity', 1);
                 $item->addAttribute('unit-price', "-" . $this->_getFormattedNumber($voucher->dVoucherdiscount));
@@ -884,6 +886,11 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
         }
 
         return $isRateElv;
+    }
+
+    private function _getVoucherTitle($oxid){
+        $voucher = oxDB::getDb()->getOne("SELECT OXVOUCHERSERIEID FROM oxvouchers WHERE OXID ='" . $oxid . "'");
+        return oxDb::getDb()->getOne("SELECT OXSERIENR FROM oxvoucherseries WHERE OXID ='" . $voucher . "'");
     }
 
     private function _getCountryCodeById($countryId) {

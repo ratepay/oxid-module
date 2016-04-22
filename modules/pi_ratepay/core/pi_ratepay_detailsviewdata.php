@@ -348,7 +348,6 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['oxtitle'] = $vouchersValues->seriesTitle;
             $articleList[$i]['vat'] = "0";
             $articleList[$i]['unitprice'] = "-" . (float) $vouchersValues->price;
-            //$articleList[$i]['unitPriceNetto'] = "-" . $this->_getFormattedNumber((float) $vouchersValues->price, 2, ',');
             $articleList[$i]['amount'] = 1 - $vouchersValues->shipped - $vouchersValues->cancelled;
             $articleList[$i]['ordered'] = $vouchersValues->ordered;
             $articleList[$i]['shipped'] = $vouchersValues->shipped;
@@ -358,6 +357,52 @@ class pi_ratepay_DetailsViewData
 
             if (($vouchersValues->ordered - $vouchersValues->returned - $vouchersValues->cancelled) > 0) {
                 $articleList[$i]['totalprice'] = (float) $vouchersValues->price * -1;
+            } else {
+                $articleList[$i]['totalprice'] = 0;
+            }
+
+            $i++;
+        }
+
+        $creditSql = "SELECT
+          oo.oxcurrency,
+          ov.oxdiscount AS price,
+          prrod.article_number AS artnr,
+          ov.oxvouchernr AS title,
+          prrod.ordered, prrod.cancelled,
+          prrod.returned,
+          prrod.shipped
+		FROM
+		  `oxorder` oo,
+		  `oxvouchers` ov,
+		  " . $this->pi_ratepay_order_details . " prrod
+		WHERE
+		  prrod.order_number = '" . $orderId . "'
+		  AND ov.oxorderid = prrod.order_number
+		  AND ov.oxvoucherserieid = 'Anbieter Gutschrift'
+		  AND prrod.article_number = ov.oxid
+          AND oo.oxid = prrod.order_number";
+
+        $creditResult = mysql_query($creditSql);
+
+        while ($creditValues = mysql_fetch_object($creditResult)) {
+            $articleList[$i]['oxid'] = "";
+            $articleList[$i]['artid'] = $creditValues->artnr;
+            $articleList[$i]['arthash'] = md5($creditValues->artnr);
+            $articleList[$i]['artnum'] = $creditValues->title;
+            $articleList[$i]['title'] = $creditValues->seriesTitle;
+            $articleList[$i]['oxtitle'] = $creditValues->seriesTitle;
+            $articleList[$i]['vat'] = "0";
+            $articleList[$i]['unitprice'] = "-" . (float) $creditValues->price;
+            $articleList[$i]['amount'] = 1 - $creditValues->shipped - $vouchersValues->cancelled;
+            $articleList[$i]['ordered'] = $creditValues->ordered;
+            $articleList[$i]['shipped'] = $creditValues->shipped;
+            $articleList[$i]['returned'] = $creditValues->returned;
+            $articleList[$i]['cancelled'] = $creditValues->cancelled;
+            $articleList[$i]['currency'] = $creditValues->oxcurrency;
+
+            if (($creditValues->ordered - $creditValues->returned - $creditValues->cancelled) > 0) {
+                $articleList[$i]['totalprice'] = (float) $creditValues->price * -1;
             } else {
                 $articleList[$i]['totalprice'] = 0;
             }

@@ -309,7 +309,7 @@ class pi_ratepay_Details extends oxAdminDetails
         $newVoucher->save();
 
         $order->oxorder__oxvoucherdiscount->setValue($order->getFieldData("oxvoucherdiscount") + $this->piRatepayVoucher);
-        $this->_recalculateOrder($order);
+        //$this->_recalculateOrder($order);
 
         $voucherId = $newVoucher->getId();
 
@@ -394,7 +394,7 @@ class pi_ratepay_Details extends oxAdminDetails
                     }
                 }
             }
-            var_dump($this->updateOrder($articleList, $this->_isPaymentChangeFull()));
+            $this->updateOrder($articleList, $this->_isPaymentChangeFull());
             $isSuccess = 'pisuccess';
         }
         $this->addTplParam($isSuccess, $paymentChangeType);
@@ -617,9 +617,9 @@ class pi_ratepay_Details extends oxAdminDetails
 
         foreach ($articles as $article) {
             if ($subtype == "credit") {
-                $total = $total + (($article['ordered'] - $article['cancelled'] - $article['returned']) * $article['unitprice']);
+                $total = $total + (($article['ordered'] - $article['cancelled'] - $article['returned']) * ($article['unitprice']  * ($article['vat'] + 100) / 100));
             } else {
-                $total = $total + (($article['ordered'] - $article['cancelled'] - $article['returned'] - oxRegistry::getConfig()->getRequestParameter($article['arthash'])) * $article['unitprice']);
+                $total = $total + (($article['ordered'] - $article['cancelled'] - $article['returned'] - oxRegistry::getConfig()->getRequestParameter($article['arthash'])) * ($article['unitprice'] * ($article['vat'] + 100) / 100));
             }
         }
 
@@ -641,9 +641,14 @@ class pi_ratepay_Details extends oxAdminDetails
      */
     private function setRatepayContentBasketChange($content, $subtype, $total)
     {
+        $cur = '';
+        $articles = $this->getPreparedOrderArticles();
+        foreach ($articles as $article){
+            $cur= $article['currency'];
+        }
         $shoppingBasket = $content->addChild('shopping-basket');
         $shoppingBasket->addAttribute('amount', $this->_getFormattedNumber($total));
-        $shoppingBasket->addAttribute('currency', 'EUR');
+        $shoppingBasket->addAttribute('currency', $cur);
         $this->setRatepayContentBasketItemsChange($shoppingBasket, $subtype);
     }
 
@@ -722,12 +727,18 @@ class pi_ratepay_Details extends oxAdminDetails
      */
     private function setRatepayContentBasket($content)
     {
-        $oOrder = $this->getEditObject();
-        $total = $oOrder->oxorder__oxtotalordersum->getRawValue();
-
+        $articles = $this->getPreparedOrderArticles();
+        $total = 0;
+        $cur = '';
+        foreach ($articles as $article) {
+            $cur = $article['currency'];
+            if(oxRegistry::getConfig()->getRequestParameter($article['arthash']) > 0) {
+                $total = $total + (oxRegistry::getConfig()->getRequestParameter($article['arthash']) * ($article['unitprice'] * ($article['vat'] + 100)/100));
+            }
+        }
         $shoppingBasket = $content->addChild('shopping-basket');
         $shoppingBasket->addAttribute('amount', $this->_getFormattedNumber($total));
-        $shoppingBasket->addAttribute('currency', 'EUR');
+        $shoppingBasket->addAttribute('currency', $cur);
         $this->setRatepayContentBasketItems($shoppingBasket);
     }
 
