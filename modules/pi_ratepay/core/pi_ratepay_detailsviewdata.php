@@ -98,7 +98,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['returned'] = $articlesValues->returned;
             $articleList[$i]['cancelled'] = $articlesValues->cancelled;
             $articleList[$i]['currency'] = $articlesValues->oxcurrency;
-
+            
             if (($articlesValues->ordered - $articlesValues->returned - $articlesValues->cancelled) > 0) {
                 $articleList[$i]['totalprice'] = ((float) $articlesValues->oxbprice) * $articleList[$i]['amount'];
             } else {
@@ -411,9 +411,5 @@ class pi_ratepay_DetailsViewData
         }
 
         return $articleList;
-    }
-    private function _getFormattedNumber($str, $decimal = 2, $dec_point = ".", $thousands_sep = "")
-    {
-        return pi_ratepay_util_utilities::getFormattedNumber($str, $decimal, $dec_point, $thousands_sep);
     }
 }

@@ -23,6 +23,12 @@
 class pi_ratepay_RequestDataFrontend extends pi_ratepay_RequestAbstract
 {
     /**
+    * Basket object
+    * @var oxbasket
+    */
+    protected $_basket;
+
+    /**
      * PaymentType: pi_ratepay_rechnung | pi_ratepay_rate
      * @var string
      */

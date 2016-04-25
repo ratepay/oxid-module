@@ -19,13 +19,13 @@
 // -------------------------------
 // RESOURCE IDENTITFIER = STRING
 // -------------------------------
-$sLangName = "Deutsch";
+$sLangName = "Niederländisch";
 
-$piErrorAge = 'Um eine Zahlung per RatePAY Rate durchzuf&uuml;hren, m&uuml;ssen Sie mindestens 18 Jahre alt sein.';
-$piErrorBirth = 'Um eine Zahlung per RatePAY Rate durchzuf&uuml;hren, geben Sie bitte Ihr Geburtsdatum ein.';
-$piErrorPhone = 'Um eine Zahlung per RatePAY Rate durchzuf&uuml;hren, geben Sie bitte Ihre Telefonnummer ein.';
-$piErrorCompany = 'Geben Sie bitte Ihren Firmennamen und Ihre Umsatzsteuer-ID ein.';
-$piErrorBirthdayDigits = 'Geben Sie bitte Ihr Geburtsjahr vierstellig ein. (z.B. 1982)';
+$piErrorAge = 'Om door RatePAY een betaling op rekening door te kunnen, voeren moet u ten minste 18 jaar of ouder zijn.';
+$piErrorBirth = 'Om door RatePAY een betaling op rekening door te kunnen voeren, gelieve hier uw geboortedatum invoeren.';
+$piErrorPhone = 'Om door RatePAY een betaling op rekening door te kunnen voeren, gelieve hier uw telefoonnummer invoeren.';
+$piErrorCompany = 'Gelieve hier uw bedrijfsnaam en uw btw-nummer invoeren.';
+$piErrorBirthdayDigits = 'Gelieve hier uw geboortedatum middels een viercijferige invoer vastleggen (bijv. 1982)';
 
 $aLang = array(
     'charset'                                       => 'UTF-8',
@@ -55,7 +55,7 @@ $aLang = array(
     'PI_RATEPAY_RATE_VIEW_PAYMENT_MOBILFON'         => 'Mobiltelefon:',
     'PI_RATEPAY_RATE_VIEW_PAYMENT_BIRTHDATE'        => 'Geburtsdatum:',
     'PI_RATEPAY_RATE_VIEW_PAYMENT_BIRTHDATE_FORMAT' => '(tt.mm.jjjj)',
-    'PI_RATEPAY_RATE_VIEW_PAYMENT_FON_NOTE'         => 'Tragen Sie bitte entweder Ihr Telefon oder Mobiltelefon ein.',
+    'PI_RATEPAY_RATE_VIEW_PAYMENT_FON_NOTE'         => 'Gelieve hier uw telefoonnummer invoeren.',
     'PI_RATEPAY_RATE_VIEW_PAYMENT_COMPANY'          => 'Firma:',
     'PI_RATEPAY_RATE_VIEW_PAYMENT_UST'              => 'UST-ID:',
     'PI_RATEPAY_ERROR_BIRTHDAY_YEAR_DIGITS'         => $piErrorBirthdayDigits,
