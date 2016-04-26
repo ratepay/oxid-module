@@ -292,7 +292,7 @@ class pi_ratepay_Details extends oxAdminDetails
     {
         $order = $this->getEditObject();
         $orderId = $this->_getOrderId();
-        $aarticles = $this->getPreparedOrderArticles();
+        $oArticles = $this->getPreparedOrderArticles();
 
         $voucherCount = oxDb::getDb()->getOne("SELECT count( * ) AS nr FROM `oxvouchers`	WHERE oxvouchernr LIKE 'pi-Merchant-Voucher-%'");
         $voucherNr = "pi-Merchant-Voucher-" . $voucherCount;
@@ -308,8 +308,7 @@ class pi_ratepay_Details extends oxAdminDetails
         ));
 
         $newVoucher->save();
-        //$order->oxorder__oxvoucherdiscount->setValue($order->getFieldData("oxvoucherdiscount") + $this->piRatepayVoucher);
-        $this->_recalculateOrder($order, $aarticles, $voucherNr);
+        $this->_recalculateOrder($order, $oArticles, $voucherNr);
 
         $voucherId = $newVoucher->getId();
 
@@ -786,14 +785,12 @@ class pi_ratepay_Details extends oxAdminDetails
     public function updateOrder($articleList, $fullCancellation)
     {
         $aOrderArticles = $articleList;
-        $aarticles = $this->getPreparedOrderArticles();
+        $oArticles = $this->getPreparedOrderArticles();
 
         if (is_array($aOrderArticles) && $oOrder = $this->getEditObject()) {
 
             $myConfig = $this->getConfig();
             $oOrderArticles = $oOrder->getOrderArticles();
-            /*$actCurr = $oOrder->oxorder__oxcurrency->getRawValue();
-            $actCurRate = $oOrder->oxorder__oxcurrate->getRawValue();*/
             $blUseStock = $myConfig->getConfigParam('blUseStock');
             if ($fullCancellation) {
                 $oOrder->oxorder__oxstorno = new oxField(1);
@@ -818,13 +815,7 @@ class pi_ratepay_Details extends oxAdminDetails
                 }
             }
             // recalculating order
-            //var_dump($oOrder);die();
-            $this->_recalculateOrder($oOrder, $aarticles);
-            /*if($oOrder->oxorder__oxcurrency->getRawValue() != $actCurr || $oOrder->oxorder__oxcurrate->getRawValue() != $actCurRate){
-            $oDb = oxDb::getDb();
-            $sQ = "update oxorder set oxcurrency = '" . $actCurr . "', oxcurrate = '" . $actCurRate . "' where oxid = " . $oDb->quote($oOrder->oxorder__oxid->getRawValue());
-            $oDb->execute($sQ);}*/
-
+            $this->_recalculateOrder($oOrder, $oArticles);
         }
     }
 
