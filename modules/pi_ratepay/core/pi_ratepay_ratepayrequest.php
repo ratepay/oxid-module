@@ -587,7 +587,7 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
 
         if ($giftcardCosts > 0) {
             $item = $items->addChild('item', 'Giftcard Cost');
-            $item->addAttribute('article-number', 'oxwgiftcard');
+            $item->addAttribute('article-number', 'oxgiftcard');
             $item->addAttribute('quantity', 1);
             $item->addAttribute('unit-price', $this->_getFormattedNumber($giftcardNettoPrice));
             $item->addAttribute('total-price', $this->_getFormattedNumber($giftcardNettoPrice));

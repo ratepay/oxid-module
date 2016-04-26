@@ -292,7 +292,7 @@ class pi_ratepay_Details extends oxAdminDetails
     {
         $order = $this->getEditObject();
         $orderId = $this->_getOrderId();
-        $actCurr = $order->oxorder__oxcurrency->getRawValue();
+        $aarticles = $this->getPreparedOrderArticles();
 
         $voucherCount = oxDb::getDb()->getOne("SELECT count( * ) AS nr FROM `oxvouchers`	WHERE oxvouchernr LIKE 'pi-Merchant-Voucher-%'");
         $voucherNr = "pi-Merchant-Voucher-" . $voucherCount;
@@ -308,13 +308,8 @@ class pi_ratepay_Details extends oxAdminDetails
         ));
 
         $newVoucher->save();
-        $order->oxorder__oxvoucherdiscount->setValue($order->getFieldData("oxvoucherdiscount") + $this->piRatepayVoucher);
-        $this->_recalculateOrder($order);
-        if($order->oxorder__oxcurrency->getRawValue()!= $actCurr){
-            $oDb = oxDb::getDb();
-            $sQ = "update oxorder set oxcurrency = '" . $actCurr . "' where oxid = " . $oDb->quote($order->oxorder__oxid->getRawValue());
-            $oDb->execute($sQ);
-        }
+        //$order->oxorder__oxvoucherdiscount->setValue($order->getFieldData("oxvoucherdiscount") + $this->piRatepayVoucher);
+        $this->_recalculateOrder($order, $aarticles, $voucherNr);
 
         $voucherId = $newVoucher->getId();
 
@@ -791,13 +786,14 @@ class pi_ratepay_Details extends oxAdminDetails
     public function updateOrder($articleList, $fullCancellation)
     {
         $aOrderArticles = $articleList;
+        $aarticles = $this->getPreparedOrderArticles();
 
         if (is_array($aOrderArticles) && $oOrder = $this->getEditObject()) {
 
             $myConfig = $this->getConfig();
             $oOrderArticles = $oOrder->getOrderArticles();
-            $actCurr=$oOrder->oxorder__oxcurrency->getRawValue();
-            $oOrder->oxorder__oxcurrency->setValue($actCurr);
+            /*$actCurr = $oOrder->oxorder__oxcurrency->getRawValue();
+            $actCurRate = $oOrder->oxorder__oxcurrate->getRawValue();*/
             $blUseStock = $myConfig->getConfigParam('blUseStock');
             if ($fullCancellation) {
                 $oOrder->oxorder__oxstorno = new oxField(1);
@@ -821,13 +817,13 @@ class pi_ratepay_Details extends oxAdminDetails
                     }
                 }
             }
-
             // recalculating order
-            $this->_recalculateOrder($oOrder);
-            if($oOrder->oxorder__oxcurrency->getRawValue()!= $actCurr){
+            //var_dump($oOrder);die();
+            $this->_recalculateOrder($oOrder, $aarticles);
+            /*if($oOrder->oxorder__oxcurrency->getRawValue() != $actCurr || $oOrder->oxorder__oxcurrate->getRawValue() != $actCurRate){
             $oDb = oxDb::getDb();
-            $sQ = "update oxorder set oxcurrency = '" . $actCurr . "' where oxid = " . $oDb->quote($oOrder->oxorder__oxid->getRawValue());
-            $oDb->execute($sQ);}
+            $sQ = "update oxorder set oxcurrency = '" . $actCurr . "', oxcurrate = '" . $actCurRate . "' where oxid = " . $oDb->quote($oOrder->oxorder__oxid->getRawValue());
+            $oDb->execute($sQ);}*/
 
         }
     }
@@ -853,7 +849,7 @@ class pi_ratepay_Details extends oxAdminDetails
         }
 
         $oDb = oxDb::getDb();
-        $sQ = "update oxorderarticles set oxstorno = " . $oDb->quote($oArticle->oxorderarticles__oxstorno->value) . " where oxid = " . $oDb->quote($sOrderArtId);
+        $sQ = "update oxorderarticles set oxstorno = " . $oDb->quote($oArticle->oxorderarticles__oxstorno->value) . " where oxid =" . $oDb->quote($sOrderArtId);
         $oDb->execute($sQ);
     }
 
@@ -911,12 +907,38 @@ class pi_ratepay_Details extends oxAdminDetails
      *
      * @param oxorder $oOrder
      */
-    private function _recalculateOrder($oOrder)
+    private function _recalculateOrder($oOrder, $aOrderArticles, $voucherNr = null)
     {
         // keeps old delivery cost
         $oOrder->reloadDiscount(false);
         $oOrder->reloadDelivery(false);
-        $oOrder->recalculateOrder();
+        $oDb = oxDb::getDb();
+
+        if($oOrder->getOrderCurrency()->name == 'CHF'){
+            $totalprice = 0;
+            foreach($aOrderArticles as $article){
+                $totalprice += $article['totalprice'];
+            }
+            if($voucherNr != null){
+                $discount = (float) $oDb->getOne("select oxdiscount from oxvouchers where oxvouchernr = '" . $voucherNr . "'");
+                $tDiscount = $oOrder->oxorder__oxvoucherdiscount->getRawValue();
+                $tDiscount += $discount;
+                $sQ = "update oxorder set oxvoucherdiscount ='" . $tDiscount . "'where oxid=" . $oDb->quote($oOrder->oxorder__oxid->getRawValue());
+                $oDb->execute($sQ);
+                $totalprice -= $discount;
+            }
+
+            if($totalprice < 0){
+                $totalprice = 0;
+            }
+
+            $sQ = "update oxorder set oxtotalordersum = '" . $totalprice . "' where oxid = " . $oDb->quote($oOrder->oxorder__oxid->getRawValue());
+            $oDb->execute($sQ);
+
+        }else{
+            $oOrder->recalculateOrder();
+        }
+
     }
 
     /**
