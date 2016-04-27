@@ -196,10 +196,16 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                     $this->_insertSettings($insertSql);
                 }
 
-                if ($methodShop == 'elv' && $country == 'de') {
-                    $elvSaveArray = array(
-                        'iban_only' => $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_iban_only_' . $methodShop . '_' . $country))
-                    );
+                if ($methodShop == 'elv'){
+                    if ($country == 'de') {
+                        $elvSaveArray = array(
+                            'iban_only' => $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_iban_only_' . $methodShop . '_' . $country))
+                        );
+                    }else{
+                        $elvSaveArray = array(
+                        'iban_only' => 1
+                        );
+                    }
 
                     $insertSql = $this->_createUpdateSql($elvSaveArray, $shopId, $country, $methodDB);
                     $this->_insertSettings($insertSql);
