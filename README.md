@@ -16,6 +16,17 @@
 ### Version 3.3.0 -
 * Oxid EE compatibility implemented
 * descriptor field in database, size changed from 20 to 128
+* sandbox notification added
+* address and Telephone validation added
+* CH embedded
+* conflict of SimpleXMLExtended class resolved
+* DFP fixed
+* NL embedded
+* fixed credit issue
+* fixed Trusted Shops issue
+* currency and country-code added to DB
+* fixed wrappingcosts issue
+* fixed CDATA vouchercode/title issue
 
 ### Version 3.2.3 - Released 2015-10-01
 * Device Fingerprint implemented

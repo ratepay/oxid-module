@@ -535,9 +535,9 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         if($blShowShippingAddress == true) {
             $country = oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $this->getDelAddress()->oxaddress__oxcountryid->value . "'");
             if ($country == "DE" && strlen($this->getDelAddress()->oxaddress__oxzip->value) == 5) {
-            } elseif (($country == 'AT' || $country == 'CH' || $country == 'NL') && strlen($this->getDelAddress()->oxaddress__oxzip) == 4) {
-            }  elseif ($country == 'NL'){
-            } else {
+            }elseif (($country == 'AT' || $country == 'CH') && strlen($this->getDelAddress()->oxaddress__oxzip) == 4) {
+            }elseif ($country == 'NL'){
+            }else {
                 switch ($this->_selectedPaymentMethod) {
                     case 'pi_ratepay_rechnung':
                         $this->_errors[] = '-406';

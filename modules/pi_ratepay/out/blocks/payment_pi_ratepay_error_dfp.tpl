@@ -14,7 +14,7 @@
 [{foreach from=$piRatepayErrors item=pierror}]
 
     [{if $pierror == "-300"}]
-        <div class="status error">[{ oxmultilang ident="PI_RATEPAY_RATE_ERROR" }]<a href="[{$pi_ratepay_elv_url}]" target="_blank">[{ oxmultilang ident="PI_RATEPAY_RATE_VIEW_POLICY_PRIVACYPOLICY" }]</a>.</div>
+        <div class="status error">[{ oxmultilang ident="PI_RATEPAY_ELV_ERROR" }]<a href="[{$pi_ratepay_elv_url}]" target="_blank">[{ oxmultilang ident="PI_RATEPAY_RATE_VIEW_POLICY_PRIVACYPOLICY" }]</a>.</div>
     [{/if}]
 
     <!-- Rechnung -->
