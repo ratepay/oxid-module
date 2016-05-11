@@ -5,7 +5,7 @@
 |------|----------
 |Author | `Sebastian Neumann`
 |Prefix | `pi`
-|Shop Version | `CE` `4.7.x-4.9.x`
+|Shop Version | `CE` `EE` `4.7.x-5.2.x`
 |Version | `3.3.0`
 |Link | `http://www.ratepay.com`
 |Mail | `integration@ratepay.com`
@@ -13,7 +13,7 @@
 
 ## Changelog
 
-### Version 3.3.0 -
+### Version 3.3.0 - Released 2016-05-11
 * Oxid EE compatibility implemented
 * descriptor field in database, size changed from 20 to 128
 * sandbox notification added
