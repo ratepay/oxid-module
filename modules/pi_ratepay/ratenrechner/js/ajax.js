@@ -20,6 +20,13 @@ function piRatepayRateCalculatorAction(mode) {
     }
     piRpInputValue=document.getElementById('piRpInput-button').value;
     piRpInputValueRuntime=document.getElementById('piRpInput-buttonRuntime').value;
+    stoken = document.getElementsByName("stoken")[0].value;
+    if(document.getElementsByName("shp")[0] === undefined){
+        shop = 1;
+    } else{
+        shop = document.getElementsByName("shp")[0].value;
+    }
+
     if (mode == 'rate') {
         calcValue = document.getElementById('rate').value;
         calcMethod = 'calculation-by-rate';
@@ -49,7 +56,7 @@ function piRatepayRateCalculatorAction(mode) {
     xmlhttp.setRequestHeader("Content-Type",
         "application/x-www-form-urlencoded");
 
-    xmlhttp.send("calcValue=" + calcValue + "&calcMethod=" + calcMethod + "&dueDate=" + dueDate);
+    xmlhttp.send("calcValue=" + calcValue + "&calcMethod=" + calcMethod + "&dueDate=" + dueDate + "&stoken=" + stoken + "&shp=" + shop);
 
     if (xmlhttp.responseText != null) {
         html = xmlhttp.responseText;
@@ -70,12 +77,19 @@ function piLoadrateCalculator() {
     } else {// code for IE6, IE5
         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
     }
+    stoken = document.getElementsByName("stoken")[0].value;
+    if(document.getElementsByName("shp")[0] === undefined){
+        shop = 1;
+    } else{
+        shop = document.getElementsByName("shp")[0].value;
+    }
+
     xmlhttp.open("POST", pi_ratepay_rate_calc_path + "php/PiRatepayRateCalcDesign.php", false);
 
     xmlhttp.setRequestHeader("Content-Type",
         "application/x-www-form-urlencoded");
 
-    xmlhttp.send();
+    xmlhttp.send("stoken=" + stoken + "&shp=" + shop);
 
     if (xmlhttp.responseText != null) {
         html = xmlhttp.responseText;
@@ -98,12 +112,19 @@ function piLoadrateResult() {
     } else {// code for IE6, IE5
         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
     }
+    stoken = document.getElementsByName("stoken")[0].value;
+    if(document.getElementsByName("shp")[0] === undefined){
+        shop = 1;
+    } else{
+        shop = document.getElementsByName("shp")[0].value;
+    }
+    
     xmlhttp.open("POST", pi_ratepay_rate_calc_path + "php/PiRatepayRateCalcRequest.php", false);
 
     xmlhttp.setRequestHeader("Content-Type",
         "application/x-www-form-urlencoded");
 
-    xmlhttp.send();
+    xmlhttp.send("stoken=" + stoken + "&shp=" + shop);
 
     if (xmlhttp.responseText != null) {
         html = xmlhttp.responseText;
