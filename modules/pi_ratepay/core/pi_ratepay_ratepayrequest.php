@@ -860,8 +860,9 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
     private function _isRateElv()
     {
         $isRateElv = false;
+        $session = new oxSession;
         $settings = oxNew('pi_ratepay_settings');
-        $settings->loadByType($this->_getPaymentMethod('pi_ratepay_rate'), oxSession::getVariable('shopId'));
+        $settings->loadByType($this->_getPaymentMethod('pi_ratepay_rate'), $session->getVariable('shopId'));
 
         if ($this->getSession()->getVariable('pi_rp_rate_pay_method') === 'pi_ratepay_rate_radio_elv'
             && $settings->pi_ratepay_settings__activate_elv->rawValue == 1

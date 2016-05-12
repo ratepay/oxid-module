@@ -173,12 +173,13 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
     {
         $basket = $this->getSession()->getBasket();
         $basketAmount = $basket->getPrice()->getBruttoPrice();
-        oxSession::setVariable('basketAmount', $basketAmount);
+        $session = new oxSession;
+        $session->setVariable('basketAmount', $basketAmount);
 
         $settings = oxNew('pi_ratepay_settings');
         $shopId = $this->getConfig()->getShopId();
         $shopId = $settings->setShopIdToOne($shopId);
-        oxSession::setVariable('shopId', $shopId);
+        $session->setVariable('shopId', $shopId);
 
         foreach (pi_ratepay_util_utilities::$_RATEPAY_PAYMENT_METHOD as $paymentMethod) {
 
