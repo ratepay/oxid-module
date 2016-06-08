@@ -41,6 +41,8 @@ class pi_ratepay_order extends pi_ratepay_order_parent
      *
      * Tests if the payment method is Rate or Rechnung.
      *
+     * If order_id is already in use the old transaction with this order_id will be full-cancelled and a new transaction will be created.
+     *
      * If true - Checks for 'ord_custinfo' and session challenge (CSRF), if either of them fails returns to order view.
      * It loads basket contents (plus applied price/amount if availabe - checks for stock, checks user data (if no data
      * is set - returns to user login page). Stores order info to database (oxorder::finalizeOrder()) and updates
@@ -60,6 +62,22 @@ class pi_ratepay_order extends pi_ratepay_order_parent
     {
         $this->_paymentId = $this->getBasket()->getPaymentId();
 
+        if($this->getSession()->getBasket()->getOrderId() != null) {
+
+            $trans_id = oxDb::getDb()->getOne("SELECT TRANSACTION_ID FROM pi_ratepay_orders WHERE ORDER_NUMBER = '" . $this->getSession()->getBasket()->getOrderId() . "'");
+            $strans_id = oxDb::getDb()->getOne("SELECT TRANSACTION_SHORT_ID FROM pi_ratepay_orders WHERE ORDER_NUMBER = '" . $this->getSession()->getBasket()->getOrderId() . "'");
+            $oid = oxDb::getDb()->getOne("SELECT OXORDERNR FROM oxorder WHERE OXID = '" . $this->getSession()->getBasket()->getOrderId() . "'");
+            $ratepayRequest = $this->_getRatepayRequest($this->_paymentId);
+            $subtype = 'full-cancellation';
+            $name = $this->getUser()->oxuser__oxfname->value;
+            $surname = $this->getUser()->oxuser__oxlname->value;
+            $changePayment = $ratepayRequest->changePayment($trans_id, $strans_id, $subtype, $oid);
+            $paymentMethod = pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId);
+
+            pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->getSession()->getBasket()->getOrderId(), $trans_id, $paymentMethod, 'PAYMENT_CHANGE', $subtype, $changePayment['request'], $name, $surname, $changePayment['response']);
+
+        }
+        
         if (in_array($this->_paymentId, pi_ratepay_util_utilities::$_RATEPAY_PAYMENT_METHOD)) {
             $paymentMethodIds = array(
                 'pi_ratepay_rechnung' => array(

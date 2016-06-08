@@ -114,6 +114,38 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
 
         return $initPayment;
     }
+    
+    /*
+     * Do payment change request
+     * return array
+    */
+    public function changePayment($trans_id, $strans_id, $subtype, $oid)
+    {
+        $currency = $this->getSession()->getBasket()->getBasketCurrency()->name;
+        $shopId = $this->getConfig()->getShopId();
+        if ($shopId == 'oxbaseshop'){
+            $shopId = 1;
+        }
+
+        $operation = 'PAYMENT_CHANGE';
+
+        $ratepay = $this->_getXmlService();
+        $request = $ratepay->getXMLObject();
+
+        $head = $this->_setRatepayHead($request, $operation, $trans_id, $strans_id, $subtype);
+
+        $this->_setRatepayHeadExternal($head, $operation, $oid);
+        $this->_setRatepayHeadMeta($head);
+        $content = $request->addChild('content');
+        $shoppingBasket = $content->addChild('shopping-basket');
+        $shoppingBasket->addAttribute('amount', "0");
+        $shoppingBasket->addAttribute('currency', $currency);
+        $changePayment = array(
+            'request'  => $request,
+            'response' => $ratepay->paymentOperation($request, $this->_getPaymentMethod(), $shopId)
+        );
+        return $changePayment;
+    }
 
     /**
      * Do a request payment request.
@@ -222,16 +254,23 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
      * @param string $subtype
      * @return SimpleXMLExtended
      */
-    private function _setRatepayHead($request, $operation)
+    private function _setRatepayHead($request, $operation, $trans_id = null, $strans_id = null, $subtype = null)
     {
         $head = $request->addChild('head');
         $head->addChild('system-id', $this->_getRatepaySystemID());
 
-        if ($operation != 'PAYMENT_INIT' && $operation != 'CONFIGURATION_REQUEST' && $operation != 'PROFILE_REQUEST') {
+        if ($operation != 'PAYMENT_INIT' && $operation != 'CONFIGURATION_REQUEST' && $operation != 'PROFILE_REQUEST' && $operation != 'PAYMENT_CHANGE') {
             $head->addChild('transaction-id', $this->_getDataProvider()->getTransactionId());
+        }elseif ($operation == 'PAYMENT_CHANGE') {
+            $head->addChild('transaction-id', $trans_id);
+            $head->addChild('transaction-short-id', $strans_id);
         }
 
-        $operationNode = $head->addChild('operation', $operation);
+        $operation = $head->addChild('operation', $operation);
+
+        if ($operation == "PAYMENT_CHANGE") {
+            $operation->addAttribute('subtype', $subtype);
+        }
 
         $this->_setRatepayHeadCredentials($head);
 
@@ -271,12 +310,16 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
      *
      * @param SimpleXMLExtended $head
      */
-    private function _setRatepayHeadExternal($head, $operation)
+    private function _setRatepayHeadExternal($head, $operation, $oid = null)
     {
         $external = $head->addChild('external');
 
         if ($operation == 'PAYMENT_CONFIRM') {
             $external->addChild('order-id', $this->_getDataProvider()->getOrderId());
+        }
+
+        if ($operation == 'PAYMENT_CHANGE'){
+            $external->addChild('order-id', $oid);
         }
 
         if ($operation == 'PAYMENT_REQUEST') {
@@ -807,7 +850,8 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
      */
     private function _getPaymentMethod()
     {
-        return pi_ratepay_util_utilities::getPaymentMethod($this->_getPaymentType());
+        $util = new pi_ratepay_util_Utilities();
+        return $util->getPaymentMethod($this->_getPaymentType());
     }
 
     /**
@@ -820,7 +864,8 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
      */
     private function _getFormattedNumber($str, $decimal = 2, $dec_point = ".", $thousands_sep = "")
     {
-        return pi_ratepay_util_utilities::getFormattedNumber($str, $decimal, $dec_point, $thousands_sep);
+        $util = new pi_ratepay_util_Utilities();
+        return $util->getFormattedNumber($str, $decimal, $dec_point, $thousands_sep);
     }
 
     /**
