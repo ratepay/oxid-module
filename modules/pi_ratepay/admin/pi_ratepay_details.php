@@ -137,7 +137,6 @@ class pi_ratepay_Details extends oxAdminDetails
 
         $this->addTplParam('pi_total_amount', $order->oxorder__oxtotalordersum->getRawValue());
 
-
         $this->addTplParam('pi_ratepay_payment_type', $this->_paymentMethod);
         $this->addTplParam('articleList', $this->getPreparedOrderArticles());
         $this->addTplParam('historyList', $this->getHistory($this->_aViewData["articleList"]));
@@ -609,16 +608,14 @@ class pi_ratepay_Details extends oxAdminDetails
      */
     private function _orderTotalAmount($subtype)
     {
-        $total = 0;
-
         $articles = $this->getPreparedOrderArticles();
         $total = 0;
 
         foreach ($articles as $article) {
             if ($subtype == "credit") {
-                $total = $total + (($article['ordered'] - $article['cancelled'] - $article['returned']) * ($article['unitprice']  * ($article['vat'] + 100) / 100));
+                $total = $total + (($article['ordered'] - $article['cancelled'] - $article['returned']) * round($article['unitprice'] * ($article['vat'] + 100) / 100, 2));
             } else {
-                $total = $total + (($article['ordered'] - $article['cancelled'] - $article['returned'] - oxRegistry::getConfig()->getRequestParameter($article['arthash'])) * ($article['unitprice'] * ($article['vat'] + 100) / 100));
+                $total = $total + (($article['ordered'] - $article['cancelled'] - $article['returned'] - oxRegistry::getConfig()->getRequestParameter($article['arthash'])) * round($article['unitprice'] * ($article['vat'] + 100) / 100, 2));
             }
         }
 
@@ -905,12 +902,11 @@ class pi_ratepay_Details extends oxAdminDetails
         $oOrder->reloadDelivery(false);
         $oDb = oxDb::getDb();
 
-        if($oOrder->getOrderCurrency()->name == 'CHF'){
             $totalprice = 0;
 
             foreach($aOrderArticles as $article){
                 $totalprice += $article['totalprice'];
-                $oxnprice = $article['unitprice']*$article['amount'];
+                $oxnprice = $article['unitprice'] * $article['amount'];
                 $oxbprice = ($oxnprice * ($article['vat'] + 100)) / 100;
                 $oDb->execute("update oxorderarticles set oxnetprice ='" . $oxnprice . "', oxbrutprice = '". $oxbprice ."' where oxartid = '" . $article['artid'] ."' and oxorderid = " . $oDb->quote($oOrder->oxorder__oxid->getRawValue()));
             }
@@ -933,11 +929,9 @@ class pi_ratepay_Details extends oxAdminDetails
 
             $sQ = "update oxorder set oxtotalordersum = '" . $totalprice . "', oxtotalnetsum ='" . $oxnprice . "', oxtotalbrutsum ='" . $oxbprice . "'  where oxid = " . $oDb->quote($oOrder->oxorder__oxid->getRawValue());
             $oDb->execute($sQ);
-
-        }else{
-            $oOrder->recalculateOrder();
-        }
-
+            $oOrder->oxorder__oxtotalordersum->setValue($totalprice);
+            $oOrder->oxorder__oxtotalnetsum->setValue($oxnprice);
+            $oOrder->oxorder__oxtotalbrutsum->setValue($oxbprice);
     }
 
     /**

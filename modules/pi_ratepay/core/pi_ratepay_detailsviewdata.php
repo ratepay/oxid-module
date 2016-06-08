@@ -136,7 +136,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['currency'] = $rpOrderDetailsWrappingValues->oxcurrency;
 
             if (($rpOrderDetailsWrappingValues->ORDERED - $rpOrderDetailsWrappingValues->RETURNED - $rpOrderDetailsWrappingValues->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = (float) $rpOrderDetailsWrappingValues->PRICE+((float) $rpOrderDetailsWrappingValues->PRICE*round((float) $rpOrderDetailsWrappingValues->VAT)/100);
+                $articleList[$i]['totalprice'] = (float) $rpOrderDetailsWrappingValues->PRICE + ((float) $rpOrderDetailsWrappingValues->PRICE * round((float) $rpOrderDetailsWrappingValues->VAT) / 100);
             } else {
                 $articleList[$i]['totalprice'] = 0;
             }
@@ -166,7 +166,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['currency'] = $rpOrderDetailsGiftcardsValues->oxcurrency;
 
             if (($rpOrderDetailsGiftcardsValues->ORDERED - $rpOrderDetailsGiftcardsValues->RETURNED - $rpOrderDetailsGiftcardsValues->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = (float) $rpOrderDetailsGiftcardsValues->PRICE+((float) $rpOrderDetailsGiftcardsValues->PRICE*(float) $rpOrderDetailsGiftcardsValues->VAT)/100;
+                $articleList[$i]['totalprice'] = (float) $rpOrderDetailsGiftcardsValues->PRICE + ((float) $rpOrderDetailsGiftcardsValues->PRICE * (float) $rpOrderDetailsGiftcardsValues->VAT) / 100;
             } else {
                 $articleList[$i]['totalprice'] = 0;
             }
@@ -197,7 +197,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['currency'] = $rpOrderDetailsPaymentValues->oxcurrency;
 
             if (($rpOrderDetailsPaymentValues->ORDERED - $rpOrderDetailsPaymentValues->RETURNED - $rpOrderDetailsPaymentValues->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = (float) $rpOrderDetailsPaymentValues->PRICE+((float) $rpOrderDetailsPaymentValues->PRICE*(float) $rpOrderDetailsPaymentValues->VAT)/100;
+                $articleList[$i]['totalprice'] = (float) $rpOrderDetailsPaymentValues->PRICE + ((float) $rpOrderDetailsPaymentValues->PRICE * (float) $rpOrderDetailsPaymentValues->VAT) / 100;
             } else {
                 $articleList[$i]['totalprice'] = 0;
             }
@@ -394,7 +394,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['oxtitle'] = $creditValues->seriesTitle;
             $articleList[$i]['vat'] = "0";
             $articleList[$i]['unitprice'] = "-" . (float) $creditValues->price;
-            $articleList[$i]['amount'] = 1 - $creditValues->shipped - $vouchersValues->cancelled;
+            $articleList[$i]['amount'] = 1 - $creditValues->shipped - $creditValues->cancelled;
             $articleList[$i]['ordered'] = $creditValues->ordered;
             $articleList[$i]['shipped'] = $creditValues->shipped;
             $articleList[$i]['returned'] = $creditValues->returned;
