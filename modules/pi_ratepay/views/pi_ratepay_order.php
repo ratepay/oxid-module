@@ -62,7 +62,7 @@ class pi_ratepay_order extends pi_ratepay_order_parent
     {
         $this->_paymentId = $this->getBasket()->getPaymentId();
 
-        if($this->getSession()->getBasket()->getOrderId() != null) {
+        if($this->getSession()->getBasket()->getOrderId() == $this->getSession()->getVariable('pi_ratepay_shops_order_id')) {
 
             $trans_id = oxDb::getDb()->getOne("SELECT TRANSACTION_ID FROM pi_ratepay_orders WHERE ORDER_NUMBER = '" . $this->getSession()->getBasket()->getOrderId() . "'");
             $strans_id = oxDb::getDb()->getOne("SELECT TRANSACTION_SHORT_ID FROM pi_ratepay_orders WHERE ORDER_NUMBER = '" . $this->getSession()->getBasket()->getOrderId() . "'");
@@ -132,19 +132,22 @@ class pi_ratepay_order extends pi_ratepay_order_parent
 
                 try {
                     $oOrder = oxNew('oxorder');
-
                     // finalizing ordering process (validating, storing order into DB, executing payment, setting status ...)
                     $iSuccess = $oOrder->finalizeOrder($oBasket, $oUser);
 
                     // performing special actions after user finishes order (assignment to special user groups)
                     $oUser->onOrderExecute($oBasket, $iSuccess);
-                    $this->_saveRatepayOrder($oBasket->getOrderId());
-                    $oid = $oBasket->getOrderId();
+
+                    if($oBasket->getOrderId() != null && $oBasket->getOrderId() != $this->getSession()->getVariable('pi_ratepay_shops_order_id')) {
+                        $this->getSession()->setVariable('pi_ratepay_shops_order_id', $oBasket->getOrderId());
+                    }
+
+                    $this->_saveRatepayOrder($this->getSession()->getVariable('pi_ratepay_shops_order_id'));
                     $tid = $this->getSession()->getVariable($this->_paymentId . '_trans_id');
 
                     $orderLogs = pi_ratepay_LogsService::getInstance()->getLogsList("transaction_id = " . oxDb::getDb(true)->quote($tid));
                     foreach($orderLogs as $log) {
-                        $log->assign(array('order_number' => $oid));
+                        $log->assign(array('order_number' => $this->getSession()->getVariable('pi_ratepay_shops_order_id')));
                         $log->save();
                     }
 
