@@ -62,7 +62,8 @@ class pi_ratepay_order extends pi_ratepay_order_parent
     {
         $this->_paymentId = $this->getBasket()->getPaymentId();
 
-        if($this->getSession()->getBasket()->getOrderId() == $this->getSession()->getVariable('pi_ratepay_shops_order_id')) {
+        if($this->getSession()->getVariable('pi_ratepay_shops_order_id') != null &&
+           $this->getSession()->getBasket()->getOrderId() == $this->getSession()->getVariable('pi_ratepay_shops_order_id')) {
 
             $trans_id = oxDb::getDb()->getOne("SELECT TRANSACTION_ID FROM pi_ratepay_orders WHERE ORDER_NUMBER = '" . $this->getSession()->getBasket()->getOrderId() . "'");
             $strans_id = oxDb::getDb()->getOne("SELECT TRANSACTION_SHORT_ID FROM pi_ratepay_orders WHERE ORDER_NUMBER = '" . $this->getSession()->getBasket()->getOrderId() . "'");
