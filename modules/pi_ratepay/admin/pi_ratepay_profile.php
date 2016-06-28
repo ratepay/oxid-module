@@ -49,7 +49,6 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                 $config[$country][$methodShop]['security_code'] = $settings->pi_ratepay_settings__security_code->rawValue;
                 $config[$country][$methodShop]['sandbox'] = (bool) $settings->pi_ratepay_settings__sandbox->rawValue;
                 $config[$country][$methodShop]['logging'] = (bool) $settings->pi_ratepay_settings__logging->rawValue;
-                $config[$country][$methodShop]['whitelabel'] = (bool) $settings->pi_ratepay_settings__whitelabel->rawValue;
                 $config[$country][$methodShop]['duedate'] = $settings->pi_ratepay_settings__duedate->rawValue;
 
                 if (!empty($config[$country][$methodShop]['profile_id']) && !empty($config[$country][$methodShop]['security_code'])) {
@@ -125,7 +124,6 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                     'url' => $url,
                     'sandbox' => $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_sandbox_' . $methodShop . '_' . $country)),
                     'logging' => $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_logging_' . $methodShop . '_' . $country)),
-                    'whitelabel' => $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_whitelabel_' . $methodShop . '_' . $country)),
                 );//'duedate' => (int) oxRegistry::getConfig()->getRequestParameter('rp_duedate_' . $methodShop . '_' . $country)
 
 

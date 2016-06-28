@@ -213,7 +213,6 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                 $this->addTplParam($paymentMethod . '_minimumAmount', $settings->pi_ratepay_settings__limit_min->rawValue);
                 $this->addTplParam($paymentMethod . '_maximumAmount', $settings->pi_ratepay_settings__limit_max->rawValue);
                 $this->addTplParam($paymentMethod . '_duedays', $settings->pi_ratepay_settings__duedate->rawValue);
-                $this->addTplParam($paymentMethod . '_whitelabel', (bool) $settings->pi_ratepay_settings__whitelabel->rawValue);
                 $this->addTplParam($paymentMethod . '_iban_only', (bool) $settings->pi_ratepay_settings__iban_only->rawValue);
                 $this->addTplParam($paymentMethod . '_url', $settings->pi_ratepay_settings__url->rawValue);
 
