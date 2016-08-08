@@ -309,6 +309,12 @@ class pi_ratepay_Details extends oxAdminDetails
         $newVoucher->save();
         $this->_recalculateOrder($order, $oArticles, $voucherNr);
 
+        $tmptotal = 0;
+        foreach ($oArticles as $article){
+            if($article['shipped'] == 0){
+                $tmptotal += $article['totalprice'];
+            }
+        }
         $voucherId = $newVoucher->getId();
 
         $voucherDetails = oxNew('pi_ratepay_orderdetails');
@@ -316,8 +322,13 @@ class pi_ratepay_Details extends oxAdminDetails
         $voucherDetails->assign(array(
             'order_number' => $orderId,
             'article_number' => $voucherId,
-            'ordered' => 1
+            'ordered' => 1,
         ));
+        if ($tmptotal < $this->piRatepayVoucher){
+            $voucherDetails->assign(array(
+                'shipped' => 1,
+            ));
+        }
 
         $voucherDetails->save();
 
