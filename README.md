@@ -6,12 +6,16 @@
 |Author | `Sebastian Neumann`
 |Prefix | `pi`
 |Shop Version | `CE` `EE` `4.7.x-5.2.x`
-|Version | `3.3.0`
+|Version | `3.3.1`
 |Link | `http://www.ratepay.com`
 |Mail | `integration@ratepay.com`
 |Installation | `see separate installation manual`
 
 ## Changelog
+
+### Version 3.3.1 - 
+* renaming of paymentmethods improved
+* credit handling improved
 
 ### Version 3.3.0 - Released 2016-06-13
 * Oxid EE compatibility implemented

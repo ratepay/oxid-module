@@ -21,7 +21,7 @@
     <dt>
         <input id="payment_[{$sPaymentID}]" type="radio" name="paymentid" value="[{$sPaymentID}]" [{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]checked[{/if}] style="position:relative;">
         <label for="payment_[{$sPaymentID}]"><b>
-                [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_WHITELABEL_TEXT"}]
+                [{$paymentmethod->oxpayments__oxdesc->value}]
         </b></label>
     </dt>
     <dd class="[{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]activePayment[{/if}]">
@@ -32,25 +32,6 @@
             </p>
         </div>
         [{/if}]
-        </br>
-        [{if $oView->getActiveLangAbbr() == 'de' || $oView->getActiveLangAbbr() == 'en' }]
-        <div id="policy[{$sPaymentID}]" style="display: none;">
-            <p>
-                <font style="font-weight: bold;">[{$oxcmp_shop->oxshops__oxname->value}]</font>
-                [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_1"}]
-                [{$pi_ratepay_elv_duedays}]
-                [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_1_PART_2"}]
-            </p>
-            <p>
-                [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_2"}]
-                [{$pi_ratepay_elv_minimumAmount}] [{$currency->sign}]
-                [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_3"}]
-                [{$pi_ratepay_elv_maximumAmount}] [{$currency->sign}]
-                [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_INFORMATION_TEXT_4"}]
-            </p>
-        </div>
-        [{/if}]
-        <br/>
         <br/>
         <div style="border: 1px solid #BDBDBD; padding-left: 4px;">
             [{oxmultilang ident="PI_RATEPAY_VIEW_RATEPAY_ADDRESS"}]
