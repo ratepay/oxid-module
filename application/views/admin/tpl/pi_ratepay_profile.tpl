@@ -94,16 +94,6 @@
                                                         </td>
                                                     </tr><tr>
                                                         <td class="edittext">
-                                                            [{oxmultilang ident="PI_RATEPAY_PROFILE_SETTINGS_WHITELABEL"}]:
-                                                        </td><td class="edittext">
-                                                            [{if $methodValue.whitelabel === true}]
-                                                        <input type="checkbox" name="rp_whitelabel_[{$method}]_[{$country}]" checked='checked' value='on'>
-                                                            [{else}]
-                                                        <input type="checkbox" name="rp_whitelabel_[{$method}]_[{$country}]">
-                                                            [{/if}]
-                                                        </td>
-                                                    </tr><tr>
-                                                        <td class="edittext">
                                                             [{oxmultilang ident="PI_RATEPAY_PROFILE_SETTINGS_SANDBOX"}]:
                                                         </td><td class="edittext">
                                                             [{if $methodValue.sandbox === true}]
