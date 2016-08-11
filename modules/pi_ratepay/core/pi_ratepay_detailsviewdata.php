@@ -98,6 +98,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['returned'] = $articlesValues->returned;
             $articleList[$i]['cancelled'] = $articlesValues->cancelled;
             $articleList[$i]['currency'] = $articlesValues->oxcurrency;
+            $articleList[$i]['bruttoprice'] = (float) $articlesValues->oxbprice;
             
             if (($articlesValues->ordered - $articlesValues->returned - $articlesValues->cancelled) > 0) {
                 $articleList[$i]['totalprice'] = (float) $articlesValues->oxbprice * ($articleList[$i]['ordered'] - $articleList[$i]['returned'] - $articleList[$i]['cancelled']);

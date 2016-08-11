@@ -311,10 +311,11 @@ class pi_ratepay_Details extends oxAdminDetails
 
         $tmptotal = 0;
         foreach ($oArticles as $article){
-            if($article['shipped'] == 0){
-                $tmptotal += $article['totalprice'];
+            if($article['amount'] > 0){
+                $tmptotal += $article['amount'] * $article['bruttoprice'];
             }
         }
+
         $voucherId = $newVoucher->getId();
 
         $voucherDetails = oxNew('pi_ratepay_orderdetails');
