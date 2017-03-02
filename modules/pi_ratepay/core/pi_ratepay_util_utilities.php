@@ -39,7 +39,7 @@ class pi_ratepay_util_Utilities
      */
     public static $_RATEPAY_ALLOWED_COUNTRIES = array('de', 'at', 'ch', 'nl');
 
-    const PI_MODULE_VERSION = '3.3.1';
+    const PI_MODULE_VERSION = '3.3.2';
 
     public static function getPaymentMethod($paymentType)
     {

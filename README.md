@@ -3,15 +3,19 @@
 
 |Module | RatePAY Payment Module for OXID
 |------|----------
-|Author | `Sebastian Neumann`
+|Author | `Annegret Seufert`
 |Prefix | `pi`
 |Shop Version | `CE` `EE` `4.7.x-5.2.x`
-|Version | `3.3.1`
+|Version | `3.3.2`
 |Link | `http://www.ratepay.com`
 |Mail | `integration@ratepay.com`
 |Installation | `see separate installation manual`
 
 ## Changelog
+
+### Version 3.3.2 - 
+* SEPA - BIC field removed
+* IBAN country prefix validation removed
 
 ### Version 3.3.1 - 
 * renaming of paymentmethods improved
