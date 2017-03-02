@@ -89,12 +89,6 @@
                 <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_IBAN"}]:</label>
                 <input name='pi_ratepay_elv_bank_iban' maxlength='50' size='37' type='text' value='[{$pi_ratepay_elv_bank_iban}]'/>
             </li>
-            [{if $pi_ratepay_elv_country != "de"}]
-                <li id="PI_RATEPAY_ELV_VIEW_BANK_CODE">
-                    <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_BIC"}]:</label>
-                    <input name='pi_ratepay_elv_bank_bic' maxlength='255' size='37' type='text' value='[{$pi_ratepay_elv_bank_bic}]'/>
-                </li>
-            [{/if}]
         </ul>
         [{if !$pi_ratepay_elv_iban_only}]
         <ul class="form" id="pi_ratepay_elv_classic_bankdata" [{if $pi_ratepay_elv_bank_datatype=="sepa"}] style="display: none" [{/if}]>
@@ -105,10 +99,6 @@
             <li>
                 <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_ACCOUNT_NUMBER"}]:</label>
                 <input name='pi_ratepay_elv_bank_account_number' maxlength='50' size='37' type='text' value='[{$pi_ratepay_elv_bank_account_number}]' />
-            </li>
-            <li id="PI_RATEPAY_ELV_VIEW_BANK_CODE">
-                <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_CODE"}]:</label>
-                <input name='pi_ratepay_elv_bank_code' maxlength='255' size='37' type='text' value='[{$pi_ratepay_elv_bank_code}]'/>
             </li>
         </ul>
         [{/if}]

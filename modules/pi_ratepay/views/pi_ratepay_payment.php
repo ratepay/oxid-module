@@ -650,7 +650,6 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         $accountNumber = $this->_xTrim(oxRegistry::getConfig()->getRequestParameter($paymentMethod . '_bank_account_number'));
         $iban          = $this->_xTrim(oxRegistry::getConfig()->getRequestParameter($paymentMethod . '_bank_iban'));
         $bankCode      = $this->_xTrim(oxRegistry::getConfig()->getRequestParameter($paymentMethod . '_bank_code'));
-        $bic           = $this->_xTrim(oxRegistry::getConfig()->getRequestParameter($paymentMethod . '_bank_bic'));
 
         /* bank errors
             account numberKey => -501
@@ -687,10 +686,7 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
             if (empty($iban)) {
                 $isBankDataValid = false;
                 $this->_errors[] = '-501';
-            } elseif ($countryPrefix != $userCountry) {
-                $isBankDataValid = false;
-                $this->_errors[] = '-501';
-            }elseif (!is_numeric($numericPart)) {
+            } elseif (!is_numeric($numericPart)) {
                 $isBankDataValid = false;
                 $this->_errors[] = '-501';
             } elseif ($countryPrefix == "DE" && strlen($iban) <> 22) {
@@ -704,15 +700,6 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                 $this->_errors[] = '-501';
             }
 
-            if ($userCountry != "DE") {
-                if (empty($bic)) {
-                    $isBankDataValid = false;
-                    $this->_errors[] = '-510';
-                } elseif (strlen($bic) < 8 || strlen($bic) > 11) {
-                    $isBankDataValid = false;
-                    $this->_errors[] = '-510';
-                }
-            }
         }
 
         if ($isBankDataValid) {
@@ -722,7 +709,6 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                 $this->getSession()->setVariable($paymentMethod . '_bank_code', $bankCode);
             } else {
                 $this->getSession()->setVariable($paymentMethod . '_bank_iban', $iban);
-                $this->getSession()->setVariable($paymentMethod . '_bank_bic', $bic);
             }
 
             /*if ($this->_isSaveBankDataSet()) {
@@ -928,7 +914,6 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                 $this->addTplParam($paymentMethod . '_bank_code', $session->getVariable($paymentMethod . '_bank_code'));
             } else {
                 $this->addTplParam($paymentMethod . '_bank_iban', $session->getVariable($paymentMethod . '_bank_iban'));
-                $this->addTplParam($paymentMethod . '_bank_bic', $session->getVariable($paymentMethod . '_bank_bic'));
             }
         } else {
             $this->addTplParam($paymentMethod . '_bank_datatype', 'sepa');

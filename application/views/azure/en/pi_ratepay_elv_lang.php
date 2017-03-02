@@ -59,13 +59,10 @@ $aLang = array(
     'PI_RATEPAY_ERROR_COMPANY'                     => $piErrorCompany,
     'PI_RATEPAY_ELV_ERROR_OWNER'                   => 'Um eine Zahlung per RatePAY SEPA-Lastschrift durchzuf&uuml;hren, geben Sie bitte den Namen des Kontoinhabers ein.',
     'PI_RATEPAY_ELV_ERROR_ACCOUNT_NUMBER'          => 'Um eine Zahlung per RatePAY SEPA-Lastschrift durchzuf&uuml;hren, geben Sie bitte die Kontonummer ein.',
-    'PI_RATEPAY_ELV_ERROR_CODE'                    => 'Um eine Zahlung per RatePAY SEPA-Lastschrift durchzuf&uuml;hren, geben Sie bitte die BLZ ein.',
     'PI_RATEPAY_ELV_ERROR_NAME'                    => 'Um eine Zahlung per RatePAY SEPA-Lastschrift durchzuf&uuml;hren, geben Sie bitte den Banknamen ein.',
     'PI_RATEPAY_ELV_VIEW_BANK_OWNER'               => 'Kontoinhaber',
     'PI_RATEPAY_ELV_VIEW_BANK_ACCOUNT_NUMBER'       => 'Kontonummer',
     'PI_RATEPAY_ELV_VIEW_BANK_IBAN'                 => 'IBAN',
-    'PI_RATEPAY_ELV_VIEW_BANK_CODE'                 => 'BLZ',
-    'PI_RATEPAY_ELV_VIEW_BANK_BIC'                  => 'BIC',
     'PI_RATEPAY_ELV_VIEW_BANK_NAME'                => 'Kreditinstitut',
     'PI_RATEPAY_ELV_ERROR_BANKCODE_TO_SHORT'       => 'Die Bankleitzahl muss acht Zeichen lang sein.'
 );

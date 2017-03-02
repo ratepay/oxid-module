@@ -209,16 +209,12 @@ abstract class pi_ratepay_RequestAbstract extends oxSuperCfg
         $bankAccountNumber = $this->getSession()->getVariable($paymentType . '_bank_account_number');
         $bankCode          = $this->getSession()->getVariable($paymentType . '_bank_code');
         $bankIban          = $this->getSession()->getVariable($paymentType . '_bank_iban');
-        $bankBic           = $this->getSession()->getVariable($paymentType . '_bank_bic');
 
         if ($bankDataType == 'classic') {
             $bankData['bankAccountNumber'] = $bankAccountNumber;
             $bankData['bankCode']          = $bankCode;
         } else {
             $bankData['bankIban'] = $bankIban;
-            if (!empty($bankBic)) {
-                $bankData['bankBic'] = $bankBic;
-            }
         }
 
         return $bankData;

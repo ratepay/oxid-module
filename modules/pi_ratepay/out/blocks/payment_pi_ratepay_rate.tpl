@@ -70,10 +70,6 @@
                 <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_ACCOUNT_NUMBER"}]:</label>
                 <input name='pi_ratepay_rate_bank_account_number' maxlength='255' size='37' type='text' value='[{$piDbBankaccountnumber}]'/>
             </li>
-            <li>
-                <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_CODE"}]:</label>
-                <input name='pi_ratepay_rate_bank_code' maxlength='255' size='37' type='text' value='[{$piDbBankcode}]'/>
-            </li>
         </ul>
         [{/if}]
     </dd>

@@ -529,9 +529,6 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
         if (isset($bankdata['bankIban'])) {
             $bankAccount->addChild('iban', $bankdata['bankIban']);
         }
-        if (isset($bankdata['bankBic'])) {
-            $bankAccount->addChild('bic-swift', $bankdata['bankBic']);
-        }
     }
 
     /**
@@ -920,7 +917,6 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
                 $this->_getPaymentType() . '_bank_account_number',
                 $this->_getPaymentType() . '_bank_code',
                 $this->_getPaymentType() . '_bank_iban',
-                $this->_getPaymentType() . '_bank_bic'
             );
 
             foreach ($bankDataSessionKeys as $key) {
