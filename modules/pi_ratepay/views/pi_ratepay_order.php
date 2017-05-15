@@ -133,8 +133,9 @@ class pi_ratepay_order extends pi_ratepay_order_parent
                             $this->getSession()->setVariable('pi_ratepay_denied', 'denied');
                     }
 
+                    $message = $this->getSession()->getVariable($this->_paymentId . '_message');
                     if ($this->getSession()->getVariable($this->_paymentId . '_error_id') == $paymentMethodIds[$this->_paymentId]['soft'] &&
-                        !empty($this->getSession()->getVariable($this->_paymentId . '_message')))
+                        !empty($message))
                     {
                         $this->getSession()->setVariable($this->_paymentId . '_error_id', $paymentMethodIds[$this->_paymentId]['soft']);
                     } else {

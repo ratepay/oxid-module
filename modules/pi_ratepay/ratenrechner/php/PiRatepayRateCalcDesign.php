@@ -14,7 +14,7 @@
 
 
     $pi_calculator->unsetData();
-    $pi_monthAllowed = json_decode($pi_calculator->getRatepayRateMonthAllowed());
+    $pi_monthAllowed = $pi_calculator->getRatepayRateMonthAllowed();
     $pi_amount = $pi_calculator->getRequestAmount();
     $pi_language = $pi_calculator->getLanguage();
     $pi_firstday = $pi_calculator->getRequestFirstday();

@@ -192,7 +192,9 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                 // save installment configuration
                 if ($methodShop == 'rate' && $methodActive && $profileRequest) {
                     $installmentSaveArray = array(
-                        'month_allowed' => "[" . $profileRequest['installment_configuration']['month-allowed'] . "]"
+                        'month_allowed' => "[" . $profileRequest['installment_configuration']['month-allowed'] . "]",
+                        'min_rate' => $profileRequest['installment_configuration']['rate-min-normal'],
+                        'interest_rate' => $profileRequest['installment_configuration']['interestrate-default'],
                     );
 
                     $insertSql = $this->_createUpdateSql($installmentSaveArray, $shopId, $country, $methodDB);

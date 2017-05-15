@@ -128,7 +128,21 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
         $settings = oxNew('pi_ratepay_settings');
         $settings->loadByType('installment', oxRegistry::getSession()->getVariable('shopId'), oxRegistry::getSession()->getVariable('pi_ratepay_rate_usr_country'));
 
-        return $settings->pi_ratepay_settings__month_allowed->rawValue;
+        $basketAmount = (float)$this->getRequestAmount();
+        $rateMinNormal = $settings->pi_ratepay_settings__min_rate->rawValue;
+        $runTimes = json_decode($settings->pi_ratepay_settings__month_allowed->rawValue);
+        $interestRate = ((float)$settings->pi_ratepay_settings__interest_rate->rawValue / 12) / 100;
+
+        foreach ($runTimes AS $month) {
+            $rateAmount = ceil($basketAmount * (($interestRate * pow((1 + $interestRate), $month)) / (pow((1 + $interestRate), $month) - 1)));
+
+            if($rateAmount >= $rateMinNormal) {
+                $allowedRuntimes[] = $month;
+            }
+        }
+
+        return $allowedRuntimes;
+
     }
 
     /**
