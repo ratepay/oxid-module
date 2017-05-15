@@ -407,6 +407,13 @@ class pi_ratepay_Details extends oxAdminDetails
             $this->updateOrder($articleList, $this->_isPaymentChangeFull());
             $isSuccess = 'pisuccess';
         }
+
+        if ($this->_isPaymentChangeFull()) {
+            $paymentChangeType = 'full-' . $paymentChangeType;
+        } else {
+            $paymentChangeType = 'partial-' . $paymentChangeType;
+        }
+
         $this->addTplParam($isSuccess, $paymentChangeType);
     }
 
@@ -721,7 +728,7 @@ class pi_ratepay_Details extends oxAdminDetails
     private function _setContentInvoicing($content)
     {
         $invoiceId = oxDb::getDb()->getOne("SELECT OXBILLNR FROM `oxorder`	WHERE OXID LIKE '" . $this->_getOrderId() . "'");
-        
+
         if (!empty($invoiceId)) {
             $invoicing = $content->addChild('invoicing');
             $invoicing->addChild('invoice_id', $invoiceId);
