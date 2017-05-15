@@ -125,6 +125,10 @@
     [{if $pierror == "-461"}]
         <div class="status error">[{ oxmultilang ident="PI_RATEPAY_ERROR_PRIVACY_AGREEMENT" }]</div>
     [{/if}]
+
+    [{if $pierror == "-001"}]
+        <div class="status error">[{$customer_message}]</div>
+    [{/if}]
 [{/foreach}]
 
 <script type="text/javascript">

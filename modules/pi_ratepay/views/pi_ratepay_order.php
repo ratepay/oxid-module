@@ -83,15 +83,18 @@ class pi_ratepay_order extends pi_ratepay_order_parent
             $paymentMethodIds = array(
                 'pi_ratepay_rechnung' => array(
                     'connection_timeout' => '-418',
-                    'denied' => '-400'
+                    'denied' => '-400',
+                    'soft' => '-001',
                 ),
                 'pi_ratepay_rate' => array(
                     'connection_timeout' => '-418',
-                    'denied' => '-407'
+                    'denied' => '-407',
+                    'soft' => '-001',
                 ),
                 'pi_ratepay_elv' => array(
                     'connection_timeout' => '-418',
-                    'denied' => '-300'
+                    'denied' => '-300',
+                    'soft' => '-001',
                 )
             );
 
@@ -123,11 +126,21 @@ class pi_ratepay_order extends pi_ratepay_order_parent
                 }
 
                 if (!$this->_ratepayRequest()) {
-                    if (!$this->getSession()->getVariable($this->_paymentId . '_error_id') == $paymentMethodIds[$this->_paymentId]['connection_timeout'] &&
-                        !$this->_isSandbox(pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId))) {
-                        $this->getSession()->setVariable('pi_ratepay_denied', 'denied');
+                    if ((!$this->getSession()->getVariable($this->_paymentId . '_error_id') == $paymentMethodIds[$this->_paymentId]['connection_timeout']) &&
+                        (!$this->getSession()->getVariable($this->_paymentId . '_error_id') == $paymentMethodIds[$this->_paymentId]['soft']) &&
+                        !$this->_isSandbox(pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId)))
+                    {
+                            $this->getSession()->setVariable('pi_ratepay_denied', 'denied');
                     }
-                    $this->getSession()->setVariable($this->_paymentId . '_error_id', $paymentMethodIds[$this->_paymentId]['denied']);
+
+                    if ($this->getSession()->getVariable($this->_paymentId . '_error_id') == $paymentMethodIds[$this->_paymentId]['soft'] &&
+                        !empty($this->getSession()->getVariable($this->_paymentId . '_message')))
+                    {
+                        $this->getSession()->setVariable($this->_paymentId . '_error_id', $paymentMethodIds[$this->_paymentId]['soft']);
+                    } else {
+                        $this->getSession()->setVariable($this->_paymentId . '_error_id', $paymentMethodIds[$this->_paymentId]['denied']);
+
+                    }
                     oxRegistry::getUtils()->redirect($this->getConfig()->getSslShopUrl() . 'index.php?cl=payment', false);
                 }
 
@@ -246,10 +259,17 @@ class pi_ratepay_order extends pi_ratepay_order_parent
         pi_ratepay_LogsService::getInstance()->logRatepayTransaction('', $transactionId, $paymentMethod, $paymentRequestType, '', $requestPayment['request'], $name, $surname, $requestPayment['response']);
 
         if ($requestPayment['response']) {
-            if (((string) $requestPayment['response']->head->processing->status->attributes()->code) == "OK" && ((string) $requestPayment['response']->head->processing->result->attributes()->code) == "402") {
+            if (((string) $requestPayment['response']->head->processing->status->attributes()->code) == "OK" &&
+                ((string) $requestPayment['response']->head->processing->result->attributes()->code) == "402")
+            {
                 $descriptor = (string) $requestPayment['response']->content->payment->descriptor;
                 $this->getSession()->setVariable($this->_paymentId . '_descriptor', $descriptor);
                 return true;
+            } elseif (((string) $requestPayment['response']->head->processing->status->attributes()->code) == "ERROR" &&
+                     ((string) $requestPayment['response']->head->processing->result->attributes()->code) == "150") {
+                $vars = get_object_vars($requestPayment['response']->head->processing);
+                $this->getSession()->setVariable($this->_paymentId . '_error_id', "-001");
+                $this->getSession()->setVariable($this->_paymentId . '_message', (string)$vars['customer-message']);
             }
         } else {
             $this->getSession()->setVariable($this->_paymentId . '_error_id', "-418");

@@ -174,6 +174,10 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                         'delivery_countries' => $profileRequest['profile']['country-code-delivery']
                     );
 
+                    if (empty($secondSaveArray['b2b']) || $secondSaveArray['b2b'] == 0) {
+                        $secondSaveArray['b2b'] = (int) $profileRequest['profile']['tx-limit-' . $methodDB . '-max'];
+                    }
+
                     $insertSql = $this->_createUpdateSql($secondSaveArray, $shopId, $country, $methodDB);
                     $this->_insertSettings($insertSql);
                 }
