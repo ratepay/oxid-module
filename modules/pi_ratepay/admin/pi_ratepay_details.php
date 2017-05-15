@@ -602,9 +602,7 @@ class pi_ratepay_Details extends oxAdminDetails
     {
         $content = $request->addChild('content');
         if ($operation == "CONFIRMATION_DELIVER") {
-            /*if ($this->_getPaymentSid() === 'pi_ratepay_rechnung' || $this->_getPaymentSid() === 'pi_ratepay_elv') {
-                $this->_setContentInvoicing($content);
-            }*/
+            $this->_setContentInvoicing($content);
             $this->setRatepayContentBasket($content);
         } else if ($operation == "PAYMENT_CHANGE") {
             $total = $this->_orderTotalAmount($subtype);
@@ -722,9 +720,13 @@ class pi_ratepay_Details extends oxAdminDetails
      */
     private function _setContentInvoicing($content)
     {
-        $dueDays = $this->_getSettings()->pi_ratepay_settings__duedate->rawValue;
-        $invoicing = $content->addChild('invoicing');
-        $invoicing->addChild('due-date', date(DATE_ATOM, mktime(date("H"), date("i"), date("s"), date("m"), date("d") + $dueDays, date("Y"))));
+        $invoiceId = oxDb::getDb()->getOne("SELECT OXBILLNR FROM `oxorder`	WHERE OXID LIKE '" . $this->_getOrderId() . "'");
+        
+        if (!empty($invoiceId)) {
+            $invoicing = $content->addChild('invoicing');
+            $invoicing->addChild('invoice_id', $invoiceId);
+            $invoicing->addChild('invoice_date', date(DATE_ATOM, mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y"))));
+        }
     }
 
     /**
