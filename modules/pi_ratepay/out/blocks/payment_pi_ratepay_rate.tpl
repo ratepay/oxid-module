@@ -72,6 +72,28 @@
             </li>
         </ul>
         [{/if}]
+        [{ if isset($error)}]
+        <div class="status error">[{ oxmultilang ident="PI_RATEPAY_RECHNUNG_AGBERROR" }]</div>
+        [{/if}]
+
+        <br/>
+        <link type="text/css" rel="stylesheet" href="modules/pi_ratepay/ratenrechner/css/style.css"/>
+        <script type="text/javascript" src="[{$oViewConf->getModuleUrl('pi_ratepay')}]ratenrechner/js/path.js"></script>
+        <script type="text/javascript" src="[{$oViewConf->getModuleUrl('pi_ratepay')}]ratenrechner/js/layout.js"></script>
+        <script type="text/javascript" src="[{$oViewConf->getModuleUrl('pi_ratepay')}]ratenrechner/js/ajax.js"></script>
+        <script type="text/javascript" src="[{$oViewConf->getModuleUrl('pi_ratepay')}]ratenrechner/js/mouseaction.js"></script>
+        [{if $pierror == "-461"}]
+        <div class="status error">
+            [{oxmultilang ident="PI_RATEPAY_RATE_ERROR_CALCULATE_TO_PROCEED"}]
+        </div>
+        [{/if}]
+        <div id="pirpmain-cont"></div>
+        <script type="text/javascript">
+            if(document.getElementById('pirpmain-cont')){
+                piLoadrateCalculator();
+            }
+
+        </script>
     </dd>
 </dl>
 

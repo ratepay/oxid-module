@@ -315,11 +315,6 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                     oxRegistry::getUtils()->redirect($this->getConfig()->getSslShopUrl() . 'index.php?cl=payment', false);
                 }
             }
-
-            if ($this->_selectedPaymentMethod === 'pi_ratepay_rate') {
-                $this->getSession()->setVariable('pi_ratepay_rate_usr_country', $this->_getCountry());
-                $nextStep = 'pi_ratepay_rate_calc';
-            }
         }
 
         return $nextStep;
