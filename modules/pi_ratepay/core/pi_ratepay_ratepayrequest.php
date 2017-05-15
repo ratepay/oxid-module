@@ -238,7 +238,10 @@ class pi_ratepay_RatepayRequest extends oxSuperCfg
         $operation = 'PROFILE_REQUEST';
         $ratepay = $this->_getXmlService();
         $request = $ratepay->getXMLObject();
-        $this->_setRatepayHead($request, $operation);
+
+        $head = $this->_setRatepayHead($request, $operation);
+        $this->_setRatepayHeadMeta($head);
+        
         $requestProfile = array(
             'request' => $request,
             'response' => $ratepay->paymentOperation($request, $this->_getPaymentMethod(), $this->_shopId, $country)
