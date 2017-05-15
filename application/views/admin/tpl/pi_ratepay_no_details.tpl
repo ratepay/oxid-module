@@ -14,14 +14,4 @@
 * @copyright (C) 2011 PayIntelligent GmbH  <http://www.payintelligent.de/>
 * @license	http://www.gnu.org/licenses/  GNU General Public License 3
 *-->
-[{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign}]
-
-[{ oxmultilang ident="PI_RATEPAY_NODETAILS" }]
-
-<form name="transfer" id="transfer" action="[{ $oViewConf->getSelfLink() }]" method="post">
-    [{ $oViewConf->getHiddenSid() }]
-    <input type="hidden" name="oxid" value="[{ $oxid }]">
-    <input type="hidden" name="cl" value="pi_ratepay_details">
-</form>
-
-[{include file="bottomitem.tpl"}]
+[{include file="../../../../modules/pi_ratepay/out/admin/tpl/pi_ratepay_no_details.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign}]
