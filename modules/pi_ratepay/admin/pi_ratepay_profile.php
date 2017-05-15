@@ -165,6 +165,7 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                     $secondSaveArray = array(
                         'limit_min' => (int) $profileRequest['profile']['tx-limit-' . $methodDB . '-min'],
                         'limit_max' => (int) $profileRequest['profile']['tx-limit-' . $methodDB . '-max'],
+                        'limit_max_b2b' => (int) $profileRequest['profile']['tx-limit-' . $methodDB . '-max-b2b'],
                         'b2b' => $this->_isParameterCheckedYes($profileRequest['profile']['b2b-' . $methodDB]),
                         'ala' => $this->_isParameterCheckedYes($profileRequest['profile']['delivery-address-' . $methodDB]),
                         'dfp' => $this->_isParameterCheckedYes($profileRequest['profile']['eligibility-device-fingerprint']),

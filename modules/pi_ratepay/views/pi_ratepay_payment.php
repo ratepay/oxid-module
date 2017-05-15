@@ -127,8 +127,9 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         $settings = $this->_getRatePaySettings($paymentMethod);
         $limitMin = (int) $settings->pi_ratepay_settings__limit_min->rawValue;
         $limitMax = (int) $settings->pi_ratepay_settings__limit_max->rawValue;
+        $limitMaxB2B = (int) $settings->pi_ratepay_settings__limit_max_b2b->rawValue;
         $basketAmount = $this->getSession()->getBasket()->getPrice()->getNettoPrice();
-        return ($basketAmount >= $limitMin && $basketAmount <= $limitMax);
+        return ($basketAmount >= $limitMin && ($basketAmount <= $limitMax || $basketAmount <= $limitMaxB2B));
     }
     /**
      * Checks if b2b is used and allowed.
@@ -137,7 +138,7 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
      */
     private function _checkB2B($paymentMethod) {
         $settings = $this->_getRatePaySettings($paymentMethod);
-        $b2b = (bool) $settings->pi_ratepay_settings__b2b->rawValue;
+        $b2b = (bool)$settings->pi_ratepay_settings__b2b->rawValue;
         $company = (!empty($this->getUser()->oxuser__oxcompany->value));
         return (!$company || $b2b);
     }
