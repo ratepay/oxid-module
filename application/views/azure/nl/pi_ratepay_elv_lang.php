@@ -34,6 +34,7 @@ $aLang = array(
     'PI_RATEPAY_ELV_VIEW_CREDITOR_ID_VALUE'         => 'DE39RPY00000568463',
     'PI_RATEPAY_ELV_VIEW_MANDATE_TEXT'              => 'Kenmerk machtiging',
     'PI_RATEPAY_ELV_VIEW_MANDATE_VALUE'             => '(wordt na aankoop medegedeeld)',
+    'PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT'         => 'Einwilligungserklärung zum SEPA-Mandat lesen',
     'PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_1'  => 'Ik ga hiermee akkoord met het overdragen van mijn gegevens aan ',
     'PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_2'  => ' volgens het ',
     'PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_3'  => ' sowie der ',

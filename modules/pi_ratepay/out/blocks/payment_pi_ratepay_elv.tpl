@@ -15,6 +15,10 @@
                 document.getElementById('pi_ratepay_elv_bank_datatype').value = 'sepa';
             }
         }
+        function showAgreement() {
+            document.getElementById('pi_ratepay_elv_sepa_agreement').style.display = 'block';
+            document.getElementById('pi_ratepay_elv_sepa_agreement_link').style.display = 'none';
+        }
     </script>
     [{/if}]
 <dl>
@@ -106,18 +110,21 @@
             <table>
                 <tr>
                     <td>
-                        <input type="checkbox" name="pi_ratepay_elv_privacy" value="1" style="float: left;" />
+                        <input type="hidden" name="pi_ratepay_elv_privacy" value="1" style="float: left;" />
                     </td>
                     <td>
-                        [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_1"}]
-                        [{oxmultilang ident="PI_RATEPAY_VIEW_RATEPAY_ADDRESS"}]
-                        [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_2"}]
-                        <a href='[{$pi_ratepay_elv_url}]' target='_blank' style="text-decoration:underline;">[{oxmultilang ident="PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_PRIVACYPOLICY"}]</a>
-                        [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_4"}]
-                        <br/><br/>
-                        [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_5"}]
-                        </br>
-                        [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_6"}]
+                        <a id="pi_ratepay_elv_sepa_agreement_link" onclick="showAgreement();">[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT"}]</a>
+                        <span id="pi_ratepay_elv_sepa_agreement" style="display: none">
+                            [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_1"}]
+                            [{oxmultilang ident="PI_RATEPAY_VIEW_RATEPAY_ADDRESS"}]
+                            [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_2"}]
+                            <a href='[{$pi_ratepay_elv_url}]' target='_blank' style="text-decoration:underline;">[{oxmultilang ident="PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_PRIVACYPOLICY"}]</a>
+                            [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_4"}]
+                            <br/><br/>
+                            [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_5"}]
+                            </br>
+                            [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_6"}]
+                        </span>
                     </td>
                 </tr>
             </table>
