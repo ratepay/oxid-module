@@ -104,7 +104,7 @@
                     </td>
                     <td></td>
                     <td id="piInstallmentSecondTd">&nbsp;<?php echo $pi_resultArray['amount']; ?>&nbsp;</td>
-                    <td id="piInstallmentThirdTd" class="piRpTextAlignLeft">&euro;</td>
+                    <td id="piInstallmentThirdTd" class="piRpTextAlignLeft"></td>
                 </tr>
 
                 <tr class="piTableHr">
@@ -121,7 +121,7 @@
                     </td>
                     <td></td>
                     <td>&nbsp;<?php echo $pi_resultArray['serviceCharge']; ?>&nbsp;</td>
-                    <td class="piRpTextAlignLeft">&euro;</td>
+                    <td class="piRpTextAlignLeft"></td>
                 </tr>
 
                 <tr class="piPriceSectionHead">
@@ -169,7 +169,7 @@
                     </td>
                     <td></td>
                     <td>&nbsp;<?php echo $pi_resultArray['interestAmount']; ?>&nbsp;</td>
-                    <td class="piRpTextAlignLeft">&euro;</td>
+                    <td class="piRpTextAlignLeft"></td>
                 </tr>
 
                 <tr>
@@ -186,7 +186,7 @@
                     </td>
                     <td></td>
                     <td><b>&nbsp;<?php echo $pi_resultArray['totalAmount']; ?>&nbsp;</b></td>
-                    <td class="piRpTextAlignLeft"><b>&euro;</b></td>
+                    <td class="piRpTextAlignLeft"><b></b></td>
                 </tr>
                 <tr>
                     <td colspan="4"><div class="piRpFloatLeft">&nbsp;<div></td>
@@ -231,7 +231,7 @@
                         </div>
                     </td>
                     <td colspan="2"><b>&nbsp;<?php echo $pi_resultArray['rate'];?>&nbsp;</b></td>
-                    <td class="piRpPaddingRight"><b>&euro;</b></td>
+                    <td class="piRpPaddingRight"><b></b></td>
                 </tr>
                 <tr class="piRpyellow piRpPaddingBottom">
                     <td class="piRpPaddingBottom">
@@ -250,7 +250,7 @@
                     <td colspan="2" class="piRpPaddingBottom">
                         <b>&nbsp;<?php echo $pi_resultArray['lastRate']; ?>&nbsp;</b>
                     </td>
-                    <td class="piRpPaddingRight piRpPaddingBottom"><b>&euro;</b></td>
+                    <td class="piRpPaddingRight piRpPaddingBottom"><b></b></td>
                 </tr>
                 <tr>
                     <td colspan="4">

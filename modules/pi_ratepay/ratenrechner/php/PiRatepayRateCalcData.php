@@ -247,7 +247,7 @@ class PiRatepayRateCalcData implements PiRatepayRateCalcDataInterface
         $array = array(
             'total_amount'           => oxRegistry::getSession()->getVariable('pi_ratepay_rate_total_amount'),
             'amount'                 => oxRegistry::getSession()->getVariable('pi_ratepay_rate_amount'),
-            'interest_rate'          => oxRegistry::getSession()->getVariable('pi_ratepay_rate_interest_amount'),
+            'interest_rate'          => oxRegistry::getSession()->getVariable('pi_ratepay_rate_interest_rate'),
             'interest_amount'        => oxRegistry::getSession()->getVariable('pi_ratepay_rate_interest_amount'),
             'service_charge'         => oxRegistry::getSession()->getVariable('pi_ratepay_rate_service_charge'),
             'annual_percentage_rate' => oxRegistry::getSession()->getVariable('pi_ratepay_rate_annual_percentage_rate'),
