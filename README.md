@@ -6,12 +6,21 @@
 |Author | `Annegret Seufert`
 |Prefix | `pi`
 |Shop Version | `CE` `EE` `4.7.x-5.2.x`
-|Version | `3.3.2`
+|Version | `3.3.3`
 |Link | `http://www.ratepay.com`
 |Mail | `integration@ratepay.com`
 |Installation | `see separate installation manual`
 
 ## Changelog
+
+### Version 3.3.3 - Released 2017-05-15
+* compatibility for oxid version 4.10.2
+* fix tooltip for retour at the admin panel
+* only show possibl months ind the calculator
+* send invoice information at the confirmation delivery request
+* add extendet responses
+* add b2b max limit configuration
+* rate calculation without intermediate step
 
 ### Version 3.3.2 - 
 * SEPA - BIC field removed
