@@ -251,6 +251,9 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
 
                 $settings = $this->_getRatePaySettings($paymentMethod);
             }
+            if ($this->getSession()->hasVariable($paymentMethod . '_message')) {
+               $this->addTplParam('customer_message', $this->getSession()->getVariable($paymentMethod . '_message'));
+            }
         }
 
         if ($paymentMethod === 'pi_ratepay_elv') { // || $paymentMethod === 'pi_ratepay_rate'
