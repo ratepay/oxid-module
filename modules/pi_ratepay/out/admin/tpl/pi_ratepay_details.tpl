@@ -1,172 +1,405 @@
 <!--
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * @category  PayIntelligent
- * @package   PayIntelligent_RatePAY_Rechnung
- * @copyright (C) 2011 PayIntelligent GmbH  <http://www.payintelligent.de/>
- * @license	http://www.gnu.org/licenses/  GNU General Public License 3
- *-->
-[{include file="headitem.tpl" title="[ratepay]"}]
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* @category  PayIntelligent
+* @package   PayIntelligent_RatePAY_Rechnung
+* @copyright (C) 2011 PayIntelligent GmbH  <http://www.payintelligent.de/>
+* @license	http://www.gnu.org/licenses/  GNU General Public License 3
+*-->
 
-<form id="sortOrderId" action="[{$oViewConf->getSelfLink()}]" method="post">
+[{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign}]
+
+<script type="text/javascript">
+    function showWaitingWheel() {
+        document.getElementById("waitingWheel").style.visibility = 'visible';
+    }
+</script>
+<!--[if gte IE 6]>
+<style>
+    .waitIMG{
+        visibility:hidden;
+    }
+</style>
+<![endif]-->
+
+<form name="transfer" id="transfer" action="[{$oViewConf->getSelfLink()}]" method="post">
     [{$oViewConf->getHiddenSid()}]
-    <input type="hidden" name="cl" value="pi_ratepay_log">
-    <input type="hidden" name="sortmethod" value="sortOrderId">
-    [{if $sortmethod == "sortOrderId" }]
-    <input type="hidden" name="sortType" value="[{$sortType}]">
-    [{/if}]
-    </form>
+    <input type="hidden" name="oxid" value="[{$oxid}]">
+    <input type="hidden" name="cl" value="pi_ratepay_details">
+</form>
 
-<form id="sortTransactionId" action="[{$oViewConf->getSelfLink()}]" method="post">
-    [{$oViewConf->getHiddenSid()}]
-    <input type="hidden" name="cl" value="pi_ratepay_log">
-    <input type="hidden" name="sortmethod" value="sortTransactionId">
-    [{if $sortmethod == "sortTransactionId" }]
-    <input type="hidden" name="sortType" value="[{$sortType}]">
+[{if isset($pierror)}]
+    [{if $pierror == ""}]
+    <div class="messagebox" style="color:red;"><b>[{oxmultilang ident="PI_RATEPAY_ERRORDELIVERY"}]</b></div>
     [{/if}]
-    </form>
-
-<form id="sortFirstName" action="[{$oViewConf->getSelfLink()}]" method="post">
-    [{$oViewConf->getHiddenSid()}]
-    <input type="hidden" name="cl" value="pi_ratepay_log">
-    <input type="hidden" name="sortmethod" value="sortFirstName">
-    [{if $sortmethod == "sortFirstName" }]
-    <input type="hidden" name="sortType" value="[{$sortType}]">
+    [{if $pierror == "credit"}]
+    <div class="messagebox" style="color:red;"><b>[{oxmultilang ident="PI_RATEPAY_ERRORVOUCHER"}]</b></div>
     [{/if}]
-    </form>
-
-<form id="sortLastName" action="[{$oViewConf->getSelfLink()}]" method="post">
-    [{$oViewConf->getHiddenSid()}]
-    <input type="hidden" name="cl" value="pi_ratepay_log">
-    <input type="hidden" name="sortmethod" value="sortLastName">
-    [{if $sortmethod == "sortLastName" }]
-    <input type="hidden" name="sortType" value="[{$sortType}]">
+    [{if $pierror == "partial-return"}]
+    <div class="messagebox" style="color:red;"><b>[{oxmultilang ident="PI_RATEPAY_ERRORPARTIALRETURN"}]</b></div>
     [{/if}]
-    </form>
-
-<form id="sortPaymentMethod" action="[{$oViewConf->getSelfLink()}]" method="post">
-    [{$oViewConf->getHiddenSid()}]
-    <input type="hidden" name="cl" value="pi_ratepay_log">
-    <input type="hidden" name="sortmethod" value="sortPaymentMethod">
-    [{if $sortmethod == "sortPaymentMethod" }]
-    <input type="hidden" name="sortType" value="[{$sortType}]">
+    [{if $pierror == "full-return"}]
+    <div class="messagebox" style="color:red;"><b>[{oxmultilang ident="PI_RATEPAY_ERRORFULLRETURN"}]</b></div>
     [{/if}]
-    </form>
-
-<form id="sortPaymentType" action="[{$oViewConf->getSelfLink()}]" method="post">
-    [{$oViewConf->getHiddenSid()}]
-    <input type="hidden" name="cl" value="pi_ratepay_log">
-    <input type="hidden" name="sortmethod" value="sortPaymentType">
-    [{if $sortmethod == "sortPaymentType" }]
-    <input type="hidden" name="sortType" value="[{$sortType}]">
+    [{if $pierror == "partial-cancellation"}]
+    <div class="messagebox" style="color:red;"><b>[{oxmultilang ident="PI_RATEPAY_ERRORPARTIALCANCELLATION"}]</b></div>
     [{/if}]
-    </form>
-
-<form id="sortPaymentSubType" action="[{$oViewConf->getSelfLink()}]" method="post">
-    [{$oViewConf->getHiddenSid()}]
-    <input type="hidden" name="cl" value="pi_ratepay_log">
-    <input type="hidden" name="sortmethod" value="sortPaymentSubType">
-    [{if $sortmethod == "sortPaymentSubType" }]
-    <input type="hidden" name="sortType" value="[{$sortType}]">
+    [{if $pierror == "full-cancellation"}]
+    <div class="messagebox" style="color:red;"><b>[{oxmultilang ident="PI_RATEPAY_ERRORFULLCANCELLATION"}]</b></div>
     [{/if}]
-    </form>
-
-<form id="sortResult" action="[{$oViewConf->getSelfLink()}]" method="post">
-    [{$oViewConf->getHiddenSid()}]
-    <input type="hidden" name="cl" value="pi_ratepay_log">
-    <input type="hidden" name="sortmethod" value="sortResult">
-    [{if $sortmethod == "sortResult" }]
-    <input type="hidden" name="sortType" value="[{$sortType}]">
     [{/if}]
-    </form>
-
-<form id="sortReason" action="[{$oViewConf->getSelfLink()}]" method="post">
-    [{$oViewConf->getHiddenSid()}]
-    <input type="hidden" name="cl" value="pi_ratepay_log">
-    <input type="hidden" name="sortmethod" value="sortReason">
-    [{if $sortmethod == "sortReason" }]
-    <input type="hidden" name="sortType" value="[{$sortType}]">
+[{if isset($pisuccess)}]
+    [{if $pisuccess == ""}]
+    <div class="messagebox" style="color:green;"><b>[{oxmultilang ident="PI_RATEPAY_SUCCESSDELIVERY"}]</b></div>
     [{/if}]
-    </form>
-
-<form id="sortDate" action="[{$oViewConf->getSelfLink()}]" method="post">
-    [{$oViewConf->getHiddenSid()}]
-    <input type="hidden" name="cl" value="pi_ratepay_log">
-    <input type="hidden" name="sortmethod" value="sortDate">
-    [{if $sortmethod == "sortDate" }]
-    <input type="hidden" name="sortType" value="[{$sortType}]">
+    [{if $pisuccess == "credit"}]
+    <div class="messagebox" style="color:green;"><b>[{oxmultilang ident="PI_RATEPAY_SUCCESSVOUCHER"}]</b></div>
     [{/if}]
-    </form>
-[{if isset($deleteSuccess)}]
-    <div class="messagebox" style="color:green;"><b>[{ oxmultilang ident="PI_RATEPAY_LOGGING_SUCCESS" }]</b></div>
+    [{if $pisuccess == "partial-return"}]
+    <div class="messagebox" style="color:green;"><b>[{oxmultilang ident="PI_RATEPAY_SUCCESSPARTIALRETURN"}]</b></div>
     [{/if}]
-
-
-<table cellspacing="0" cellpadding="0" border="0" width="100%">
-    <tr>
-            <td class="listheader"><a href="#" onclick="document.getElementById('sortOrderId').submit();" >ORDER ID</a></td>
-            <td class="listheader"><a href="#" onclick="document.getElementById('sortTransactionId').submit();" >TRANSACTION ID</a></td>
-            <td class="listheader"><a href="#" onclick="document.getElementById('sortFirstName').submit();" >FIRST NAME</a></td>
-            <td class="listheader"><a href="#" onclick="document.getElementById('sortLastName').submit();" >LAST NAME</a></td>
-            <td class="listheader"><a href="#" onclick="document.getElementById('sortPaymentMethod').submit();" >PAYMENT METHOD</a></td>
-            <td class="listheader"><a href="#" onclick="document.getElementById('sortPaymentType').submit();" >OPERATION TYPE</a></td>
-            <td class="listheader"><a href="#" onclick="document.getElementById('sortPaymentSubType').submit();" >OPERATION SUBTYPE</a></td>
-            <td class="listheader"><a href="#" onclick="document.getElementById('sortResult').submit();" >RESULT</a></td>
-            <td class="listheader"><a href="#" onclick="document.getElementById('sortResult').submit();"> RATEPAY RESULT</a></td>
-            <td class="listheader"><a href="#" onclick="document.getElementById('sortResult').submit();" >RATEPAY RESULT CODE</a></td>
-            <td class="listheader"><a href="#" onclick="document.getElementById('sortReason').submit();" >REASON</a></td>
-            <td class="listheader">REQUEST</td>
-            <td class="listheader">RESPONSE</td>
-            <td class="listheader"><a href="#" onclick="document.getElementById('sortDate').submit();" >DATE</td>
+    [{if $pisuccess == "full-return"}]
+    <div class="messagebox" style="color:green;"><b>[{oxmultilang ident="PI_RATEPAY_SUCCESSFULLRETURN"}]</b></div>
+    [{/if}]
+    [{if $pisuccess == "partial-cancellation"}]
+    <div class="messagebox" style="color:green;"><b>[{oxmultilang ident="PI_RATEPAY_SUCCESSPARTIALCANCELLATION"}]</b></div>
+    [{/if}]
+    [{if $pisuccess == "full-cancellation"}]
+    <div class="messagebox" style="color:green;"><b>[{oxmultilang ident="PI_RATEPAY_SUCCESSFULLCANCELLATION"}]</b></div>
+    [{/if}]
+    [{/if}]
+<div id="message" class="messagebox" style="visibility:hidden;">[{oxmultilang ident="PI_RATEPAY_ERRORTYPING"}]</div>
+<fieldset style="padding-left: 5px; padding-right: 5px;">
+    <legend>Transaktionssdetails</legend><br/>
+    <table>
+        <tr>
+            <td>Transanction Id:</td>
+            <td>[{$pi_transaction_id}]</td>
         </tr>
-    [{assign var=oddclass value="2"}]
-    [{assign var=counter value="0"}]
-    [{foreach from=$logs item=log}]
-    [{if $oddclass == 2}]
-    [{assign var=oddclass value=""}]
-    [{else}]
-    [{assign var=oddclass value="2"}]
-    [{/if}]
-    <tr>
-        <td class="listitem[{$oddclass}]">[{$log.orderid}]</td>
-        <td class="listitem[{$oddclass}]">[{$log.transactionid}]</td>
-        <td class="listitem[{$oddclass}]">[{$log.firstname}]</td>
-        <td class="listitem[{$oddclass}]">[{$log.lastname}]</td>
-        <td class="listitem[{$oddclass}]">[{$log.paymentmethod}]</td>
-        <td class="listitem[{$oddclass}]">[{$log.operationtype}]</td>
-        <td class="listitem[{$oddclass}]">[{$log.operationsubtype}]</td>
-        <td class="listitem[{$oddclass}]">[{$log.result}]</td>
-        <td class="listitem[{$oddclass}]">[{$log.ratepayresult}]</td>
-        <td class="listitem[{$oddclass}]">[{$log.ratepaycode}]</td>
-        <td class="listitem[{$oddclass}]">[{$log.reason}]</td>
-        <td class="listitem[{$oddclass}]"><a href="#" onclick="YAHOO.oxid.help.showPanel('request_[{$counter}]');" >Request</a></td>
-        <td class="listitem[{$oddclass}]"><a href="#" onclick="YAHOO.oxid.help.showPanel('response_[{$counter}]');" >Response</a></td>
-        <td class="listitem[{$oddclass}]">[{$log.date}]</td>
-    </tr>
-<div id="helpText_request_[{$counter}]" class="helpPanelText"><textarea readonly cols="60" rows="20">[{$log.request}]</textarea>
-        <br />
-    </div>
-<div id="helpText_response_[{$counter}]" class="helpPanelText"><textarea readonly cols="60" rows="20">[{$log.response}]</textarea>
-        <br />
-    </div>
-    [{assign var="counter" value=$counter1}]
-    [{/foreach}]
+        <tr>
+            <td>Verwendungszweck/<br/>Descriptor:</td>
+            <td>[{$pi_descriptor}]</td>
+        </tr>
+        [{if $pi_ratepay_payment_type === "INSTALLMENT"}]
+        <tr>
+            <td colspan="2">
+                <fieldset style="padding-left: 5px; padding-right: 5px;">
+                    <legend>Ratendetails</legend><br/>
+                    <table>
+                        <tr>
+                            <td>Gesamtbetrag:</td>
+                            <td>[{$pirptotalamountvalue}]</td>
+                        </tr>
+                        <tr>
+                            <td>Barzahlungspreis:</td>
+                            <td>[{$pirpamountvalue}]</td>
+                        </tr>
+                        <tr>
+                            <td>Zinsbetrag:</td>
+                            <td>[{$pirpinterestamountvalue}]</td>
+                        </tr>
+                        <tr>
+                            <td>Vertragsabschlussgebühr:</td>
+                            <td>[{$pirpservicechargevalue}]</td>
+                        </tr>
+                        <tr>
+                            <td>Effektiver Jahreszins:</td>
+                            <td>[{$pirpannualpercentageratevalue}]</td>
+                        </tr>
+                        <tr>
+                            <td>Sollzinssatz pro Monat:</td>
+                            <td>[{$pirpmonthlydebitinterestvalue}]</td>
+                        </tr>
+                        <tr>
+                            <td>Laufzeit:</td>
+                            <td>[{$pirpnumberofratesvalue}]</td>
+                        </tr>
+                        <tr>
+                            <td>[{$pirpnumberofratesvalue-1}]&nbsp;monatliche Raten à:</td>
+                            <td>[{$pirpratevalue}]</td>
+                        </tr>
+                        <tr>
+                            <td>zzgl. einer Abschlussrate à:</td>
+                            <td>[{$pirplastratevalue}]</td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </td>
+        </tr>
+        [{/if}]
     </table>
-<br/>
-<form action="[{$oViewConf->getSelfLink()}]" method="post">
-    [{$oViewConf->getHiddenSid()}]
-    <input type="hidden" name="cl" value="pi_ratepay_log">
-    <input type="hidden" name="fnc" value="deleteLogs">
-    [{oxmultilang ident="PI_RATEPAY_LOGGING_TEXTDAYS"}]<input type="text" name="logdays" maxlength="2" size="2" value="0"/> [{oxmultilang ident="PI_RATEPAY_LOGGING_DAYS"}].
-    <input type="submit" name="delete" value="[{oxmultilang ident="PI_RATEPAY_LOGGING_DELETE"}]">
-    </form>
+</fieldset>
 
+<br/>
+[{assign var="storniert_versendet" value="0"}]
+[{foreach from=$articleList item=article}]
+    [{if $article.amount > 0}]
+    [{assign var="storniert_versendet" value="1"}]
+    [{/if}]
+    [{/foreach}]
+
+<fieldset title="[{oxmultilang ident="PI_RATEPAY_SHIPPING"}]/[{oxmultilang ident="PI_RATEPAY_CANCELLING"}]" style="padding-left: 5px; padding-right: 5px;">
+    <legend>[{oxmultilang ident="PI_RATEPAY_SHIPPING_TABLE_HEAD"}]</legend><br/>
+    <form action="[{$oViewConf->getSelfLink()}]" method="post" id="articleList">
+        [{$oViewConf->getHiddenSid()}]
+        <input type="hidden" name="cur" value="[{$oCurr->id}]">
+        <input type="hidden" name="oxid" value="[{$oxid}]">
+        <input type="hidden" name="cl" value="pi_ratepay_details">
+        <input type="hidden" name="fnc" value="">
+
+        [{assign var="blWhite" value=""}]
+
+        <table cellspacing="0" cellpadding="0" border="0" width="98%">
+            <tr>
+                <td class="listheader first">[{oxmultilang ident="PI_RATEPAY_QUANTITY"}]</td>
+                <td class="listheader">[{oxmultilang ident="PI_RATEPAY_ARTICLENR"}]</td>
+                <td class="listheader">[{oxmultilang ident="PI_RATEPAY_ARTICLENAME"}]</td>
+                <td class="listheader">[{oxmultilang ident="PI_RATEPAY_UNITPRICE"}]</td>
+                <td class="listheader">[{oxmultilang ident="PI_RATEPAY_TAX"}]</td>
+                <td class="listheader">[{oxmultilang ident="PI_RATEPAY_TOTALPRICE"}]</td>
+                <td class="listheader">[{oxmultilang ident="PI_RATEPAY_ORDERED"}]</td>
+                <td class="listheader">[{oxmultilang ident="PI_RATEPAY_SHIPPED"}]</td>
+                <td class="listheader">[{oxmultilang ident="PI_RATEPAY_CANCELLED"}]</td>
+                <td class="listheader">[{oxmultilang ident="PI_RATEPAY_RETURNED"}]</td>
+
+            </tr>
+            [{foreach from=$articleList item=article}]
+            [{assign var="listclass" value=listitem$blWhite}]
+            <tr>
+                [{if $article.amount > 0}]
+                <td valign="top" class="[{$listclass}]"><input name="[{$article.arthash}]" type="text" maxlength="4" style="width: 40px;" class="edittext" value="[{$article.amount}]" onkeyup="check('[{$article.arthash}]',[{$article.amount}],this.value);" onFocus="hideMessageBox();this.select();" onBlur="hideMessageBox();"/></td>
+                [{else}]
+                <td valign="top" class="[{$listclass}]"><input name="[{$article.arthash}]" type="text" maxlength="4" style="width: 40px;" class="edittext" value="[{$article.amount}]" disabled="disabled"/></td>
+                [{/if}]
+                <td valign="top" class="[{$listclass}]">[{$article.artnum}]</td>
+                <td valign="top" class="[{$listclass}]">[{$article.title|strip_tags}]</td>
+                <td valign="top" class="[{$listclass}]">[{$article.unitprice|number_format:2:",":""}]</td>
+                <td valign="top" class="[{$listclass}]">[{$article.vat}] %</td>
+                <td valign="top" class="[{$listclass}]">[{$article.totalprice|number_format:2:",":""}] [{$article.currency}]</td>
+                <td valign="top" class="[{$listclass}]">[{$article.ordered}]</td>
+                <td valign="top" class="[{$listclass}]">[{$article.shipped}]</td>
+                <td valign="top" class="[{$listclass}]">[{$article.cancelled}]</td>
+                <td valign="top" class="[{$listclass}]">[{$article.returned}]</td>
+        <tr/>
+            [{if $blWhite == "2"}]
+            [{assign var="blWhite" value=""}]
+            [{else}]
+            [{assign var="blWhite" value="2"}]
+            [{/if}]
+            [{/foreach}]
+            <tr>
+                <td valign="top" class="[{$listclass}]">&nbsp;</td>
+                <td valign="top" class="[{$listclass}]">&nbsp;</td>
+                <td valign="top" class="[{$listclass}]">&nbsp;</td>
+                <td valign="top" class="[{$listclass}]">&nbsp;</td>
+                <td valign="top" class="[{$listclass}]">&nbsp;</td>
+                <td valign="top" class="[{$listclass}]">[{$pi_total_amount|number_format:2:",":""}] [{$article.currency}]</td>
+                <td valign="top" class="[{$listclass}]">&nbsp;</td>
+                <td valign="top" class="[{$listclass}]">&nbsp;</td>
+                <td valign="top" class="[{$listclass}]">&nbsp;</td>
+                <td valign="top" class="[{$listclass}]">&nbsp;</td>
+            <tr/>
+        </table>
+        <div id="waitingWheel" class="popup" style="visibility:hidden;background: none repeat scroll 0 0 #FFFFFF;border: 1px solid #000000;display: block; height: 150px;left: 50%;margin-left: -135px;margin-top: -75px; padding: 10px;position: fixed;top: 50%;width: 270px;z-index: 2000;">
+            <p>Bitte warten, Ihre Anfrage wird gerade &uuml;berpr&uuml;ft. Schlie&szlig;en Sie diese Seite nicht und klicken Sie nicht "Reload" bis die &Uuml;berpr&uuml;fung abgeschlossen ist. Dies wird ca. 10 Sekunden dauern.</p>
+            <center><img class="waitIMG" src="[{$oViewConf->getModuleUrl('pi_ratepay')}]out/admin/img/ajax-loader.gif" alt="wait"/></center>
+        </div>
+        [{if $storniert_versendet == "1"}]
+    <input type="submit" name="deliver" value="&nbsp;&nbsp;[{oxmultilang ident="PI_RATEPAY_SHIPPING"}]&nbsp;&nbsp;" class="edittext" onClick="setFnc('deliver', 'articleList'); showWaitingWheel();">
+    <input type="submit" name="cancel" value="&nbsp;&nbsp;[{oxmultilang ident="PI_RATEPAY_CANCELLING"}]&nbsp;&nbsp;" class="edittext" onClick="setFnc('cancel', 'articleList');">
+        [{else}]
+    <input type="submit" name="deliver" value="&nbsp;&nbsp;[{oxmultilang ident="PI_RATEPAY_SHIPPING"}]&nbsp;&nbsp;" class="edittext" disabled="disabled">
+    <input type="submit" name="cancel" value="&nbsp;&nbsp;[{oxmultilang ident="PI_RATEPAY_CANCELLING"}]&nbsp;&nbsp;" class="edittext" disabled="disabled">
+        [{/if}]
+    </form>
+</fieldset>
+
+[{assign var="retourniert" value="0"}]
+[{foreach from=$articleList item=article}]
+    [{if $article.shipped-$article.returned > 0}]
+    [{assign var="retourniert" value="1"}]
+    [{/if}]
+    [{/foreach}]
+
+<br/>
+<fieldset title="[{oxmultilang ident="PI_RATEPAY_RETURNING_TABLE_HEAD"}]" style="padding-left: 5px; padding-right: 5px;">
+    <legend>[{oxmultilang ident="PI_RATEPAY_RETURNING_TABLE_HEAD"}]</legend><br/>
+    <form action="[{$oViewConf->getSelfLink()}]" method="post">
+        [{$oViewConf->getHiddenSid()}]
+        <input type="hidden" name="cur" value="[{$oCurr->id}]">
+        <input type="hidden" name="oxid" value="[{$oxid}]">
+        <input type="hidden" name="cl" value="pi_ratepay_details">
+        <input type="hidden" name="fnc" value="retoure">
+
+        [{assign var="blWhite" value=""}]
+        <table cellspacing="0" cellpadding="0" border="0" width="98%">
+            <tr>
+                <td class="listheader first">[{oxmultilang ident="PI_RATEPAY_QUANTITY"}]</td>
+                <td class="listheader">[{oxmultilang ident="PI_RATEPAY_ARTICLENR"}]</td>
+                <td class="listheader">[{oxmultilang ident="PI_RATEPAY_ARTICLENAME"}]</td>
+                <td class="listheader">[{oxmultilang ident="PI_RATEPAY_SHIPPED"}]</td>
+                <td class="listheader">[{oxmultilang ident="PI_RATEPAY_RETURNED"}]</td>
+
+            </tr>
+            [{foreach from=$articleList item=article}]
+            [{assign var="listclass" value=listitem$blWhite}]
+            <tr>
+                [{if $article.shipped-$article.returned > 0}]
+                <td valign="top" class="[{$listclass}]"><input name="[{$article.arthash}]" type="text" maxlength="4" style="width: 40px;" class="edittext" value="[{$article.shipped-$article.returned}]" onkeyup="check_shipped('[{$article.arthash}]',[{$article.shipped - $article.returned}],this.value);" onFocus="hideMessageBox();this.select();" onBlur="hideMessageBox();"/></td>
+                [{else}]
+                <td valign="top" class="[{$listclass}]"><input name="[{$article.arthash}]" type="text" maxlength="4" style="width: 40px;" class="edittext" value="0" disabled="disabled" /></td>
+                [{/if}]
+                <td valign="top" class="[{$listclass}]">[{$article.artnum}]</td>
+                <td valign="top" class="[{$listclass}]">[{$article.title|strip_tags}]</td>
+                <td valign="top" class="[{$listclass}]">[{$article.shipped}]</td>
+                <td valign="top" class="[{$listclass}]">[{$article.returned}]</td>
+        <tr/>
+            [{if $blWhite == "2"}]
+            [{assign var="blWhite" value=""}]
+            [{else}]
+            [{assign var="blWhite" value="2"}]
+            [{/if}]
+            [{/foreach}]
+        </table>
+        [{if $retourniert == "1"}]
+    <input type="submit" name="return" value="&nbsp;&nbsp;[{oxmultilang ident="PI_RATEPAY_RETURNING"}]&nbsp;&nbsp;" class="edittext"/>
+        [{else}]
+    <input type="submit" name="return" value="&nbsp;&nbsp;[{oxmultilang ident="PI_RATEPAY_RETURNING"}]&nbsp;&nbsp;" class="edittext" disabled="disabled"/>
+        [{/if}]
+
+    </form>
+</fieldset>
+
+<br/>
+<fieldset title="[{oxmultilang ident="PI_RATEPAY_GOODWILL"}]" style="padding-left: 5px; padding-right: 5px;">
+    <legend>[{oxmultilang ident="PI_RATEPAY_GOODWILL"}]</legend><br/>
+    <form action="[{$oViewConf->getSelfLink()}]" method="post">
+        [{$oViewConf->getHiddenSid()}]
+        <input type="hidden" name="cur" value="[{$oCurr->id}]">
+        <input type="hidden" name="oxid" value="[{$oxid}]">
+        <input type="hidden" name="cl" value="pi_ratepay_details">
+        <input type="hidden" name="fnc" value="credit">
+        <span>Wert: </span>
+        <input id='voucherAmount' type='text' style="float:none;" maxlength='4' name='voucherAmount' size='4' value='0' onkeyup="check_voucher('[{$pi_total_amount}]');" onFocus="this.select();">[{oxmultilang ident="PI_RATEPAY_KOMMA"}]<input style='float:none;' id='voucherAmountKomma' type='text' maxlength='2' name='voucherAmountKomma' size='2' value='00' onkeyup="check_voucher('[{$pi_total_amount}]');" onFocus="hideMessageBox();this.select();" onBlur="hideMessageBox();">[{$article.currency}]<br><br>
+        <input type='submit' name='voucher' value='&nbsp;&nbsp;[{oxmultilang ident="PI_RATEPAY_VOUCHER"}]&nbsp;&nbsp;'">
+    </form>
+</fieldset>
+[{assign var="historyCount" value="0"}]
+[{foreach from=$historyList item=history}]
+    [{assign var="historyCount" value="1"}]
+    [{/foreach}]
+<br/>
+<fieldset title="[{oxmultilang ident="PI_RATEPAY_HISTORY"}]" style="padding-left: 5px; padding-right: 5px;">
+    <legend>[{oxmultilang ident="PI_RATEPAY_HISTORY"}]</legend><br/>
+    [{assign var="blWhite" value=""}]
+    <table cellspacing="0" cellpadding="0" border="0" width="98%">
+        <tr>
+            <td class="listheader first">[{oxmultilang ident="PI_RATEPAY_QUANTITY"}]</td>
+            <td class="listheader">[{oxmultilang ident="PI_RATEPAY_ARTICLENR"}]</td>
+            <td class="listheader">[{oxmultilang ident="PI_RATEPAY_ARTICLENAME"}]</td>
+            <td class="listheader">[{oxmultilang ident="PI_RATEPAY_ACTION"}]</td>
+            <td class="listheader">[{oxmultilang ident="PI_RATEPAY_DATE"}]</td>
+        </tr>
+        [{foreach from=$historyList item=history}]
+        [{assign var="listclass" value=listitem$blWhite}]
+        <tr>
+            <td valign="top" class="[{$listclass}]">[{$history.quantity}]</td>
+            <td valign="top" class="[{$listclass}]">[{$history.article_number}]</td>
+            <td valign="top" class="[{$listclass}]">[{$history.title|strip_tags}]</td>
+            <td valign="top" class="[{$listclass}]">
+                [{if $history.method == "CONFIRMATION_DELIVER"}]
+                [{oxmultilang ident="PI_RATEPAY_CONFIRMDELIVER"}]
+                [{/if}]
+                [{if $history.method == "PAYMENT_CHANGE"}]
+                [{if $history.subtype == "credit"}]
+                [{oxmultilang ident="PI_RATEPAY_GOODWILL"}]
+                [{/if}]
+                [{if strstr($history.subtype, "return")}]
+                [{oxmultilang ident="PI_RATEPAY_RETURN"}]
+                [{/if}]
+                [{if strstr($history.subtype, "cancellation")}]
+                [{oxmultilang ident="PI_RATEPAY_CANCELLATION"}]
+                [{/if}]
+                [{/if}]
+            </td>
+            <td valign="top" class="[{$listclass}]">[{$history.date}]</td>
+    <tr/>
+        [{if $blWhite == "2"}]
+        [{assign var="blWhite" value=""}]
+        [{else}]
+        [{assign var="blWhite" value="2"}]
+        [{/if}]
+        [{/foreach}]
+    </table>
+</fieldset>
 [{include file="bottomitem.tpl"}]
+<script type="text/javascript">
+    function setFnc(fnc, form) {
+        var form = document.getElementById(form);
+        form.fnc.value = fnc;
+        form.submit();
+    }
+    function check(arthash, totalamount, amount) {
+        var sub = document.getElementsByName(arthash)[0].value;
+        if(sub.match(/^[0-9]{1,4}$/i)) {
+            if(totalamount < amount) {
+                document.getElementById('message').style.visibility = 'visible';
+                document.getElementsByName(arthash)[0].value = totalamount;
+            }
+        } else {
+            document.getElementById('message').style.visibility = 'visible';
+            document.getElementsByName(arthash)[0].value = totalamount;
+        }
+    }
+    function check_shipped(arthash, totalamount, amount) {
+        var sub = document.getElementsByName(arthash)[1].value;
+        if(sub.match(/^[0-9]{1,4}$/i)) {
+            if(totalamount < amount) {
+                document.getElementById('message').style.visibility = 'visible';
+                document.getElementsByName(arthash)[1].value = totalamount;
+            }
+        } else {
+            document.getElementById('message').style.visibility = 'visible';
+            document.getElementsByName(arthash)[1].value = totalamount;
+        }
+    }
+    function check_voucher(totalamount) {
+        var vouchertotal = 0;
+        var sub = document.getElementById('voucherAmount').value;
+        var subKomma = document.getElementById('voucherAmountKomma').value;
+        if(sub.match(/^[0-9]{1,4}$/i)) {
+            vouchertotal = parseInt(sub);
+            if(vouchertotal > totalamount) {
+                document.getElementById('voucherAmount').value = "0";
+                document.getElementById('message').style.visibility = 'visible';
+            } else {
+                if(subKomma.match(/^[0-9]{1,2}$/i)) {
+                    vouchertotal = sub + "." + subKomma;
+                    vouchertotal = parseFloat(vouchertotal);
+                    totalamount = parseFloat(totalamount);
+                    if(vouchertotal > totalamount) {
+                        document.getElementById('message').style.visibility = 'visible';
+                        document.getElementById('voucherAmountKomma').value = "00";
+                    }
+                } else {
+                    document.getElementById('message').style.visibility = 'visible';
+                    document.getElementById('voucherAmountKomma').value = "00";
+                }
+            }
+        } else {
+            document.getElementById('message').style.visibility = 'visible';
+            document.getElementById('voucherAmount').value = "0";
+        }
+    }
+    function hideMessageBox() {
+        document.getElementById('message').style.visibility = 'hidden';
+    }
+</script>
