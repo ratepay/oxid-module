@@ -52,17 +52,22 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                 $config[$country][$methodShop]['duedate'] = $settings->pi_ratepay_settings__duedate->rawValue;
 
                 if (!empty($config[$country][$methodShop]['profile_id']) && !empty($config[$country][$methodShop]['security_code'])) {
-                    $extendedData = array('profileId' => $config[$country][$methodShop]['profile_id'], 'securityCode' => $config[$country][$methodShop]['security_code'], 'country' => $country);
-                    $profileRequest = $this->_callProfileRequest('pi_ratepay_' . $methodShop, $extendedData);
-                    if ($profileRequest) {
-                        $profileRequest['profile'] = $this->_deleteNegativeValues($profileRequest['profile'], $methodDB);
-                        $profileRequest['profile']['currencies'] = $settings->pi_ratepay_settings__currencies->rawValue;
-                        $profileRequest['profile']['delivery countries'] = $settings->pi_ratepay_settings__delivery_countries->rawValue;
-                        $profileRequest['profile'] = $this->_changeKeyFormat($profileRequest['profile']);
-                        $config[$country][$methodShop]['details'] = $profileRequest['profile'];
+
+                    $modelFactory = new ModelFactory();
+                    $modelFactory->setSecurityCode($config[$country][$methodShop]['security_code']);
+                    $modelFactory->setProfileId($config[$country][$methodShop]['profile_id']);
+                    $modelFactory->setSandbox($config[$country][$methodShop]['sandbox']);
+                    $result = $modelFactory->doOperation('PROFILE_REQUEST');
+
+                    if ($result) {
+                        $profileRequest['profile'] = $this->_deleteNegativeValues($result['merchantConfig'], $methodDB);
+                        $profileRequest['profile']['currencies'] = $result['currency'];
+                        $profileRequest['profile']['delivery countries'] = $result['country-code-delivery'];
+                        $profileRequest['profile'] = $this->_changeKeyFormat($result['merchantConfig']);
+                        $config[$country][$methodShop]['details'] = $result['merchantConfig'];
                         if ($methodShop == 'rate') {
-                            $profileRequest['installment_configuration'] = $this->_changeKeyFormat($profileRequest['installment_configuration']);
-                            $config[$country][$methodShop]['installment_configuration'] = $profileRequest['installment_configuration'];
+                            $profileRequest['installment_configuration'] = $this->_changeKeyFormat($result['installmentConfig']);
+                            $config[$country][$methodShop]['installment_configuration'] = $result['installmentConfig'];
                         }
                         if ($methodShop == 'elv' && $country == 'de') {
                             $config[$country][$methodShop]['iban_only'] = (bool) $settings->pi_ratepay_settings__iban_only->rawValue;
@@ -135,18 +140,22 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                 $this->_insertSettings($insertSql);
 
                 if (!empty($profileId) && !empty($securityCode)) {
-                    $extendedData = array('profileId' => $profileId, 'securityCode' => $securityCode, 'country' => $country);
-                    $profileRequest = $this->_callProfileRequest('pi_ratepay_' . $methodShop, $extendedData);
+
+                    $modelFactory = new ModelFactory();
+                    $modelFactory->setSecurityCode($securityCode);
+                    $modelFactory->setProfileId($profileId);
+                    $modelFactory->setSandbox($firstSaveArray['sandbox']);
+                    $result = $modelFactory->doOperation('PROFILE_REQUEST');
                 } else {
                     $profileRequest = false;
                 }
 
                 if ($methodActive === true) {
-                    if ($profileRequest) {
-                        $methodActive = ((bool) $profileRequest['profile']['eligibility-ratepay-' . $methodDB] && (int) $profileRequest['profile']['activation-status-' . $methodDB] == 2);
+                    if ($result) {
+                        $methodActive = ((bool) $result['merchantConfig']['eligibility-ratepay-' . $methodDB] && (int) $result['merchantConfig']['activation-status-' . $methodDB] == 2);
                         if ($methodActive === false) {
                             $errMsg[$country][$methodShop] = "PI_RATEPAY_PROFILE_ERROR_DEACTIVATED_BY_REQUEST";
-                        } elseif (!strstr($profileRequest['profile']['country-code-billing'], strtoupper($country))) {
+                        } elseif (!strstr($result['merchantConfig']['country-code-billing'], strtoupper($country))) {
                             $methodActive = false;
                             $errMsg[$country][$methodShop] = "PI_RATEPAY_PROFILE_ERROR_DEACTIVATED_BY_REQUEST";
                         }
@@ -161,21 +170,21 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                     $methodActive = false;
                 }
 
-                if ($profileRequest) {
+                if ($result) {
                     $secondSaveArray = array(
-                        'limit_min' => (int) $profileRequest['profile']['tx-limit-' . $methodDB . '-min'],
-                        'limit_max' => (int) $profileRequest['profile']['tx-limit-' . $methodDB . '-max'],
-                        'limit_max_b2b' => (int) $profileRequest['profile']['tx-limit-' . $methodDB . '-max-b2b'],
-                        'b2b' => $this->_isParameterCheckedYes($profileRequest['profile']['b2b-' . $methodDB]),
-                        'ala' => $this->_isParameterCheckedYes($profileRequest['profile']['delivery-address-' . $methodDB]),
-                        'dfp' => $this->_isParameterCheckedYes($profileRequest['profile']['eligibility-device-fingerprint']),
-                        'dfp_snippet_id' => $profileRequest['profile']['device-fingerprint-snippet-id'],
-                        'currencies' => $profileRequest['profile']['currency'],
-                        'delivery_countries' => $profileRequest['profile']['country-code-delivery']
+                        'limit_min' => (int) $result['merchantConfig']['tx-limit-' . $methodDB . '-min'],
+                        'limit_max' => (int) $result['merchantConfig']['tx-limit-' . $methodDB . '-max'],
+                        'limit_max_b2b' => (int) $result['merchantConfig']['tx-limit-' . $methodDB . '-max-b2b'],
+                        'b2b' => $this->_isParameterCheckedYes($result['merchantConfig']['b2b-' . $methodDB]),
+                        'ala' => $this->_isParameterCheckedYes($result['merchantConfig']['delivery-address-' . $methodDB]),
+                        'dfp' => $this->_isParameterCheckedYes($result['merchantConfig']['eligibility-device-fingerprint']),
+                        'dfp_snippet_id' => $result['merchantConfig']['device-fingerprint-snippet-id'],
+                        'currencies' => $result['merchantConfig']['currency'],
+                        'delivery_countries' => $result['merchantConfig']['country-code-delivery']
                     );
 
                     if (empty($secondSaveArray['b2b']) || $secondSaveArray['b2b'] == 0) {
-                        $secondSaveArray['b2b'] = (int) $profileRequest['profile']['tx-limit-' . $methodDB . '-max'];
+                        $secondSaveArray['b2b'] = (int) $result['merchantConfig']['tx-limit-' . $methodDB . '-max'];
                     }
 
                     $insertSql = $this->_createUpdateSql($secondSaveArray, $shopId, $country, $methodDB);
@@ -190,11 +199,12 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                 $this->_insertSettings($insertSql);
 
                 // save installment configuration
-                if ($methodShop == 'rate' && $methodActive && $profileRequest) {
+                if ($methodShop == 'rate' && $methodActive && $result) {
                     $installmentSaveArray = array(
-                        'month_allowed' => "[" . $profileRequest['installment_configuration']['month-allowed'] . "]",
-                        'min_rate' => $profileRequest['installment_configuration']['rate-min-normal'],
-                        'interest_rate' => $profileRequest['installment_configuration']['interestrate-default'],
+                        'month_allowed' => "[" . $result['installmentConfig']['month-allowed'] . "]",
+                        'min_rate' => $result['installmentConfig']['rate-min-normal'],
+                        'interest_rate' => $result['installmentConfig']['interestrate-default'],
+                        'payment_firstday' => $result['installmentConfig']['valid-payment-firstdays'],
                     );
 
                     $insertSql = $this->_createUpdateSql($installmentSaveArray, $shopId, $country, $methodDB);
@@ -220,20 +230,6 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
 
         $this->addTplParam('saved', true);
         $this->addTplParam('errMsg', $errMsg);
-    }
-
-    private function _callProfileRequest($method, $extendedData = array()) {
-        $ratepayRequest = oxNew('pi_ratepay_ratepayrequest', $method, null, null, $extendedData);
-        $profileRequestResult = $ratepayRequest->profileRequest($extendedData['country']);
-
-        if ((string) $profileRequestResult['response']->head->processing->status->attributes()->code == "OK" && (string) $profileRequestResult['response']->head->processing->result->attributes()->code == "500") {
-            return array(
-                'profile' => (array) $profileRequestResult['response']->content->{'master-data'},
-                'installment_configuration' => (array) $profileRequestResult['response']->content->{'installment-configuration-result'}
-            );
-        }
-
-        return false;
     }
 
     private function _changeKeyFormat($arrayBefore) {
