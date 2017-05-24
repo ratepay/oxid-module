@@ -116,6 +116,7 @@ class pi_ratepay_order extends pi_ratepay_order_parent
             // get basket contents
             $oBasket = $this->getSession()->getBasket();
             if ($oBasket->getProductsCount()) {
+
                 if (!$this->_ratepayInitRequest()) {
                     if (!$this->getSession()->getVariable($this->_paymentId . '_error_id') == $paymentMethodIds[$this->_paymentId]['connection_timeout'] &&
                         !$this->_isSandbox(pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId))) {
@@ -201,31 +202,29 @@ class pi_ratepay_order extends pi_ratepay_order_parent
      */
     private function _ratepayInitRequest()
     {
-        $ratepayRequest = $this->_getRatepayRequest($this->_paymentId);
-
         $paymentMethod = pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId);
+
+        $modelFactory = new ModelFactory();
+        $modelFactory->setSandbox($this->_isSandbox(pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId)));
+        $modelFactory->setPaymentType($this->_paymentId);
+        $payInit = $modelFactory->doOperation('PAYMENT_INIT', array());
 
         $name = $this->getUser()->oxuser__oxfname->value;
         $surname = $this->getUser()->oxuser__oxlname->value;
 
-        $initPayment = $ratepayRequest->initPayment();
-
         $transactionId = '';
 
-        pi_ratepay_LogsService::getInstance()->logRatepayTransaction('', $transactionId, $paymentMethod, 'PAYMENT_INIT', '', $initPayment['request'], $name, $surname, $initPayment['response']);
+        pi_ratepay_LogsService::getInstance()->logRatepayTransaction('', $transactionId, $paymentMethod, 'PAYMENT_INIT', '',  $name, $surname, $payInit);
 
-        if ($initPayment['response']) {
-            if ((string) $initPayment['response']->head->processing->status->attributes()->code == "OK" && (string) $initPayment['response']->head->processing->result->attributes()->code == "350") {
-                $transactionId = (string) $initPayment['response']->head->{'transaction-id'};
-                $this->getSession()->setVariable($this->_paymentId . '_trans_id', (string) $initPayment['response']->head->{'transaction-id'});
-                $this->getSession()->setVariable($this->_paymentId . '_trans_short_id', (string) $initPayment['response']->head->{'transaction-short-id'});
+        if ($payInit->isSuccessful()) {
+                $transactionId = (string) $payInit->getTransactionId();
+                $this->getSession()->setVariable($this->_paymentId . '_trans_id', (string) $transactionId);
 
                 return true;
-            } else {
-                $this->getSession()->setVariable($this->_paymentId . '_error_id', "-400");
-            }
-        } else {
+        } elseif ($payInit->getReasonCode() != 703) {
             $this->getSession()->setVariable($this->_paymentId . '_error_id', "-418");
+        } else {
+            $this->getSession()->setVariable($this->_paymentId . '_error_id', "-400");
         }
 
         return false;

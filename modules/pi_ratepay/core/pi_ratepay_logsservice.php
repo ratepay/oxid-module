@@ -58,34 +58,36 @@ class pi_ratepay_LogsService extends oxSuperCfg
      *
      * @param string $orderId
      * @param string $transactionId
+     * @param string $paymentMethod
      * @param string $paymentType
      * @param string $paymentSubtype
-     * @param SimpleXMLExtended $request
-     * @param mixed $response is optional; if there is a response than SimpleXMLExtended is expected, else it defaults to boolean false
+     * @param string $name
+     * @param string $surname
+     * @param object $trans
      *
      * @return mixed pi_ratepay_Logs or null
      */
-    public function logRatepayTransaction($orderId, $transactionId, $paymentMethod, $paymentType, $paymentSubtype, $request, $name, $surname, $response = false)
+    public function logRatepayTransaction($orderId, $transactionId, $paymentMethod, $paymentType, $paymentSubtype, $name, $surname, $trans)
     {
         $logging = $this->_getLogSettings($paymentMethod);
 
         if ($logging == 1) {
-            if (($paymentMethod === 'ELV' || $paymentMethod === 'INSTALLMENT') && isset($request->content->customer->{"bank-account"})) {
+            /*if (($paymentMethod === 'ELV' || $paymentMethod === 'INSTALLMENT') && isset($request->content->customer->{"bank-account"})) {
                 $request->content->customer->{"bank-account"}->{"owner"} = "(hidden)";
                 $request->content->customer->{"bank-account"}->{"bank-account-number"} = "(hidden)";
                 $request->content->customer->{"bank-account"}->{"bank-code"} = "(hidden)";
                 $request->content->customer->{"bank-account"}->{"iban"} = "(hidden)";
                 $request->content->customer->{"bank-account"}->{"bic"} = "(hidden)";
-            }
-            $requestXml = $request->asXML();
-            $responseXml = '';
+            }*/
+
+            $requestXml = $trans->getRequestXmlElement();
+            $responseXml = $trans->getResponseXmlElement();
             $reason = '';
 
-            if ($response) {
-                $result = (string) $response->head->processing->result;
-                $resultCode = (string) $response->head->processing->result->attributes()->code;
-                $responseXml = $response->asXML();
-                $reason = (string) $response->head->processing->reason;
+            if ($trans->isSuccessful()) {
+                $result = (string) $trans->getResultMessage();
+                $resultCode = (string) $trans->getResultCode();
+                $reason = (string) $trans->getReasonMessage();
             } else {
                 $result = "service unavaible.";
                 $resultCode = $result;
@@ -112,7 +114,6 @@ class pi_ratepay_LogsService extends oxSuperCfg
             ));
 
             $logEntry->save();
-
             return $logEntry;
         }
 

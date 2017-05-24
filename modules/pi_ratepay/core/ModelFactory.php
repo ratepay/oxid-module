@@ -15,7 +15,7 @@
  * @copyright (C) 2011 PayIntelligent GmbH  <http://www.payintelligent.de/>
  * @license	http://www.gnu.org/licenses/  GNU General Public License 3
  */
-class ModelFactory {
+class ModelFactory extends oxSuperCfg {
 
     protected $_orderId;
 
@@ -120,7 +120,6 @@ class ModelFactory {
             $securityCode = $settings->pi_ratepay_settings__security_code->rawValue;
         }
 
-
         $headArray = [
             'SystemId' => $_SERVER['SERVER_ADDR'],
             'Credential' => [
@@ -143,6 +142,7 @@ class ModelFactory {
 
         $modelBuilder = new RatePAY\ModelBuilder();
         $modelBuilder->setArray($headArray);
+
         return $modelBuilder;
     }
 
@@ -170,10 +170,7 @@ class ModelFactory {
         $rb = new \RatePAY\RequestBuilder($this->_sandbox);
         $paymentInit = $rb->callPaymentInit($head);
 
-        if ($paymentInit->isSuccessfull()) {
-            return $paymentInit->getTransactionId();
-        }
-        return false;
+        return $paymentInit;
     }
 
     /**
