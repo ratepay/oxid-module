@@ -80,8 +80,8 @@ class pi_ratepay_LogsService extends oxSuperCfg
                 $request->content->customer->{"bank-account"}->{"bic"} = "(hidden)";
             }*/
 
-            $requestXml = $trans->getRequestXmlElement();
-            $responseXml = $trans->getResponseXmlElement();
+            $requestXml = $trans->getRequestRaw();
+            $responseXml = $trans->getResponseRaw();
             $reason = '';
 
             if ($trans->isSuccessful()) {

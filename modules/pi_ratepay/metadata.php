@@ -122,6 +122,9 @@ $aModule = array(
         'RatePAY\Model\Request\SubModel\AbstractModel'  => $librarySubModel . 'AbstractModel.php',
         'RatePAY\Model\Request\SubModel\Head\Credential'=> $librarySubModel . 'Head/Credential.php',
         'RatePAY\Model\Request\SubModel\Head\Meta'      => $librarySubModel . 'Head/Meta.php',
+        'RatePAY\Model\Request\SubModel\Head\CustomerDevice' => $librarySubModel . 'Head/CustomerDevice.php',
+        'RatePAY\Model\Request\SubModel\Head\External'      => $librarySubModel . 'Head/External.php',
+        'RatePAY\Model\Request\SubModel\Head\External\Tracking'      => $librarySubModel . 'Head/External/Tracking.php',
         'RatePAY\Model\Request\SubModel\Head\Meta\Systems'          => $librarySubModel . 'Head/Meta/Systems.php',
         'RatePAY\Model\Request\SubModel\Head\Meta\Systems\System'   => $librarySubModel . 'Head/Meta/Systems/System.php',
         'RatePAY\Model\Request\SubModel\Constants'      => $librarySubModel . 'Constants.php',
@@ -169,10 +172,14 @@ $aModule = array(
         $librarySubModelContent . '\InstallmentCalculation\CalculationRate'  => $librarySubModel . 'Content/InstallmentCalculation/CalculationRate.php',
         $librarySubModelContent . '\InstallmentCalculation\CalculationTime'  => $librarySubModel . 'Content/InstallmentCalculation/CalculationTime.php',
         $librarySubModelContent . '\InstallmentCalculation\Configuration'    => $librarySubModel . 'Content/InstallmentCalculation/Configuration.php',
-        $librarySubModelContent . '\Customer\Addresses'         => $librarySubModel . 'Content/Content/Addresses.php',
-        $librarySubModelContent . '\Customer\BankAccount'       => $librarySubModel . 'Content/Content/BankAccount.php',
-        $librarySubModelContent . '\Customer\Contacts'          => $librarySubModel . 'Content/Content/Contacts.php',
-        $librarySubModelContent . '\Customer\Contacts\Phone'    => $librarySubModel . 'Content/Content/Contacts/Phone.php',
-        $librarySubModelContent . '\Customer\Addresses\Address' => $librarySubModel . 'Content/Content/Addresses/Address.php',
-        )
+        $librarySubModelContent . '\Customer\Addresses'         => $librarySubModel . 'Content/Customer/Addresses.php',
+        $librarySubModelContent . '\Customer\BankAccount'       => $librarySubModel . 'Content/Customer/BankAccount.php',
+        $librarySubModelContent . '\Customer\Contacts'          => $librarySubModel . 'Content/Customer/Contacts.php',
+        $librarySubModelContent . '\Customer\Contacts\Phone'    => $librarySubModel . 'Content/Customer/Contacts/Phone.php',
+        $librarySubModelContent . '\Customer\Addresses\Address' => $librarySubModel . 'Content/Customer/Addresses/Address.php',
+        $librarySubModelContent . '\Customer'                   => $librarySubModel . 'Content/Customer.php',
+        'RatePAY\Model\Request\TraitRequestContent'             => $libraryModel . 'Request/TraitRequestContent.php',
+        'RatePAY\Model\Request\TraitRequestSubtype'             => $libraryModel . 'Request/TraitRequestSubtype.php'
+
+    )
 );

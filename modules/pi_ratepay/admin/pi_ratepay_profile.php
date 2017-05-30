@@ -183,7 +183,7 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                         'delivery_countries' => $result['merchantConfig']['country-code-delivery']
                     );
 
-                    if (empty($secondSaveArray['b2b']) || $secondSaveArray['b2b'] == 0) {
+                    if ($secondSaveArray['b2b'] !== 0) {
                         $secondSaveArray['b2b'] = (int) $result['merchantConfig']['tx-limit-' . $methodDB . '-max'];
                     }
 

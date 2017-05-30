@@ -63,17 +63,6 @@
                     <div class="piRpNintyPercentWidth piRpFloatLeft"><?php echo $pi_lang_payment_text_wishrate; ?></div>
                 </label>
                 <div id="piRpContentTerm" class="piRpContent" style="display: none;">
-                    <?php if($pi_firstday){ ?>
-                        <div id="piRpDueDate" class="piRpDueDate">
-                            <div class="piRpDueText"><?php echo $pi_lang_due_date; ?></div>
-                            <select name="piRpDueDateSelect" id="debitSelect" size="3">
-                                <option value="1" selected="selected">Zum 1. des Monats</option>
-                                <option value="15">Zum 15. des Monats</option>
-                                <option value="28">Zum 28. des Monats</option>
-                            </select>
-                            <br class="piRpClearFix" />
-                        </div>
-                    <?php } ?>
                     <br class="piRpClearFix" />
                     <div class="piRpMarginTop">
                         <span class="piRpVertAlignMiddle"><?php echo $pi_lang_please . " " . $pi_lang_insert_wishrate; ?>:</span>
@@ -90,17 +79,6 @@
                     <div class="piRpNintyPercentWidth piRpFloatLeft"><?php echo $pi_lang_payment_text_runtime; ?></div>
                 </label>
                 <div id="piRpContentRuntime" class="piRpContent" style="display: none;">
-                    <?php if($pi_firstday){ ?>
-                        <div id="piRpDueDate" class="piRpDueDate">
-                            <div class="piRpDueText"><?php echo $pi_lang_due_date; ?></div>
-                            <select name="piRpDueDateSelect" class="piRpDueDateSelect" id="debitSelectRuntime" size="3">
-                                <option value="1" selected="selected"><?php echo $pi_lang_first_month; ?></option>
-                                <option value="15"><?php echo $pi_lang_second_month; ?></option>
-                                <option value="28"><?php echo $pi_lang_third_month; ?></option>
-                            </select>
-                            <br class="piRpClearFix" />
-                        </div>
-                    <?php } ?>
                     <br class="piRpClearFix" />
                     <div class="piRpMarginTop">
                         <span class="piRpVertAlignMiddle"><?php echo $pi_lang_please . " " . $pi_lang_insert_runtime; ?>:</span>

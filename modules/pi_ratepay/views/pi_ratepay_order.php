@@ -55,15 +55,16 @@ class pi_ratepay_order extends pi_ratepay_order_parent
      *
      * @uses function _ratepayRequest
      * @uses function _saveRatepayOrder
-     * @see order::execute()
+     * @see  order::execute()
      * @return string
      */
     public function execute()
     {
         $this->_paymentId = $this->getBasket()->getPaymentId();
 
-        if($this->getSession()->getVariable('pi_ratepay_shops_order_id') != null &&
-           $this->getSession()->getBasket()->getOrderId() == $this->getSession()->getVariable('pi_ratepay_shops_order_id')) {
+        if ($this->getSession()->getVariable('pi_ratepay_shops_order_id') != null &&
+            $this->getSession()->getBasket()->getOrderId() == $this->getSession()->getVariable('pi_ratepay_shops_order_id')
+        ) {
 
             $trans_id = oxDb::getDb()->getOne("SELECT TRANSACTION_ID FROM pi_ratepay_orders WHERE ORDER_NUMBER = '" . $this->getSession()->getBasket()->getOrderId() . "'");
             $strans_id = oxDb::getDb()->getOne("SELECT TRANSACTION_SHORT_ID FROM pi_ratepay_orders WHERE ORDER_NUMBER = '" . $this->getSession()->getBasket()->getOrderId() . "'");
@@ -78,7 +79,7 @@ class pi_ratepay_order extends pi_ratepay_order_parent
             pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->getSession()->getBasket()->getOrderId(), $trans_id, $paymentMethod, 'PAYMENT_CHANGE', $subtype, $changePayment['request'], $name, $surname, $changePayment['response']);
 
         }
-        
+
         if (in_array($this->_paymentId, pi_ratepay_util_utilities::$_RATEPAY_PAYMENT_METHOD)) {
             $paymentMethodIds = array(
                 'pi_ratepay_rechnung' => array(
@@ -119,7 +120,8 @@ class pi_ratepay_order extends pi_ratepay_order_parent
 
                 if (!$this->_ratepayInitRequest()) {
                     if (!$this->getSession()->getVariable($this->_paymentId . '_error_id') == $paymentMethodIds[$this->_paymentId]['connection_timeout'] &&
-                        !$this->_isSandbox(pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId))) {
+                        !$this->_isSandbox(pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId))
+                    ) {
                         $this->getSession()->setVariable('pi_ratepay_denied', 'denied');
                     }
                     $this->getSession()->setVariable($this->_paymentId . '_error_id', $paymentMethodIds[$this->_paymentId]['denied']);
@@ -129,15 +131,15 @@ class pi_ratepay_order extends pi_ratepay_order_parent
                 if (!$this->_ratepayRequest()) {
                     if ((!$this->getSession()->getVariable($this->_paymentId . '_error_id') == $paymentMethodIds[$this->_paymentId]['connection_timeout']) &&
                         (!$this->getSession()->getVariable($this->_paymentId . '_error_id') == $paymentMethodIds[$this->_paymentId]['soft']) &&
-                        !$this->_isSandbox(pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId)))
-                    {
-                            $this->getSession()->setVariable('pi_ratepay_denied', 'denied');
+                        !$this->_isSandbox(pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId))
+                    ) {
+                        $this->getSession()->setVariable('pi_ratepay_denied', 'denied');
                     }
 
                     $message = $this->getSession()->getVariable($this->_paymentId . '_message');
                     if ($this->getSession()->getVariable($this->_paymentId . '_error_id') == $paymentMethodIds[$this->_paymentId]['soft'] &&
-                        !empty($message))
-                    {
+                        !empty($message)
+                    ) {
                         $this->getSession()->setVariable($this->_paymentId . '_error_id', $paymentMethodIds[$this->_paymentId]['soft']);
                     } else {
                         $this->getSession()->setVariable($this->_paymentId . '_error_id', $paymentMethodIds[$this->_paymentId]['denied']);
@@ -154,7 +156,7 @@ class pi_ratepay_order extends pi_ratepay_order_parent
                     // performing special actions after user finishes order (assignment to special user groups)
                     $oUser->onOrderExecute($oBasket, $iSuccess);
 
-                    if($oBasket->getOrderId() != null && $oBasket->getOrderId() != $this->getSession()->getVariable('pi_ratepay_shops_order_id')) {
+                    if ($oBasket->getOrderId() != null && $oBasket->getOrderId() != $this->getSession()->getVariable('pi_ratepay_shops_order_id')) {
                         $this->getSession()->setVariable('pi_ratepay_shops_order_id', $oBasket->getOrderId());
                     }
 
@@ -162,13 +164,12 @@ class pi_ratepay_order extends pi_ratepay_order_parent
                     $tid = $this->getSession()->getVariable($this->_paymentId . '_trans_id');
 
                     $orderLogs = pi_ratepay_LogsService::getInstance()->getLogsList("transaction_id = " . oxDb::getDb(true)->quote($tid));
-                    foreach($orderLogs as $log) {
+                    foreach ($orderLogs as $log) {
                         $log->assign(array('order_number' => $this->getSession()->getVariable('pi_ratepay_shops_order_id')));
                         $log->save();
                     }
 
                     $this->_ratepayPaymentType = $this->getBasket()->getPaymentId();
-                    $this->_ratepayConfirm();
 
                     // proceeding to next view
                     return $this->_getNextStep($iSuccess);
@@ -196,7 +197,6 @@ class pi_ratepay_order extends pi_ratepay_order_parent
     }
 
 
-
     /**
      * Do init payment request redirect to order on succes, on failure redirect back to payment.
      */
@@ -214,13 +214,14 @@ class pi_ratepay_order extends pi_ratepay_order_parent
 
         $transactionId = '';
 
-        pi_ratepay_LogsService::getInstance()->logRatepayTransaction('', $transactionId, $paymentMethod, 'PAYMENT_INIT', '',  $name, $surname, $payInit);
+        pi_ratepay_LogsService::getInstance()->logRatepayTransaction('', $transactionId, $paymentMethod, 'PAYMENT_INIT', '', $name, $surname, $payInit);
 
         if ($payInit->isSuccessful()) {
-                $transactionId = (string) $payInit->getTransactionId();
-                $this->getSession()->setVariable($this->_paymentId . '_trans_id', (string) $transactionId);
+            $transactionId = (string)$payInit->getTransactionId();
+            $this->getSession()->setVariable($this->_paymentId . '_trans_id', (string)$transactionId);
+            //$this->getSession()->setVariable($this->_paymentId . '_trans_short_id', (string)$payInit->getTransactionShortId());
 
-                return true;
+            return true;
         } elseif ($payInit->getReasonCode() != 703) {
             $this->getSession()->setVariable($this->_paymentId . '_error_id', "-418");
         } else {
@@ -245,32 +246,36 @@ class pi_ratepay_order extends pi_ratepay_order_parent
      */
     private function _ratepayRequest()
     {
-        $ratepayRequest = $this->_getRatepayRequest($this->_paymentId, $this->getBasket());
 
         $paymentMethod = pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId);
 
-        $requestPayment = $ratepayRequest->requestPayment();
+        $modelFactory = new ModelFactory();
+        $modelFactory->setSandbox($this->_isSandbox($paymentMethod));
+        $modelFactory->setPaymentType($this->_paymentId);
+        $modelFactory->setBasket($this->getBasket());
+        $modelFactory->setTransactionId($this->getSession()->getVariable($this->_paymentId . '_trans_id'));
+        $modelFactory->setCustomerId($this->getUser()->oxuser__oxcustnr->value);
+        $modelFactory->setDeviceToken($this->getSession()->getVariable('pi_ratepay_dfp_token'));
+
+        $payRequest = $modelFactory->doOperation('PAYMENT_REQUEST', array());
+
         $transactionId = $this->getSession()->getVariable($this->_paymentId . '_trans_id');
         $paymentRequestType = 'PAYMENT_REQUEST';
 
         $name = $this->getUser()->oxuser__oxfname->value;
         $surname = $this->getUser()->oxuser__oxlname->value;
 
-        pi_ratepay_LogsService::getInstance()->logRatepayTransaction('', $transactionId, $paymentMethod, $paymentRequestType, '', $requestPayment['request'], $name, $surname, $requestPayment['response']);
+        pi_ratepay_LogsService::getInstance()->logRatepayTransaction('', $transactionId, $paymentMethod, $paymentRequestType, '', $name, $surname, $payRequest);
 
-        if ($requestPayment['response']) {
-            if (((string) $requestPayment['response']->head->processing->status->attributes()->code) == "OK" &&
-                ((string) $requestPayment['response']->head->processing->result->attributes()->code) == "402")
-            {
-                $descriptor = (string) $requestPayment['response']->content->payment->descriptor;
-                $this->getSession()->setVariable($this->_paymentId . '_descriptor', $descriptor);
-                return true;
-            } elseif (((string) $requestPayment['response']->head->processing->status->attributes()->code) == "ERROR" &&
-                     ((string) $requestPayment['response']->head->processing->result->attributes()->code) == "150") {
-                $vars = get_object_vars($requestPayment['response']->head->processing);
-                $this->getSession()->setVariable($this->_paymentId . '_error_id', "-001");
-                $this->getSession()->setVariable($this->_paymentId . '_message', (string)$vars['customer-message']);
-            }
+        if ($payRequest->isSuccessful()) {
+
+            $descriptor = (string)$payRequest->getDescriptor();
+            $this->getSession()->setVariable($this->_paymentId . '_descriptor', $descriptor);
+            return true;
+        } elseif ($payRequest->getResultCode() == 150) {
+            $vars = $payRequest->getCustomerMessage();
+            $this->getSession()->setVariable($this->_paymentId . '_error_id', "-001");
+            $this->getSession()->setVariable($this->_paymentId . '_message', (string)$vars['customer-message']);
         } else {
             $this->getSession()->setVariable($this->_paymentId . '_error_id', "-418");
         }
