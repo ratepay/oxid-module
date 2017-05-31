@@ -416,18 +416,6 @@ class pi_ratepay_order extends pi_ratepay_order_parent
     }
 
     /**
-     * Get RatePAY Request object.
-     * @return  pi_ratepay_ratepayrequest
-     */
-    protected function _getRatepayRequestOLD($paymentType)
-    {
-        $requestDataProvider = oxNew('pi_ratepay_requestdatafrontend', $paymentType);
-        $ratepayRequest = oxNew('pi_ratepay_ratepayrequest', $this->_selectedPaymentMethod, $requestDataProvider, null, array('country' => pi_ratepay_util_utilities::getCountry($this->getUser()->oxuser__oxcountryid->value)));
-
-        return $ratepayRequest;
-    }
-
-    /**
      * Get Ratepay Request object.
      * @param string $paymentType
      * @param oxbasket $basket
@@ -437,44 +425,6 @@ class pi_ratepay_order extends pi_ratepay_order_parent
     {
         $requestDataProvider = oxNew('pi_ratepay_requestdatafrontend', $paymentType, $basket);
         return oxNew('pi_ratepay_ratepayrequest', $paymentType, $requestDataProvider);
-    }
-
-    /**
-     * Do RatePAY PAYMENT_CONFIRM
-     *
-     * Creates request object (type: SimpleXMLExtended) for payment request. Sends the request with
-     * pi_ratepay_xml_service::paymentOperation and logs transaction.
-     *
-     * @uses  function _setRatepayHead
-     */
-    private function _ratepayConfirm()
-    {
-        $ratepayRequest = $this->_getRatepayConfirm();
-
-        $name = $this->getUser()->oxuser__oxfname->value;
-        $surname = $this->getUser()->oxuser__oxlname->value;
-
-        $confirmPayment = $ratepayRequest->confirmPayment();
-
-        pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->_oBasket->getOrderId(), $this->getSession()->getVariable($this->_ratepayPaymentType . '_trans_id'), pi_ratepay_util_utilities::getPaymentMethod($this->_ratepayPaymentType), 'PAYMENT_CONFIRM', '', $confirmPayment['request'], $name, $surname, $confirmPayment['response']);
-
-        if ($confirmPayment['response'] && ((string) $confirmPayment['response']->head->processing->status->attributes()->code) == "OK" && ((string) $confirmPayment['response']->head->processing->result->attributes()->code) == "400") {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Get RatePAY Request object.
-     * @return  pi_ratepay_ratepayrequest
-     */
-    protected function _getRatepayConfirm()
-    {
-        $requestDataProvider = oxNew('pi_ratepay_requestdatafrontend', $this->_ratepayPaymentType, $this->getBasket());
-        $ratepayRequest = oxNew('pi_ratepay_ratepayrequest', $this->_ratepayPaymentType, $requestDataProvider);
-
-        return $ratepayRequest;
     }
 
     protected function _isSandbox($method)

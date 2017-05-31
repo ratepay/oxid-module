@@ -149,7 +149,8 @@ class ModelFactory extends oxSuperCfg {
     /**
      * return the head for an request
      */
-    private function _getHead() {
+    private function _getHead()
+    {
         if ($this->_profileId && $this->_securityCode) {
             $profileId = $this->_profileId;
             $securityCode = $this->_securityCode;
@@ -318,6 +319,16 @@ class ModelFactory extends oxSuperCfg {
             }
         }
 
+        $shippingCosts = $this->_getShippingCosts();
+        if (!empty($shippingCosts)) {
+            $contentArr['ShoppingBasket']['Shipping'] = $shippingCosts;
+        }
+
+        $discount = $this->_getDiscount();
+        if (!empty($discount)) {
+            $contentArr['ShoppingBasket']['Discount'] = $discount;
+        }
+
         $mbContent = new RatePAY\ModelBuilder('Content');
         $mbContent->setArray($contentArr);
 
@@ -328,10 +339,95 @@ class ModelFactory extends oxSuperCfg {
     }
 
     /**
+     * get shipping costs
+     *
+     * @return array|bool
+     */
+    private function _getShippingCosts()
+    {
+        $basket = $this->_basket;
+        if (method_exists($basket, 'getDeliveryCost') && $basket->getDeliveryCost()) {
+            $deliveryCosts = $basket->getDeliveryCost()->getPrice();
+            $deliveryVat = $basket->getDeliveryCost()->getVat();
+        } elseif (method_exists($basket, 'getDeliveryCosts') && $basket->getDeliveryCosts()) {
+            $deliveryCosts = $basket->getDeliveryCosts();
+            if ($basket->getDelCostNet() > 0) {
+                $deliveryVat = $basket->getDelCostVatPercent();
+            } else {
+                $deliveryVat = 0;
+            }
+        } else {
+            return false;
+        }
+
+        if (empty($deliveryCosts)) {
+            return false;
+        }
+        $shipping = array(
+            'Description'       => 'Shipping Costs',
+            'UnitPriceGross'    => $deliveryCosts,
+            'TaxRate'           => $deliveryVat,
+        );
+
+        return $shipping;
+    }
+
+    /**
+     * get discount
+     *
+     * @return array|bool|int
+     */
+    private function _getDiscount()
+    {
+        $discount = 0;
+        $basket = $this->_basket;
+        $util = new pi_ratepay_util_Utilities();
+
+        if ($basket->getTotalDiscount() && $basket->getTotalDiscount()->getBruttoPrice() > 0) {
+            $discount = $discount + (float)$util->getFormattedNumber($basket->getTotalDiscount()->getBruttoPrice());
+        }
+
+        if (count($basket->getVouchers())) {
+
+            foreach ($basket->getVouchers() as $voucher) {
+                $vNr = $voucher->sVoucherId;
+                $vNr = $this->_getVoucherTitle($vNr);
+                $discount = $discount + (float)$util->getFormattedNumber($voucher->dVoucherdiscount);
+
+            }
+        }
+
+        if (empty($discount) || $discount <= 0) {
+            return false;
+        }
+
+        $discount = array(
+            'Description'       => 'Discount ' . $vNr,
+            'UnitPriceGross'    => $discount,
+            'TaxRate'           => $util->getFormattedNumber("0"),
+        );
+
+        return $discount;
+    }
+
+    /**
+     * get voucher title
+     *
+     * @param $oxid
+     * @return false|string
+     */
+    private function _getVoucherTitle($oxid)
+    {
+        $voucher = oxDB::getDb()->getOne("SELECT OXVOUCHERSERIEID FROM oxvouchers WHERE OXID ='" . $oxid . "'");
+        return oxDb::getDb()->getOne("SELECT OXSERIENR FROM oxvoucherseries WHERE OXID ='" . $voucher . "'");
+    }
+
+    /**
      * get installment data
      * @return array
      */
-    private function _getInstallmentData() {
+    private function _getInstallmentData()
+    {
         $util = new pi_ratepay_util_Utilities();
         return array(
             'InstallmentNumber'     => $this->getSession()->getVariable('pi_ratepay_rate_number_of_rates'),
@@ -438,6 +534,8 @@ class ModelFactory extends oxSuperCfg {
     private function _getBasket()
     {
         $shoppingBasket = array();
+        $util = new pi_ratepay_util_Utilities();
+
         foreach ($this->_basket->getContents() AS $article) {
 
             $item = array(
@@ -450,6 +548,114 @@ class ModelFactory extends oxSuperCfg {
 
             $shoppingBasket['Items'][] = array('Item' => $item);
         }
+
+        //wrapping costs
+        if (method_exists($this->_basket, 'getWrappingCost') && $this->_basket->getWrappingCost()) {
+            $wrappingCosts = $this->_basket->getWrappingCost()->getBruttoPrice();
+            $wrappingVat = $this->_basket->getWrappingCost()->getVat();
+        } elseif (method_exists($this->_basket, 'getFWrappingCosts') && $this->_basket->getFWrappingCosts()) {
+            $wrappingCosts = $this->_basket->getFWrappingCosts();
+            if ($this->_basket->getWrappCostNet() > 0) {
+                $wrappingVat = $this->_basket->getWrappCostVatPercent();
+            } else {
+                $wrappingVat = 0;
+            }
+        } else {
+            $wrappingCosts = 0;
+        }
+        if (!empty($wrappingCosts) && $wrappingCosts > 0) {
+            $item = array(
+                'Description' => 'Wrapping Costs',
+                'ArticleNumber' => 'oxwrapping',
+                'Quantity' => 1,
+                'UnitPriceGross' => $util->getFormattedNumber($wrappingCosts, '2', '.'),
+                'TaxRate' => $util->getFormattedNumber(ceil($wrappingVat), '2', '.'),
+            );
+
+            $shoppingBasket['Items'][] = array('Item' => $item);
+        }
+
+        //giftcard costs
+        if (method_exists($this->_basket, 'getGiftCardCost') && $this->_basket->getGiftCardCost()) {
+            $giftcardCosts = $this->_basket->getGiftCardCost()->getPrice();
+            $giftcardVat = $this->_basket->getGiftCardCost()->getVat();
+        } elseif (method_exists($this->_basket, 'getFGiftCardCosts') && $this->_basket->getFGiftCardCosts()) {
+            $giftcardCosts = $this->_basket->getFGiftCardCosts();
+            if ($this->_basket->getGiftCardCostNet() > 0) {
+                $giftcardVat = $this->_basket->getGiftCardCostVatPercent();
+            } else {
+                $giftcardVat = 0;
+            }
+        } else {
+            $giftcardCosts = 0;
+        }
+        if (!empty($giftcardCosts) && $giftcardCosts > 0) {
+            $item = array(
+                'Description' => 'Giftcard Costs',
+                'ArticleNumber' => 'oxgiftcard',
+                'Quantity' => 1,
+                'UnitPriceGross' => $util->getFormattedNumber($giftcardCosts, '2', '.'),
+                'TaxRate' => $util->getFormattedNumber(ceil($giftcardVat), '2', '.'),
+            );
+
+            $shoppingBasket['Items'][] = array('Item' => $item);
+        }
+
+        //payment costs
+        if (method_exists($this->_basket, 'getPaymentCost') && $this->_basket->getPaymentCost()) {
+            $paymentCosts = $this->_basket->getPaymentCost()->getPrice();
+            $paymentVat = $this->_basket->getPaymentCost()->getVat();
+        } elseif (method_exists($this->_basket, 'getPaymentCosts') && $this->_basket->getPaymentCosts()) {
+            $paymentCosts = $this->_basket->getPaymentCosts();
+            if ($this->_basket->getPayCostNet() > 0) {
+                $paymentVat = $this->_basket->getPayCostVatPercent();
+            } else {
+                $paymentVat = 0;
+            }
+        } else {
+            $paymentCosts = 0;
+        }
+
+        if (!empty($paymentCosts) && $paymentCosts > 0) {
+            $item = array(
+                'Description' => 'Giftcard Costs',
+                'ArticleNumber' => 'oxgiftcard',
+                'Quantity' => 1,
+                'UnitPriceGross' => $util->getFormattedNumber($paymentCosts, '2', '.'),
+                'TaxRate' => $util->getFormattedNumber(ceil($paymentVat), '2', '.'),
+            );
+
+            $shoppingBasket['Items'][] = array('Item' => $item);
+        }
+
+        //trusted protection
+        if (method_exists($this->_basket, 'getTrustedShopProtectionCost') && $this->_basket->getTrustedShopProtectionCost()) {
+            $tsProtectionCosts = $this->_basket->getTrustedShopProtectionCost()->getPrice();
+            $tsProtectionVat = $this->_basket->getTrustedShopProtectionCost()->getVat();
+        } elseif (method_exists($this->_basket, 'getTsProtectionCosts') && $this->_basket->getTsProtectionCosts()) {
+            $tsProtectionCosts = $this->_basket->getTsProtectionCosts();
+            if ($this->_basket->getTsProtectionNet() > 0) {
+                $tsProtectionVat = $this->_basket->getTsProtectionVatPercent();
+            } else {
+                $tsProtectionNettoPrice = $tsProtectionCosts;
+                $tsProtectionVat = 0;
+            }
+        } else {
+            $tsProtectionCosts = 0;
+        }
+
+        if (!empty($tsProtectionCosts) && $tsProtectionCosts > 0) {
+            $item = array(
+                'Description' => 'Giftcard Costs',
+                'ArticleNumber' => 'oxgiftcard',
+                'Quantity' => 1,
+                'UnitPriceGross' => $util->getFormattedNumber($tsProtectionCosts, '2', '.'),
+                'TaxRate' => $util->getFormattedNumber(ceil($tsProtectionVat), '2', '.'),
+            );
+
+            $shoppingBasket['Items'][] = array('Item' => $item);
+        }
+
         return $shoppingBasket;
 
     }
@@ -460,7 +666,8 @@ class ModelFactory extends oxSuperCfg {
      * @param $countryId
      * @return false|string
      */
-    private function _getCountryCodeById($countryId) {
+    private function _getCountryCodeById($countryId)
+    {
         return oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $countryId . "'");
     }
 
