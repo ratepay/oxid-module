@@ -89,6 +89,8 @@ class pi_ratepay_Details extends oxAdminDetails
      */
     private $_utfMode = null;
 
+    private $_transactionId;
+
     /**
      * Preparing all necessary Data for rendering and executing all calls
      * also: {@inheritdoc}
@@ -123,13 +125,14 @@ class pi_ratepay_Details extends oxAdminDetails
         $this->_shopId = $this->getConfig()->getShopId();
         $this->_shopId = oxNew('pi_ratepay_settings')->setShopIdToOne($this->_shopId);
 
+
         $this->pi_ratepay_order_details = 'pi_ratepay_order_details';
 
         $this->_requestDataBackend = oxNew('pi_ratepay_requestdatabackend', $this->getEditObject());
 
         $ratepayOrder = oxNew('pi_ratepay_orders');
         $ratepayOrder->loadByOrderNumber($this->_getOrderId());
-
+        $this->_transactionId = $ratepayOrder->pi_ratepay_orders__transaction_id->rawValue;
         $transactionId = $ratepayOrder->pi_ratepay_orders__transaction_id->rawValue;
         $descriptor = $ratepayOrder->pi_ratepay_orders__descriptor->rawValue;
         $this->addTplParam('pi_transaction_id', $transactionId);
@@ -435,18 +438,34 @@ class pi_ratepay_Details extends oxAdminDetails
         return $full;
     }
 
+    protected function _isSandbox($method)
+    {
+        $settings = oxNew('pi_ratepay_settings');
+        $settings->loadByType(strtolower($method), $this->_shopId);
+        return ($settings->pi_ratepay_settings__sandbox->rawValue);
+    }
+
     /**
      * Excecute payment change request. If the request succeeds add voucher to order and log to history.
      */
     protected function deliverRequest()
     {
         $operation = 'CONFIRMATION_DELIVER';
-        $subtype = '';
+        $modelFactory = new ModelFactory();
+        $paymentMethod = pi_ratepay_util_utilities::getPaymentMethod($this->_paymentSid);
+        $modelFactory->setSandbox($this->_isSandbox($paymentMethod));
+        $modelFactory->setPaymentType($this->_getPaymentSid());
+        $modelFactory->setShopId($this->_shopId);
+        $articles = $this->getPreparedOrderArticles();
+        $modelFactory->setBasket($articles);
+        $modelFactory->setTransactionId($this->_transactionId);
+        $modelFactory->setOrderId($this->_getOrderId());
 
-        $response = $this->ratepayRequest($operation, $subtype);
+        $deliver = $modelFactory->doOperation($operation);
 
         $isSuccess = 'pierror';
-        if ($response && (string) $response->head->processing->result->attributes()->code == '404') {
+
+        if ($deliver->isSuccessful()) {
             $articles = $this->getPreparedOrderArticles();
             foreach ($articles as $article) {
                 if (oxRegistry::getConfig()->getRequestParameter($article['arthash']) > 0) {
@@ -454,13 +473,13 @@ class pi_ratepay_Details extends oxAdminDetails
                     $artid = $article['artid'];
                     // @todo this can be done better
                     oxDb::getDb()->execute("update $this->pi_ratepay_order_details set shipped=shipped+$quant where order_number='" . $this->_getOrderId() . "' and article_number='$artid'");
-                    $this->_logHistory($this->_getOrderId(), $artid, $quant, $operation, $subtype);
+                    $this->_logHistory($this->_getOrderId(), $artid, $quant, $operation, '');
                 }
             }
             $isSuccess = 'pisuccess';
         }
 
-        $this->addTplParam($isSuccess, $subtype);
+        $this->addTplParam($isSuccess, '');
     }
 
     /**
@@ -747,6 +766,7 @@ class pi_ratepay_Details extends oxAdminDetails
         $articles = $this->getPreparedOrderArticles();
         $total = 0;
         $cur = '';
+
         foreach ($articles as $article) {
             $cur = $article['currency'];
             if(oxRegistry::getConfig()->getRequestParameter($article['arthash']) > 0) {

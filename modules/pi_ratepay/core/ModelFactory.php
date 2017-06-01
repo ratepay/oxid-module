@@ -37,6 +37,36 @@ class ModelFactory extends oxSuperCfg {
 
     protected $_customerId;
 
+    protected $_subtype;
+
+    protected $_shopId;
+
+    protected $_countryId;
+
+    /**
+     * @param mixed $subtype
+     */
+    public function setSubtype($subtype)
+    {
+        $this->_subtype = $subtype;
+    }
+
+    /**
+     * @param mixed $shopId
+     */
+    public function setShopId($shopId)
+    {
+        $this->_shopId = $shopId;
+    }
+
+    /**
+     * @param mixed $countryId
+     */
+    public function setCountryId($countryId)
+    {
+        $this->_countryId = $countryId;
+    }
+
     /**
      * @param mixed $customerId
      */
@@ -125,7 +155,7 @@ class ModelFactory extends oxSuperCfg {
      * @param bool $operationData
      * @return bool|mixed|object
      */
-    public function doOperation($operation, $operationData = false)
+    public function doOperation($operation)
     {
         switch ($operation) {
             case 'PAYMENT_INIT':
@@ -136,14 +166,59 @@ class ModelFactory extends oxSuperCfg {
                 break;
             case 'PAYMENT_QUERY':
                 break;
-            case 'CONFIRMATION_DELIVERY':
+            case 'CONFIRMATION_DELIVER':
+                return $this->_makeConfirmationDeliver();
                 break;
             case 'PAYMENT_CHANGE':
+                return $this->_makePaymentChange();
                 break;
             case 'PROFILE_REQUEST':
                 return $this->_makeProfileRequest();
                 break;
         }
+    }
+
+    private function _makeConfirmationDeliver()
+    {
+        $mbHead = $this->_getHead();
+
+        $shoppingBasket = [
+            'ShoppingBasket' => $this->_getSpecialBasket(),
+        ];
+
+        $mbContent = new RatePAY\ModelBuilder('Content');
+        $mbContent->setArray($shoppingBasket);
+        //$mbContent->setArray($invoicing);
+
+        $rb = new \RatePAY\RequestBuilder($this->_sandbox);
+        $confirmationDeliver = $rb->callConfirmationDeliver($mbHead, $mbContent);
+        return $confirmationDeliver;
+    }
+
+    /**
+     * make payment change
+     *
+     * @param $operationData
+     * @return object|bool
+     */
+    private function _makePaymentChange()
+    {
+        $mbHead = $this->_getHead();
+        $detailsViewData = oxNew('pi_ratepay_detailsviewdata', $this->_orderId);
+
+        $this->basket = $detailsViewData->getPreparedOrderArticles();
+
+        $shoppingBasket = [
+            'ShoppingBasket' => $this->_getSpecialBasket(),
+        ];
+
+        $mbContent = new RatePAY\ModelBuilder('Content');
+        $mbContent->setArray($shoppingBasket);
+
+        $rb = new \RatePAY\RequestBuilder($this->_sandbox);
+        $confirmationDeliver = $rb->callPaymentChange($mbHead, $mbContent)->subtype($this->_subtype);
+
+        return $confirmationDeliver;
     }
 
     /**
@@ -159,12 +234,12 @@ class ModelFactory extends oxSuperCfg {
             $paymentMethod =  $util->getPaymentMethod($this->_paymentType);
 
             $paymentMethod = strtolower($paymentMethod);
-            $country = $this->_getCountryCodeById($this->getUser()->oxuser__oxcountryid->value);
+            $country = $this->_getCountryCodeById($this->_countryId);
             $settings = oxNew('pi_ratepay_settings');
             if ($country) {
-                $settings->loadByType($paymentMethod, oxRegistry::getSession()->getVariable('shopId'), $country);
+                $settings->loadByType($paymentMethod, $this->_shopId, $country);
             } else {
-                $settings->loadByType($paymentMethod, oxRegistry::getSession()->getVariable('shopId'));
+                $settings->loadByType($paymentMethod, $this->_shopId);
             }
             $profileId = $settings->pi_ratepay_settings__profile_id->rawValue;
             $securityCode = $settings->pi_ratepay_settings__security_code->rawValue;
@@ -524,6 +599,51 @@ class ModelFactory extends oxSuperCfg {
         }
 
         return $address;
+    }
+
+    /**
+     * get special basket for deliver and change
+     *
+     * @return array
+     */
+    private function _getSpecialBasket()
+    {
+        $shoppingBasket = array();
+
+        foreach ($this->_basket AS $article) {
+
+            if ($article['artnum'] == 'oxdelivery') {
+                $shoppingBasket['Shipping'] = [
+                    'Description' => 'Shipping Costs',
+                    'UnitPriceGross' => $article['unitprice'],
+                    'TaxRate'       => $article['vat'],
+                ];
+                continue;
+            }
+            if ($article['artnum'] == 'discount') {
+                $shoppingBasket['Discount'] = [
+                    'Description' => 'Discount ' . $article['unitprice'],
+                    'UnitPriceGross' => $article['unitprice'],
+                    'TaxRate'       => $article['vat'],
+                ];
+                continue;
+            }
+
+            $item = array(
+                'Description' => $article['title'],
+                'ArticleNumber' => $article['artnum'],
+                'Quantity' => $article['amount'],
+                'UnitPriceGross' => $article['totalprice'] / $article['amount'],
+                'TaxRate' => $article['vat'],
+            );
+
+            if (!empty($article['bruttoprice'])) {
+                $item['UnitPriceGross'] = $article['bruttoprice'];
+            }
+
+            $shoppingBasket['Items'][] = array('Item' => $item);
+        }
+        return $shoppingBasket;
     }
 
     /**

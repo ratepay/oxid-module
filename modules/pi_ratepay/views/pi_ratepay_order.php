@@ -207,7 +207,9 @@ class pi_ratepay_order extends pi_ratepay_order_parent
         $modelFactory = new ModelFactory();
         $modelFactory->setSandbox($this->_isSandbox(pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId)));
         $modelFactory->setPaymentType($this->_paymentId);
-        $payInit = $modelFactory->doOperation('PAYMENT_INIT', array());
+        $modelFactory->setCountryId($this->getUser()->oxuser__oxcountryid->value);
+        $modelFactory->setShopId(oxRegistry::getSession()->getVariable('shopId'));
+        $payInit = $modelFactory->doOperation('PAYMENT_INIT');
 
         $name = $this->getUser()->oxuser__oxfname->value;
         $surname = $this->getUser()->oxuser__oxlname->value;
@@ -253,11 +255,13 @@ class pi_ratepay_order extends pi_ratepay_order_parent
         $modelFactory->setSandbox($this->_isSandbox($paymentMethod));
         $modelFactory->setPaymentType($this->_paymentId);
         $modelFactory->setBasket($this->getBasket());
+        $modelFactory->setCountryId($this->getUser()->oxuser__oxcountryid->value);
+        $modelFactory->setShopId(oxRegistry::getSession()->getVariable('shopId'));
         $modelFactory->setTransactionId($this->getSession()->getVariable($this->_paymentId . '_trans_id'));
         $modelFactory->setCustomerId($this->getUser()->oxuser__oxcustnr->value);
         $modelFactory->setDeviceToken($this->getSession()->getVariable('pi_ratepay_dfp_token'));
 
-        $payRequest = $modelFactory->doOperation('PAYMENT_REQUEST', array());
+        $payRequest = $modelFactory->doOperation('PAYMENT_REQUEST');
 
         $transactionId = $this->getSession()->getVariable($this->_paymentId . '_trans_id');
         $paymentRequestType = 'PAYMENT_REQUEST';
