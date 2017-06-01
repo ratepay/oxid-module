@@ -366,11 +366,20 @@ class pi_ratepay_Details extends oxAdminDetails
     protected function paymentChangeRequest($paymentChangeType)
     {
         $operation = 'PAYMENT_CHANGE';
-
-        $response = $this->ratepayRequest($operation, $paymentChangeType);
+        $modelFactory = new ModelFactory();
+        $paymentMethod = pi_ratepay_util_utilities::getPaymentMethod($this->_paymentSid);
+        $modelFactory->setSandbox($this->_isSandbox($paymentMethod));
+        $modelFactory->setPaymentType($this->_getPaymentSid());
+        $modelFactory->setShopId($this->_shopId);
+        $articles = $this->getPreparedOrderArticles();
+        $modelFactory->setBasket($articles);
+        $modelFactory->setTransactionId($this->_transactionId);
+        $modelFactory->setOrderId($this->_getOrderId());
+        $modelFactory->setSubtype($paymentChangeType);
+        $change = $modelFactory->doOperation($operation);
 
         $isSuccess = 'pierror';
-        if ($response && (string) $response->head->processing->result->attributes()->code == '403') {
+        if ($change->isSuccessful()) {
             $articles = $this->getPreparedOrderArticles();
             $articleList = array();
             foreach ($articles as $article) {
@@ -478,7 +487,7 @@ class pi_ratepay_Details extends oxAdminDetails
             }
             $isSuccess = 'pisuccess';
         }
-
+        pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->_getOrderId(), $this->_transactionId, $this->_paymentMethod, $operation, '', '', '', $deliver);
         $this->addTplParam($isSuccess, '');
     }
 

@@ -426,7 +426,7 @@ class ModelFactory extends oxSuperCfg {
             $deliveryVat = $basket->getDeliveryCost()->getVat();
         } elseif (method_exists($basket, 'getDeliveryCosts') && $basket->getDeliveryCosts()) {
             $deliveryCosts = $basket->getDeliveryCosts();
-            if ($basket->getDelCostNet() > 0) {
+            if ($basket->$deliveryCosts() > 0) {
                 $deliveryVat = $basket->getDelCostVatPercent();
             } else {
                 $deliveryVat = 0;
@@ -440,7 +440,7 @@ class ModelFactory extends oxSuperCfg {
         }
         $shipping = array(
             'Description'       => 'Shipping Costs',
-            'UnitPriceGross'    => $deliveryCosts,
+            'UnitPriceGross'    => number_format($deliveryCosts + ($deliveryCosts / 100 * $deliveryVat), '2', '.', ''),
             'TaxRate'           => $deliveryVat,
         );
 
@@ -611,19 +611,27 @@ class ModelFactory extends oxSuperCfg {
         $shoppingBasket = array();
 
         foreach ($this->_basket AS $article) {
-
+            if (oxRegistry::getConfig()->getRequestParameter($article['arthash']) <= 0) {
+                continue;
+            }
             if ($article['artnum'] == 'oxdelivery') {
+                if ($article['shipped'] == 1) {
+                    continue;
+                }
                 $shoppingBasket['Shipping'] = [
                     'Description' => 'Shipping Costs',
-                    'UnitPriceGross' => $article['unitprice'],
+                    'UnitPriceGross' => number_format($article['unitprice'] + ($article['unitprice'] / 100 * $article['vat']), '2', '.', ''),
                     'TaxRate'       => $article['vat'],
                 ];
                 continue;
             }
             if ($article['artnum'] == 'discount') {
+                if ($article['shipped'] == 1) {
+                    continue;
+                }
                 $shoppingBasket['Discount'] = [
                     'Description' => 'Discount ' . $article['unitprice'],
-                    'UnitPriceGross' => $article['unitprice'],
+                    'UnitPriceGross' => number_format($article['unitprice'] + ($article['unitprice'] / 100 * $article['vat']), '2', '.', ''),
                     'TaxRate'       => $article['vat'],
                 ];
                 continue;
@@ -632,8 +640,8 @@ class ModelFactory extends oxSuperCfg {
             $item = array(
                 'Description' => $article['title'],
                 'ArticleNumber' => $article['artnum'],
-                'Quantity' => $article['amount'],
-                'UnitPriceGross' => $article['totalprice'] / $article['amount'],
+                'Quantity' => oxRegistry::getConfig()->getRequestParameter($article['arthash']),
+                'UnitPriceGross' => number_format($article['unitprice'] + ($article['unitprice'] / 100 * $article['vat']), '2', '.', ''),
                 'TaxRate' => $article['vat'],
             );
 
@@ -662,7 +670,7 @@ class ModelFactory extends oxSuperCfg {
                 'Description' => $article->getTitle(),
                 'ArticleNumber' => $article->getArticle()->oxarticles__oxartnum->value,
                 'Quantity' => $article->getAmount(),
-                'UnitPriceGross' => $article->getPrice()->getBruttoPrice(),
+                'UnitPriceGross' => $article->getPrice()->getBruttoPrice() / $article->getAmount(),
                 'TaxRate' => $article->getPrice()->getVat(),
             );
 
