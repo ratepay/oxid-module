@@ -346,11 +346,30 @@ class pi_ratepay_Details extends oxAdminDetails
     {
         $operation = "PAYMENT_CHANGE";
         $subtype = "credit";
+        $nr = oxDb::getDb()->getOne("SELECT count( * ) AS nr FROM `oxvouchers` WHERE oxvouchernr LIKE 'pi-Merchant-Voucher-%'");
+        $vouchertitel = "pi-Merchant-Voucher-" . $nr;
 
-        $response = $this->ratepayRequest($operation, $subtype);
+        $articles[] = array(
+            'title'     => 'Credit',
+            'artnum'    => $vouchertitel,
+            'unitprice' => "-" . $this->_getFormattedNumber($this->piRatepayVoucher),
+            'arthash'   => 1,
+            'vat'       => 0,
+        );
+
+        $modelFactory = new ModelFactory();
+        $paymentMethod = pi_ratepay_util_utilities::getPaymentMethod($this->_paymentSid);
+        $modelFactory->setSandbox($this->_isSandbox($paymentMethod));
+        $modelFactory->setPaymentType($this->_getPaymentSid());
+        $modelFactory->setShopId($this->_shopId);
+        $modelFactory->setBasket($articles);
+        $modelFactory->setTransactionId($this->_transactionId);
+        $modelFactory->setOrderId($this->_getOrderId());
+        $modelFactory->setSubtype($subtype);
+        $change = $modelFactory->doOperation($operation);
 
         $isSuccess = 'pierror';
-        if ($response && (string) $response->head->processing->result->attributes()->code == '403') {
+        if ($change->isSuccessful()) {
             $artid = $this->piAddVoucher();
             $this->_logHistory($this->_getOrderId(), $artid, 1, $operation, $subtype);
 
