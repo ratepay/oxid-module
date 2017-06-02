@@ -344,7 +344,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['oxid'] = "";
             $articleList[$i]['artid'] = $vouchersValues->artnr;
             $articleList[$i]['arthash'] = md5($vouchersValues->artnr);
-            $articleList[$i]['artnum'] = $vouchersValues->title;
+            $articleList[$i]['artnum'] = 'voucher_' . $vouchersValues->title;
             $articleList[$i]['title'] = $vouchersValues->seriesTitle;
             $articleList[$i]['oxtitle'] = $vouchersValues->seriesTitle;
             $articleList[$i]['vat'] = "0";

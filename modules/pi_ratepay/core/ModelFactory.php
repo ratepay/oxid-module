@@ -440,7 +440,7 @@ class ModelFactory extends oxSuperCfg {
         }
         $shipping = array(
             'Description'       => 'Shipping Costs',
-            'UnitPriceGross'    => number_format($deliveryCosts + ($deliveryCosts / 100 * $deliveryVat), '2', '.', ''),
+            'UnitPriceGross'    => $deliveryCosts ,
             'TaxRate'           => $deliveryVat,
         );
 
@@ -609,6 +609,7 @@ class ModelFactory extends oxSuperCfg {
     private function _getSpecialBasket()
     {
         $shoppingBasket = array();
+        $artnr =  array();
 
         foreach ($this->_basket AS $article) {
             if (oxRegistry::getConfig()->getRequestParameter($article['arthash']) <= 0) {
@@ -625,13 +626,18 @@ class ModelFactory extends oxSuperCfg {
                 ];
                 continue;
             }
-            if ($article['artnum'] == 'discount') {
+
+            if (substr($article['artnum'], 0, 7) == 'voucher' || $article['artnum'] == 'discount') {
                 if ($article['shipped'] == 1) {
                     continue;
                 }
+                if (!empty($shoppingBasket['Discount']['UnitPriceGross'])) {
+                    $article['unitprice'] = $article['unitprice'] + $shoppingBasket['Discount']['UnitPriceGross'];
+                    $article['oxtitle'] = $shoppingBasket['Discount']['Description'] . '_' . $article['oxtitle'];
+                }
                 $shoppingBasket['Discount'] = [
-                    'Description' => 'Discount ' . $article['unitprice'],
-                    'UnitPriceGross' => number_format($article['unitprice'] + ($article['unitprice'] / 100 * $article['vat']), '2', '.', ''),
+                    'Description' => $article['oxtitle'],
+                    'UnitPriceGross' => $article['unitprice'],
                     'TaxRate'       => $article['vat'],
                 ];
                 continue;
@@ -643,7 +649,10 @@ class ModelFactory extends oxSuperCfg {
                 'Quantity' => oxRegistry::getConfig()->getRequestParameter($article['arthash']),
                 'UnitPriceGross' => number_format($article['unitprice'] + ($article['unitprice'] / 100 * $article['vat']), '2', '.', ''),
                 'TaxRate' => $article['vat'],
+                'UniqueArticleNumber' => $article['artid'],
             );
+
+            $artnr[] = $article['artnum'];
 
             if (!empty($article['bruttoprice'])) {
                 $item['UnitPriceGross'] = $article['bruttoprice'];
@@ -663,6 +672,7 @@ class ModelFactory extends oxSuperCfg {
     {
         $shoppingBasket = array();
         $util = new pi_ratepay_util_Utilities();
+        $artnr = array();
 
         foreach ($this->_basket->getContents() AS $article) {
 
@@ -672,6 +682,7 @@ class ModelFactory extends oxSuperCfg {
                 'Quantity' => $article->getAmount(),
                 'UnitPriceGross' => $article->getPrice()->getBruttoPrice() / $article->getAmount(),
                 'TaxRate' => $article->getPrice()->getVat(),
+                'UniqueArticleNumber' => $article->getArticle()->getId()
             );
 
             $shoppingBasket['Items'][] = array('Item' => $item);

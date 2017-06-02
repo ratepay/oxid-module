@@ -67,17 +67,19 @@ class pi_ratepay_order extends pi_ratepay_order_parent
         ) {
 
             $trans_id = oxDb::getDb()->getOne("SELECT TRANSACTION_ID FROM pi_ratepay_orders WHERE ORDER_NUMBER = '" . $this->getSession()->getBasket()->getOrderId() . "'");
-            $strans_id = oxDb::getDb()->getOne("SELECT TRANSACTION_SHORT_ID FROM pi_ratepay_orders WHERE ORDER_NUMBER = '" . $this->getSession()->getBasket()->getOrderId() . "'");
-            $oid = oxDb::getDb()->getOne("SELECT OXORDERNR FROM oxorder WHERE OXID = '" . $this->getSession()->getBasket()->getOrderId() . "'");
-            $ratepayRequest = $this->_getRatepayRequest($this->_paymentId);
-            $subtype = 'full-cancellation';
+
+            $modelFactory = new ModelFactory();
+            $modelFactory->setTransactionId($trans_id);
+            $modelFactory->setOrderId($this->getSession()->getBasket()->getOrderId());
+            $paymentMethod = pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId);
+            $modelFactory->setPaymentType($this->_paymentId);
+            $modelFactory->setSandbox($this->_isSandbox($paymentMethod));
+            $modelFactory->setSubtype('cancellation');
+            $ratepayRequest = $modelFactory->doOperation('PAYMENT_CHANGE');
             $name = $this->getUser()->oxuser__oxfname->value;
             $surname = $this->getUser()->oxuser__oxlname->value;
-            $changePayment = $ratepayRequest->changePayment($trans_id, $strans_id, $subtype, $oid);
-            $paymentMethod = pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId);
 
-            pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->getSession()->getBasket()->getOrderId(), $trans_id, $paymentMethod, 'PAYMENT_CHANGE', $subtype, $changePayment['request'], $name, $surname, $changePayment['response']);
-
+            pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->getSession()->getBasket()->getOrderId(), $trans_id, $paymentMethod, 'PAYMENT_CHANGE', 'cancellation', $name, $surname, $ratepayRequest);
         }
 
         if (in_array($this->_paymentId, pi_ratepay_util_utilities::$_RATEPAY_PAYMENT_METHOD)) {
@@ -180,7 +182,6 @@ class pi_ratepay_order extends pi_ratepay_order_parent
                 } catch (oxArticleInputException $oEx) {
                     oxRegistry::get("oxUtilsView")->addErrorToDisplay($oEx);
                 }
-
             }
         } else {
             return parent::execute();
