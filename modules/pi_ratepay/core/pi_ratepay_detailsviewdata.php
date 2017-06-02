@@ -69,6 +69,7 @@ class pi_ratepay_DetailsViewData
               prrod.cancelled,
               prrod.returned,
               prrod.shipped,
+              prrod.unique_article_number,
               if(oa.OXSELVARIANT != '',concat(oa.oxtitle,', ',oa.OXSELVARIANT),oa.oxtitle) as title
             FROM
               `oxorder` oo,
@@ -99,6 +100,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['cancelled'] = $articlesValues->cancelled;
             $articleList[$i]['currency'] = $articlesValues->oxcurrency;
             $articleList[$i]['bruttoprice'] = (float) $articlesValues->oxbprice;
+            $articleList[$i]['unique_article_number'] = $articlesValues->unique_article_number;
             
             if (($articlesValues->ordered - $articlesValues->returned - $articlesValues->cancelled) > 0) {
                 $articleList[$i]['totalprice'] = (float) $articlesValues->oxbprice * ($articleList[$i]['ordered'] - $articleList[$i]['returned'] - $articleList[$i]['cancelled']);
@@ -135,6 +137,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['returned']  = $rpOrderDetailsWrappingValues->RETURNED;
             $articleList[$i]['cancelled'] = $rpOrderDetailsWrappingValues->CANCELLED;
             $articleList[$i]['currency'] = $rpOrderDetailsWrappingValues->oxcurrency;
+            $articleList[$i]['unique_article_number'] = $rpOrderDetailsWrappingValues->unique_article_number;
 
             if (($rpOrderDetailsWrappingValues->ORDERED - $rpOrderDetailsWrappingValues->RETURNED - $rpOrderDetailsWrappingValues->CANCELLED) > 0) {
                 $articleList[$i]['totalprice'] = (float) $rpOrderDetailsWrappingValues->PRICE + ((float) $rpOrderDetailsWrappingValues->PRICE * round((float) $rpOrderDetailsWrappingValues->VAT) / 100);
@@ -165,6 +168,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['returned'] = $rpOrderDetailsGiftcardsValues->RETURNED;
             $articleList[$i]['cancelled'] = $rpOrderDetailsGiftcardsValues->CANCELLED;
             $articleList[$i]['currency'] = $rpOrderDetailsGiftcardsValues->oxcurrency;
+            $articleList[$i]['unique_article_number'] = $rpOrderDetailsGiftcardsValues->unique_article_number;
 
             if (($rpOrderDetailsGiftcardsValues->ORDERED - $rpOrderDetailsGiftcardsValues->RETURNED - $rpOrderDetailsGiftcardsValues->CANCELLED) > 0) {
                 $articleList[$i]['totalprice'] = (float) $rpOrderDetailsGiftcardsValues->PRICE + ((float) $rpOrderDetailsGiftcardsValues->PRICE * (float) $rpOrderDetailsGiftcardsValues->VAT) / 100;
@@ -196,6 +200,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['returned'] = $rpOrderDetailsPaymentValues->RETURNED;
             $articleList[$i]['cancelled'] = $rpOrderDetailsPaymentValues->CANCELLED;
             $articleList[$i]['currency'] = $rpOrderDetailsPaymentValues->oxcurrency;
+            $articleList[$i]['unique_article_number'] = $rpOrderDetailsPaymentValues->unique_article_number;
 
             if (($rpOrderDetailsPaymentValues->ORDERED - $rpOrderDetailsPaymentValues->RETURNED - $rpOrderDetailsPaymentValues->CANCELLED) > 0) {
                 $articleList[$i]['totalprice'] = (float) $rpOrderDetailsPaymentValues->PRICE + ((float) $rpOrderDetailsPaymentValues->PRICE * (float) $rpOrderDetailsPaymentValues->VAT) / 100;
@@ -226,6 +231,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['returned']  = $rpOrderDetailsDeliveryValues->RETURNED;
             $articleList[$i]['cancelled'] = $rpOrderDetailsDeliveryValues->CANCELLED;
             $articleList[$i]['currency'] = $rpOrderDetailsDeliveryValues->oxcurrency;
+            $articleList[$i]['unique_article_number'] = $rpOrderDetailsDeliveryValues->unique_article_number;
 
             if (($rpOrderDetailsDeliveryValues->ORDERED - $rpOrderDetailsDeliveryValues->RETURNED - $rpOrderDetailsDeliveryValues->CANCELLED) > 0) {
                 $articleList[$i]['totalprice'] = (float) $rpOrderDetailsDeliveryValues->PRICE + ((float) $rpOrderDetailsDeliveryValues->PRICE * (float) $rpOrderDetailsDeliveryValues->VAT) / 100;
@@ -257,6 +263,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['returned'] = $rpOrderDetailsProtectionValues->RETURNED;
             $articleList[$i]['cancelled'] = $rpOrderDetailsProtectionValues->CANCELLED;
             $articleList[$i]['currency'] = $rpOrderDetailsProtectionValues->oxcurrency;
+            $articleList[$i]['unique_article_number'] = $rpOrderDetailsProtectionValues->unique_article_number;
 
             if (($rpOrderDetailsProtectionValues->ORDERED - $rpOrderDetailsProtectionValues->RETURNED - $rpOrderDetailsProtectionValues->CANCELLED) > 0) {
                 $articleList[$i]['totalprice'] = (float) $rpOrderDetailsProtectionValues->PRICE + ((float) $rpOrderDetailsProtectionValues->PRICE * (float) $rpOrderDetailsProtectionValues->VAT) / 100;
@@ -277,7 +284,8 @@ class pi_ratepay_DetailsViewData
           prrod.ordered AS ORDERED,
           prrod.cancelled AS CANCELLED,
           prrod.returned AS RETURNED,
-          prrod.shipped AS SHIPPED
+          prrod.shipped AS SHIPPED,
+          prrod.unique_article_number
 		FROM
 		  `oxorder` oo,
 		  `oxdiscount` od,
@@ -306,6 +314,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['returned'] = $rpOrderDetailsDiscountsValues->RETURNED;
             $articleList[$i]['cancelled'] = $rpOrderDetailsDiscountsValues->CANCELLED;
             $articleList[$i]['currency'] = $rpOrderDetailsDiscountsValues->oxcurrency;
+            $articleList[$i]['unique_article_number'] = $rpOrderDetailsDiscountsValues->unique_article_number;
 
             if (($rpOrderDetailsDiscountsValues->ORDERED - $rpOrderDetailsDiscountsValues->RETURNED - $rpOrderDetailsDiscountsValues->CANCELLED) > 0) {
                 $articleList[$i]['totalprice'] = $rpOrderDetailsDiscountsValues->PRICE;
@@ -324,6 +333,7 @@ class pi_ratepay_DetailsViewData
           prrod.ordered, prrod.cancelled,
           prrod.returned,
           prrod.shipped,
+          prrod.unique_article_number,
           ovs.OXSERIENR as seriesTitle,
           ovs.OXSERIEDESCRIPTION as seriesDescription
 		FROM
@@ -355,6 +365,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['returned'] = $vouchersValues->returned;
             $articleList[$i]['cancelled'] = $vouchersValues->cancelled;
             $articleList[$i]['currency'] = $vouchersValues->oxcurrency;
+            $articleList[$i]['unique_article_number'] = $vouchersValues->unique_article_number;
 
             if (($vouchersValues->ordered - $vouchersValues->returned - $vouchersValues->cancelled) > 0) {
                 $articleList[$i]['totalprice'] = (float) $vouchersValues->price * -1;
@@ -372,6 +383,7 @@ class pi_ratepay_DetailsViewData
           ov.oxvouchernr AS title,
           prrod.ordered, prrod.cancelled,
           prrod.returned,
+          prrod.unique_article_number,
           prrod.shipped
 		FROM
 		  `oxorder` oo,
@@ -401,6 +413,7 @@ class pi_ratepay_DetailsViewData
             $articleList[$i]['returned'] = $creditValues->returned;
             $articleList[$i]['cancelled'] = $creditValues->cancelled;
             $articleList[$i]['currency'] = $creditValues->oxcurrency;
+            $articleList[$i]['unique_article_number'] = $creditValues->unique_article_number;
 
             if (($creditValues->ordered - $creditValues->returned - $creditValues->cancelled) > 0) {
                 $articleList[$i]['totalprice'] = (float) $creditValues->price * -1;

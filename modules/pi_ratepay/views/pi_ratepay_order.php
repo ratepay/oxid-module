@@ -412,6 +412,7 @@ class pi_ratepay_order extends pi_ratepay_order_parent
         $ratepayOrderDetails->assign(array(
             'order_number' => $id,
             'article_number' => $articleNumber,
+            'unique_article_number' => $articleNumber,
             'price' => $price,
             'vat' => $vat,
             'ordered' => $quantity

@@ -152,7 +152,6 @@ class ModelFactory extends oxSuperCfg {
      * do operation
      *
      * @param $operation
-     * @param bool $operationData
      * @return bool|mixed|object
      */
     public function doOperation($operation)
@@ -163,8 +162,6 @@ class ModelFactory extends oxSuperCfg {
                 break;
             case 'PAYMENT_REQUEST':
                 return $this->_makePaymentRequest();
-                break;
-            case 'PAYMENT_QUERY':
                 break;
             case 'CONFIRMATION_DELIVER':
                 return $this->_makeConfirmationDeliver();
@@ -610,7 +607,7 @@ class ModelFactory extends oxSuperCfg {
     {
         $shoppingBasket = array();
         $artnr =  array();
-        var_dump($this->_basket);
+
         foreach ($this->_basket AS $article) {
             if (oxRegistry::getConfig()->getRequestParameter($article['arthash']) <= 0 && $article['title'] !== 'Credit') {
                 continue;
@@ -650,6 +647,9 @@ class ModelFactory extends oxSuperCfg {
                 'UnitPriceGross' => number_format($article['unitprice'] + ($article['unitprice'] / 100 * $article['vat']), '2', '.', ''),
                 'TaxRate' => $article['vat'],
             );
+            if (!empty($article['unique_article_number'])) {
+                $item['UniqueArticleNumber'] = $article['unique_article_number'];
+            }
 
             if ($article['title'] == 'Credit') {
                 $item['Quantity'] = 1;
@@ -682,7 +682,8 @@ class ModelFactory extends oxSuperCfg {
                 'ArticleNumber' => $article->getArticle()->oxarticles__oxartnum->value,
                 'Quantity' => $article->getAmount(),
                 'UnitPriceGross' => $article->getPrice()->getBruttoPrice() / $article->getAmount(),
-                'TaxRate' => $article->getPrice()->getVat()
+                'TaxRate' => $article->getPrice()->getVat(),
+                'UniqueArticleNumber' => $article->getArticle()->getId(),
             );
 
             $shoppingBasket['Items'][] = array('Item' => $item);
