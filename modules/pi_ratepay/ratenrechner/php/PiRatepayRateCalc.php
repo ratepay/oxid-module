@@ -153,7 +153,6 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
         $settings = oxNew('pi_ratepay_settings');
         $settings->loadByType($this->_paymentMethod, $shopId);
 
-        $modelFactory->setTransactionId($this->getRequestTransactionId());
         $modelFactory->setCalculationData($calculationData);
         if (!empty($this->getRequestOrderId())) {
             $modelFactory->setOrderId($this->getRequestOrderId());
@@ -161,7 +160,6 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
         }
         $modelFactory->setShopId($shopId);
         $modelFactory->setPaymentType(strtolower($this->_paymentMethod));
-
         $response = $modelFactory->doOperation('CALCULATION_REQUEST');
 
         if ($response->isSuccessful()) {

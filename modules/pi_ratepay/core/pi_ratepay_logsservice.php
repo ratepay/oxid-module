@@ -69,17 +69,12 @@ class pi_ratepay_LogsService extends oxSuperCfg
      */
     public function logRatepayTransaction($orderId, $transactionId, $paymentMethod, $paymentType, $paymentSubtype, $name, $surname, $trans)
     {
+        $util = new pi_ratepay_util_Utilities();
+        $paymentMethod =  $util->getPaymentMethod($paymentMethod);
+
         $logging = $this->_getLogSettings($paymentMethod);
 
         if ($logging == 1) {
-            /*if (($paymentMethod === 'ELV' || $paymentMethod === 'INSTALLMENT') && isset($request->content->customer->{"bank-account"})) {
-                $request->content->customer->{"bank-account"}->{"owner"} = "(hidden)";
-                $request->content->customer->{"bank-account"}->{"bank-account-number"} = "(hidden)";
-                $request->content->customer->{"bank-account"}->{"bank-code"} = "(hidden)";
-                $request->content->customer->{"bank-account"}->{"iban"} = "(hidden)";
-                $request->content->customer->{"bank-account"}->{"bic"} = "(hidden)";
-            }*/
-
             $requestXml = $trans->getRequestRaw();
             $responseXml = $trans->getResponseRaw();
             $reason = '';

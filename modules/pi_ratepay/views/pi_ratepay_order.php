@@ -61,6 +61,12 @@ class pi_ratepay_order extends pi_ratepay_order_parent
     public function execute()
     {
         $this->_paymentId = $this->getBasket()->getPaymentId();
+        $name = $this->getUser()->oxuser__oxfname->value;
+        $surname = $this->getUser()->oxuser__oxlname->value;
+        $modelFactory = new ModelFactory();
+        $paymentMethod = pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId);
+        $modelFactory->setPaymentType($this->_paymentId);
+        $modelFactory->setSandbox($this->_isSandbox($paymentMethod));
 
         if ($this->getSession()->getVariable('pi_ratepay_shops_order_id') != null &&
             $this->getSession()->getBasket()->getOrderId() == $this->getSession()->getVariable('pi_ratepay_shops_order_id')
@@ -68,16 +74,12 @@ class pi_ratepay_order extends pi_ratepay_order_parent
 
             $trans_id = oxDb::getDb()->getOne("SELECT TRANSACTION_ID FROM pi_ratepay_orders WHERE ORDER_NUMBER = '" . $this->getSession()->getBasket()->getOrderId() . "'");
 
-            $modelFactory = new ModelFactory();
+
             $modelFactory->setTransactionId($trans_id);
             $modelFactory->setOrderId($this->getSession()->getBasket()->getOrderId());
-            $paymentMethod = pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId);
-            $modelFactory->setPaymentType($this->_paymentId);
-            $modelFactory->setSandbox($this->_isSandbox($paymentMethod));
             $modelFactory->setSubtype('cancellation');
             $ratepayRequest = $modelFactory->doOperation('PAYMENT_CHANGE');
-            $name = $this->getUser()->oxuser__oxfname->value;
-            $surname = $this->getUser()->oxuser__oxlname->value;
+
 
             pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->getSession()->getBasket()->getOrderId(), $trans_id, $paymentMethod, 'PAYMENT_CHANGE', 'cancellation', $name, $surname, $ratepayRequest);
         }
@@ -116,31 +118,38 @@ class pi_ratepay_order extends pi_ratepay_order_parent
                 return 'user';
             }
 
+            $modelFactory->setCountryId($this->getUser()->oxuser__oxcountryid->value);
+            $modelFactory->setShopId(oxRegistry::getSession()->getVariable('shopId'));
+            $payInit = $modelFactory->doOperation('PAYMENT_INIT');
+            $transactionId = (string)$payInit->getTransactionId();
+
             // get basket contents
             $oBasket = $this->getSession()->getBasket();
             if ($oBasket->getProductsCount()) {
-
-                if (!$this->_ratepayInitRequest()) {
-                    if (!$this->getSession()->getVariable($this->_paymentId . '_error_id') == $paymentMethodIds[$this->_paymentId]['connection_timeout'] &&
-                        !$this->_isSandbox(pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId))
-                    ) {
+                if (!$payInit->isSuccessful()) {
+                    if ($payInit->getReasonCode() != 703 && !$this->_isSandbox($paymentMethod)) {
                         $this->getSession()->setVariable('pi_ratepay_denied', 'denied');
                     }
                     $this->getSession()->setVariable($this->_paymentId . '_error_id', $paymentMethodIds[$this->_paymentId]['denied']);
                     oxRegistry::getUtils()->redirect($this->getConfig()->getSslShopUrl() . 'index.php?cl=payment', false);
                 }
 
-                if (!$this->_ratepayRequest()) {
-                    if ((!$this->getSession()->getVariable($this->_paymentId . '_error_id') == $paymentMethodIds[$this->_paymentId]['connection_timeout']) &&
-                        (!$this->getSession()->getVariable($this->_paymentId . '_error_id') == $paymentMethodIds[$this->_paymentId]['soft']) &&
-                        !$this->_isSandbox(pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId))
+                $modelFactory->setTransactionId($transactionId);
+                $modelFactory->setCustomerId($this->getUser()->oxuser__oxcustnr->value);
+                $modelFactory->setDeviceToken($this->getSession()->getVariable('pi_ratepay_dfp_token'));
+                $modelFactory->setBasket($this->getBasket());
+                $payRequest = $modelFactory->doOperation('PAYMENT_REQUEST');
+
+                if (!$payRequest->isSuccessful()) {
+                    if ((!$payRequest->getResultCode() == 150)
+                        && !$this->_isSandbox($paymentMethod)
                     ) {
                         $this->getSession()->setVariable('pi_ratepay_denied', 'denied');
                     }
 
-                    $message = $this->getSession()->getVariable($this->_paymentId . '_message');
-                    if ($this->getSession()->getVariable($this->_paymentId . '_error_id') == $paymentMethodIds[$this->_paymentId]['soft'] &&
-                        !empty($message)
+                    $message = $payRequest->getCustomerMessage();
+                    $this->getSession()->setVariable($this->_paymentId . '_message', (string)$message);
+                    if ($payRequest->getResultCode() == 150 && !empty($message)
                     ) {
                         $this->getSession()->setVariable($this->_paymentId . '_error_id', $paymentMethodIds[$this->_paymentId]['soft']);
                     } else {
@@ -195,97 +204,6 @@ class pi_ratepay_order extends pi_ratepay_order_parent
     public function piIsFourPointSixShop()
     {
         return substr(oxRegistry::getConfig()->getVersion(), 0, 3) === '4.6';
-    }
-
-
-    /**
-     * Do init payment request redirect to order on succes, on failure redirect back to payment.
-     */
-    private function _ratepayInitRequest()
-    {
-        $paymentMethod = pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId);
-
-        $modelFactory = new ModelFactory();
-        $modelFactory->setSandbox($this->_isSandbox(pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId)));
-        $modelFactory->setPaymentType($this->_paymentId);
-        $modelFactory->setCountryId($this->getUser()->oxuser__oxcountryid->value);
-        $modelFactory->setShopId(oxRegistry::getSession()->getVariable('shopId'));
-        $payInit = $modelFactory->doOperation('PAYMENT_INIT');
-
-        $name = $this->getUser()->oxuser__oxfname->value;
-        $surname = $this->getUser()->oxuser__oxlname->value;
-
-        $transactionId = '';
-
-        pi_ratepay_LogsService::getInstance()->logRatepayTransaction('', $transactionId, $paymentMethod, 'PAYMENT_INIT', '', $name, $surname, $payInit);
-
-        if ($payInit->isSuccessful()) {
-            $transactionId = (string)$payInit->getTransactionId();
-            $this->getSession()->setVariable($this->_paymentId . '_trans_id', (string)$transactionId);
-            //$this->getSession()->setVariable($this->_paymentId . '_trans_short_id', (string)$payInit->getTransactionShortId());
-
-            return true;
-        } elseif ($payInit->getReasonCode() != 703) {
-            $this->getSession()->setVariable($this->_paymentId . '_error_id', "-418");
-        } else {
-            $this->getSession()->setVariable($this->_paymentId . '_error_id', "-400");
-        }
-
-        return false;
-    }
-
-    /**
-     * Do RatePAY PAYMENT_REQUEST
-     *
-     * Checks if RatePAY Modul is set to sandbox if true sets the pi_ratepay_xml_service->live to false.
-     * Creates request object (type: SimpleXMLExtended) for payment request. Sends the request with
-     * pi_ratepay_xml_service::paymentOperation. On success sets descriptor from response to session and returns true.
-     * On request failure just returns false. In either case does it log transaction to ratepay log table
-     * (pi_ratepay_logging::logRatepay).
-     *
-     * @uses function _setRatepayHead to generate request head
-     * @uses function _setRatepayContent to generate request body
-     * @return boolean
-     */
-    private function _ratepayRequest()
-    {
-
-        $paymentMethod = pi_ratepay_util_utilities::getPaymentMethod($this->_paymentId);
-
-        $modelFactory = new ModelFactory();
-        $modelFactory->setSandbox($this->_isSandbox($paymentMethod));
-        $modelFactory->setPaymentType($this->_paymentId);
-        $modelFactory->setBasket($this->getBasket());
-        $modelFactory->setCountryId($this->getUser()->oxuser__oxcountryid->value);
-        $modelFactory->setShopId(oxRegistry::getSession()->getVariable('shopId'));
-        $modelFactory->setTransactionId($this->getSession()->getVariable($this->_paymentId . '_trans_id'));
-        $modelFactory->setCustomerId($this->getUser()->oxuser__oxcustnr->value);
-        $modelFactory->setDeviceToken($this->getSession()->getVariable('pi_ratepay_dfp_token'));
-
-        $payRequest = $modelFactory->doOperation('PAYMENT_REQUEST');
-
-        $transactionId = $this->getSession()->getVariable($this->_paymentId . '_trans_id');
-        $paymentRequestType = 'PAYMENT_REQUEST';
-
-        $name = $this->getUser()->oxuser__oxfname->value;
-        $surname = $this->getUser()->oxuser__oxlname->value;
-
-        pi_ratepay_LogsService::getInstance()->logRatepayTransaction('', $transactionId, $paymentMethod, $paymentRequestType, '', $name, $surname, $payRequest);
-
-        if ($payRequest->isSuccessful()) {
-
-            $descriptor = (string)$payRequest->getDescriptor();
-            $this->getSession()->setVariable($this->_paymentId . '_descriptor', $descriptor);
-            return true;
-        } elseif ($payRequest->getResultCode() == 150) {
-            $vars = $payRequest->getCustomerMessage();
-            $this->getSession()->setVariable($this->_paymentId . '_error_id', "-001");
-            $this->getSession()->setVariable($this->_paymentId . '_message', (string)$vars['customer-message']);
-        } else {
-            $this->getSession()->setVariable($this->_paymentId . '_error_id', "-418");
-        }
-
-        return false;
     }
 
     /**

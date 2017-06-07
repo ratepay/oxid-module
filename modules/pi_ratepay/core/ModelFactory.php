@@ -209,7 +209,8 @@ class ModelFactory extends oxSuperCfg {
         $mbContentTime->setArray($array);
 
         $rb = new RatePAY\RequestBuilder($this->_sandbox);
-        return $rb->callCalculationRequest($mbHead, $mbContentTime)->subtype($this->_calculationData['requestSubtype']);
+        $calculationRequest = $rb->callCalculationRequest($mbHead, $mbContentTime)->subtype($this->_calculationData['requestSubtype']);
+        return $calculationRequest;
     }
 
     /**
@@ -231,6 +232,7 @@ class ModelFactory extends oxSuperCfg {
 
         $rb = new \RatePAY\RequestBuilder($this->_sandbox);
         $confirmationDeliver = $rb->callConfirmationDeliver($mbHead, $mbContent);
+        pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->_orderId, $this->_transactionId, $this->_paymentType, 'CONFIRMATION_DELIVER', $this->_subtype, '', '', $confirmationDeliver);
         return $confirmationDeliver;
     }
 
@@ -254,9 +256,9 @@ class ModelFactory extends oxSuperCfg {
         $mbContent->setArray($shoppingBasket);
 
         $rb = new \RatePAY\RequestBuilder($this->_sandbox);
-        $confirmationDeliver = $rb->callPaymentChange($mbHead, $mbContent)->subtype($this->_subtype);
-
-        return $confirmationDeliver;
+        $paymentChange = $rb->callPaymentChange($mbHead, $mbContent)->subtype($this->_subtype);
+        pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->_orderId, $this->_transactionId, $this->_paymentType, 'PAYMENT_CHANGE', $this->_subtype, '', '', $paymentChange);
+        return $paymentChange;
     }
 
     /**
@@ -354,7 +356,7 @@ class ModelFactory extends oxSuperCfg {
         $head = $this->_getHead();
         $rb = new \RatePAY\RequestBuilder($this->_sandbox);
         $paymentInit = $rb->callPaymentInit($head);
-
+        pi_ratepay_LogsService::getInstance()->logRatepayTransaction('', '', $this->_paymentType, 'PAYMENT_INIT', '', $this->getUser()->oxuser__oxfname->value, $this->getUser()->oxuser__oxlname->value, $paymentInit);
         return $paymentInit;
     }
 
@@ -448,6 +450,7 @@ class ModelFactory extends oxSuperCfg {
         $rb = new \RatePAY\RequestBuilder($this->_sandbox);
 
         $paymentRequest = $rb->callPaymentRequest($head, $mbContent);
+        pi_ratepay_LogsService::getInstance()->logRatepayTransaction('', $this->_transactionId, $this->_paymentType, 'PAYMENT_REQUEST', '', $this->getUser()->oxuser__oxfname->value, $this->getUser()->oxuser__oxlname->value, $paymentRequest);
         return $paymentRequest;
     }
 

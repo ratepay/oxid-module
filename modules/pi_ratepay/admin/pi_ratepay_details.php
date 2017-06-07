@@ -506,7 +506,7 @@ class pi_ratepay_Details extends oxAdminDetails
             }
             $isSuccess = 'pisuccess';
         }
-        pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->_getOrderId(), $this->_transactionId, $this->_paymentMethod, $operation, '', '', '', $deliver);
+
         $this->addTplParam($isSuccess, '');
     }
 
