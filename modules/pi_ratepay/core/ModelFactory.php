@@ -613,9 +613,6 @@ class ModelFactory extends oxSuperCfg {
                 continue;
             }
             if ($article['artnum'] == 'oxdelivery') {
-                if ($article['shipped'] == 1) {
-                    continue;
-                }
                 $shoppingBasket['Shipping'] = [
                     'Description' => 'Shipping Costs',
                     'UnitPriceGross' => number_format($article['unitprice'] + ($article['unitprice'] / 100 * $article['vat']), '2', '.', ''),
@@ -625,9 +622,6 @@ class ModelFactory extends oxSuperCfg {
             }
 
             if (substr($article['artnum'], 0, 7) == 'voucher' || $article['artnum'] == 'discount') {
-                if ($article['shipped'] == 1) {
-                    continue;
-                }
                 if (!empty($shoppingBasket['Discount']['UnitPriceGross'])) {
                     $article['unitprice'] = $article['unitprice'] + $shoppingBasket['Discount']['UnitPriceGross'];
                     $article['oxtitle'] = $shoppingBasket['Discount']['Description'] . '_' . $article['oxtitle'];

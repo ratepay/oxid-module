@@ -421,18 +421,6 @@ class pi_ratepay_order extends pi_ratepay_order_parent
         $ratepayOrderDetails->save();
     }
 
-    /**
-     * Get Ratepay Request object.
-     * @param string $paymentType
-     * @param oxbasket $basket
-     * @return pi_ratepay_ratepayrequest
-     */
-    protected function _getRatepayRequest($paymentType, $basket = null)
-    {
-        $requestDataProvider = oxNew('pi_ratepay_requestdatafrontend', $paymentType, $basket);
-        return oxNew('pi_ratepay_ratepayrequest', $paymentType, $requestDataProvider);
-    }
-
     protected function _isSandbox($method)
     {
         $settings = oxNew('pi_ratepay_settings');
