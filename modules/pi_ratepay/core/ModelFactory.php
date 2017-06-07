@@ -43,6 +43,8 @@ class ModelFactory extends oxSuperCfg {
 
     protected $_countryId;
 
+    protected $_calculationData = array();
+
     /**
      * @param mixed $subtype
      */
@@ -149,6 +151,14 @@ class ModelFactory extends oxSuperCfg {
     }
 
     /**
+     * @param array $calculationData
+     */
+    public function setCalculationData($calculationData)
+    {
+        $this->_calculationData = $calculationData;
+    }
+
+    /**
      * do operation
      *
      * @param $operation
@@ -172,9 +182,41 @@ class ModelFactory extends oxSuperCfg {
             case 'PROFILE_REQUEST':
                 return $this->_makeProfileRequest();
                 break;
+            case 'CALCULATION_REQUEST':
+                return $this->_makeCalculationRequest();
+                break;
         }
     }
 
+    /**
+     * make calculation request
+     *
+     * @return object
+     */
+    private function _makeCalculationRequest()
+    {
+        $mbHead = $this->_getHead();
+
+        $array['InstallmentCalculation']['Amount'] = $this->_calculationData['requestAmount'];
+        if ($this->_calculationData['requestSubtype'] == 'calculation-by-rate') {
+            $array['InstallmentCalculation']['CalculationRate']['Rate'] = $this->_calculationData['requestValue'];
+        } else {
+            $array['InstallmentCalculation']['CalculationTime']['Month'] = $this->_calculationData['requestValue'];
+        }
+        $array['InstallmentCalculation']['PaymentFirstday'] = 28;
+
+        $mbContentTime = new RatePAY\ModelBuilder('Content');
+        $mbContentTime->setArray($array);
+
+        $rb = new RatePAY\RequestBuilder($this->_sandbox);
+        return $rb->callCalculationRequest($mbHead, $mbContentTime)->subtype($this->_calculationData['requestSubtype']);
+    }
+
+    /**
+     * make confirmation deliver
+     *
+     * @return object
+     */
     private function _makeConfirmationDeliver()
     {
         $mbHead = $this->_getHead();
@@ -195,7 +237,6 @@ class ModelFactory extends oxSuperCfg {
     /**
      * make payment change
      *
-     * @param $operationData
      * @return object|bool
      */
     private function _makePaymentChange()
@@ -229,7 +270,6 @@ class ModelFactory extends oxSuperCfg {
         } else {
             $util = new pi_ratepay_util_Utilities();
             $paymentMethod =  $util->getPaymentMethod($this->_paymentType);
-
             $paymentMethod = strtolower($paymentMethod);
             $country = $this->_getCountryCodeById($this->_countryId);
             $settings = oxNew('pi_ratepay_settings');
@@ -240,6 +280,7 @@ class ModelFactory extends oxSuperCfg {
             }
             $profileId = $settings->pi_ratepay_settings__profile_id->rawValue;
             $securityCode = $settings->pi_ratepay_settings__security_code->rawValue;
+            $this->setSandbox($settings->pi_ratepay_settings__sandbox->rawValue);
         }
 
         $headArray = [
