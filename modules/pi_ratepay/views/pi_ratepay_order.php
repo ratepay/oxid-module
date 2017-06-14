@@ -133,6 +133,7 @@ class pi_ratepay_order extends pi_ratepay_order_parent
                     $this->getSession()->setVariable($this->_paymentId . '_error_id', $paymentMethodIds[$this->_paymentId]['denied']);
                     oxRegistry::getUtils()->redirect($this->getConfig()->getSslShopUrl() . 'index.php?cl=payment', false);
                 }
+                $this->getSession()->setVariable($this->_paymentId . '_trans_id', $transactionId);
 
                 $modelFactory->setTransactionId($transactionId);
                 $modelFactory->setCustomerId($this->getUser()->oxuser__oxcustnr->value);
@@ -158,6 +159,7 @@ class pi_ratepay_order extends pi_ratepay_order_parent
                     }
                     oxRegistry::getUtils()->redirect($this->getConfig()->getSslShopUrl() . 'index.php?cl=payment', false);
                 }
+                $this->getSession()->setVariable($this->_paymentId . '_descriptor', $payRequest->getDescriptor());
 
                 try {
                     $oOrder = oxNew('oxorder');
@@ -215,7 +217,6 @@ class pi_ratepay_order extends pi_ratepay_order_parent
     private function _saveRatepayOrder($id)
     {
         $transid = $this->getSession()->getVariable($this->_paymentId . '_trans_id');
-        $transshortid = $this->getSession()->getVariable($this->_paymentId . '_trans_short_id');
         $descriptor = $this->getSession()->getVariable($this->_paymentId . '_descriptor');
         $userbirthdate = $this->getUser()->oxuser__oxbirthdate->value;
 
@@ -225,7 +226,6 @@ class pi_ratepay_order extends pi_ratepay_order_parent
         $ratepayOrder->assign(array(
             'order_number' => $id,
             'transaction_id' => $transid,
-            'transaction_short_id' => $transshortid,
             'descriptor' => $descriptor,
             'userbirthdate' => $userbirthdate
         ));
