@@ -36,12 +36,6 @@ class PiRatepayRateCalcBase
     private $request_transaction_id;
 
     /**
-     * Order transaction short id
-     * @var string
-     */
-    private $request_transaction_short_id;
-
-    /**
      * Order id
      * @var string
      */
@@ -100,6 +94,12 @@ class PiRatepayRateCalcBase
      * @var string
      */
     private $request_payment_firstday;
+
+    /**
+     * valid Payment first days
+     * @var string
+     */
+    private $valid_request_payment_firstday;
 
     /**
      * Define if requests should get to live or test system.
@@ -246,6 +246,11 @@ class PiRatepayRateCalcBase
     private $details_payment_firstday;
 
     /**
+     * @var string
+     */
+    private $details_bank_iban;
+
+    /**
      * Language
      * @var string
      */
@@ -268,6 +273,13 @@ class PiRatepayRateCalcBase
      * @var string
      */
     private $request_code;
+
+    /**
+     * request iban
+     *
+     * @var string
+     */
+    private $request_iban;
 
     /**
      * Calculation date, data from shops (shop specific)
@@ -298,20 +310,20 @@ class PiRatepayRateCalcBase
         $this->request_security_code = $this->picalcdata->getSecurityCode();
 
         $this->request_transaction_id = $this->picalcdata->getTransactionId();
-        $this->request_transaction_short_id = $this->picalcdata->getTransactionShortId();
         $this->request_order_id = $this->picalcdata->getOrderId();
         $this->request_merchant_consumer_id = $this->picalcdata->getMerchantConsumerId();
         $this->request_merchant_consumer_classification = $this->picalcdata->getMerchantConsumerClassification();
         $this->request_amount = $this->picalcdata->getAmount();
+        $this->request_bankOwner = $this->picalcdata->getBankOwner();
         $this->request_live = $this->picalcdata->isLive();
 
         $this->language = $this->picalcdata->getLanguage();
+        $this->bankIban = '';
 
         $this->request_operation = '';
         $this->request_operation_subtype = '';
         $this->request_calculation_value = '';
-        $this->request_due_date = '';
-        $this->request_payment_firstday = $this->picalcdata->getPaymentFirstdayConfig();
+        $this->request_iban = '';
         $this->request_interest_rate = $this->picalcdata->getInterestRate();
 
         $this->config_interestrate_min = '';
@@ -338,6 +350,39 @@ class PiRatepayRateCalcBase
         $this->details_number_of_rates = '';
         $this->details_rate = '';
         $this->details_last_rate = '';
+
+        $this->valid_request_payment_firstday = $this->picalcdata->getPaymentFirstdayConfig();
+
+        if ($this->valid_request_payment_firstday == '2,28') {
+            $this->request_payment_firstday = 2;
+        } else {
+            $this->request_payment_firstday = $this->picalcdata->getPaymentFirstdayConfig();
+        }
+
+    }
+
+    /**
+     * @return string
+     */
+    public function getRequestIban()
+    {
+        return $this->request_iban;
+    }
+
+    /**
+     * @param string $request_iban
+     */
+    public function setRequestIban($request_iban)
+    {
+        $this->request_iban = $request_iban;
+    }
+
+    /**
+     * @param $paymentFirstday
+     */
+    public function setRequestFirstday($paymentFirstday)
+    {
+        $this->request_payment_firstday = $paymentFirstday;
     }
 
     /**
@@ -371,16 +416,6 @@ class PiRatepayRateCalcBase
     }
 
     /**
-     * Set the request due day
-     *
-     * @param string $due_day
-     */
-    public function setRequestDueDay($due_day)
-    {
-        $this->request_due_date = $due_day;
-    }
-
-    /**
      * Set the request interest-rate
      *
      * @param string $interest_rate
@@ -398,6 +433,13 @@ class PiRatepayRateCalcBase
     protected function setConfigInterestRateMin($interest_rate_min)
     {
         $this->config_interestrate_min = $interest_rate_min;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRequestBankOwner() {
+        return $this->request_bankOwner;
     }
 
     /**
@@ -615,6 +657,16 @@ class PiRatepayRateCalcBase
      *
      * @param string $payment_firstday
      */
+    protected function setDetailsBankIban($bank_iban)
+    {
+        $this->details_bank_iban = $bank_iban;
+    }
+
+    /**
+     * Set the details payment-firstday
+     *
+     * @param string $payment_firstday
+     */
     protected function setDetailsPaymentFirstday($payment_firstday)
     {
         $this->details_payment_firstday = $payment_firstday;
@@ -702,16 +754,6 @@ class PiRatepayRateCalcBase
     }
 
     /**
-     * Get the request transaction-short-id
-     *
-     * @return string $this->request_transaction_short_id
-     */
-    public function getRequestTransactionShortId()
-    {
-        return $this->request_transaction_short_id;
-    }
-
-    /**
      * Get the config for payment firstday
      *
      * @return string $this->request_payment_firstday
@@ -719,6 +761,14 @@ class PiRatepayRateCalcBase
     public function getRequestFirstday()
     {
         return $this->request_payment_firstday;
+    }
+
+    /**
+     * @return string
+     */
+    public function getValidRequestPaymentFirstday()
+    {
+        return $this->valid_request_payment_firstday;
     }
 
     /**
@@ -1061,6 +1111,11 @@ class PiRatepayRateCalcBase
         return $this->details_payment_firstday;
     }
 
+    public function getDetailsBankIban()
+    {
+        return $this->request_iban;
+    }
+
     /**
      * Get the selected languange
      *
@@ -1113,13 +1168,15 @@ class PiRatepayRateCalcBase
      * @param string $number_of_rates
      * @param string $rate
      * @param string $last_rate
+     * @param string $payment_firstday
+     * @param string $bank_iban
      */
     public function setData(
-    $total_amount, $amount, $interest_rate, $interest_amount, $service_charge, $annual_percentage_rate, $monthly_debit_interest, $number_of_rates, $rate, $last_rate, $payment_firstday
+    $total_amount, $amount, $interest_rate, $interest_amount, $service_charge, $annual_percentage_rate, $monthly_debit_interest, $number_of_rates, $rate, $last_rate, $payment_firstday, $bank_iban
     )
     {
         $this->picalcdata->setData(
-                $total_amount, $amount, $interest_rate, $interest_amount, $service_charge, $annual_percentage_rate, $monthly_debit_interest, $number_of_rates, $rate, $last_rate, $payment_firstday
+                $total_amount, $amount, $interest_rate, $interest_amount, $service_charge, $annual_percentage_rate, $monthly_debit_interest, $number_of_rates, $rate, $last_rate, $payment_firstday, $bank_iban
         );
     }
 

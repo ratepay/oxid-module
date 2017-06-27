@@ -141,6 +141,12 @@ class PiRatepayRateCalcData implements PiRatepayRateCalcDataInterface
         return '';
     }
 
+    public function getBankOwner() {
+        $owner = oxRegistry::getSession()->getVariable('bankOwner');
+
+        return $owner;
+    }
+
     /**
      * {@inheritdoc}
      * @return type
@@ -200,7 +206,8 @@ class PiRatepayRateCalcData implements PiRatepayRateCalcDataInterface
         $number_of_rates,
         $rate,
         $last_rate,
-        $payment_firstday
+        $payment_firstday,
+        $bank_iban
     )
     {
         oxRegistry::getSession()->setVariable(
@@ -236,6 +243,9 @@ class PiRatepayRateCalcData implements PiRatepayRateCalcDataInterface
         oxRegistry::getSession()->setVariable(
             'pi_ratepay_rate_payment_firstday', $payment_firstday
         );
+        oxRegistry::getSession()->setVariable(
+            'pi_ratepay_rate_bank_iban', $bank_iban
+        );
     }
 
     /**
@@ -255,7 +265,8 @@ class PiRatepayRateCalcData implements PiRatepayRateCalcDataInterface
             'number_of_rates'        => oxRegistry::getSession()->getVariable('pi_ratepay_rate_number_of_rates'),
             'rate'                   => oxRegistry::getSession()->getVariable('pi_ratepay_rate_rate'),
             'last_rate'              => oxRegistry::getSession()->getVariable('pi_ratepay_rate_last_rate'),
-            'payment_firstday'       => oxRegistry::getSession()->getVariable('pi_ratepay_rate_payment_firstday')
+            'payment_firstday'       => oxRegistry::getSession()->getVariable('pi_ratepay_rate_payment_firstday'),
+            'bank_iban'              => oxRegistry::getSession()->getVariable('pi_ratepay_rate_bank_iban')
         );
         return $array;
     }

@@ -91,7 +91,8 @@ interface PiRatepayRateCalcDataInterface
         $number_of_rates,
         $rate,
         $last_rate,
-        $payment_firstday
+        $payment_firstday,
+        $bank_iban
     );
 
     /**

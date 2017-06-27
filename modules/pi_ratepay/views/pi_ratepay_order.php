@@ -68,7 +68,7 @@ class pi_ratepay_order extends pi_ratepay_order_parent
         $modelFactory->setPaymentType($this->_paymentId);
         $modelFactory->setSandbox($this->_isSandbox($paymentMethod));
 
-        if ($this->getSession()->getVariable('pi_ratepay_shops_order_id') != null &&
+        /**if ($this->getSession()->getVariable('pi_ratepay_shops_order_id') != null &&
             $this->getSession()->getBasket()->getOrderId() == $this->getSession()->getVariable('pi_ratepay_shops_order_id')
         ) {
 
@@ -82,7 +82,7 @@ class pi_ratepay_order extends pi_ratepay_order_parent
 
 
             pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->getSession()->getBasket()->getOrderId(), $trans_id, $paymentMethod, 'PAYMENT_CHANGE', 'cancellation', $name, $surname, $ratepayRequest);
-        }
+        }*/
 
         if (in_array($this->_paymentId, pi_ratepay_util_utilities::$_RATEPAY_PAYMENT_METHOD)) {
             $paymentMethodIds = array(

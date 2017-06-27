@@ -10,8 +10,12 @@
 function piRatepayRateCalculatorAction(mode, month) {
     var calcValue;
     var calcMethod;
-
+    var paymentFirstday = 28;
     var html;
+
+    document.getElementById('month').value = month;
+    document.getElementById('mode').value = mode;
+    document.getElementById('paymentNextStepBottom').disabled = false;
 
     if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
         xmlhttp = new XMLHttpRequest();
@@ -26,22 +30,36 @@ function piRatepayRateCalculatorAction(mode, month) {
         shop = document.getElementsByName("shp")[0].value;
     }
 
+    if (document.getElementById('rp-iban-account-number')) {
+        if (document.getElementById('rp-iban-account-number').style.display !== 'none') {
+            document.getElementById('rp-rate-elv').style.display = 'block';
+            document.getElementById('paymentNextStepBottom').disabled = true;
+
+            if (document.getElementById('rp-iban-account-number').style.display === 'block'
+                && document.getElementById('rp-iban-account-number').value !== ''
+                && document.getElementById('rp-sepa-aggreement').checked === true
+            ) {
+                document.getElementById('paymentNextStepBottom').disabled = false;
+            }
+
+            var bankAccount;
+            if (document.getElementById('rp-iban-account-number').value !== '') {
+                if (document.getElementById('rp-iban-account-number').style.display === 'block') {
+                    bankAccount = document.getElementById('rp-iban-account-number').value;
+                }
+            }
+            paymentFirstday = document.getElementById('paymentFirstday');
+        }
+    }
+
+
     if (mode == 'rate') {
         calcValue = document.getElementById('rp-rate-value').value;
         calcMethod = 'calculation-by-rate';
-         if(document.getElementById('debitSelect')){
-             dueDate = document.getElementById('debitSelect').value;
-        } else {
-            dueDate= '';
-        }
+
     } else if (mode == 'runtime') {
         calcValue = month;
         calcMethod = 'calculation-by-time';
-        if(document.getElementById('debitSelectRuntime')){
-             dueDate = document.getElementById('debitSelectRuntime').value;
-        } else {
-            dueDate= '';
-        }
     }
 
     xmlhttp.open("POST", pi_ratepay_rate_calc_path + "php/PiRatepayRateCalcRequest.php", false);
@@ -49,7 +67,7 @@ function piRatepayRateCalculatorAction(mode, month) {
     xmlhttp.setRequestHeader("Content-Type",
         "application/x-www-form-urlencoded");
 
-    xmlhttp.send("calcValue=" + calcValue + "&calcMethod=" + calcMethod + "&dueDate=" + dueDate + "&stoken=" + stoken + "&shp=" + shop);
+    xmlhttp.send("calcValue=" + calcValue + "&calcMethod=" + calcMethod + "&bankAccount=" + bankAccount + "&paymentFirstday=" + paymentFirstday + "&stoken=" + stoken + "&shp=" + shop);
 
     if (xmlhttp.responseText != null) {
         html = xmlhttp.responseText;
@@ -57,6 +75,30 @@ function piRatepayRateCalculatorAction(mode, month) {
         document.getElementById('piRpResultContainer').style.display = 'block';
 
     }
+}
+
+function updateCalculator() {
+    var month = document.getElementById('month').value;
+    var mode = document.getElementById('mode').value;
+
+    if (month !== '') {
+        piRatepayRateCalculatorAction(mode, month);
+    }
+
+}
+
+function rp_change_payment(payment) {
+    if (payment == 28) {
+        document.getElementById('rp-iban-account-number').value = '';
+        document.getElementById('rp-iban-account-number').style.display = 'none';
+        document.getElementById('rp-rate-elv').style.display = 'none';
+        document.getElementById('rp-switch-payment-type-direct-debit').style.display = 'block';
+    } else {
+        document.getElementById('rp-iban-account-number').style.display = 'block';
+        document.getElementById('rp-rate-elv').style.display = 'block';
+        document.getElementById('rp-switch-payment-type-direct-debit').style.display = 'none';
+    }
+    updateCalculator();
 }
 
 function piLoadrateCalculator() {

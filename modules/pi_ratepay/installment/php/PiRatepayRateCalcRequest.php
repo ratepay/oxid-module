@@ -13,6 +13,9 @@
     $pi_calculator = new PiRatepayRateCalc();
     $calcValue = $pi_calculator->getPostParameter('calcValue');
     $calcMethod = $pi_calculator->getPostParameter('calcMethod');
+    $bankAccount = $pi_calculator->getPostParameter('bankAccount');
+    $paymentFirstday = $pi_calculator->getPostParameter('paymentFirstday');
+
     if ($calcValue != '' && $calcMethod != '') {
         if ($calcMethod == "calculation-by-time" || $calcMethod == "calculation-by-rate") {
             if (empty($calcValue)) {
@@ -20,7 +23,8 @@
             } else if ($calcMethod == "calculation-by-time" && is_numeric($calcValue)) {
                 if (preg_match('/^[0-9]{1,3}$/', $calcValue)) {
                     $pi_calculator->setRequestCalculationValue($calcValue);
-                    $pi_calculator->setRequestDueDay($pi_calculator->getPostParameter('dueDate'));
+                    $pi_calculator->setRequestIban($bankAccount);
+                    $pi_calculator->setRequestFirstday($paymentFirstday);
                     $pi_resultArray = $pi_calculator->getRatepayRateDetails($calcMethod);
                 } else {
                     $pi_calculator->setErrorMsg('wrongvalue');
@@ -31,13 +35,15 @@
                     $pi_value = str_replace(".", "", $pi_value);
                     $pi_value = (substr($pi_value, -1) != ",") ? str_replace(",", ".", $pi_value) : str_replace(",", "", $pi_value);
                     $pi_calculator->setRequestCalculationValue($pi_value);
-                    $pi_calculator->setRequestDueDay($pi_calculator->getPostParameter('dueDate'));
+                    $pi_calculator->setRequestIban($bankAccount);
+                    $pi_calculator->setRequestFirstday($paymentFirstday);
                     $pi_resultArray = $pi_calculator->getRatepayRateDetails($calcMethod);
                 } else if (preg_match('/^\d+(\.)?\d{0,2}/', $pi_value)) {
                     $pi_value = str_replace(",", "", $pi_value);
                     $pi_value = (substr($pi_value, -1) != ".") ? str_replace(",", ".", $pi_value) : str_replace(",", "", $pi_value);
                     $pi_calculator->setRequestCalculationValue($pi_value);
-                    $pi_calculator->setRequestDueDay($pi_calculator->getPostParameter('dueDate'));
+                    $pi_calculator->setRequestIban($bankAccount);
+                    $pi_calculator->setRequestFirstday($paymentFirstday);
                     $pi_resultArray = $pi_calculator->getRatepayRateDetails($calcMethod);
                 } else {
                     $pi_calculator->setErrorMsg('wrongvalue');
@@ -213,6 +219,6 @@
                 </div>
             </div>
             <br/>
-    <?php
+<?php
         }
     }

@@ -426,10 +426,10 @@ class ModelFactory extends oxSuperCfg {
             $contentArr['Payment']['Amount'] = $this->getSession()->getVariable('pi_ratepay_rate_total_amount');
 
             $settings = oxNew('pi_ratepay_settings');
+            $iban = $this->getSession()->getVariable('pi_ratepay_rate_bank_iban');
             $settings->loadByType($util->getPaymentMethod('pi_ratepay_rate'), $this->getSession()->getVariable('shopId'));
-            if ($this->getSession()->getVariable('pi_rp_rate_pay_method') === 'pi_ratepay_rate_radio_elv'
-                && $settings->pi_ratepay_settings__activate_elv->rawValue == 1) {
-                $contentArr['Customer']['BankAccount'] = $this->_getCustomerBankdata($this->_paymentType);
+            if (!empty($iban) && $iban !== 'undefined') {
+                $contentArr['Customer']['BankAccount'] = $this->_getCustomerBankdata('pi_ratepay_rate');
                 $contentArr['Payment']['DebitPayType'] = 'DIRECT-DEBIT';
             }
         }
@@ -549,8 +549,7 @@ class ModelFactory extends oxSuperCfg {
             'InstallmentNumber'     => $this->getSession()->getVariable('pi_ratepay_rate_number_of_rates'),
             'InstallmentAmount'     => $util->getFormattedNumber($this->getSession()->getVariable('pi_ratepay_rate_rate'), '2', '.'),
             'LastInstallmentAmount' => $util->getFormattedNumber($this->getSession()->getVariable('pi_ratepay_rate_last_rate'),'2', '.'),
-            'InterestRate'          => $util->getFormattedNumber($this->getSession()->getVariable('pi_ratepay_rate_interest_rate'), '2', '.'),
-            'PaymentFirstday'       => $this->getSession()->getVariable('pi_ratepay_rate_payment_firstday'),
+            'InterestRate'          => $util->getFormattedNumber($this->getSession()->getVariable('pi_ratepay_rate_interest_rate'), '2', '.')
         );
     }
 

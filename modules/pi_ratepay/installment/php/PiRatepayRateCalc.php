@@ -31,6 +31,7 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
      */
     public function __construct(PiRatepayCalcDataInterface $piCalcData = null)
     {
+
         if (isset($piCalcData)) {
             parent::__construct($piCalcData);
         } else {
@@ -61,7 +62,8 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
                     $this->getDetailsNumberOfRates(),
                     $this->getDetailsRate(),
                     $this->getDetailsLastRate(),
-                    $this->getDetailsPaymentFirstday()
+                    $this->getDetailsPaymentFirstday(),
+                    $this->getDetailsBankIban()
             );
         } catch (Exception $e) {
             $this->unsetData();
@@ -100,6 +102,8 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
         $resultArray['numberOfRates'] = (int) $this->getDetailsNumberOfRates() - 1;
         $resultArray['rate'] = number_format((double) $this->getDetailsRate(), 2, $decimalSeperator, $thousandSepeartor).' '. $currency;
         $resultArray['lastRate'] = number_format((double) $this->getDetailsLastRate(), 2, $decimalSeperator, $thousandSepeartor).' '. $currency;
+        $resultArray['paymentFirstdate'] = $this->getDetailsPaymentFirstday();
+        $resultArray['bankIban'] = $this->getDetailsBankIban();
 
         return $resultArray;
     }
@@ -146,7 +150,9 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
             'requestAmount'     => $this->getRequestAmount(),
             'interestRate'      => $this->getRequestInterestRate(),
             'requestSubtype'    => $subtype,
-            'requestValue'      => $this->getRequestCalculationValue()
+            'requestValue'      => $this->getRequestCalculationValue(),
+            'paymentFirstday'   => $this->getRequestFirstday(),
+            'bankAccount'       => $this->getRequestIban()
         );
 
         $shopId = oxRegistry::getSession()->getVariable('shopId');
@@ -175,6 +181,7 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
             $this->setDetailsRate($resultArray['rate']);
             $this->setDetailsLastRate($resultArray['lastRate']);
             $this->setDetailsPaymentFirstday($response->getPaymentFirstday());
+            $this->setDetailsBankIban(oxRegistry::getSession()->getVariable('pi_ratepay_bank_iban'));
             $this->setMsg($response->getReasonMessage());
             $this->setCode($response->getReasonCode());
             $this->setErrorMsg('');

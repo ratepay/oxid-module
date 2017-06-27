@@ -47,3 +47,31 @@
     padding: 10px 0px;
     border-top: 1px solid #ddd
 }
+.rp-sepa-form {
+    width: 80%;
+    margin-left: 14px;
+}
+.rp-sepa-table {
+    margin-left: -10px;
+}
+.rp-special-item {
+    margin-left: 5px;
+}
+.rp-link {
+    margin-left: 20px
+}
+#rp-sepa-agreement {
+    margin-left: 5px
+}
+.form-group input, .form-group label {
+    margin-left: 5px
+}
+#rp-switch-payment-type-direct-debit, #rp-rate-elv {
+    display: none;
+}
+#rp-iban-account-number {
+    display: block;
+}
+.rp-payment-type-switch {
+    text-decoration: underline;
+}

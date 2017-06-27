@@ -211,6 +211,8 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                     }
                 }
 
+                $session->setVariable('bankOwner', $customer->oxuser__oxfname->rawValue . " " . $customer->oxuser__oxlname->rawValue);
+
                 $this->addTplParam($paymentMethod . '_minimumAmount', $settings->pi_ratepay_settings__limit_min->rawValue);
                 $this->addTplParam($paymentMethod . '_maximumAmount', $settings->pi_ratepay_settings__limit_max->rawValue);
                 $this->addTplParam($paymentMethod . '_duedays', $settings->pi_ratepay_settings__duedate->rawValue);
@@ -219,9 +221,6 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
 
                 $this->addTplParam($paymentMethod . '_sandbox_notification', (bool) $settings->pi_ratepay_settings__sandbox->rawValue);
 
-                if ($paymentMethod === 'pi_ratepay_rate') {
-                    $this->addTplParam('pi_ratepay_rate_activateelv', $settings->pi_ratepay_settings__activate_elv->rawValue);
-                }
                 if ($paymentMethod === 'pi_ratepay_elv') {
                     $this->addTplParam('pi_ratepay_elv_bank_account_owner', $customer->oxuser__oxfname->rawValue . " " . $customer->oxuser__oxlname->rawValue);
                 }
