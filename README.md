@@ -6,12 +6,17 @@
 |Author | `Annegret Seufert`
 |Prefix | `pi`
 |Shop Version | `CE` `EE` `4.7.x-5.2.x`
-|Version | `3.3.3`
+|Version | `4.0.0`
 |Link | `http://www.ratepay.com`
 |Mail | `integration@ratepay.com`
 |Installation | `see separate installation manual`
 
 ## Changelog
+
+### Version 4.0.0 - Released 2017-07-30
+* change requests to the new ratepay library
+* add payment method installment elv
+* change installment calculator design
 
 ### Version 3.3.3 - Released 2017-05-15
 * compatibility for oxid version 4.10.2
@@ -22,11 +27,11 @@
 * add b2b max limit configuration
 * rate calculation without intermediate step
 
-### Version 3.3.2 - 
+### Version 3.3.2 - Released 2017-03-02
 * SEPA - BIC field removed
 * IBAN country prefix validation removed
 
-### Version 3.3.1 - 
+### Version 3.3.1 - Released 2016-08-09
 * renaming of paymentmethods improved
 * credit handling improved
 
