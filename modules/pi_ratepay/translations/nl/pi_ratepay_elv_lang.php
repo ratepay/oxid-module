@@ -68,5 +68,6 @@ $aLang = array(
     'PI_RATEPAY_ELV_VIEW_BANK_ACCOUNT_NUMBER'       => 'Rekeningnummer',
     'PI_RATEPAY_ELV_VIEW_BANK_IBAN'                 => 'IBAN',
     'PI_RATEPAY_ELV_VIEW_BANK_NAME'                 => 'Kredietinstelling',
-    'PI_RATEPAY_ELV_ERROR_BANKCODE_TO_SHORT'        => 'Die Bankleitzahl muss acht Zeichen lang sein.'
+    'PI_RATEPAY_ELV_ERROR_BANKCODE_TO_SHORT'        => 'Die Bankleitzahl muss acht Zeichen lang sein.',
+    'PI_RATEPAY_ELV_VIEW_BANK_CODE'                 => "BLZ:",
 );

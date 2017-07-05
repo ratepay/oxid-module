@@ -104,6 +104,10 @@
                 <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_ACCOUNT_NUMBER"}]:</label>
                 <input name='pi_ratepay_elv_bank_account_number' maxlength='50' size='37' type='text' value='[{$pi_ratepay_elv_bank_account_number}]' />
             </li>
+            <li>
+                <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_CODE"}]:</label>
+                <input name='pi_ratepay_elv_bank_code' maxlength='50' size='37' type='text' value='[{$pi_ratepay_elv_bank_code}]' />
+            </li>
         </ul>
         [{/if}]
         <div style="margin: 15px 0;">
