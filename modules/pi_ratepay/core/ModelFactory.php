@@ -203,7 +203,7 @@ class ModelFactory extends oxSuperCfg {
         } else {
             $array['InstallmentCalculation']['CalculationTime']['Month'] = $this->_calculationData['requestValue'];
         }
-        $array['InstallmentCalculation']['PaymentFirstday'] = 28;
+        $array['InstallmentCalculation']['PaymentFirstday'] = $this->_calculationData['paymentFirstday'];
 
         $mbContentTime = new RatePAY\ModelBuilder('Content');
         $mbContentTime->setArray($array);

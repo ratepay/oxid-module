@@ -62,6 +62,7 @@
                 </div>
                 <input type="hidden" id="rate_elv" name="rate_elv" value="<?php echo $pi_rate_elv ?>">
                 <input type="hidden" id="rate" name="rate" value="<?php echo $pi_rate ?>">
+                <input type="hidden" id="paymentFirstday" name="paymentFirstday" value="<?php echo $pi_firstday ?>">
                 <input type="hidden" id="month" name="month" value="">
                 <input type="hidden" id="mode" name="mode" value="">
                 <div class="panel-body">
@@ -143,7 +144,6 @@
         <div class="row rp-sepa-form">
             <form>
                 <input type="hidden" name="rp-payment-type" id="rp-payment-type" />
-                <input type="hidden" name="paymentFirstday" id="paymentFirstday" value="<?php echo $pi_firstday; ?>" />
                 <div class="form-group">
                     <label class=""><?php echo $rp_account_holder; ?></label>
                     <input type="text" class="form-control disabled" name="rp-iban-account-owner" value="<?php echo $pi_owner; ?>" disabled /><!-- Show account holder name = billing address firstname and lastname -->

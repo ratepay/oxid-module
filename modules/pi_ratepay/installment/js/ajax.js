@@ -48,10 +48,9 @@ function piRatepayRateCalculatorAction(mode, month) {
                     bankAccount = document.getElementById('rp-iban-account-number').value;
                 }
             }
-            paymentFirstday = document.getElementById('paymentFirstday');
+            paymentFirstday = document.getElementById('paymentFirstday').value;
         }
     }
-
 
     if (mode == 'rate') {
         calcValue = document.getElementById('rp-rate-value').value;
@@ -93,10 +92,12 @@ function rp_change_payment(payment) {
         document.getElementById('rp-iban-account-number').style.display = 'none';
         document.getElementById('rp-rate-elv').style.display = 'none';
         document.getElementById('rp-switch-payment-type-direct-debit').style.display = 'block';
+        document.getElementById('paymentFirstday').value = 2;
     } else {
         document.getElementById('rp-iban-account-number').style.display = 'block';
         document.getElementById('rp-rate-elv').style.display = 'block';
         document.getElementById('rp-switch-payment-type-direct-debit').style.display = 'none';
+        document.getElementById('paymentFirstday').value = 28;
     }
     updateCalculator();
 }
