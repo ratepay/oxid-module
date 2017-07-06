@@ -30,26 +30,28 @@ function piRatepayRateCalculatorAction(mode, month) {
         shop = document.getElementsByName("shp")[0].value;
     }
 
-    if (document.getElementById('rp-iban-account-number')) {
-        if (document.getElementById('rp-iban-account-number').style.display !== 'none') {
+    if (document.getElementById('pi_ratepay_rate_bank_iban')) {
+        if (document.getElementById('pi_ratepay_rate_bank_iban').style.display !== 'none') {
             document.getElementById('rp-rate-elv').style.display = 'block';
             document.getElementById('paymentNextStepBottom').disabled = true;
 
-            if (document.getElementById('rp-iban-account-number').style.display === 'block'
-                && document.getElementById('rp-iban-account-number').value !== ''
+            if (document.getElementById('pi_ratepay_rate_bank_iban').style.display === 'block'
+                && document.getElementById('pi_ratepay_rate_bank_iban').value !== ''
                 && document.getElementById('rp-sepa-aggreement').checked === true
             ) {
                 document.getElementById('paymentNextStepBottom').disabled = false;
             }
 
             var bankAccount;
-            if (document.getElementById('rp-iban-account-number').value !== '') {
-                if (document.getElementById('rp-iban-account-number').style.display === 'block') {
-                    bankAccount = document.getElementById('rp-iban-account-number').value;
+            if (document.getElementById('pi_ratepay_rate_bank_iban').value !== '') {
+                if (document.getElementById('pi_ratepay_rate_bank_iban').style.display === 'block') {
+                    bankAccount = document.getElementById('pi_ratepay_rate_bank_iban').value;
                 }
             }
             paymentFirstday = document.getElementById('paymentFirstday').value;
         }
+    } else {
+        document.getElementById('paymentNextStepBottom').disabled = false;
     }
 
     if (mode == 'rate') {
@@ -88,13 +90,13 @@ function updateCalculator() {
 
 function rp_change_payment(payment) {
     if (payment == 28) {
-        document.getElementById('rp-iban-account-number').value = '';
-        document.getElementById('rp-iban-account-number').style.display = 'none';
+        document.getElementById('pi_ratepay_rate_bank_iban').value = '';
+        document.getElementById('pi_ratepay_rate_bank_iban').style.display = 'none';
         document.getElementById('rp-rate-elv').style.display = 'none';
         document.getElementById('rp-switch-payment-type-direct-debit').style.display = 'block';
         document.getElementById('paymentFirstday').value = 2;
     } else {
-        document.getElementById('rp-iban-account-number').style.display = 'block';
+        document.getElementById('pi_ratepay_rate_bank_iban').style.display = 'block';
         document.getElementById('rp-rate-elv').style.display = 'block';
         document.getElementById('rp-switch-payment-type-direct-debit').style.display = 'none';
         document.getElementById('paymentFirstday').value = 28;

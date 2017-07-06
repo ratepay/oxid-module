@@ -150,4 +150,12 @@ function piHide(input, elementToToggle) {
         $(elementToToggle).hide();
     });
 }
+function piCalculator() {
+    if ($('#payment_pi_ratepay_rate').is(':checked')) {
+        $('#paymentNextStepBottom').prop('disabled', true);
+    } else {
+        $('#paymentNextStepBottom').prop('disabled', false);
+    }
+
+}
 </script>

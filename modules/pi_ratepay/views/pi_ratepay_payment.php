@@ -626,20 +626,8 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
             return true;
         }
 
-        if (!$this->_isRateElv() && $paymentMethod != 'pi_ratepay_elv') {
-            $this->getSession()->setVariable(
-                'pi_rp_rate_pay_method',
-                'noelv'
-            );
-            return true;
-        }
 
-        if ($this->_isRateElv()) {
-            $this->getSession()->setVariable(
-                'pi_rp_rate_pay_method',
-                'pi_ratepay_rate_radio_elv'
-            );
-        }
+
 
         $isBankDataValid = true;
         $userCountry     = strtoupper(oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $this->getUser()->oxuser__oxcountryid->value . "'"));
@@ -656,6 +644,11 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
             bic               => -510
             bankcode invalid  => -509
         */
+
+        if ($paymentMethod == 'pi_ratepay_rate' && !empty($_SESSION['pi_ratepay_rate_bank_iban'])) {
+            $bankDataType = 'iban';
+            $iban = $_SESSION['pi_ratepay_rate_bank_iban'];
+        }
 
         if ($bankDataType == "classic") {
             if (empty($accountNumber)) {
@@ -708,27 +701,6 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
             } else {
                 $this->getSession()->setVariable($paymentMethod . '_bank_iban', $iban);
             }
-
-            /*if ($this->_isSaveBankDataSet()) {
-                $encryptionService = new Pi_Util_Encryption_OxEncryption();
-
-                if(empty($bankData[$ibanKey])) {
-                    $insertArray['accountnumber'] = $bankData[$accountNumberKey];
-                    $insertArray['bankcode'] = $bankData[$codeKey];
-                } else {
-                    $insertArray['iban'] = $bankData[$ibanKey];
-                    if($country == "AT") {
-                        $insertArray['bic'] = $bankData[$bicKey];
-                    }
-                }
-
-                if (!isset($this->_bankdata) || $this->_bankdata != $insertArray) {
-                    $userOxid = $this->getUser()->getId();
-                    $encryptionService->saveBankdata(
-                        $userOxid, $insertArray
-                    );
-                }
-            }*/
         }
 
         return $isBankDataValid;

@@ -151,7 +151,7 @@
                 <!-- Account number is only allowed for customers with german billing address. IBAN must be used for all others -->
                 <div class="form-group">
                     <label class=""><?php echo $rp_iban; ?></label>
-                    <input type="text" class="form-control required" id="rp-iban-account-number" onchange="updateCalculator()" name="rp-iban-account-number" style="display: block"/>
+                    <input type="text" class="form-control required"  maxlength='50' size='37' id="pi_ratepay_rate_bank_iban" oninput="updateCalculator()" onchange="updateCalculator()" name="rp-iban-account-number" style="display: block"/>
                 </div>
                 <!-- Bank code is only necesarry if account number (no iban) is set -->
                 <!--<div class="form-group" id="rp-form-bank-code">

@@ -2,7 +2,7 @@
 [{assign var="dynvalue" value=$oView->getDynValue()}]
 <dl>
     <dt>
-        <input id="payment_[{$sPaymentID}]" type="radio" name="paymentid" value="[{$sPaymentID}]" [{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]checked[{/if}] style="position:relative;">
+        <input id="payment_[{$sPaymentID}]" type="radio" onclick="piCalculator();" name="paymentid" value="[{$sPaymentID}]" [{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]checked[{/if}] style="position:relative;">
         <label for="payment_[{$sPaymentID}]"><b>
                 [{$paymentmethod->oxpayments__oxdesc->value}]
         </b></label>
@@ -98,6 +98,7 @@
 </dl>
 
 [{oxscript add="piTogglePolicy('$sPaymentID');"}]
+[{oxscript add="piCalculator();"}]
 [{oxscript add="$('#pi_ratepay_rate_bank_box').hide();"}]
 [{oxscript add="piShow('#piRpRadioElv', '#pi_ratepay_rate_bank_box');"}]
 [{oxscript add="piHide('#piRpRadioWire', '#pi_ratepay_rate_bank_box');"}]
