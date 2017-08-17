@@ -310,7 +310,8 @@ class ModelFactory extends oxSuperCfg {
 
         $modelBuilder->setArray($headArray);
         if (!empty($this->_orderId)) {
-            $external['External']['OrderId'] = $this->_orderId;
+            $orderNr = oxDb::getDb()->getOne('SELECT OXORDERNR FROM oxorder where oxid = ?', array($this->_orderId));
+            $external['External']['OrderId'] = $orderNr;
         }
         if (!empty($this->_customerId)) {
             $external['External']['MerchantConsumerId'] = $this->_customerId;
