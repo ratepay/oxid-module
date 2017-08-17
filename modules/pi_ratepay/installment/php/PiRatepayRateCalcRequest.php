@@ -200,7 +200,7 @@
                 <div id="rp-installment-plan-no-details">
                     <div class="rp-installment-plan-no-details">
                         <div class="rp-installment-plan-title" onmouseover="piMouseOver('rate2')" onmouseout="piMouseOut('rate2')">
-                            <?php echo $pi_resultArray['numberOfRatesFull']; ?> <?php echo $rp_mouseover_duration_month; ?>
+                            <?php echo $pi_resultArray['numberOfRatesFull']; ?> <?php echo $rp_duration_month; ?>
                             <p id="rate2" class="rp-installment-plan-description small"><?php echo $rp_mouseover_duration_month; ?></p>
                         </div>
                         <div class="text-right">
