@@ -621,13 +621,13 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
     private function _checkBankData()
     {
         $paymentMethod = $this->_selectedPaymentMethod;
-        
         if ($paymentMethod != 'pi_ratepay_elv' && $paymentMethod != 'pi_ratepay_rate') {
             return true;
         }
 
-
-
+        if ($paymentMethod == 'pi_ratepay_rate' && $_SESSION['pi_ratepay_rate_payment_firstday'] == 28) {
+            return true;
+        }
 
         $isBankDataValid = true;
         $userCountry     = strtoupper(oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $this->getUser()->oxuser__oxcountryid->value . "'"));

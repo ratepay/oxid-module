@@ -30,7 +30,7 @@ function piRatepayRateCalculatorAction(mode, month) {
         shop = document.getElementsByName("shp")[0].value;
     }
 
-    if (document.getElementById('pi_ratepay_rate_bank_iban')) {
+    if (document.getElementById('pi_ratepay_rate_bank_iban') !== null) {
         if (document.getElementById('pi_ratepay_rate_bank_iban').style.display !== 'none') {
             document.getElementById('rp-rate-elv').style.display = 'block';
             document.getElementById('paymentNextStepBottom').disabled = true;
