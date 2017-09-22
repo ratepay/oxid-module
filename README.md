@@ -5,7 +5,7 @@
 |------|----------
 |Author | `Annegret Seufert`
 |Prefix | `pi`
-|Shop Version | `CE` `EE` `4.7.x-5.2.x`
+|Shop Version | `CE/PE` `4.7.x-4.10.x` `EE` `5.0.x-5.2.x`
 |Version | `4.0.0`
 |Link | `http://www.ratepay.com`
 |Mail | `integration@ratepay.com`
