@@ -3,15 +3,18 @@
 
 |Module | RatePAY Payment Module for OXID
 |------|----------
-|Author | `Annegret Seufert`
+|Author | `Annegret Seufert`, `Tim Bischoff`
 |Prefix | `pi`
 |Shop Version | `CE` `EE` `4.7.x-5.2.x`
-|Version | `3.3.3`
+|Version | `3.3.3.1`
 |Link | `http://www.ratepay.com`
 |Mail | `integration@ratepay.com`
 |Installation | `see separate installation manual`
 
 ## Changelog
+
+### Version 3.3.3.1 - Released 2017-11-28
+* change RatePAY company address
 
 ### Version 3.3.3 - Released 2017-05-15
 * compatibility for oxid version 4.10.2
