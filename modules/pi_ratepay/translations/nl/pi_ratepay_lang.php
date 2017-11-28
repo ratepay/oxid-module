@@ -34,5 +34,5 @@ $aLang = array(
     'PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_OWNERPOLICY'   => 'H&auml;ndler-Datenschutzerkl&auml;rung',
     'PI_RATEPAY_VIEW_RADIO_LABEL_ELV'                 => 'Per elektronischem Lastschriftverfahren',
     'PI_RATEPAY_VIEW_RADIO_PAYMENT_WIRE'              => 'Per &Uuml;berweisung',
-    'PI_RATEPAY_VIEW_RATEPAY_ADDRESS'                 => 'RatePAY GmbH, Schl&uuml;terstr. 39, 10629 Berlin'
+    'PI_RATEPAY_VIEW_RATEPAY_ADDRESS'                 => 'RatePAY GmbH, Franklinstra&szlig;e 28-29, 10587 Berlin'
 );
