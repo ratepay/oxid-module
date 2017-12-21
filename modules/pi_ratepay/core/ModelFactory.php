@@ -220,6 +220,7 @@ class ModelFactory extends oxSuperCfg {
      */
     private function _makeConfirmationDeliver()
     {
+        $this->_getOrderCountryId();
         $mbHead = $this->_getHead();
 
         $shoppingBasket = [
@@ -237,12 +238,21 @@ class ModelFactory extends oxSuperCfg {
     }
 
     /**
+     * get order country id
+     */
+    private function getOrderCountryId() {
+        $countryId = oxDb::getDb()->getOne("SELECT OXBILLCOUNTRYID FROM oxorder WHERE OXID = '" . $this->_orderId . "'");
+        $this->_countryId = $countryId;
+    }
+
+    /**
      * make payment change
      *
      * @return object|bool
      */
     private function _makePaymentChange()
     {
+        $this->getOrderCountryId();
         $mbHead = $this->_getHead();
         $detailsViewData = oxNew('pi_ratepay_detailsviewdata', $this->_orderId);
 
