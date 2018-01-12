@@ -50,11 +50,6 @@
 					<label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PAYMENT_FON"}]</label>
 					<input name='pi_ratepay_elv_fon' type='text' value='' size='37'/>
 				</li>
-				<li>
-					<label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PAYMENT_MOBILFON"}]</label>
-					<input name='pi_ratepay_elv_mobilfon' type='text' value='' size='37'/>
-					<div class='note'>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PAYMENT_FON_NOTE"}]</div>
-				</li>
 			[{/if}]
 			[{if isset($pi_ratepay_elv_birthdate_check)}]
 				<li>

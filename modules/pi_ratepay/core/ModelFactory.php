@@ -395,6 +395,12 @@ class ModelFactory extends oxSuperCfg {
                 break;
         }
 
+        if (!empty($this->getUser()->oxuser__oxfon->value)) {
+            $phone = $this->getUser()->oxuser__oxfon->value;
+        } else {
+            $phone = $this->getUser()->oxuser__oxmbfon->value;
+        }
+
         $contentArr = [
             'Customer' => [
                 'Gender' => $gender,
@@ -412,7 +418,7 @@ class ModelFactory extends oxSuperCfg {
                 'Contacts' => [
                     'Email' => $this->getUser()->oxuser__oxusername->value,
                     'Phone' => [
-                        'DirectDial' => $this->getUser()->oxuser__oxfon->value
+                        'DirectDial' => $phone
                     ],
                 ],
             ],

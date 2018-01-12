@@ -22,11 +22,6 @@
                 <label>[{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_PAYMENT_FON"}]</label>
                 <input name='pi_ratepay_rechnung_fon' type='text' value='' size='37'/>
             </li>
-            <li>
-                <label>[{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_PAYMENT_MOBILFON"}]</label>
-                <input name='pi_ratepay_rechnung_mobilfon' type='text' value='' size='37'/>
-                <div class='note'>[{oxmultilang ident="PI_RATEPAY_RECHNUNG_VIEW_PAYMENT_FON_NOTE"}]</div>
-            </li>
             [{/if}]
             [{if isset($pi_ratepay_rechnung_birthdate_check)}]
             <li>
