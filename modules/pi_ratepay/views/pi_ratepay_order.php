@@ -107,6 +107,11 @@ class pi_ratepay_order extends pi_ratepay_order_parent
                 return;
             }
 
+            if (oxRegistry::getConfig()->getRequestParameter('ord_agb') == 0) {
+                $this->_blConfirmAGBError = 1;
+                return;
+            }
+
             // for compatibility reasons for a while. will be removed in future
             if (oxRegistry::getConfig()->getRequestParameter('ord_custinfo') !== null && !oxRegistry::getConfig()->getRequestParameter('ord_custinfo') && $this->isConfirmCustInfoActive()) {
                 $this->_blConfirmCustInfoError = 1;
