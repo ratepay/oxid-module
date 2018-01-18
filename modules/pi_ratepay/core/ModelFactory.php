@@ -240,7 +240,7 @@ class ModelFactory extends oxSuperCfg {
     /**
      * get order country id
      */
-    private function getOrderCountryId() {
+    private function _getOrderCountryId() {
         $countryId = oxDb::getDb()->getOne("SELECT OXBILLCOUNTRYID FROM oxorder WHERE OXID = '" . $this->_orderId . "'");
         $this->_countryId = $countryId;
     }
@@ -252,7 +252,7 @@ class ModelFactory extends oxSuperCfg {
      */
     private function _makePaymentChange()
     {
-        $this->getOrderCountryId();
+        $this->_getOrderCountryId();
         $mbHead = $this->_getHead();
         $detailsViewData = oxNew('pi_ratepay_detailsviewdata', $this->_orderId);
 
@@ -715,6 +715,7 @@ class ModelFactory extends oxSuperCfg {
 
             $shoppingBasket['Items'][] = array('Item' => $item);
         }
+
         return $shoppingBasket;
     }
 
