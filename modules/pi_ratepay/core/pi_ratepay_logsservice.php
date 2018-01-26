@@ -72,7 +72,7 @@ class pi_ratepay_LogsService extends oxSuperCfg
         $util = new pi_ratepay_util_Utilities();
         $paymentMethod =  $util->getPaymentMethod($paymentMethod);
 
-        $logging = $this->_getLogSettings($paymentMethod);
+        $logging = $this->_getLogSettings();
 
         if ($logging == 1) {
             $requestXml = $trans->getRequestRaw();
@@ -132,22 +132,15 @@ class pi_ratepay_LogsService extends oxSuperCfg
     }
 
     /**
-     * Get RatePAY Settings
-     * @param string $paymentMethod
+     * Get RatePAY Log Settings
      * @return int
      */
-    private function _getLogSettings($paymentMethod)
+    private function _getLogSettings()
     {
-        $settings = oxNew('pi_ratepay_settings');
-        $shopId = $this->getConfig()->getShopId();
-        $shopId = $settings->setShopIdToOne($shopId);
+        $oDb = oxDb::getDb();
+        $sqlResult = $oDb->getRow('SELECT * FROM pi_ratepay_global_settings');
 
-        if ($paymentMethod == 'INVOICE' || $paymentMethod == 'INSTALLMENT' || $paymentMethod == 'ELV') {
-            $settings->loadByType($paymentMethod, $shopId);
-            return $settings->pi_ratepay_settings__logging->rawValue;
-        }
-
-        return 0;
+        return $sqlResult[1];
     }
 
 }

@@ -102,16 +102,6 @@
                                                                       <input type="checkbox" name="rp_sandbox_[{$method}]_[{$country}]">
                                                                   [{/if}]
                                                               </td>
-                                                         </tr><tr>
-                                                             <td class="edittext">
-                                                                 [{oxmultilang ident="PI_RATEPAY_PROFILE_SETTINGS_LOGGING"}]:
-                                                             </td><td class="edittext">
-                                                                 [{if $methodValue.logging === true}]
-                                                                     <input type="checkbox" name="rp_logging_[{$method}]_[{$country}]" checked='checked' value='on'>
-                                                                 [{else}]
-                                                                     <input type="checkbox" name="rp_logging_[{$method}]_[{$country}]">
-                                                                 [{/if}]
-                                                             </td>
                                                          </tr>
                                                          [{if array_key_exists('iban_only', $methodValue)}]
                                                              <tr>
@@ -185,7 +175,32 @@
                                     </fieldset>
                                 <br/>
                                 [{/foreach}]
-                            
+                            <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <tr>
+                                    <td class="edittext">
+                                        [{oxmultilang ident="PI_RATEPAY_PROFILE_SETTINGS_LOGGING"}]:
+                                    </td>
+                                    <td class="edittext">
+                                        [{if $globalConfig.logging === true}]
+                                        <input type="checkbox" name="rp_logging" checked='checked' value='on'>
+                                        [{else}]
+                                        <input type="checkbox" name="rp_logging">
+                                        [{/if}]
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="edittext">
+                                        Auto Payment Confirm:
+                                    </td>
+                                    <td class="edittext">
+                                        [{if $globalConfig.confirm === true}]
+                                        <input type="checkbox" name="rp_confirm" checked='checked' value='on'>
+                                        [{else}]
+                                        <input type="checkbox" name="rp_confirm">
+                                        [{/if}]
+                                    </td>
+                                </tr>
+                            </table>
                             </td>
                         </tr><tr>
                         <td valign="top" align="left" class="edittext" colspan="2">
@@ -197,7 +212,6 @@
             </td>
         </tr>
     </table>
-    
 </form>
 
 [{include file="bottomitem.tpl"}]

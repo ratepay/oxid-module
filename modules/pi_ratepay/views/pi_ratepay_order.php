@@ -177,7 +177,6 @@ class pi_ratepay_order extends pi_ratepay_order_parent
                     if ($oBasket->getOrderId() != null && $oBasket->getOrderId() != $this->getSession()->getVariable('pi_ratepay_shops_order_id')) {
                         $this->getSession()->setVariable('pi_ratepay_shops_order_id', $oBasket->getOrderId());
                     }
-
                     $this->_saveRatepayOrder($this->getSession()->getVariable('pi_ratepay_shops_order_id'));
                     $tid = $this->getSession()->getVariable($this->_paymentId . '_trans_id');
 
@@ -187,8 +186,11 @@ class pi_ratepay_order extends pi_ratepay_order_parent
                         $log->save();
                     }
 
-                    $this->_ratepayPaymentType = $this->getBasket()->getPaymentId();
+                    $modelFactory->setOrderId($this->getSession()->getVariable('pi_ratepay_shops_order_id'));
+                    $modelFactory->setTransactionId($tid);
+                    $modelFactory->doOperation('PAYMENT_CONFIRM');
 
+                    $this->_ratepayPaymentType = $this->getBasket()->getPaymentId();
                     // proceeding to next view
                     return $this->_getNextStep($iSuccess);
                 } catch (oxOutOfStockException $oEx) {
@@ -266,7 +268,6 @@ class pi_ratepay_order extends pi_ratepay_order_parent
 
             $ratepayRateDetails->save();
         }
-
 
         $this->_saveRatepayBasketItems($id);
     }

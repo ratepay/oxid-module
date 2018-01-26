@@ -173,6 +173,9 @@ class ModelFactory extends oxSuperCfg {
             case 'PAYMENT_REQUEST':
                 return $this->_makePaymentRequest();
                 break;
+            case 'PAYMENT_CONFIRM':
+                return $this->_makePaymentConfirm();
+                break;
             case 'CONFIRMATION_DELIVER':
                 return $this->_makeConfirmationDeliver();
                 break;
@@ -186,6 +189,46 @@ class ModelFactory extends oxSuperCfg {
                 return $this->_makeCalculationRequest();
                 break;
         }
+    }
+
+    /**
+     * Get RatePAY Confirm Settings
+     * @return int
+     */
+    private function _getConfirmSettings()
+    {
+        $oDb = oxDb::getDb();
+        $sqlResult = $oDb->getRow('SELECT * FROM pi_ratepay_global_settings');
+
+        $globalConfig['confirm'] = (bool) $sqlResult[2];
+
+        return $sqlResult[2];
+    }
+
+    /**
+     * make a payment confirm
+     *
+     * @return bool
+     */
+    private function _makePaymentConfirm() {
+        $util = new pi_ratepay_util_Utilities();
+        $paymentMethod =  $util->getPaymentMethod($this->_paymentType);
+
+        $confirm = $this->_getConfirmSettings();
+        if ($confirm == 0) {
+            return true;
+        }
+
+        $mbHead = $this->_getHead();
+        $rb = new RatePAY\RequestBuilder($this->_sandbox);
+
+        $paymentConfirm = $rb->callPaymentConfirm($mbHead);
+        pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->_orderId, $this->_transactionId, $this->_paymentType, 'PAYMENT_CONFIRM', $this->_subtype, '', '', $paymentConfirm);
+
+        if ($paymentConfirm->isSuccessful()) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -312,7 +355,6 @@ class ModelFactory extends oxSuperCfg {
         ];
 
         $modelBuilder = new RatePAY\ModelBuilder();
-
 
         if (!empty($this->_transactionId)) {
             $modelBuilder->setTransactionId($this->_transactionId);

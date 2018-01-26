@@ -48,7 +48,6 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                 $config[$country][$methodShop]['profile_id'] = $settings->pi_ratepay_settings__profile_id->rawValue;
                 $config[$country][$methodShop]['security_code'] = $settings->pi_ratepay_settings__security_code->rawValue;
                 $config[$country][$methodShop]['sandbox'] = (bool) $settings->pi_ratepay_settings__sandbox->rawValue;
-                $config[$country][$methodShop]['logging'] = (bool) $settings->pi_ratepay_settings__logging->rawValue;
                 $config[$country][$methodShop]['duedate'] = $settings->pi_ratepay_settings__duedate->rawValue;
 
                 if (!empty($config[$country][$methodShop]['profile_id']) && !empty($config[$country][$methodShop]['security_code'])) {
@@ -82,9 +81,17 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                     $activeCountries[$country] = $country;
                 }
             }
+
         }
+        $oDb = oxDb::getDb();
+        $sqlResult = $oDb->getRow('SELECT * FROM pi_ratepay_global_settings');
+
+        $globalConfig['logging'] = (bool) $sqlResult[1];
+        $globalConfig['confirm'] = (bool) $sqlResult[2];
+
         //die(print_r($config));
         $this->addTplParam('config', $config);
+        $this->addTplParam('globalConfig', $globalConfig);
 
         if (count($errMsg) > 0) {
             $this->addTplParam('errMsg', $errMsg);
@@ -127,10 +134,8 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                     'profile_id' => $profileId,
                     'security_code' => $securityCode,
                     'url' => $url,
-                    'sandbox' => $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_sandbox_' . $methodShop . '_' . $country)),
-                    'logging' => $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_logging_' . $methodShop . '_' . $country)),
+                    'sandbox' => $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_sandbox_' . $methodShop . '_' . $country))
                 );//'duedate' => (int) oxRegistry::getConfig()->getRequestParameter('rp_duedate_' . $methodShop . '_' . $country)
-
 
                 if ($this->_checkOnShopId($shopId, $country, $methodDB) == false){
                     $insertSql = $this->_createInsertSql($shopId, $country, $methodDB);
@@ -226,6 +231,10 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
                     $this->_insertSettings($insertSql);
                 }
             }
+            $logging = $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_logging'));
+            $confirm = $this->_isParameterCheckedOn(oxRegistry::getConfig()->getRequestParameter('rp_confirm'));
+            $globalSettingSql = 'INSERT INTO pi_ratepay_global_settings SET logging = ' . $logging . ', autoconfirm = '. $confirm . ', shopid =' . $shopId . ' ON DUPLICATE KEY UPDATE logging = ' . $logging . ', autoconfirm = '. $confirm;
+            $this->_insertSettings($globalSettingSql);
         }
 
         $this->addTplParam('saved', true);
