@@ -710,17 +710,21 @@ class ModelFactory extends oxSuperCfg {
         $shoppingBasket = array();
         $artnr =  array();
 
+        $api = $this->_isNewApi();
+
         foreach ($this->_basket AS $article) {
             if (oxRegistry::getConfig()->getRequestParameter($article['arthash']) <= 0 && $article['title'] !== 'Credit') {
                 continue;
             }
             if ($article['artnum'] == 'oxdelivery') {
-                $shoppingBasket['Shipping'] = [
-                    'Description' => 'Shipping Costs',
-                    'UnitPriceGross' => number_format($article['unitprice'] + ($article['unitprice'] / 100 * $article['vat']), '2', '.', ''),
-                    'TaxRate'       => $article['vat'],
-                ];
-                continue;
+                if ($api  == true) {
+                    $shoppingBasket['Shipping'] = [
+                        'Description' => 'Shipping Costs',
+                        'UnitPriceGross' => number_format($article['unitprice'] + ($article['unitprice'] / 100 * $article['vat']), '2', '.', ''),
+                        'TaxRate' => $article['vat'],
+                    ];
+                    continue;
+                }
             }
 
             if (substr($article['artnum'], 0, 7) == 'voucher' || $article['artnum'] == 'discount') {
@@ -759,6 +763,21 @@ class ModelFactory extends oxSuperCfg {
         }
 
         return $shoppingBasket;
+    }
+
+    /**
+     * check if the new api is used
+     *
+     * @return bool
+     * @throws oxConnectionException
+     */
+    private function _isNewApi() {
+        $api = oxDb::getDb()->getOne("SELECT RP_API FROM pi_ratepay_orders WHERE TRANSACTION_ID = '" . $this->_transactionId . "'");
+
+        if (empty($api) || $api == null) {
+            return false;
+        }
+        return true;
     }
 
     /**

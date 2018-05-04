@@ -226,6 +226,7 @@ class pi_ratepay_order extends pi_ratepay_order_parent
         $transid = $this->getSession()->getVariable($this->_paymentId . '_trans_id');
         $descriptor = $this->getSession()->getVariable($this->_paymentId . '_descriptor');
         $userbirthdate = $this->getUser()->oxuser__oxbirthdate->value;
+        $api = 'api_1.8';
 
         $ratepayOrder = oxNew('pi_ratepay_orders');
         $ratepayOrder->loadByOrderNumber($id);
@@ -234,7 +235,8 @@ class pi_ratepay_order extends pi_ratepay_order_parent
             'order_number' => $id,
             'transaction_id' => $transid,
             'descriptor' => $descriptor,
-            'userbirthdate' => $userbirthdate
+            'userbirthdate' => $userbirthdate,
+            'rp_api' => $api
         ));
 
         $ratepayOrder->save();
