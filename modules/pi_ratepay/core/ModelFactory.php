@@ -728,16 +728,18 @@ class ModelFactory extends oxSuperCfg {
             }
 
             if (substr($article['artnum'], 0, 7) == 'voucher' || $article['artnum'] == 'discount') {
-                if (!empty($shoppingBasket['Discount']['UnitPriceGross'])) {
-                    $article['unitprice'] = $article['unitprice'] + $shoppingBasket['Discount']['UnitPriceGross'];
-                    $article['oxtitle'] = $shoppingBasket['Discount']['Description'] . '_' . $article['oxtitle'];
+                if ($api  == true) {
+                    if (!empty($shoppingBasket['Discount']['UnitPriceGross'])) {
+                        $article['unitprice'] = $article['unitprice'] + $shoppingBasket['Discount']['UnitPriceGross'];
+                        $article['oxtitle'] = $shoppingBasket['Discount']['Description'] . '_' . $article['oxtitle'];
+                    }
+                    $shoppingBasket['Discount'] = [
+                        'Description' => $article['oxtitle'],
+                        'UnitPriceGross' => $article['unitprice'],
+                        'TaxRate' => $article['vat'],
+                    ];
+                    continue;
                 }
-                $shoppingBasket['Discount'] = [
-                    'Description' => $article['oxtitle'],
-                    'UnitPriceGross' => $article['unitprice'],
-                    'TaxRate'       => $article['vat'],
-                ];
-                continue;
             }
 
             $item = array(
