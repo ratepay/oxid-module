@@ -36,6 +36,9 @@
             </p>
         </div>
         [{/if}]
+        <div>
+            [{ oxmultilang ident="PI_RATEPAY_POLICY" }]<a href="[{$pi_ratepay_elv_url}]" target="_blank">[{ oxmultilang ident="PI_RATEPAY_POLICY2" }]</a>.[{ oxmultilang ident="PI_RATEPAY_POLICY3" }]
+        </div>
         <br/>
         <div style="border: 1px solid #BDBDBD; padding-left: 4px;">
             [{oxmultilang ident="PI_RATEPAY_VIEW_RATEPAY_ADDRESS"}]

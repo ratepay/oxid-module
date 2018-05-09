@@ -15,6 +15,9 @@
             </p>
         </div>
         [{/if}]
+        <div>
+            [{ oxmultilang ident="PI_RATEPAY_POLICY" }]<a href="[{$pi_ratepay_elv_url}]" target="_blank">[{ oxmultilang ident="PI_RATEPAY_POLICY2" }]</a>.[{ oxmultilang ident="PI_RATEPAY_POLICY3" }]
+        </div>
         </br>
         <ul class="form">
             [{if isset($pi_ratepay_rate_fon_check)}]

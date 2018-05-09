@@ -6,12 +6,19 @@
 |Author | `Annegret Seufert`
 |Prefix | `pi`
 |Shop Version | `CE/PE` `4.7.x-4.10.x` `EE` `5.0.x-5.3.x`
-|Version | `4.0.1`
+|Version | `4.0.3`
 |Link | `http://www.ratepay.com`
 |Mail | `integration@ratepay.com`
 |Installation | `see separate installation manual`
 
 ## Changelog
+
+### Version 4.0.3 - Released 2018-05-04
+* add compatibility for old rp order structure
+* add privacy information
+
+### Version 4.0.2 - Released 2018-02-10
+* add optional auto confirm
 
 ### Version 4.0.1 - Released 2018-01-10
 * fix multicountry backend process
