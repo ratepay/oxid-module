@@ -3,7 +3,7 @@
 
 |Module | RatePAY Payment Module for OXID
 |------|----------
-|Author | `Annegret Seufert`
+|Author | `Annegret Seufert`, `Tim Bischoff`
 |Prefix | `pi`
 |Shop Version | `CE/PE` `4.7.x-4.10.x` `EE` `5.0.x-5.3.x`
 |Version | `4.0.3`
@@ -12,6 +12,7 @@
 |Installation | `see separate installation manual`
 
 ## Changelog
+
 
 ### Version 4.0.3 - Released 2018-05-04
 * add compatibility for old rp order structure
@@ -30,6 +31,9 @@
 * change requests to the new ratepay library
 * add payment method installment elv
 * change installment calculator design
+
+### Version 3.3.3.1 - Released 2017-11-28
+* change RatePAY company address
 
 ### Version 3.3.3 - Released 2017-05-15
 * compatibility for oxid version 4.10.2
