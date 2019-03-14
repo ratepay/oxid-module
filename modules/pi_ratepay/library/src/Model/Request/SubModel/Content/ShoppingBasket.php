@@ -3,6 +3,7 @@
 namespace RatePAY\Model\Request\SubModel\Content;
 
 use RatePAY\Model\Request\SubModel\AbstractModel;
+use RatePAY\Service\Util;
 
 class ShoppingBasket extends AbstractModel
 {
@@ -38,22 +39,32 @@ class ShoppingBasket extends AbstractModel
         ],
         'Items' => [
             'mandatory' => false,
-            'instanceOf' => __NAMESPACE__ . "\\ShoppingBasket\\Items"
+            'instanceOf' => "Content\\ShoppingBasket\\Items"
         ],
         'Shipping' => [
             'mandatory' => false,
-            'instanceOf' => __NAMESPACE__ . "\\ShoppingBasket\\Shipping"
+            'instanceOf' => "Content\\ShoppingBasket\\Shipping"
         ],
         'Discount' => [
             'mandatory' => false,
-            'instanceOf' => __NAMESPACE__ . "\\ShoppingBasket\\Discount"
+            'instanceOf' => "Content\\ShoppingBasket\\Discount"
         ],
+    ];
+
+    /*
+     * List of settings.
+     * In addition to API fields there are settings possible to control library behavior.
+     */
+    public $settings = [
+        'AutoDelivery' => false
     ];
 
     /**
      * Totalizes item amounts and sets shopping basket amount.
      *
      * @return array
+     * @throws \RatePAY\Exception\ModelException
+     * @throws \RatePAY\Exception\RuleSetException
      */
     public function toArray()
     {
@@ -64,7 +75,8 @@ class ShoppingBasket extends AbstractModel
                 $items = $this->admittedFields['Items']['value']->toArray();
                 if (key_exists('item', $items)) { // If item list is not empty
                     foreach ($items['item'] as $item) {
-                        $unitPriceGross = floatval($item['attributes']['unit-price-gross']['value']);
+                        $unitPrice = Util::changeAmountToFloat($item['attributes']['unit-price-gross']['value']);
+                        $unitPriceGross = floatval($unitPrice);
                         $quantity = intval($item['attributes']['quantity']['value']);
                         $discount = (key_exists('discount', $item['attributes'])) ? floatval($item['attributes']['discount']['value']) : 0;
                         $amount += ($unitPriceGross + $discount) * $quantity;
@@ -74,12 +86,14 @@ class ShoppingBasket extends AbstractModel
             
             if (key_exists('value', $this->admittedFields['Shipping'])) {
                 $shipping = $this->admittedFields['Shipping']['value']->toArray();
-                $amount += floatval($shipping['attributes']['unit-price-gross']['value']);
+                $unitPrice = Util::changeAmountToFloat($shipping['attributes']['unit-price-gross']['value']);
+                $amount += floatval($unitPrice);
             }
             
             if (key_exists('value', $this->admittedFields['Discount'])) {
                 $discount = $this->admittedFields['Discount']['value']->toArray();
-                $amount += floatval($discount['attributes']['unit-price-gross']['value']);
+                $unitPrice = Util::changeAmountToFloat($discount['attributes']['unit-price-gross']['value']);
+                $amount += floatval($unitPrice);
             }
             
             $this->admittedFields['Amount']['value'] = $amount;

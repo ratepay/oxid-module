@@ -124,6 +124,12 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
         $runTimes = json_decode($settings->pi_ratepay_settings__month_allowed->rawValue);
         $interestRate = ((float)$settings->pi_ratepay_settings__interest_rate->rawValue / 12) / 100;
 
+        // 0049008 : no need to calculate
+        // $rateAmount will be equal to 0 if $interestRate is equal to 0
+        if ($interestRate == 0) {
+            return $runTimes;
+        }
+
         foreach ($runTimes AS $month) {
             $rateAmount = ceil($basketAmount * (($interestRate * pow((1 + $interestRate), $month)) / (pow((1 + $interestRate), $month) - 1)));
 

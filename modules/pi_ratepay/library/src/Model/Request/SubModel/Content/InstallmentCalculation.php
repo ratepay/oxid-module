@@ -31,22 +31,29 @@ class InstallmentCalculation extends AbstractModel
         ],
         'CalculationRate' => [
             'mandatoryByRule' => true,
-            'instanceOf' => __NAMESPACE__ . "\\InstallmentCalculation\\CalculationRate",
+            'instanceOf' => "Content\\InstallmentCalculation\\CalculationRate",
         ],
         'CalculationTime' => [
             'mandatoryByRule' => true,
-            'instanceOf' => __NAMESPACE__ . "\\InstallmentCalculation\\CalculationTime",
+            'instanceOf' => "Content\\InstallmentCalculation\\CalculationTime",
         ],
         'PaymentFirstday' => [
             'mandatory' => false,
         ],
         'Configuration' => [
             'mandatory' => false,
-            'instanceOf' => __NAMESPACE__ . "\\Configuration",
+            'instanceOf' => "Content\\Configuration",
         ],
         'CalculationStart' => [
             'mandatory' => false,
         ],
+        // Following fields are necessary for offline installment calculation
+        'ServiceCharge' => [
+            'mandatory' => false,
+        ],
+        'InterestRate' => [
+            'mandatory' => false,
+        ]
     ];
 
     /**

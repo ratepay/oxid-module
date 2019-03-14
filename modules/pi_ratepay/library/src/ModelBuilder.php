@@ -42,26 +42,31 @@ class ModelBuilder
      * @param $name
      * @param $arguments
      * @return mixed|ModelBuilder
+     * @throws ModelException
      */
     public function __call($name, $arguments)
     {
-        $fieldToSet = false;
+        $prefix = substr($name, 0, 3);
+        $field = false;
         $requestedModel = false;
 
-        if (substr($name, 0, 3) == 'set') {
-            $fieldToSet = substr($name, 3);
+        if ($prefix == "set" || $prefix == "get") {
+            $field = substr($name, 3);
         } else {
             $requestedModel = $name;
         }
 
-        if ($fieldToSet) {
-            if (!key_exists($fieldToSet, $this->model->admittedFields)) {
-                throw new ModelException("Field '" . $fieldToSet . "' invalid");
+        if ($field) {
+            if (!key_exists($field, $this->model->admittedFields)) {
+                throw new ModelException("Field '" . $field . "' invalid");
             }
 
-            $this->model->commonSetter($fieldToSet, $arguments);
-
-            return $this->model;
+            if ($prefix == "set") {
+                $this->model->commonSetter($field, $arguments);
+                return $this->model;
+            } else {
+                return $this->model->commonGetter($field);
+            }
         } else {
             return new ModelBuilder($requestedModel);
         }
@@ -91,6 +96,7 @@ class ModelBuilder
      * Sets and fills model instance by array
      *
      * @param $array
+     * @throws ModelException
      */
     public function setArray($array)
     {
@@ -113,6 +119,7 @@ class ModelBuilder
      * Converts JSON input to array and uses setArray method
      *
      * @param $json
+     * @throws ModelException
      */
     public function setJson($json) {
         $this->setArray(json_decode($json, true));
