@@ -21,6 +21,6 @@ class pi_ratepay_shopcontrol extends pi_ratepay_shopcontrol_parent
             spl_autoload_register('ratepayAutoload');
         }
 
-        parent::start($sClass, $sFunction, $aParams, $aViewsChain);
+        return parent::start($sClass, $sFunction, $aParams, $aViewsChain);
     }
 }
