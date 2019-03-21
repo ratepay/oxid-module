@@ -31,6 +31,16 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
      */
     public function __construct(PiRatepayCalcDataInterface $piCalcData = null)
     {
+        /**
+         * OXID-169
+         * If the classes using backslash namespace format are not found
+         * this might be due to using Windows system, handling filepath differently.
+         * Then we call a specific class autoloader for those classes
+         */
+        if (!class_exists('RatePAY\RequestBuilder')) {
+            require __DIR__ . '/../../autoloader.php';
+            spl_autoload_register('ratepayAutoload');
+        }
 
         if (isset($piCalcData)) {
             parent::__construct($piCalcData);

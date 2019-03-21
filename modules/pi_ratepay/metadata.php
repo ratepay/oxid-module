@@ -39,7 +39,8 @@ $aModule = array(
     'url'          => 'http://www.ratepay.com/',
     'extend'       => array(
         'payment'           => 'pi_ratepay/views/pi_ratepay_payment',
-        'order'             => 'pi_ratepay/views/pi_ratepay_order'
+        'order'             => 'pi_ratepay/views/pi_ratepay_order',
+        'oxshopcontrol'     => 'pi_ratepay/core/pi_ratepay_shopcontrol'
     ),
     'blocks' => array(
         array(
