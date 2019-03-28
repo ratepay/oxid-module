@@ -23,6 +23,8 @@ class Customer extends AbstractModel
      * isAttributeTo        = field is xml attribute to field (in value)
      * instanceOf           = value has to be an instance of class (in value)
      * cdata                = value will be wrapped in CDATA tag
+     * uppercase            = value will be changed to upper case
+     * lowercase            = value will be changed to lower case
      *
      * @var array
      */
@@ -62,6 +64,10 @@ class Customer extends AbstractModel
             'mandatory' => false,
             'uppercase' => true
         ],
+        'Language' => [
+            'mandatory' => false,
+            'lowercase' => true
+        ],
         'IpAddress' => [
             'mandatory' => true
         ],
@@ -71,16 +77,16 @@ class Customer extends AbstractModel
         ],
         'Addresses' => [
             'mandatory' => true,
-            'instanceOf' => __NAMESPACE__ . "\\Customer\\Addresses"
+            'instanceOf' => "Content\\Customer\\Addresses"
         ],
         'Contacts' => [
             'mandatory' => true,
-            'instanceOf' => __NAMESPACE__ . "\\Customer\\Contacts"
+            'instanceOf' => "Content\\Customer\\Contacts"
         ],
         'BankAccount' => [
             'mandatory' => false,
             'cdata' => true,
-            'instanceOf' => __NAMESPACE__ . "\\Customer\\BankAccount"
+            'instanceOf' => "Content\\Customer\\BankAccount"
         ],
         'CompanyName' => [
             'mandatory' => false,
@@ -88,7 +94,7 @@ class Customer extends AbstractModel
         ],
         'CompanyType' => [
             'optionalByRule' => true,
-            'instanceOf' => "CompanyType"
+            'cdata' => true
         ],
         'VatId' => [
             'optionalByRule' => true,
@@ -115,11 +121,20 @@ class Customer extends AbstractModel
      */
     protected function rule()
     {
-        if (key_exists('value', $this->admittedFields['CompanyName'])) {
-            return true;
-        } else {
-            return false;
+        foreach ($this->admittedFields as $fieldName => $value) {
+            switch ($fieldName) {
+                case "CompanyType":
+                case "VatId":
+                case "CompanyId":
+                case "RegistryLocation":
+                case "Homepage":
+                    if (!key_exists('value', $this->admittedFields['CompanyName'])) {
+                        return false;
+                    }
+            }
         }
+
+        return true;
     }
 
 }

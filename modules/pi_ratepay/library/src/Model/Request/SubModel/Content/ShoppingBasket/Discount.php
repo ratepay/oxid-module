@@ -45,6 +45,14 @@ class Discount extends AbstractModel
         ]
     ];
 
+    /*
+     * List of settings.
+     * In addition to API fields there are settings possible to control library behavior.
+     */
+    public $settings = [
+        'AutoDelivery' => false
+    ];
+
     /**
      * Changes discount to negative value (if necessary)
      *
@@ -52,7 +60,8 @@ class Discount extends AbstractModel
      */
     public function toArray()
     {
-        $this->admittedFields['UnitPriceGross']['value'] = Util::changeValueToNegative($this->admittedFields['UnitPriceGross']['value']);
+        $unitPrice = Util::changeAmountToFloat($this->admittedFields['UnitPriceGross']['value']);
+        $this->admittedFields['UnitPriceGross']['value'] = Util::changeValueToNegative($unitPrice);
 
         return parent::toArray();
     }

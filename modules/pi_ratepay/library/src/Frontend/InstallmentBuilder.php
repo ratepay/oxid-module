@@ -3,7 +3,6 @@
 namespace RatePAY\Frontend;
 
 use RatePAY\Model\Request\ConfigurationRequest;
-use RatePAY\Model\Request\SubModel\Constants as CONSTANTS;
 use RatePAY\ModelBuilder;
 use RatePAY\RequestBuilder;
 use RatePAY\Service\Util;
@@ -76,6 +75,14 @@ class InstallmentBuilder
      */
     private $retryDelay = 0;
 
+    /**
+     * DebitPayTypes
+     * @ToDo: find better place to save (but stay compatible with PHP 5.4 (now array within constant))
+     */
+    private $debitPayTypes = [
+        2 => "DIRECT-DEBIT",
+        28 => "BANK-TRANSFER"
+    ];
 
     public function __construct($sandbox = false, $profileId = null, $securitycode = null, $language = "DE", $country = "DE")
     {
@@ -118,6 +125,7 @@ class InstallmentBuilder
      * Sets current language
      *
      * @param $language
+     * @throws \RatePAY\Exception\LanguageException
      */
     public function setLanguage($language)
     {
@@ -162,6 +170,7 @@ class InstallmentBuilder
      * @param float $amount
      * @param string $template
      * @return string
+     * @throws RequestException
      */
     public function getInstallmentCalculatorByTemplate($amount, $template)
     {
@@ -186,6 +195,7 @@ class InstallmentBuilder
      *
      * @param $amount
      * @return string
+     * @throws RequestException
      */
     public function getInstallmentCalculatorAsJson($amount)
     {
@@ -203,8 +213,13 @@ class InstallmentBuilder
     /**
      * Calls CalculationRequest
      *
+     * @param $type
+     * @param $value
+     * @param $amount
+     * @param null $firstday
      * @return CalculationRequest
      * @throws RequestException
+     * @throws \RatePAY\Exception\ModelException
      */
     private function getInstallmentCalculation($type, $value, $amount, $firstday = null)
     {
@@ -344,8 +359,8 @@ class InstallmentBuilder
                 $result = Util::merge_array_replace($result, $this->getDebitPayType($validPaymentFirstday));
             }
         } else {
-            if (key_exists($validPaymentFirstdays, CONSTANTS::DEBIT_PAY_TYPES)) {
-                switch (CONSTANTS::DEBIT_PAY_TYPES[$validPaymentFirstdays]) {
+            if (key_exists($validPaymentFirstdays, $this->debitPayTypes)) {
+                switch ($this->debitPayTypes[$validPaymentFirstdays]) {
                     case "DIRECT-DEBIT":
                         $result['rp_paymentType_directDebit'] = true;
                         $result['rp_paymentType_directDebit_firstday'] = $validPaymentFirstdays;

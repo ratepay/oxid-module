@@ -31,6 +31,16 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
      */
     public function __construct(PiRatepayCalcDataInterface $piCalcData = null)
     {
+        /**
+         * OXID-169
+         * If the classes using backslash namespace format are not found
+         * this might be due to using Windows system, handling filepath differently.
+         * Then we call a specific class autoloader for those classes
+         */
+        if (!class_exists('RatePAY\RequestBuilder')) {
+            require __DIR__ . '/../../autoloader.php';
+            spl_autoload_register('ratepayAutoload');
+        }
 
         if (isset($piCalcData)) {
             parent::__construct($piCalcData);
@@ -123,6 +133,12 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
         $rateMinNormal = $settings->pi_ratepay_settings__min_rate->rawValue;
         $runTimes = json_decode($settings->pi_ratepay_settings__month_allowed->rawValue);
         $interestRate = ((float)$settings->pi_ratepay_settings__interest_rate->rawValue / 12) / 100;
+
+        // 0049008 : no need to calculate
+        // $rateAmount will be equal to 0 if $interestRate is equal to 0
+        if ($interestRate == 0) {
+            return $runTimes;
+        }
 
         foreach ($runTimes AS $month) {
             $rateAmount = ceil($basketAmount * (($interestRate * pow((1 + $interestRate), $month)) / (pow((1 + $interestRate), $month) - 1)));

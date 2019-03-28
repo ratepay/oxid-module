@@ -3,6 +3,7 @@
 namespace RatePAY\Model\Request\SubModel\Content\ShoppingBasket;
 
 use RatePAY\Model\Request\SubModel\AbstractModel;
+use RatePAY\Service\Util;
 
 class Shipping extends AbstractModel
 {
@@ -43,5 +44,25 @@ class Shipping extends AbstractModel
             'isAttribute' => true
         ]
     ];
+
+    /*
+     * List of settings.
+     * In addition to API fields there are settings possible to control library behavior.
+     */
+    public $settings = [
+        'AutoDelivery' => false
+    ];
+
+    /**
+     * @return array
+     * @throws \RatePAY\Exception\ModelException
+     * @throws \RatePAY\Exception\RuleSetException
+     */
+    public function toArray()
+    {
+        $this->admittedFields['UnitPriceGross']['value'] = Util::changeAmountToFloat($this->admittedFields['UnitPriceGross']['value']);
+
+        return parent::toArray();
+    }
 
 }
