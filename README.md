@@ -13,6 +13,7 @@
 
 ## Changelog
 
+* solving installation problems
 
 ### Version 4.0.3 - Released 2018-05-04
 * add compatibility for old rp order structure
