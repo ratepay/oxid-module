@@ -38,58 +38,29 @@ $aModule = array(
     'email'        => 'integration@ratepay.com',
     'url'          => 'http://www.ratepay.com/',
     'extend'       => array(
-        'payment'           => 'pi_ratepay/views/pi_ratepay_payment',
-        'order'             => 'pi_ratepay/views/pi_ratepay_order',
-        'oxshopcontrol'     => 'pi_ratepay/core/pi_ratepay_shopcontrol'
-    ),
-    'blocks' => array(
-        array(
-            'template' => 'page/checkout/payment.tpl',
-            'block'    => 'checkout_payment_errors',
-            'file'     => 'payment_pi_ratepay_error_dfp.tpl'
-        ),
-        array(
-            'template' => 'page/checkout/payment.tpl',
-            'block'    => 'select_payment',
-            'file'     => 'payment_pi_ratepay_rechnung.tpl'
-        ),
-        array(
-            'template' => 'page/checkout/payment.tpl',
-            'block'    => 'select_payment',
-            'file'     => 'payment_pi_ratepay_rate.tpl'
-        ),
-        array(
-            'template' => 'page/checkout/payment.tpl',
-            'block'    => 'select_payment',
-            'file'     => 'payment_pi_ratepay_elv.tpl'
-        ),
-        array(
-            'template' => 'page/checkout/order.tpl',
-            'block'    => 'checkout_order_main',
-            'file'     => 'order_pi_ratepay_waitingwheel.tpl'
-        ),
-        array(
-            'template' => 'page/checkout/order.tpl',
-            'block'    => 'shippingAndPayment',
-            'file'     => 'order_pi_ratepay_rate.tpl'
-        ),
-        array(
-            'template' => 'page/checkout/',
-            'block'    => 'checkout_order_btn_confirm_bottom',
-            'file'     => 'order_pi_ratepay_checkout_order.tpl'
-        )
+        // conrollers
+        'payment'           => 'pi_ratepay/extend/application/controllers/pi_ratepay_payment',
+        'order'             => 'pi_ratepay/extend/application/controllers/pi_ratepay_order',
+        // core
+        'oxshopcontrol'     => 'pi_ratepay/extend/core/pi_ratepay_shopcontrol'
     ),
     'templates' => array(
-        'pi_ratepay_log.tpl'                    => 'pi_ratepay/out/admin/tpl/pi_ratepay_log.tpl',
-        'pi_ratepay_details.tpl'                => 'pi_ratepay/out/admin/tpl/pi_ratepay_details.tpl',
-        'pi_ratepay_no_details.tpl'             => 'pi_ratepay/out/admin/tpl/pi_ratepay_no_details.tpl',
-        'pi_ratepay_profile.tpl'                => 'pi_ratepay/out/admin/tpl/pi_ratepay_profile.tpl'
+        // views->admin
+        'pi_ratepay_log.tpl'                    => 'pi_ratepay/application/views/admin/tpl/pi_ratepay_log.tpl',
+        'pi_ratepay_details.tpl'                => 'pi_ratepay/application/views/admin/tpl/pi_ratepay_details.tpl',
+        'pi_ratepay_no_details.tpl'             => 'pi_ratepay/application/views/admin/tpl/pi_ratepay_no_details.tpl',
+        'pi_ratepay_profile.tpl'                => 'pi_ratepay/application/views/admin/tpl/pi_ratepay_profile.tpl'
     ),
     'files' => array(
-        'pi_ratepay_admin_SettingsAbstract'             => 'pi_ratepay/admin/pi_ratepay_admin_settingsabstract.php',
-        'pi_ratepay_Log'                                => 'pi_ratepay/admin/pi_ratepay_log.php',
-        'pi_ratepay_Details'                            => 'pi_ratepay/admin/pi_ratepay_details.php',
-        'pi_ratepay_Profile'                            => 'pi_ratepay/admin/pi_ratepay_profile.php',
+        // controllers -> admin
+        'pi_ratepay_admin_SettingsAbstract'             => 'pi_ratepay/application/controllers/admin/pi_ratepay_admin_settingsabstract.php',
+        'pi_ratepay_Log'                                => 'pi_ratepay/application/controllers/admin/pi_ratepay_log.php',
+        'pi_ratepay_Details'                            => 'pi_ratepay/application/controllers/admin/pi_ratepay_details.php',
+        'pi_ratepay_Profile'                            => 'pi_ratepay/application/controllers/admin/pi_ratepay_profile.php',
+        // controllers
+        'pi_ratepay_rate_Calc'                          => 'pi_ratepay/application/controllers/pi_ratepay_rate_calc.php',
+        // core
+        'ModelFactory'                                  => 'pi_ratepay/core/ModelFactory.php',
         'pi_ratepay_DetailsViewData'                    => 'pi_ratepay/core/pi_ratepay_detailsviewdata.php',
         'pi_ratepay_History'                            => 'pi_ratepay/core/pi_ratepay_history.php',
         'pi_ratepay_HistoryList'                        => 'pi_ratepay/core/pi_ratepay_historylist.php',
@@ -104,11 +75,10 @@ $aModule = array(
         'pi_ratepay_RequestOrderArticle'                => 'pi_ratepay/core/pi_ratepay_requestorderarticle.php',
         'pi_ratepay_Settings'                           => 'pi_ratepay/core/pi_ratepay_settings.php',
         'pi_ratepay_util_Utilities'                     => 'pi_ratepay/core/pi_ratepay_util_utilities.php',
-        'pi_ratepay_rate_Calc'                          => 'pi_ratepay/views/pi_ratepay_rate_calc.php',
+        // libs
         'Pi_Util_Encryption_EncryptionAbstract'         => 'pi_ratepay/Pi/Util/Encryption/EncryptionAbstract.php',
         'Pi_Util_Encryption_OxEncryption'               => 'pi_ratepay/Pi/Util/Encryption/OxEncryption.php',
         'Pi_Util_Encryption_PrivateKey'                 => 'pi_ratepay/Pi/Util/Encryption/PrivateKey.php',
-        'ModelFactory'                                  => 'pi_ratepay/core/ModelFactory.php',
         'RatePAY\RequestBuilder'                        => 'pi_ratepay/library/src/RequestBuilder.php',
         'RatePAY\ModelBuilder'                          => 'pi_ratepay/library/src/ModelBuilder.php',
         'RatePAY\Service\ModelMapper'                   => 'pi_ratepay/library/src/Service/ModelMapper.php',
@@ -180,5 +150,42 @@ $aModule = array(
         'RatePAY\Model\Request\TraitRequestContent'             => $libraryModel . 'Request/TraitRequestContent.php',
         'RatePAY\Model\Request\TraitRequestSubtype'             => $libraryModel . 'Request/TraitRequestSubtype.php'
 
-    )
+    ),
+    'blocks' => array(
+        array(
+            'template' => 'page/checkout/payment.tpl',
+            'block'    => 'checkout_payment_errors',
+            'file'     => 'payment_pi_ratepay_error_dfp.tpl'
+        ),
+        array(
+            'template' => 'page/checkout/payment.tpl',
+            'block'    => 'select_payment',
+            'file'     => 'payment_pi_ratepay_rechnung.tpl'
+        ),
+        array(
+            'template' => 'page/checkout/payment.tpl',
+            'block'    => 'select_payment',
+            'file'     => 'payment_pi_ratepay_rate.tpl'
+        ),
+        array(
+            'template' => 'page/checkout/payment.tpl',
+            'block'    => 'select_payment',
+            'file'     => 'payment_pi_ratepay_elv.tpl'
+        ),
+        array(
+            'template' => 'page/checkout/order.tpl',
+            'block'    => 'checkout_order_main',
+            'file'     => 'order_pi_ratepay_waitingwheel.tpl'
+        ),
+        array(
+            'template' => 'page/checkout/order.tpl',
+            'block'    => 'shippingAndPayment',
+            'file'     => 'order_pi_ratepay_rate.tpl'
+        ),
+        array(
+            'template' => 'page/checkout/',
+            'block'    => 'checkout_order_btn_confirm_bottom',
+            'file'     => 'order_pi_ratepay_checkout_order.tpl'
+        )
+    ),
 );
