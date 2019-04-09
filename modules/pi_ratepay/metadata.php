@@ -75,6 +75,7 @@ $aModule = array(
         'pi_ratepay_RequestOrderArticle'                => 'pi_ratepay/core/pi_ratepay_requestorderarticle.php',
         'pi_ratepay_Settings'                           => 'pi_ratepay/core/pi_ratepay_settings.php',
         'pi_ratepay_util_Utilities'                     => 'pi_ratepay/core/pi_ratepay_util_utilities.php',
+        'pi_ratepay_events'                             => 'pi_ratepay/core/pi_ratepay_events.php',
         // libs
         'Pi_Util_Encryption_EncryptionAbstract'         => 'pi_ratepay/Pi/Util/Encryption/EncryptionAbstract.php',
         'Pi_Util_Encryption_OxEncryption'               => 'pi_ratepay/Pi/Util/Encryption/OxEncryption.php',
@@ -150,6 +151,10 @@ $aModule = array(
         'RatePAY\Model\Request\TraitRequestContent'             => $libraryModel . 'Request/TraitRequestContent.php',
         'RatePAY\Model\Request\TraitRequestSubtype'             => $libraryModel . 'Request/TraitRequestSubtype.php'
 
+    ),
+    'events' => array(
+        'onActivate'                => 'pi_ratepay_events::onActivate',
+        'onDeactivate'              => 'pi_ratepay_events::onDeactivate',
     ),
     'blocks' => array(
         array(
