@@ -7,4 +7,4 @@
  * Code by PayIntelligent GmbH  <http://www.payintelligent.de/>
  */
 
-pi_ratepay_rate_calc_path = "modules/pi_ratepay/installment/";
+pi_ratepay_rate_calc_path = "modules/pi/pi_ratepay/installment/";

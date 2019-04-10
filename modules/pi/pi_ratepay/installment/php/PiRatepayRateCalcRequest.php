@@ -107,11 +107,11 @@
                     <div colspan="2" class="small text-right">
                         <a class="rp-link" id="rp-show-installment-plan-details" onclick="changeDetails()">
                             Zeige Details
-                            <img src="modules/pi_ratepay/installment/resources/icon-enlarge.png" class="rp-details-icon" />
+                            <img src="modules/pi/pi_ratepay/installment/resources/icon-enlarge.png" class="rp-details-icon" />
                         </a>
                         <a class="rp-link" id="rp-hide-installment-plan-details" onclick="changeDetails()">
                             Schließe Details
-                            <img src="modules/pi_ratepay/installment/resources/icon-shrink.png" class="rp-details-icon" />
+                            <img src="modules/pi/pi_ratepay/installment/resources/icon-shrink.png" class="rp-details-icon" />
                         </a>
                     </div>
                 </div>

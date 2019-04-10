@@ -75,7 +75,7 @@
         [{/if}]
 
         <br/>
-        <link type="text/css" rel="stylesheet" href="modules/pi_ratepay/installment/css/style.css"/>
+        <link type="text/css" rel="stylesheet" href="modules/pi/pi_ratepay/installment/css/style.css"/>
         <script type="text/javascript" src="[{$oViewConf->getModuleUrl('pi_ratepay')}]installment/js/path.js"></script>
         <script type="text/javascript" src="[{$oViewConf->getModuleUrl('pi_ratepay')}]installment/js/layout.js"></script>
         <script type="text/javascript" src="[{$oViewConf->getModuleUrl('pi_ratepay')}]installment/js/ajax.js"></script>

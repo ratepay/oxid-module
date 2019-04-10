@@ -11,7 +11,7 @@ if (!function_exists('getShopBasePath')) {
 
     function getShopBasePath()
     {
-        return dirname(__FILE__) . '/../../../../';
+        return dirname(__FILE__) . '/../../../../../';
     }
 
 }
@@ -25,16 +25,9 @@ if (!function_exists('getShopBasePath')) {
 
 }*/
 
-// custom functions file
-require_once getShopBasePath() . 'modules/functions.php';
-
-// Generic utility method file
-require_once getShopBasePath() . 'core/oxfunctions.php';
-
-require_once 'PiRatepayRateCalcDataInterface.php';
-require_once getShopBasePath() . 'core/oxdb.php';
-
 // get bootstrap since 4.7
+require_once 'PiRatepayRateCalcDataInterface.php';
+
 require_once getShopBasePath() . 'bootstrap.php';
 
 

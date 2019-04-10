@@ -279,7 +279,7 @@ class pi_ratepay_Profile extends pi_ratepay_admin_SettingsAbstract
     private function _checkOnShopId($shopid, $country, $method){
 
         $oDb = oxDb::getDb();
-        $sqlResult = $oDb->getAssoc('SELECT * FROM ' . $this->_tableName . ' WHERE shopid = "' . $shopid .'" AND country = "' . $country .'" AND type = "' . $method .'"');
+        $sqlResult = $oDb->getRow('SELECT * FROM ' . $this->_tableName . ' WHERE shopid = "' . $shopid .'" AND country = "' . $country .'" AND type = "' . $method .'"');
 
         return count($sqlResult) > 0;
     }

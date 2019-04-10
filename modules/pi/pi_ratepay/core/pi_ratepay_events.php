@@ -205,7 +205,7 @@ class pi_ratepay_events
 
         foreach (self::$aPaymentMethods as $sPaymentOxid => $sPaymentName) {
             //INSERT PAYMENT METHOD
-            self::insertRowIfNotExists('oxpayments', array('OXID' => $sPaymentOxid), "INSERT INTO oxpayments (OXID, OXACTIVE, OXDESC, OXADDSUM, OXADDSUMTYPE, OXFROMBONI, OXFROMAMOUNT, OXTOAMOUNT, OXVALDESC, OXCHECKED, OXDESC_1, OXVALDESC_1, OXDESC_2, OXVALDESC_2, OXDESC_3, OXVALDESC_3, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXSORT, OXTSPAYMENTID) VALUES ('{$sPaymentOxid}', 1, '{$sPaymentName}', 0, 'abs', 0, 0, 999999, '', 1, '{$sPaymentName}', '', '', '', '', '', '', '', '', '', 0, '')");
+            self::insertRowIfNotExists('oxpayments', array('OXID' => $sPaymentOxid), "INSERT INTO oxpayments (OXID, OXACTIVE, OXDESC, OXADDSUM, OXADDSUMTYPE, OXFROMBONI, OXFROMAMOUNT, OXTOAMOUNT, OXVALDESC, OXCHECKED, OXDESC_1, OXVALDESC_1, OXDESC_2, OXVALDESC_2, OXDESC_3, OXVALDESC_3, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXSORT) VALUES ('{$sPaymentOxid}', 1, '{$sPaymentName}', 0, 'abs', 0, 0, 999999, '', 1, '{$sPaymentName}', '', '', '', '', '', '', '', '', '', 0)");
             self::insertRowIfNotExists('oxobject2payment', array('OXPAYMENTID' => $sPaymentOxid, 'OXTYPE' => 'oxdelset'), "INSERT INTO oxobject2payment(OXID,OXPAYMENTID,OXOBJECTID,OXTYPE) values (MD5(CONCAT(NOW(),RAND())), '{$sPaymentOxid}', 'oxidstandard', 'oxdelset');");
         }
     }
@@ -237,7 +237,8 @@ class pi_ratepay_events
      */
     public static function addTableIfNotExists($sTableName, $sQuery)
     {
-        if (oxDb::getDb()->Execute("SHOW TABLES LIKE '{$sTableName}'")->EOF) {
+        $aTables = oxDb::getDb()->getAll("SHOW TABLES LIKE '{$sTableName}'");
+        if (!$aTables || count($aTables) == 0) {
             oxDb::getDb()->Execute($sQuery);
             return true;
         }
