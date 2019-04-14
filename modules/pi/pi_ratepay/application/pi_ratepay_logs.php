@@ -15,11 +15,30 @@
  * @copyright (C) 2011 PayIntelligent GmbH  <http://www.payintelligent.de/>
  * @license	http://www.gnu.org/licenses/  GNU General Public License 3
  */
-class pi_ratepay_log extends oxAdminView
+
+class pi_ratepay_logs extends oxI18n
 {
     /**
-     * Current class template name.
+     * Object core table name
+     *
      * @var string
      */
-    protected $_sThisTemplate = 'pi_ratepay_log.tpl';
+    protected $_sCoreTbl = 'pi_ratepay_logs';
+    /**
+     * Current class name
+     *
+     * @var string
+     */
+    protected $_sClassName = 'pi_ratepay_logs';
+
+    /**
+     * Class constructor, initiates parent constructor (parent::oxI18n()).
+     *
+     * @return null
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->init($this->_sCoreTbl);
+    }
 }

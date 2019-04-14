@@ -8,7 +8,9 @@
         </MAINMENU>
         <MAINMENU id="PI_RATEPAY_RATEPAY">
             <SUBMENU id="PI_RATEPAY_ADMIN_MENU_SETTINGS" cl="pi_ratepay_profile"></SUBMENU>
-            <SUBMENU id="PI_RATEPAY_LOGGING" cl="pi_ratepay_log"></SUBMENU>
+            <SUBMENU id="PI_RATEPAY_LOGGING" cl="pi_ratepay_log" list="pi_ratepay_log_list">
+                <TAB id="PI_RATEPAY_LOGGING_ENTRY" cl="pi_ratepay_log_main" />
+            </SUBMENU>
         </MAINMENU>
     </OXMENU>
 </OX>
