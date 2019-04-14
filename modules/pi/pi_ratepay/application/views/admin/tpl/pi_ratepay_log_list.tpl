@@ -95,10 +95,10 @@
             </tr>
 
             <tr>
-                <td class="listheader first" height="15" width="30" align="center"><a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$listTable}]', 'order_number', 'asc');document.search.submit();" class="listheader">[{oxmultilang ident="PI_RATEPAY_LOGGING_ORDERNUMBER"}]</a></td>
+                <td class="listheader first" height="15"><a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$listTable}]', 'order_number', 'asc');document.search.submit();" class="listheader">[{oxmultilang ident="PI_RATEPAY_LOGGING_ORDERNUMBER"}]</a></td>
                 <td class="listheader" height="15">&nbsp;<a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$listTable}]', 'transaction_id', 'asc');document.search.submit();" class="listheader">[{oxmultilang ident="PI_RATEPAY_LOGGING_TRANSACTIONID"}]</a></td>
                 <td class="listheader" height="15">&nbsp;<a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$listTable}]', 'payment_method', 'asc');document.search.submit();" class="listheader">[{oxmultilang ident="PI_RATEPAY_LOGGING_PAYMENTMETHOD"}]</a></td>
-                <td class="listheader first" height="15" width="30" align="center"><a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$listTable}]', 'payment_type', 'asc');document.search.submit();" class="listheader">[{oxmultilang ident="PI_RATEPAY_LOGGING_PAYMENTTYPE"}]</a></td>
+                <td class="listheader" height="15"><a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$listTable}]', 'payment_type', 'asc');document.search.submit();" class="listheader">[{oxmultilang ident="PI_RATEPAY_LOGGING_PAYMENTTYPE"}]</a></td>
                 <td class="listheader" height="15">&nbsp;<a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$listTable}]', 'result', 'asc');document.search.submit();" class="listheader">[{oxmultilang ident="PI_RATEPAY_LOGGING_RESULT"}]</a></td>
                 <td colspan="2" class="listheader" height="15">&nbsp;<a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$listTable}]', 'date', 'asc');document.search.submit();" class="listheader">[{oxmultilang ident="PI_RATEPAY_LOGGING_DATE"}]</a></td>
             </tr>
