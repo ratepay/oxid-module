@@ -19,13 +19,19 @@
 /**
  * Helper Class to generate RatePAY order data.
  */
-class pi_ratepay_DetailsViewData
+class pi_ratepay_DetailsViewData extends oxBase
 {
     /**
      * oxid of order
      * @var string
      */
     private $_orderId;
+
+    /**
+     * Order values
+     * @var array|null 
+     */
+    protected $_orderValues = null;
 
     /**
      * Name of order details table
@@ -49,8 +55,27 @@ class pi_ratepay_DetailsViewData
      */
     public function getPreparedOrderArticles()
     {
-        $orderId = $this->_orderId;
+        $articleList = $this->_piGetOrderArticleList();
+        $articleList = $this->_piAddSpecialCosts($articleList, 'oxwrapping', 'Wrapping Cost');
+        $articleList = $this->_piAddSpecialCosts($articleList, 'oxgiftcard', 'Giftcard Cost');
+        $articleList = $this->_piAddSpecialCosts($articleList, 'oxpayment', 'Payment Costs');
+        $articleList = $this->_piAddSpecialCosts($articleList, 'oxdelivery', 'Delivery Costs');
+        $articleList = $this->_piAddSpecialCosts($articleList, 'oxtsprotection', 'TS Protection Cost');
+        $articleList = $this->_piAddDiscounts($articleList);
+        $articleList = $this->_piAddVouchers($articleList);
+        $articleList = $this->_piAddCredit($articleList);
 
+        return $articleList;
+    }
+
+    /**
+     * Initial method for generating an article list
+     *
+     * @return array
+     */
+    protected function _piGetOrderArticleList()
+    {
+        $oDb = oxDb::getDb(oxDb::FETCH_MODE_ASSOC);
         $articleList = array();
 
         # Get order articles
@@ -74,356 +99,360 @@ class pi_ratepay_DetailsViewData
             FROM
               `oxorder` oo,
               `oxorderarticles` oa,
-              $this->pi_ratepay_order_details prrod
+              ".$this->pi_ratepay_order_details." prrod
             WHERE
-              prrod.order_number = '$orderId'
+              prrod.order_number = '{$this->_orderId}'
               AND prrod.order_number = oa.oxorderid
               AND oa.oxartid = prrod.article_number
               AND oo.oxid = prrod.order_number";
-        $articlesResult = mysql_query($articlesSql);
-        $i = 0;
 
-        while ($articlesValues = mysql_fetch_object($articlesResult)) {
-            $articleList[$i]['oxid'] = $articlesValues->oxid;
-            $articleList[$i]['artid'] = $articlesValues->oxartid;
-            $articleList[$i]['arthash'] = md5($articlesValues->oxartid);
-            $articleList[$i]['artnum'] = $articlesValues->oxartnum;
-            $articleList[$i]['title'] = $articlesValues->title;
-            $articleList[$i]['oxtitle'] = $articlesValues->oxtitle;
-            $articleList[$i]['vat'] = $articlesValues->oxvat;
-            $articleList[$i]['unitprice'] = (float) $articlesValues->oxnprice;
-            //$articleList[$i]['unitPriceNetto'] = $this->_getFormattedNumber((float) $articlesValues->oxnprice, 2, ',');
-            $articleList[$i]['amount'] = $articlesValues->ordered - $articlesValues->shipped - $articlesValues->cancelled;
-            $articleList[$i]['ordered'] = $articlesValues->ordered;
-            $articleList[$i]['shipped'] = $articlesValues->shipped;
-            $articleList[$i]['returned'] = $articlesValues->returned;
-            $articleList[$i]['cancelled'] = $articlesValues->cancelled;
-            $articleList[$i]['currency'] = $articlesValues->oxcurrency;
-            $articleList[$i]['bruttoprice'] = (float) $articlesValues->oxbprice;
-            $articleList[$i]['unique_article_number'] = $articlesValues->unique_article_number;
-            
-            if (($articlesValues->ordered - $articlesValues->returned - $articlesValues->cancelled) > 0) {
-                $articleList[$i]['totalprice'] = (float) $articlesValues->oxbprice * ($articleList[$i]['ordered'] - $articleList[$i]['returned'] - $articleList[$i]['cancelled']);
+        $aRows = $oDb->getAll($articlesSql);
+
+        foreach ($aRows as $aRow) {
+            $iAmount = $aRow['ORDERED'] - $aRow['SHIPPED'] - $aRow['CANCELLED'];
+            $dTotal = $aRow['ORDERED'] - $aRow['RETURNED'] - $aRow['CANCELLED'];
+
+            $listEntry['oxid'] = $aRow['OXID'];
+            $listEntry['artid'] = $aRow['OXARTID'];
+            $listEntry['arthash'] = md5($aRow['OXARTID']);
+            $listEntry['artnum'] = $aRow['OXARTNUM'];
+            $listEntry['title'] = $aRow['TITLE'];
+            $listEntry['oxtitle'] = $aRow['OXTITLE'];
+            $listEntry['vat'] = $aRow['OXVAT'];
+            $listEntry['unitprice'] = (float) $aRow['OXNPRICE'];
+            $listEntry['amount'] = $iAmount;
+            $listEntry['ordered'] = $aRow['ORDERED'];
+            $listEntry['shipped'] = $aRow['SHIPPED'];
+            $listEntry['returned'] = $aRow['RETURNED'];
+            $listEntry['cancelled'] = $aRow['CANCELLED'];
+            $listEntry['currency'] = $aRow['OXCURRENCY'];
+            $listEntry['bruttoprice'] = (float) $aRow['OXBPRICE'];
+            $listEntry['unique_article_number'] = $aRow['UNIQUE_ARTICLE_NUMBER'];
+
+            if ($dTotal > 0) {
+                $listEntry['totalprice'] = (float)
+                    $aRow['OXBPRICE'] * (
+                        $listEntry['ordered'] - 
+                        $listEntry['returned'] - 
+                        $listEntry['cancelled']
+                    );
             } else {
-                $articleList[$i]['totalprice'] = 0;
+                $listEntry['totalprice'] = 0;
             }
 
-            $i++;
-        }
-
-        $orderSql = "SELECT * from `oxorder` where oxid='$orderId'";
-
-        $orderResult = mysql_query($orderSql);
-        $orderValues = mysql_fetch_object($orderResult);
-
-
-        $rpOrderDetailsWrappingSql = "SELECT oxorder.oxcurrency, prrod.* from $this->pi_ratepay_order_details prrod, oxorder where prrod.order_number='$orderId' and prrod.article_number='oxwrapping' and oxorder.oxid = prrod.order_number ";
-        $rpOrderDetailsWrappingResult = mysql_query($rpOrderDetailsWrappingSql);
-        $rpOrderDetailsWrappingValues = mysql_fetch_object($rpOrderDetailsWrappingResult);
-
-        if ($rpOrderDetailsWrappingValues->PRICE > 0) {
-
-            $articleList[$i]['oxid']      = "";
-            $articleList[$i]['artid']     = "oxwrapping";
-            $articleList[$i]['arthash']   = md5("oxwrapping");
-            $articleList[$i]['artnum']    = "oxwrapping";
-            $articleList[$i]['title']     = "Wrapping Cost";
-            $articleList[$i]['oxtitle']   = "Wrapping Cost";
-            $articleList[$i]['vat']       = round((float) $rpOrderDetailsWrappingValues->VAT);
-            $articleList[$i]['unitprice'] = (float) $rpOrderDetailsWrappingValues->PRICE;
-            $articleList[$i]['amount']    = 1 - $rpOrderDetailsWrappingValues->SHIPPED - $rpOrderDetailsWrappingValues->CANCELLED;
-            $articleList[$i]['ordered']   = $rpOrderDetailsWrappingValues->ORDERED;
-            $articleList[$i]['shipped']   = $rpOrderDetailsWrappingValues->SHIPPED;
-            $articleList[$i]['returned']  = $rpOrderDetailsWrappingValues->RETURNED;
-            $articleList[$i]['cancelled'] = $rpOrderDetailsWrappingValues->CANCELLED;
-            $articleList[$i]['currency'] = $rpOrderDetailsWrappingValues->oxcurrency;
-            $articleList[$i]['unique_article_number'] = $rpOrderDetailsWrappingValues->unique_article_number;
-
-            if (($rpOrderDetailsWrappingValues->ORDERED - $rpOrderDetailsWrappingValues->RETURNED - $rpOrderDetailsWrappingValues->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = (float) $rpOrderDetailsWrappingValues->PRICE + ((float) $rpOrderDetailsWrappingValues->PRICE * round((float) $rpOrderDetailsWrappingValues->VAT) / 100);
-            } else {
-                $articleList[$i]['totalprice'] = 0;
-            }
-
-            $i++;
-        }
-
-        $rpOrderDetailsGiftcardsSql = "SELECT oxorder.oxcurrency, prrod.* from $this->pi_ratepay_order_details prrod, oxorder where prrod.order_number='$orderId' and prrod.article_number='oxgiftcard' and oxorder.oxid = prrod.order_number ";
-        $rpOrderDetailsGiftcardsResult = mysql_query($rpOrderDetailsGiftcardsSql);
-        $rpOrderDetailsGiftcardsValues = mysql_fetch_object($rpOrderDetailsGiftcardsResult);
-
-        if ($rpOrderDetailsGiftcardsValues->PRICE > 0) {
-
-            $articleList[$i]['oxid'] = "";
-            $articleList[$i]['artid'] = "oxgiftcard";
-            $articleList[$i]['arthash'] = md5($orderValues->oxartid);
-            $articleList[$i]['artnum'] = "oxgiftcard";
-            $articleList[$i]['title'] = "Giftcard Cost";
-            $articleList[$i]['oxtitle'] = "Giftcard Cost";
-            $articleList[$i]['vat'] = (float) $rpOrderDetailsGiftcardsValues->VAT;
-            $articleList[$i]['unitprice'] = (float) $rpOrderDetailsGiftcardsValues->PRICE;
-            $articleList[$i]['amount'] = 1 - $rpOrderDetailsGiftcardsValues->SHIPPED - $rpOrderDetailsGiftcardsValues->CANCELLED;
-            $articleList[$i]['ordered'] = $rpOrderDetailsGiftcardsValues->ORDERED;
-            $articleList[$i]['shipped'] = $rpOrderDetailsGiftcardsValues->SHIPPED;
-            $articleList[$i]['returned'] = $rpOrderDetailsGiftcardsValues->RETURNED;
-            $articleList[$i]['cancelled'] = $rpOrderDetailsGiftcardsValues->CANCELLED;
-            $articleList[$i]['currency'] = $rpOrderDetailsGiftcardsValues->oxcurrency;
-            $articleList[$i]['unique_article_number'] = $rpOrderDetailsGiftcardsValues->unique_article_number;
-
-            if (($rpOrderDetailsGiftcardsValues->ORDERED - $rpOrderDetailsGiftcardsValues->RETURNED - $rpOrderDetailsGiftcardsValues->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = (float) $rpOrderDetailsGiftcardsValues->PRICE + ((float) $rpOrderDetailsGiftcardsValues->PRICE * (float) $rpOrderDetailsGiftcardsValues->VAT) / 100;
-            } else {
-                $articleList[$i]['totalprice'] = 0;
-            }
-
-            $i++;
-        }
-
-
-        $rpOrderDetailsPaymentSql = "SELECT oxorder.oxcurrency, prrod.* from $this->pi_ratepay_order_details prrod, oxorder where prrod.order_number='$orderId' and prrod.article_number='oxpayment' and oxorder.oxid = prrod.order_number ";
-        $rpOrderDetailsPaymentResult = mysql_query($rpOrderDetailsPaymentSql);
-        $rpOrderDetailsPaymentValues = mysql_fetch_object($rpOrderDetailsPaymentResult);
-
-        if ($rpOrderDetailsPaymentValues->PRICE > 0) {
-
-            $articleList[$i]['oxid'] = "";
-            $articleList[$i]['artid'] = "oxpayment";
-            $articleList[$i]['arthash'] = md5($orderValues->oxartid);
-            $articleList[$i]['artnum'] = "oxpayment";
-            $articleList[$i]['title'] = "Payment Cost";
-            $articleList[$i]['oxtitle'] = "Payment Cost";
-            $articleList[$i]['vat'] = (float) $rpOrderDetailsPaymentValues->VAT;
-            $articleList[$i]['unitprice'] = (float) $rpOrderDetailsPaymentValues->PRICE;
-            $articleList[$i]['amount'] = 1 - $rpOrderDetailsPaymentValues->SHIPPED - $rpOrderDetailsPaymentValues->CANCELLED;
-            $articleList[$i]['ordered'] = $rpOrderDetailsPaymentValues->ORDERED;
-            $articleList[$i]['shipped'] = $rpOrderDetailsPaymentValues->SHIPPED;
-            $articleList[$i]['returned'] = $rpOrderDetailsPaymentValues->RETURNED;
-            $articleList[$i]['cancelled'] = $rpOrderDetailsPaymentValues->CANCELLED;
-            $articleList[$i]['currency'] = $rpOrderDetailsPaymentValues->oxcurrency;
-            $articleList[$i]['unique_article_number'] = $rpOrderDetailsPaymentValues->unique_article_number;
-
-            if (($rpOrderDetailsPaymentValues->ORDERED - $rpOrderDetailsPaymentValues->RETURNED - $rpOrderDetailsPaymentValues->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = (float) $rpOrderDetailsPaymentValues->PRICE + ((float) $rpOrderDetailsPaymentValues->PRICE * (float) $rpOrderDetailsPaymentValues->VAT) / 100;
-            } else {
-                $articleList[$i]['totalprice'] = 0;
-            }
-
-            $i++;
-        }
-
-        $rpOrderDetailsDeliverySql = "SELECT oxorder.oxcurrency, prrod.* from $this->pi_ratepay_order_details prrod, oxorder where prrod.order_number='$orderId' and prrod.article_number='oxdelivery' and oxorder.oxid = prrod.order_number ";
-        $rpOrderDetailsDeliveryResult = mysql_query($rpOrderDetailsDeliverySql);
-        $rpOrderDetailsDeliveryValues = mysql_fetch_object($rpOrderDetailsDeliveryResult);
-
-        if ($rpOrderDetailsDeliveryValues->PRICE > 0) {
-
-            $articleList[$i]['oxid']      = "";
-            $articleList[$i]['artid']     = "oxdelivery";
-            $articleList[$i]['arthash']   = md5('oxdelivery');
-            $articleList[$i]['artnum']    = "oxdelivery";
-            $articleList[$i]['title']     = "Delivery Cost";
-            $articleList[$i]['oxtitle']   = "Delivery Cost";
-            $articleList[$i]['vat']       = (float) $rpOrderDetailsDeliveryValues->VAT;
-            $articleList[$i]['unitprice'] = (float) $rpOrderDetailsDeliveryValues->PRICE;
-            $articleList[$i]['amount']    = 1 - $rpOrderDetailsDeliveryValues->SHIPPED - $rpOrderDetailsDeliveryValues->CANCELLED;
-            $articleList[$i]['ordered']   = $rpOrderDetailsDeliveryValues->ORDERED;
-            $articleList[$i]['shipped']   = $rpOrderDetailsDeliveryValues->SHIPPED;
-            $articleList[$i]['returned']  = $rpOrderDetailsDeliveryValues->RETURNED;
-            $articleList[$i]['cancelled'] = $rpOrderDetailsDeliveryValues->CANCELLED;
-            $articleList[$i]['currency'] = $rpOrderDetailsDeliveryValues->oxcurrency;
-            $articleList[$i]['unique_article_number'] = $rpOrderDetailsDeliveryValues->unique_article_number;
-
-            if (($rpOrderDetailsDeliveryValues->ORDERED - $rpOrderDetailsDeliveryValues->RETURNED - $rpOrderDetailsDeliveryValues->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = (float) $rpOrderDetailsDeliveryValues->PRICE + ((float) $rpOrderDetailsDeliveryValues->PRICE * (float) $rpOrderDetailsDeliveryValues->VAT) / 100;
-            } else {
-                $articleList[$i]['totalprice'] = 0;
-            }
-
-            $i++;
-        }
-
-
-        $rpOrderDetailsProtectionSql = "SELECT oxorder.oxcurrency, prrod.* from $this->pi_ratepay_order_details prrod, oxorder where prrod.order_number='$orderId' and prrod.article_number='oxtsprotection' and oxorder.oxid = prrod.order_number ";
-        $rpOrderDetailsProtectionResult = mysql_query($rpOrderDetailsProtectionSql);
-        $rpOrderDetailsProtectionValues = mysql_fetch_object($rpOrderDetailsProtectionResult);
-
-        if ($rpOrderDetailsProtectionValues->PRICE > 0) {
-
-            $articleList[$i]['oxid'] = "";
-            $articleList[$i]['artid'] = "oxtsprotection";
-            $articleList[$i]['arthash'] = md5('oxtsprotection');
-            $articleList[$i]['artnum'] = "oxtsprotection";
-            $articleList[$i]['title'] = "TS Protection Cost";
-            $articleList[$i]['oxtitle'] = "TS Protection Cost";
-            $articleList[$i]['vat'] = (float) $rpOrderDetailsProtectionValues->VAT;
-            $articleList[$i]['unitprice'] = (float) $rpOrderDetailsProtectionValues->PRICE;
-            $articleList[$i]['amount'] = 1 - $rpOrderDetailsProtectionValues->SHIPPED - $rpOrderDetailsProtectionValues->CANCELLED;
-            $articleList[$i]['ordered'] = $rpOrderDetailsProtectionValues->ORDERED;
-            $articleList[$i]['shipped'] = $rpOrderDetailsProtectionValues->SHIPPED;
-            $articleList[$i]['returned'] = $rpOrderDetailsProtectionValues->RETURNED;
-            $articleList[$i]['cancelled'] = $rpOrderDetailsProtectionValues->CANCELLED;
-            $articleList[$i]['currency'] = $rpOrderDetailsProtectionValues->oxcurrency;
-            $articleList[$i]['unique_article_number'] = $rpOrderDetailsProtectionValues->unique_article_number;
-
-            if (($rpOrderDetailsProtectionValues->ORDERED - $rpOrderDetailsProtectionValues->RETURNED - $rpOrderDetailsProtectionValues->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = (float) $rpOrderDetailsProtectionValues->PRICE + ((float) $rpOrderDetailsProtectionValues->PRICE * (float) $rpOrderDetailsProtectionValues->VAT) / 100;
-            } else {
-                $articleList[$i]['totalprice'] = 0;
-            }
-
-            $i++;
-        }
-
-        //$rpOrderDetailsDiscountsSql = "SELECT * from `$this->pi_ratepay_order_details` where order_number='$orderId' and article_number='discount'";
-
-        $rpOrderDetailsDiscountsSql = "SELECT
-          oo.oxcurrency,
-          od.oxid AS ARTID,
-          od.oxtitle AS TITLE,
-          prrod.price AS PRICE,
-          prrod.ordered AS ORDERED,
-          prrod.cancelled AS CANCELLED,
-          prrod.returned AS RETURNED,
-          prrod.shipped AS SHIPPED,
-          prrod.unique_article_number
-		FROM
-		  `oxorder` oo,
-		  `oxdiscount` od,
-		  " . $this->pi_ratepay_order_details . " prrod
-		WHERE
-		  prrod.order_number = '" . $orderId . "'
-		  AND prrod.article_number = od.oxid
-          AND oo.oxid = prrod.order_number";
-        $rpOrderDetailsDiscountsResult = mysql_query($rpOrderDetailsDiscountsSql);
-        $rpOrderDetailsDiscountsValues = mysql_fetch_object($rpOrderDetailsDiscountsResult);
-
-        if ($rpOrderDetailsDiscountsValues->PRICE != 0) {
-
-            $articleList[$i]['oxid'] = "";
-            $articleList[$i]['artid'] = $rpOrderDetailsDiscountsValues->ARTID;
-            $articleList[$i]['arthash'] = md5($orderValues->oxartid);
-            $articleList[$i]['artnum'] = "discount";
-            $articleList[$i]['title'] = $rpOrderDetailsDiscountsValues->TITLE;
-            $articleList[$i]['oxtitle'] = $rpOrderDetailsDiscountsValues->TITLE;
-            $articleList[$i]['vat'] = "0";
-            $articleList[$i]['unitprice'] = (float) $rpOrderDetailsDiscountsValues->PRICE;
-            //$articleList[$i]['unitPriceNetto'] = $this->_getFormattedNumber((float) $rpOrderDetailsDiscountsValues->PRICE, 2, ',');
-            $articleList[$i]['amount'] = 1 - $rpOrderDetailsDiscountsValues->SHIPPED - $rpOrderDetailsDiscountsValues->CANCELLED;
-            $articleList[$i]['ordered'] = $rpOrderDetailsDiscountsValues->ORDERED;
-            $articleList[$i]['shipped'] = $rpOrderDetailsDiscountsValues->SHIPPED;
-            $articleList[$i]['returned'] = $rpOrderDetailsDiscountsValues->RETURNED;
-            $articleList[$i]['cancelled'] = $rpOrderDetailsDiscountsValues->CANCELLED;
-            $articleList[$i]['currency'] = $rpOrderDetailsDiscountsValues->oxcurrency;
-            $articleList[$i]['unique_article_number'] = $rpOrderDetailsDiscountsValues->unique_article_number;
-
-            if (($rpOrderDetailsDiscountsValues->ORDERED - $rpOrderDetailsDiscountsValues->RETURNED - $rpOrderDetailsDiscountsValues->CANCELLED) > 0) {
-                $articleList[$i]['totalprice'] = $rpOrderDetailsDiscountsValues->PRICE;
-            } else {
-                $articleList[$i]['totalprice'] = 0;
-            }
-
-            $i++;
-        }
-
-        $vouchersSql = "SELECT
-          oo.oxcurrency,
-          ov.oxdiscount AS price,
-          prrod.article_number AS artnr,
-          ov.oxvouchernr AS title,
-          prrod.ordered, prrod.cancelled,
-          prrod.returned,
-          prrod.shipped,
-          prrod.unique_article_number,
-          ovs.OXSERIENR as seriesTitle,
-          ovs.OXSERIEDESCRIPTION as seriesDescription
-		FROM
-		  `oxorder` oo,
-		  `oxvouchers` ov,
-		  " . $this->pi_ratepay_order_details . " prrod,
-		  oxvoucherseries ovs
-		WHERE
-		  prrod.order_number = '" . $orderId . "'
-		  AND ov.oxorderid = prrod.order_number
-		  AND prrod.article_number = ov.oxid
-          AND ovs.oxid = ov.OXVOUCHERSERIEID
-          AND oo.oxid = prrod.order_number";
-
-        $vouchersResult = mysql_query($vouchersSql);
-
-        while ($vouchersValues = mysql_fetch_object($vouchersResult)) {
-            $articleList[$i]['oxid'] = "";
-            $articleList[$i]['artid'] = $vouchersValues->artnr;
-            $articleList[$i]['arthash'] = md5($vouchersValues->artnr);
-            $articleList[$i]['artnum'] = 'voucher_' . $vouchersValues->title;
-            $articleList[$i]['title'] = $vouchersValues->seriesTitle;
-            $articleList[$i]['oxtitle'] = $vouchersValues->seriesTitle;
-            $articleList[$i]['vat'] = "0";
-            $articleList[$i]['unitprice'] = "-" . (float) $vouchersValues->price;
-            $articleList[$i]['amount'] = 1 - $vouchersValues->shipped - $vouchersValues->cancelled;
-            $articleList[$i]['ordered'] = $vouchersValues->ordered;
-            $articleList[$i]['shipped'] = $vouchersValues->shipped;
-            $articleList[$i]['returned'] = $vouchersValues->returned;
-            $articleList[$i]['cancelled'] = $vouchersValues->cancelled;
-            $articleList[$i]['currency'] = $vouchersValues->oxcurrency;
-            $articleList[$i]['unique_article_number'] = $vouchersValues->unique_article_number;
-
-            if (($vouchersValues->ordered - $vouchersValues->returned - $vouchersValues->cancelled) > 0) {
-                $articleList[$i]['totalprice'] = (float) $vouchersValues->price * -1;
-            } else {
-                $articleList[$i]['totalprice'] = 0;
-            }
-
-            $i++;
-        }
-
-        $creditSql = "SELECT
-          oo.oxcurrency,
-          ov.oxdiscount AS price,
-          prrod.article_number AS artnr,
-          ov.oxvouchernr AS title,
-          prrod.ordered, prrod.cancelled,
-          prrod.returned,
-          prrod.unique_article_number,
-          prrod.shipped
-		FROM
-		  `oxorder` oo,
-		  `oxvouchers` ov,
-		  " . $this->pi_ratepay_order_details . " prrod
-		WHERE
-		  prrod.order_number = '" . $orderId . "'
-		  AND ov.oxorderid = prrod.order_number
-		  AND ov.oxvoucherserieid = 'Anbieter Gutschrift'
-		  AND prrod.article_number = ov.oxid
-          AND oo.oxid = prrod.order_number";
-
-        $creditResult = mysql_query($creditSql);
-
-        while ($creditValues = mysql_fetch_object($creditResult)) {
-            $articleList[$i]['oxid'] = "";
-            $articleList[$i]['artid'] = $creditValues->artnr;
-            $articleList[$i]['arthash'] = md5($creditValues->artnr);
-            $articleList[$i]['artnum'] = $creditValues->title;
-            $articleList[$i]['title'] = $creditValues->seriesTitle;
-            $articleList[$i]['oxtitle'] = $creditValues->seriesTitle;
-            $articleList[$i]['vat'] = "0";
-            $articleList[$i]['unitprice'] = "-" . (float) $creditValues->price;
-            $articleList[$i]['amount'] = 1 - $creditValues->shipped - $creditValues->cancelled;
-            $articleList[$i]['ordered'] = $creditValues->ordered;
-            $articleList[$i]['shipped'] = $creditValues->shipped;
-            $articleList[$i]['returned'] = $creditValues->returned;
-            $articleList[$i]['cancelled'] = $creditValues->cancelled;
-            $articleList[$i]['currency'] = $creditValues->oxcurrency;
-            $articleList[$i]['unique_article_number'] = $creditValues->unique_article_number;
-
-            if (($creditValues->ordered - $creditValues->returned - $creditValues->cancelled) > 0) {
-                $articleList[$i]['totalprice'] = (float) $creditValues->price * -1;
-            } else {
-                $articleList[$i]['totalprice'] = 0;
-            }
-
-            $i++;
+            $articleList[] = $listEntry;
         }
 
         return $articleList;
+    }
+
+    /**
+     * Adding special costs to article list
+     *
+     * @param $articleList
+     * @param $ident
+     * @param $title
+     * @return array
+     */
+    protected function _piAddSpecialCosts($articleList, $ident, $title)
+    {
+        $orderValues = $this->_piGetOrderValues();
+        $aRow = $this->_piGetOrderSpecialCostsQuery($ident);
+
+        if ($aRow['PRICE'] > 0) {
+            $listEntry['oxid'] = "";
+            $listEntry['artid'] = $ident;
+            $listEntry['arthash'] = md5($orderValues['OXARTID']);
+            $listEntry['artnum'] = $ident;
+            $listEntry['title'] = $title;
+            $listEntry['oxtitle'] = $title;
+            $listEntry['vat'] = (float) $aRow['VAT'];
+            $listEntry['unitprice'] = (float) $aRow['PRICE'];
+            $listEntry['amount'] = 1 - $aRow['SHIPPED'] - $aRow['CANCELLED'];
+            $listEntry['ordered'] = $aRow['ORDERED'];
+            $listEntry['shipped'] = $aRow['SHIPPED'];
+            $listEntry['returned'] = $aRow['RETURNED'];
+            $listEntry['cancelled'] = $aRow['CANCELLED'];
+            $listEntry['currency'] = $aRow['oxcurrency'];
+            $listEntry['unique_article_number'] = $aRow['unique_article_number'];
+
+            $blHasTotal = (
+                ($aRow['ORDERED'] - $aRow['RETURNED'] - $aRow['CANCELLED']) > 0
+            );
+
+            if ($blHasTotal) {
+                $dTotal =
+                    (float) $aRow['PRICE'] +
+                    ((float) $aRow['PRICE'] *
+                        round((float) $aRow['VAT']) / 100);
+
+                $listEntry['totalprice'] = $dTotal;
+            } else {
+                $listEntry['totalprice'] = 0;
+            }
+
+            $articleList[] = $listEntry;
+        }
+
+        return $articleList;
+    }
+
+    /**
+     * Add discounts to article list
+     * 
+     * @param $articleList
+     * @return array
+     */
+    protected function _piAddDiscounts($articleList)
+    {
+        $oDb = oxDb::getDb(oxDb::FETCH_MODE_ASSOC);
+
+        $sQuery = "
+            SELECT
+                oo.oxcurrency,
+                od.oxid AS ARTID,
+                od.oxtitle AS TITLE,
+                prrod.price AS PRICE,
+                prrod.ordered AS ORDERED,
+                prrod.cancelled AS CANCELLED,
+                prrod.returned AS RETURNED,
+                prrod.shipped AS SHIPPED,
+                prrod.unique_article_number
+            FROM
+                `oxorder` oo,
+                `oxdiscount` od,
+                " . $this->pi_ratepay_order_details . " prrod
+            WHERE
+                prrod.order_number = '" . $this->_orderId . "'
+                AND prrod.article_number = od.oxid
+                AND oo.oxid = prrod.order_number";
+
+        $aRow = $oDb->getRow($sQuery);
+
+        if ($aRow['PRICE'] != 0) {
+
+            $listEntry['oxid'] = "";
+            $listEntry['artid'] = $aRow['ARTID'];
+            $listEntry['arthash'] = md5($aRow['oxartid']);
+            $listEntry['artnum'] = "discount";
+            $listEntry['title'] = $aRow['TITLE'];
+            $listEntry['oxtitle'] = $aRow['TITLE'];
+            $listEntry['vat'] = "0";
+            $listEntry['unitprice'] = (float) $aRow['PRICE'];
+            $listEntry['amount'] = 1 - $aRow['SHIPPED'] - $aRow['CANCELLED'];
+            $listEntry['ordered'] = $aRow['ORDERED'];
+            $listEntry['shipped'] = $aRow['SHIPPED'];
+            $listEntry['returned'] = $aRow['RETURNED'];
+            $listEntry['cancelled'] = $aRow['CANCELLED'];
+            $listEntry['currency'] = $aRow['oxcurrency'];
+            $listEntry['unique_article_number'] = $aRow['unique_article_number'];
+
+            $blHasTotal = (
+                ($aRow['ORDERED'] - $aRow['RETURNED'] - $aRow['CANCELLED']) > 0
+            );
+
+            if ($blHasTotal) {
+                $dTotal =
+                    (float) $aRow['PRICE'] +
+                    ((float) $aRow['PRICE'] *
+                        round((float) $aRow['VAT']) / 100);
+
+                $listEntry['totalprice'] = $dTotal;
+            } else {
+                $listEntry['totalprice'] = 0;
+            }
+
+            $articleList[] = $listEntry;
+        }
+
+        return $articleList;
+    }
+
+    /**
+     * Add vouchers to article list
+     *
+     * @param $articleList
+     * @return array
+     */
+    protected function _piAddVouchers($articleList) 
+    {
+        $oDb = oxDb::getDb(oxDb::FETCH_MODE_ASSOC);
+
+        $sQuery = "
+            SELECT
+                oo.oxcurrency,
+                ov.oxdiscount AS price,
+                prrod.article_number AS artnr,
+                ov.oxvouchernr AS title,
+                prrod.ordered, prrod.cancelled,
+                prrod.returned,
+                prrod.shipped,
+                prrod.unique_article_number,
+                ovs.OXSERIENR as seriesTitle,
+                ovs.OXSERIEDESCRIPTION as seriesDescription
+            FROM
+                `oxorder` oo,
+                `oxvouchers` ov,
+                " . $this->pi_ratepay_order_details . " prrod,
+                oxvoucherseries ovs
+            WHERE
+                prrod.order_number = '" . $this->_orderId . "' AND 
+                ov.oxorderid = prrod.order_number AND 
+                prrod.article_number = ov.oxid AND 
+                ovs.oxid = ov.OXVOUCHERSERIEID AND 
+                oo.oxid = prrod.order_number";
+
+        $aRow = $oDb->getRow($sQuery);
+
+        if ($aRow['price'] != 0) {
+            $listEntry['oxid'] = "";
+            $listEntry['artid'] = $aRow['artnr'];
+            $listEntry['arthash'] = md5($aRow['artnr']);
+            $listEntry['artnum'] = 'voucher_' . $aRow['title'];
+            $listEntry['title'] = $aRow['seriesTitle'];
+            $listEntry['oxtitle'] = $aRow['seriesTitle'];
+            $listEntry['vat'] = "0";
+            $listEntry['unitprice'] = (float) $aRow['price'];
+            $listEntry['amount'] = 1 - $aRow['SHIPPED'] - $aRow['CANCELLED'];
+            $listEntry['ordered'] = $aRow['ORDERED'];
+            $listEntry['shipped'] = $aRow['SHIPPED'];
+            $listEntry['returned'] = $aRow['RETURNED'];
+            $listEntry['cancelled'] = $aRow['CANCELLED'];
+            $listEntry['currency'] = $aRow['oxcurrency'];
+            $listEntry['unique_article_number'] = $aRow['unique_article_number'];
+
+            $blHasTotal = (
+                ($aRow['ORDERED'] - $aRow['RETURNED'] - $aRow['CANCELLED']) > 0
+            );
+
+            if ($blHasTotal) {
+                $dTotal =
+                    (float) $aRow['price'] +
+                    ((float) $aRow['price'] *
+                        round((float) $aRow['VAT']) / 100);
+
+                $listEntry['totalprice'] = $dTotal;
+            } else {
+                $listEntry['totalprice'] = 0;
+            }
+
+            $articleList[] = $listEntry;
+        }
+
+        return $articleList;
+    }
+
+    /**
+     * Add credit to articlelist
+     *
+     * @param $articleList
+     * @return array
+     */
+    protected function _piAddCredit($articleList)
+    {
+        $oDb = oxDb::getDb(oxDb::FETCH_MODE_ASSOC);
+
+        $sQuery = "
+            SELECT
+                oo.oxcurrency,
+                ov.oxdiscount AS price,
+                prrod.article_number AS artnr,
+                ov.oxvouchernr AS title,
+                prrod.ordered, prrod.cancelled,
+                prrod.returned,
+                prrod.unique_article_number,
+                prrod.shipped
+            FROM
+                `oxorder` oo,
+                `oxvouchers` ov,
+                " . $this->pi_ratepay_order_details . " prrod
+            WHERE
+            prrod.order_number = '" . $this->_orderId . "'
+            AND ov.oxorderid = prrod.order_number
+            AND ov.oxvoucherserieid = 'Anbieter Gutschrift'
+            AND prrod.article_number = ov.oxid
+            AND oo.oxid = prrod.order_number";
+
+        $aRow = $oDb->getRow($sQuery);
+
+        if ($aRow['price'] != 0) {
+            $listEntry['oxid'] = "";
+            $listEntry['artid'] = $aRow['artnr'];
+            $listEntry['arthash'] = md5($aRow['artnr']);
+            $listEntry['artnum'] = 'voucher_' . $aRow['title'];
+            $listEntry['title'] = $aRow['seriesTitle'];
+            $listEntry['oxtitle'] = $aRow['seriesTitle'];
+            $listEntry['vat'] = "0";
+            $listEntry['unitprice'] = (float) $aRow['price'];
+            $listEntry['amount'] = 1 - $aRow['SHIPPED'] - $aRow['CANCELLED'];
+            $listEntry['ordered'] = $aRow['ORDERED'];
+            $listEntry['shipped'] = $aRow['SHIPPED'];
+            $listEntry['returned'] = $aRow['RETURNED'];
+            $listEntry['cancelled'] = $aRow['CANCELLED'];
+            $listEntry['currency'] = $aRow['oxcurrency'];
+            $listEntry['unique_article_number'] = $aRow['unique_article_number'];
+
+            $blHasTotal = (
+                ($aRow['ORDERED'] - $aRow['RETURNED'] - $aRow['CANCELLED']) > 0
+            );
+
+            if ($blHasTotal) {
+                $dTotal =
+                    (float) $aRow['price'] +
+                    ((float) $aRow['price'] *
+                        round((float) $aRow['VAT']) / 100);
+
+                $listEntry['totalprice'] = $dTotal;
+            } else {
+                $listEntry['totalprice'] = 0;
+            }
+
+            $articleList[] = $listEntry;
+        }
+
+        return $articleList;
+    }
+
+    /**
+     * Returns special costs
+     *
+     * @param $sIdent
+     * @return mixed
+     */
+    protected function _piGetOrderSpecialCostsQuery($sIdent)
+    {
+        $oDb = oxDb::getDb(oxDb::FETCH_MODE_ASSOC);
+
+        $sQuery = "
+            SELECT 
+                oxorder.oxcurrency, 
+                prrod.* 
+            FROM 
+                {$this->pi_ratepay_order_details} prrod, oxorder oo
+            WHERE
+                prrod.order_number='{$this->_orderId}' AND 
+                prrod.article_number='oxgiftcard' AND 
+                oxorder.oxid = prrod.order_number";
+
+        $aRow = $oDb->getRow($sQuery);
+
+        return $aRow;
+    }
+
+    /**
+     * Returns order informations
+     * 
+     * @return array|null
+     */
+    protected function _piGetOrderValues() 
+    {
+        if ($this->_orderValues === null) {
+            $oDb = oxDb::getDb(oxDb::FETCH_MODE_ASSOC);
+            $orderId = $this->_orderId;
+            $orderSql = "SELECT * from `oxorder` where oxid='{$orderId}'";
+            $this->_orderValues = $oDb->getAll($orderSql);
+        }
+        
+        return $this->_orderValues;
     }
 }
