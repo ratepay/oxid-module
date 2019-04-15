@@ -315,6 +315,14 @@ class ModelFactory extends oxSuperCfg {
     }
 
     /**
+     *
+     */
+    protected function _getSecurityCode()
+    {
+        $oConfig = $this->getConfig();
+    }
+
+    /**
      * return the head for an request
      */
     private function _getHead()

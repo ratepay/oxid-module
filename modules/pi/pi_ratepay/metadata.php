@@ -38,6 +38,8 @@ $aModule = array(
     'email'        => 'integration@ratepay.com',
     'url'          => 'http://www.ratepay.com/',
     'extend'       => array(
+        // controllers->admin
+        'module_config'     => 'pi/pi_ratepay/extend/application/controllers/admin/pi_ratepay_module_config',
         // conrollers
         'payment'           => 'pi/pi_ratepay/extend/application/controllers/pi_ratepay_payment',
         'order'             => 'pi/pi_ratepay/extend/application/controllers/pi_ratepay_order',
@@ -63,13 +65,14 @@ $aModule = array(
         'pi_ratepay_Profile'                            => 'pi/pi_ratepay/application/controllers/admin/pi_ratepay_profile.php',
         // controllers
         'pi_ratepay_rate_Calc'                          => 'pi/pi_ratepay/application/controllers/pi_ratepay_rate_calc.php',
+        // models
+        'pi_ratepay_Logs'                               => 'pi/pi_ratepay/application/models/pi_ratepay_logs.php',
+        'pi_ratepay_LogsList'                           => 'pi/pi_ratepay/application/models/pi_ratepay_logslist.php',
         // core
         'ModelFactory'                                  => 'pi/pi_ratepay/core/ModelFactory.php',
         'pi_ratepay_DetailsViewData'                    => 'pi/pi_ratepay/core/pi_ratepay_detailsviewdata.php',
         'pi_ratepay_History'                            => 'pi/pi_ratepay/core/pi_ratepay_history.php',
         'pi_ratepay_HistoryList'                        => 'pi/pi_ratepay/core/pi_ratepay_historylist.php',
-        'pi_ratepay_Logs'                               => 'pi/pi_ratepay/core/pi_ratepay_logs.php',
-        'pi_ratepay_LogsList'                           => 'pi/pi_ratepay/core/pi_ratepay_logslist.php',
         'pi_ratepay_LogsService'                        => 'pi/pi_ratepay/core/pi_ratepay_logsservice.php',
         'pi_ratepay_OrderDetails'                       => 'pi/pi_ratepay/core/pi_ratepay_orderdetails.php',
         'pi_ratepay_Orders'                             => 'pi/pi_ratepay/core/pi_ratepay_orders.php',
@@ -195,6 +198,61 @@ $aModule = array(
             'template' => 'page/checkout/',
             'block'    => 'checkout_order_btn_confirm_bottom',
             'file'     => 'order_pi_ratepay_checkout_order.tpl'
-        )
+        ),
+        array(
+            'template' => 'module_config.tpl',
+            'block'    => 'admin_module_config_form',
+            'file'     => 'admin_pi_ratepay_module_config_form.tpl',
+        ),
+    ),
+    'settings' => array(
+        // ratepay general
+        array('group' => 'PI_RATEPAY_GENERAL', 'name' => 'blRPLogging', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_GENERAL', 'name' => 'blRPAutoPaymentConfirm', 'type' => 'bool', 'value' => false),
+        // ratepay germany invoice
+        array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPInvoiceActive', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPInvoiceSandbox', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'sRPInvoiceProfileId', 'type' => 'str', 'value' => ''),
+        array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'sRPInvoiceSecret', 'type' => 'password', 'value' => ''),
+        // ratepay germany installment
+        array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPInstallmentActive', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPInstallmentSandbox', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'sRPInstallmentProfileId', 'type' => 'str', 'value' => ''),
+        array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'sRPInstallmentSecret', 'type' => 'password', 'value' => ''),
+        // ratepay germany elv
+        array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPElvActive', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPElvSandbox', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'sRPElvProfileId', 'type' => 'str', 'value' => ''),
+        array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'sRPElvSecret', 'type' => 'password', 'value' => ''),
+        // ratepay austria invoice
+        array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'blRPAustriaInvoice', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'blRPAustriaInvoiceSandbox', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'sRPAustriaInvoiceProfileId', 'type' => 'str', 'value' => ''),
+        array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'sRPAustriaInvoiceSecret', 'type' => 'password', 'value' => ''),
+        // ratepay austria installment
+        array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'blRPAustriaInstallment', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'blRPAustriaInstallmentSandbox', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'sRPAustriaInstallmentProfileId', 'type' => 'str', 'value' => ''),
+        array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'sRPAustriaInstallmentSecret', 'type' => 'password', 'value' => ''),
+        // ratepay austria elv
+        array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'blRPAustriaElv', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'blRPAustriaElvSandbox', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'sRPAustriaElvProfileId', 'type' => 'str', 'value' => ''),
+        array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'sRPAustriaElvSecret', 'type' => 'password', 'value' => ''),
+        // ratepay switzerland invoice
+        array('group' => 'PI_RATEPAY_SWITZERLAND', 'name' => 'blRPSwitzerlandInvoice', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_SWITZERLAND', 'name' => 'blRPSwitzerlandInvoiceSandbox', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_SWITZERLAND', 'name' => 'sRPSwitzerlandInvoiceProfileId', 'type' => 'str', 'value' => ''),
+        array('group' => 'PI_RATEPAY_SWITZERLAND', 'name' => 'sRPSwitzerlandInvoiceSecret', 'type' => 'password', 'value' => ''),
+        // ratepay netherland invoice
+        array('group' => 'PI_RATEPAY_NETHERLAND', 'name' => 'blRPNetherlandInvoice', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_NETHERLAND', 'name' => 'blRPNetherlandInvoiceSandbox', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_NETHERLAND', 'name' => 'sRPNetherlandInvoiceProfileId', 'type' => 'str', 'value' => ''),
+        array('group' => 'PI_RATEPAY_NETHERLAND', 'name' => 'sRPNetherlandInvoiceSecret', 'type' => 'password', 'value' => ''),
+        // ratepay netherland elv
+        array('group' => 'PI_RATEPAY_NETHERLAND', 'name' => 'blRPNetherlandElv', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_NETHERLAND', 'name' => 'blRPNetherlandElvSandbox', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_NETHERLAND', 'name' => 'sRPNetherlandElvProfileId', 'type' => 'str', 'value' => ''),
+        array('group' => 'PI_RATEPAY_NETHERLAND', 'name' => 'sRPNetherlandElvSecret', 'type' => 'password', 'value' => ''),
     ),
 );

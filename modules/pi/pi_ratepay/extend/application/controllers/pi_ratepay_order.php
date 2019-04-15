@@ -68,22 +68,6 @@ class pi_ratepay_order extends pi_ratepay_order_parent
         $modelFactory->setPaymentType($this->_paymentId);
         $modelFactory->setSandbox($this->_isSandbox($paymentMethod));
 
-        /**if ($this->getSession()->getVariable('pi_ratepay_shops_order_id') != null &&
-            $this->getSession()->getBasket()->getOrderId() == $this->getSession()->getVariable('pi_ratepay_shops_order_id')
-        ) {
-
-            $trans_id = oxDb::getDb()->getOne("SELECT TRANSACTION_ID FROM pi_ratepay_orders WHERE ORDER_NUMBER = '" . $this->getSession()->getBasket()->getOrderId() . "'");
-
-
-            $modelFactory->setTransactionId($trans_id);
-            $modelFactory->setOrderId($this->getSession()->getBasket()->getOrderId());
-            $modelFactory->setSubtype('cancellation');
-            $ratepayRequest = $modelFactory->doOperation('PAYMENT_CHANGE');
-
-
-            pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->getSession()->getBasket()->getOrderId(), $trans_id, $paymentMethod, 'PAYMENT_CHANGE', 'cancellation', $name, $surname, $ratepayRequest);
-        }*/
-
         if (in_array($this->_paymentId, pi_ratepay_util_utilities::$_RATEPAY_PAYMENT_METHOD)) {
             $paymentMethodIds = array(
                 'pi_ratepay_rechnung' => array(

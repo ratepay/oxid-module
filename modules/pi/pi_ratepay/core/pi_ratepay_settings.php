@@ -85,6 +85,7 @@ class pi_ratepay_Settings extends oxBase
         );
         $selectQuery = $this->buildSelectString($whereClause);
         $return = $this->_isLoaded = $this->assignRecord($selectQuery);
+
         return $return;
     }
 
