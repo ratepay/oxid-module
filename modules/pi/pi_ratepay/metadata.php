@@ -68,6 +68,7 @@ $aModule = array(
         // models
         'pi_ratepay_Logs'                               => 'pi/pi_ratepay/application/models/pi_ratepay_logs.php',
         'pi_ratepay_LogsList'                           => 'pi/pi_ratepay/application/models/pi_ratepay_logslist.php',
+        'pi_ratepay_Settings'                           => 'pi/pi_ratepay/application/models/pi_ratepay_settings.php',
         // core
         'ModelFactory'                                  => 'pi/pi_ratepay/core/ModelFactory.php',
         'pi_ratepay_DetailsViewData'                    => 'pi/pi_ratepay/core/pi_ratepay_detailsviewdata.php',
@@ -80,7 +81,6 @@ $aModule = array(
         'pi_ratepay_RequestAbstract'                    => 'pi/pi_ratepay/core/pi_ratepay_requestabstract.php',
         'pi_ratepay_RequestDataBackend'                 => 'pi/pi_ratepay/core/pi_ratepay_requestdatabackend.php',
         'pi_ratepay_RequestOrderArticle'                => 'pi/pi_ratepay/core/pi_ratepay_requestorderarticle.php',
-        'pi_ratepay_Settings'                           => 'pi/pi_ratepay/core/pi_ratepay_settings.php',
         'pi_ratepay_util_Utilities'                     => 'pi/pi_ratepay/core/pi_ratepay_util_utilities.php',
         'pi_ratepay_events'                             => 'pi/pi_ratepay/core/pi_ratepay_events.php',
         // libs
