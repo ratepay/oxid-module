@@ -28,6 +28,18 @@ class pi_ratepay_module_config extends pi_ratepay_module_config_parent
                 'profileid' => 'sRPElvProfileId',
                 'secret' => 'sRPElvSecret',
             ),
+            'invoice' => array(
+                'active'=> 'blRPInvoiceActive',
+                'sandbox' => 'blRPInvoiceSandbox',
+                'profileid' => 'sRPInvoiceProfileId',
+                'secret' => 'sRPInvoiceSecret',
+            ),
+            'installment' => array(
+                'active' => 'blRPInstallmentActive',
+                'sandbox' => 'blRPInstallmentSandbox',
+                'profileid' => 'sRPInstallmentProfileId',
+                'secret' => 'sRPInstallmentSecret',
+            ),
         ),
         'at' => array(
             'rechnung' => array(
@@ -48,9 +60,27 @@ class pi_ratepay_module_config extends pi_ratepay_module_config_parent
                 'profileid' => 'sRPAustriaElvProfileId',
                 'secret' => 'sRPAustriaElvSecret',
             ),
+            'inovice' => array(
+                'active' => 'blRPAustriaInvoice',
+                'sandbox' => 'blRPAustriaInvoiceSandbox',
+                'profileid' => 'sRPAustriaInvoiceProfileId',
+                'secret' => 'sRPAustriaInvoiceSecret',
+            ),
+            'installment' => array(
+                'active' => 'blRPAustriaInstallment',
+                'sandbox' => 'blRPAustriaInstallmentSandbox',
+                'profileid' => 'sRPAustriaInstallmentProfileId',
+                'secret' => 'sRPAustriaInstallmentSecret',
+            ),
         ),
         'ch' => array(
             'rechnung' => array(
+                'active' => 'blRPSwitzerlandInvoice',
+                'sandbox' => 'blRPSwitzerlandInvoiceSandbox',
+                'profileid' => 'sRPSwitzerlandInvoiceProfileId',
+                'secret' => 'sRPSwitzerlandInvoiceSecret',
+            ),
+            'invoice' => array(
                 'active' => 'blRPSwitzerlandInvoice',
                 'sandbox' => 'blRPSwitzerlandInvoiceSandbox',
                 'profileid' => 'sRPSwitzerlandInvoiceProfileId',
@@ -70,8 +100,37 @@ class pi_ratepay_module_config extends pi_ratepay_module_config_parent
                 'profileid' => 'sRPNetherlandElvProfileId',
                 'secret' => 'sRPNetherlandElvSecret',
             ),
+            'invoice' => array(
+                'active' => 'blRPNetherlandInvoice',
+                'sandbox' => 'blRPNetherlandInvoiceSandbox',
+                'profileid' => 'sRPNetherlandInvoiceProfileId',
+                'secret' => 'sRPNetherlandInvoiceSecret',
+            ),
         ),
     );
+
+    /**
+     * Returns url of country code
+     *
+     * @param $sCountryCode
+     * @return string
+     */
+    public function piGetFlagUrl($sCountryCode)
+    {
+        $oConfig = $this->getConfig();
+        $sShopUrl = $oConfig->getShopUrl();
+
+        $sModuleAdminImgFlagsPath =
+            "/modules/pi/pi_ratepay/out/admin/img/flags/";
+
+        $sFlagUrl =
+            $sShopUrl.
+            $sModuleAdminImgFlagsPath.
+            $sCountryCode.
+            ".png";
+
+        return $sFlagUrl;
+    }
 
     /**
      * Method determines this is the config controller of
@@ -89,26 +148,24 @@ class pi_ratepay_module_config extends pi_ratepay_module_config_parent
     }
 
     /**
-     * Returns an array with test results of established
-     */
-    public function piGetConfigTestResults()
-    {
-        $aActiveCombinations = $this->_piGetActiveCombinations();
-
-        foreach ($aActiveCombinations as $aActiveCombination) {
-
-        }
-    }
-
-    /**
      * Returns if connection has been successfully established
      *
-     * @param $sPaymentId
+     * @param $sPaymentType
      * @return bool
      */
-    public function piTestConnectionEstablished($sPaymentId)
+    public function piTestConnectionEstablished($sPaymentType, $sCountryCode)
     {
-        return false;
+        $blValid = isset(
+            $this->_aCountry2Payment2Configs[$sCountryCode][$sPaymentType]
+        );
+        if (!$blValid) return false;
+
+        $aConfig =
+            $this->_aCountry2Payment2Configs[$sCountryCode][$sPaymentType];
+
+        $blConnected = (bool) $this->_piPerformProfileRequest($aConfig);
+
+        return $blConnected;
     }
 
     /**
@@ -170,13 +227,15 @@ class pi_ratepay_module_config extends pi_ratepay_module_config_parent
         $sSecurityCode = $oConfig->getConfigParam($aConfigParams['secret']);
         $sProfileId = $oConfig->getConfigParam($aConfigParams['profileid']);
         $blSandbox = $oConfig->getConfigParam($aConfigParams['sandbox']);
+        $blActive = $oConfig->getConfigParam($aConfigParams['active']);
 
         $blValid = (
+            $blActive &&
             !empty($sProfileId) &&
             !empty($sSecurityCode)
         );
 
-        if (!$blValid) return;
+        if (!$blValid) return false;
 
         $modelFactory = new ModelFactory();
         $modelFactory->setSecurityCode($sSecurityCode);
