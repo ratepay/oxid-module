@@ -38,6 +38,7 @@ $aLang = array(
     'SHOP_MODULE_sRPInstallmentSecret'          => 'Security Code',
     'SHOP_MODULE_blRPElvActive'                 => 'RatePAY SEPA-Lastschrift aktiv',
     'SHOP_MODULE_blRPElvSandbox'                => 'Sandbox (Testmodus)',
+    'SHOP_MODULE_blRPElvIbanOnly'               => 'Only allow IBAN',
     'SHOP_MODULE_sRPElvProfileId'               => 'Profil ID',
     'SHOP_MODULE_sRPElvSecret'                  => 'Security Code',
     'SHOP_MODULE_blRPAustriaInvoice'            => 'RatePAY Rechnung aktiv',

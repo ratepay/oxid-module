@@ -222,6 +222,7 @@ $aModule = array(
         // ratepay germany elv
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPElvActive', 'type' => 'bool', 'value' => false),
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPElvSandbox', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPElvIbanOnly', 'type' => 'bool', 'value' => false),
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'sRPElvProfileId', 'type' => 'str', 'value' => ''),
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'sRPElvSecret', 'type' => 'password', 'value' => ''),
         // ratepay austria invoice
