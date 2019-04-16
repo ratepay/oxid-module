@@ -36,7 +36,6 @@
     <input type="hidden" name="fnc" value="">
     <input type="hidden" name="oxid" value="[{$oxid}]">
     <input type="hidden" name="voxid" value="[{$oxid}]">
-    <input type="hidden" name="editval[fcredirect__oxid]" value="[{$oxid}]">
     <tr>
         <td valign="top" class="edittext">
             <table cellspacing="0" cellpadding="0" border="0">

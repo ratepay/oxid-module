@@ -53,16 +53,21 @@ $aModule = array(
         'pi_ratepay_log_main.tpl'                       => 'pi/pi_ratepay/application/views/admin/tpl/pi_ratepay_log_main.tpl',
         'pi_ratepay_details.tpl'                        => 'pi/pi_ratepay/application/views/admin/tpl/pi_ratepay_details.tpl',
         'pi_ratepay_no_details.tpl'                     => 'pi/pi_ratepay/application/views/admin/tpl/pi_ratepay_no_details.tpl',
-        'pi_ratepay_profile.tpl'                        => 'pi/pi_ratepay/application/views/admin/tpl/pi_ratepay_profile.tpl'
+        'pi_ratepay_profile.tpl'                        => 'pi/pi_ratepay/application/views/admin/tpl/pi_ratepay_profile.tpl',
+        'pi_ratepay_profile_list.tpl'                   => 'pi/pi_ratepay/application/views/admin/tpl/pi_ratepay_profile_list.tpl',
+        'pi_ratepay_profile_main.tpl'                   => 'pi/pi_ratepay/application/views/admin/tpl/pi_ratepay_profile_main.tpl',
     ),
     'files' => array(
         // controllers -> admin
-        'pi_ratepay_admin_SettingsAbstract'             => 'pi/pi_ratepay/application/controllers/admin/pi_ratepay_admin_settingsabstract.php',
+        'pi_ratepay_adminview_base'                     => 'pi/pi_ratepay/application/controllers/admin/pi_ratepay_adminview_base.php',
+        'pi_ratepay_adminlist_base'                     => 'pi/pi_ratepay/application/controllers/admin/pi_ratepay_adminlist_base.php',
         'pi_ratepay_log'                                => 'pi/pi_ratepay/application/controllers/admin/pi_ratepay_log.php',
         'pi_ratepay_log_list'                           => 'pi/pi_ratepay/application/controllers/admin/pi_ratepay_log_list.php',
         'pi_ratepay_log_main'                           => 'pi/pi_ratepay/application/controllers/admin/pi_ratepay_log_main.php',
         'pi_ratepay_Details'                            => 'pi/pi_ratepay/application/controllers/admin/pi_ratepay_details.php',
         'pi_ratepay_Profile'                            => 'pi/pi_ratepay/application/controllers/admin/pi_ratepay_profile.php',
+        'pi_ratepay_Profile_list'                       => 'pi/pi_ratepay/application/controllers/admin/pi_ratepay_profile_list.php',
+        'pi_ratepay_Profile_main'                       => 'pi/pi_ratepay/application/controllers/admin/pi_ratepay_profile_main.php',
         // controllers
         'pi_ratepay_rate_Calc'                          => 'pi/pi_ratepay/application/controllers/pi_ratepay_rate_calc.php',
         // models

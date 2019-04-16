@@ -16,22 +16,45 @@
  * @copyright (C) 2011 PayIntelligent GmbH  <http://www.payintelligent.de/>
  * @license	http://www.gnu.org/licenses/  GNU General Public License 3
  */
-abstract class pi_ratepay_admin_SettingsAbstract extends oxAdminView
+abstract class pi_ratepay_adminview_base extends oxAdminView
 {
+    /**
+     * Returns oxid
+     *
+     * @param void
+     * @return string
+     */
+    protected function _piGetOxid() {
+        $oConfig = $this->getConfig();
+        $sOxid = $oConfig->getRequestParameter("oxid");
 
-    public function render()
+        return $sOxid;
+    }
+
+    /**
+     * Returns former saved id
+     *
+     * @param void
+     * @return string
+     */
+    protected function _piGetSavedId()
     {
-        $sReturn = parent::render();
+        $oConfig = $this->getConfig();
+        $sSavedID = $oConfig->getRequestParameter("saved_oxid");
 
-        if (oxRegistry::getConfig()->getRequestParameter('stoken') != null) {
-            $this->addTplParam('stoken', oxRegistry::getConfig()->getRequestParameter('stoken'));
-        } else {
-            $this->addTplParam('stoken', '');
-        }
+        return $sSavedID;
+    }
 
-        $this->addTplParam('moduleVersion', pi_ratepay_util_utilities::PI_MODULE_VERSION);
-
-        return $sReturn;
+    /**
+     * Delete former saved id from session
+     *
+     * @param void
+     * @return void
+     */
+    protected function _piDeleteSavedId()
+    {
+        $oSession = $this->getSession();
+        $oSession->deleteVariable("saved_oxid");
     }
 
     /**

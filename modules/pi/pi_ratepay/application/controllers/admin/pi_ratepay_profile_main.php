@@ -16,37 +16,26 @@
  * @copyright (C) 2011 PayIntelligent GmbH  <http://www.payintelligent.de/>
  * @license	http://www.gnu.org/licenses/  GNU General Public License 3
  */
-
-/**
- * RatePAY Logging View
- *
- * Shows RatePAY Transaction Logs
- *
- * Also:
- * {@inheritdoc}
- *
- * @package PayIntelligent_RatePAY
- * @extends oxAdminView
- */
-class pi_ratepay_log_main extends pi_ratepay_adminview_base
+class pi_ratepay_profile_main extends pi_ratepay_adminview_base
 {
     /**
      * Current class template name.
      * @var string
      */
-    protected $_sThisTemplate = 'pi_ratepay_log_main.tpl';
+    protected $_sThisTemplate = 'pi_ratepay_profile_main.tpl';
 
     /**
      * Name of chosen object class (default null).
      * @var string
      */
-    protected $_sModelClass = 'pi_ratepay_logs';
+    protected $_sModelClass = 'pi_ratepay_settings';
 
     /**
      * DB Table
      * @var string
      */
-    protected $_sTable = 'pi_ratepay_logs';
+    protected $_sTable = 'pi_ratepay_settings';
+
 
     /**
      * Handle displaying model entry
@@ -82,38 +71,15 @@ class pi_ratepay_log_main extends pi_ratepay_adminview_base
             // load object
             $this->_piDeleteSavedId();
 
-            $oRatePayLogs = oxNew(
+            $oProfile = oxNew(
                 $this->_sModelClass,
                 getViewName($this->_sModelClass)
             );
-            $oRatePayLogs->load($sOxid);
+            $oProfile->load($sOxid);
 
-            $this->_aViewData["edit"] =  $oRatePayLogs;
+            $this->_aViewData["edit"] =  $oProfile;
         }
 
         return $this->_sThisTemplate;
-    }
-
-    /**
-     * Removes all log entries from db which are older than x days.
-     *
-     * @param void
-     * @return void
-     */
-    public function deleteLogs()
-    {
-        $oConfig = $this->getConfig();
-        $oDb = oxDb::getDb();
-        $sLogDays = $oConfig->getRequestParameter('logdays');
-        $iLogDays = (int) $sLogDays;
-
-        $sQuery = "DELETE FROM ".$this->_sTable;
-
-        if ($iLogDays > 0) {
-            $sQuery .= " WHERE TO_DAYS(now()) - TO_DAYS(date) > ".$iLogDays;
-        }
-
-        $oDb->execute($sQuery);
-        $this->addTplParam('deleteSuccess', 'Success');
     }
 }
