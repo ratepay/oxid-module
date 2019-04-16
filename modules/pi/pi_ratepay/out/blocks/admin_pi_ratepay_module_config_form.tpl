@@ -60,18 +60,10 @@
                     [{/if}]
                 </td>
                 <td style="border: 1px solid gray;">
-                    [{if $oView->piTestConnectionEstablished('installment', 'ch')}]
-                        <span style="color:green;">[{oxmultilang ident="PI_RATEPAY_CONNECTED"}]</span>
-                    [{else}]
-                        <span style="color:red;">[{oxmultilang ident="PI_RATEPAY_DISCONNECTED"}]</span>
-                    [{/if}]
+                    <span style="color:lightgray;">[{oxmultilang ident="PI_RATEPAY_UNAVAILABLE"}]</span>
                 </td>
                 <td style="border: 1px solid gray;">
-                    [{if $oView->piTestConnectionEstablished('installment', 'nl')}]
-                        <span style="color:green;">[{oxmultilang ident="PI_RATEPAY_CONNECTED"}]</span>
-                    [{else}]
-                        <span style="color:red;">[{oxmultilang ident="PI_RATEPAY_DISCONNECTED"}]</span>
-                    [{/if}]
+                    <span style="color:lightgray;">[{oxmultilang ident="PI_RATEPAY_UNAVAILABLE"}]</span>
                 </td>
             </tr>
             <tr>
@@ -93,11 +85,7 @@
                     [{/if}]
                 </td>
                 <td style="border: 1px solid gray;">
-                    [{if $oView->piTestConnectionEstablished('elv', 'ch')}]
-                        <span style="color:green;">[{oxmultilang ident="PI_RATEPAY_CONNECTED"}]</span>
-                    [{else}]
-                        <span style="color:red;">[{oxmultilang ident="PI_RATEPAY_DISCONNECTED"}]</span>
-                    [{/if}]
+                    <span style="color:lightgray;">[{oxmultilang ident="PI_RATEPAY_UNAVAILABLE"}]</span>
                 </td>
                 <td style="border: 1px solid gray;">
                     [{if $oView->piTestConnectionEstablished('elv', 'nl')}]

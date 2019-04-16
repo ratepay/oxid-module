@@ -96,6 +96,7 @@ $aLang = array(
     'PI_RATEPAY_LOGGING_SUCCESS'               => "L&ouml;schen war erfolgreich.",
     'PI_RATEPAY_CONNECTED'                     => 'Verbunden',
     'PI_RATEPAY_DISCONNECTED'                  => 'Nicht verbunden',
+    'PI_RATEPAY_UNAVAILABLE'                   => 'Nicht verfügbar',
     'PI_RATEPAY_NODETAILS'                     => 'Keine RatePAY Bezahlung.',
     'PI_RATEPAY_ARTICLENR'                     => "Art.-Nr.",
     'PI_RATEPAY_ARTICLENAME'                   => "Bezeichnung",
