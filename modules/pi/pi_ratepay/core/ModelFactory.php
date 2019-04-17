@@ -17,6 +17,112 @@
  */
 class ModelFactory extends oxSuperCfg {
 
+    /**
+     * Assignment helper for ratepay payment activity
+     * @var array
+     */
+    protected $_aCountry2Payment2Configs = array(
+        'de' => array(
+            'rechnung' => array(
+                'active'=> 'blRPInvoiceActive',
+                'sandbox' => 'blRPInvoiceSandbox',
+                'profileid' => 'sRPInvoiceProfileId',
+                'secret' => 'sRPInvoiceSecret',
+            ),
+            'rate' => array(
+                'active' => 'blRPInstallmentActive',
+                'sandbox' => 'blRPInstallmentSandbox',
+                'profileid' => 'sRPInstallmentProfileId',
+                'secret' => 'sRPInstallmentSecret',
+            ),
+            'elv' => array(
+                'active' => 'blRPElvActive',
+                'sandbox' => 'blRPElvSandbox',
+                'profileid' => 'sRPElvProfileId',
+                'secret' => 'sRPElvSecret',
+            ),
+            'invoice' => array(
+                'active'=> 'blRPInvoiceActive',
+                'sandbox' => 'blRPInvoiceSandbox',
+                'profileid' => 'sRPInvoiceProfileId',
+                'secret' => 'sRPInvoiceSecret',
+            ),
+            'installment' => array(
+                'active' => 'blRPInstallmentActive',
+                'sandbox' => 'blRPInstallmentSandbox',
+                'profileid' => 'sRPInstallmentProfileId',
+                'secret' => 'sRPInstallmentSecret',
+            ),
+        ),
+        'at' => array(
+            'rechnung' => array(
+                'active' => 'blRPAustriaInvoice',
+                'sandbox' => 'blRPAustriaInvoiceSandbox',
+                'profileid' => 'sRPAustriaInvoiceProfileId',
+                'secret' => 'sRPAustriaInvoiceSecret',
+            ),
+            'rate' => array(
+                'active' => 'blRPAustriaInstallment',
+                'sandbox' => 'blRPAustriaInstallmentSandbox',
+                'profileid' => 'sRPAustriaInstallmentProfileId',
+                'secret' => 'sRPAustriaInstallmentSecret',
+            ),
+            'elv' => array(
+                'active' => 'blRPAustriaElv',
+                'sandbox' => 'blRPAustriaElvSandbox',
+                'profileid' => 'sRPAustriaElvProfileId',
+                'secret' => 'sRPAustriaElvSecret',
+            ),
+            'inovice' => array(
+                'active' => 'blRPAustriaInvoice',
+                'sandbox' => 'blRPAustriaInvoiceSandbox',
+                'profileid' => 'sRPAustriaInvoiceProfileId',
+                'secret' => 'sRPAustriaInvoiceSecret',
+            ),
+            'installment' => array(
+                'active' => 'blRPAustriaInstallment',
+                'sandbox' => 'blRPAustriaInstallmentSandbox',
+                'profileid' => 'sRPAustriaInstallmentProfileId',
+                'secret' => 'sRPAustriaInstallmentSecret',
+            ),
+        ),
+        'ch' => array(
+            'rechnung' => array(
+                'active' => 'blRPSwitzerlandInvoice',
+                'sandbox' => 'blRPSwitzerlandInvoiceSandbox',
+                'profileid' => 'sRPSwitzerlandInvoiceProfileId',
+                'secret' => 'sRPSwitzerlandInvoiceSecret',
+            ),
+            'invoice' => array(
+                'active' => 'blRPSwitzerlandInvoice',
+                'sandbox' => 'blRPSwitzerlandInvoiceSandbox',
+                'profileid' => 'sRPSwitzerlandInvoiceProfileId',
+                'secret' => 'sRPSwitzerlandInvoiceSecret',
+            ),
+        ),
+        'nl' => array(
+            'rechnung' => array(
+                'active' => 'blRPNetherlandInvoice',
+                'sandbox' => 'blRPNetherlandInvoiceSandbox',
+                'profileid' => 'sRPNetherlandInvoiceProfileId',
+                'secret' => 'sRPNetherlandInvoiceSecret',
+            ),
+            'elv' => array(
+                'active' => 'blRPAustriaElv',
+                'sandbox' => 'blRPNetherlandElvSandbox',
+                'profileid' => 'sRPNetherlandElvProfileId',
+                'secret' => 'sRPNetherlandElvSecret',
+            ),
+            'invoice' => array(
+                'active' => 'blRPNetherlandInvoice',
+                'sandbox' => 'blRPNetherlandInvoiceSandbox',
+                'profileid' => 'sRPNetherlandInvoiceProfileId',
+                'secret' => 'sRPNetherlandInvoiceSecret',
+            ),
+        ),
+    );
+
+
     protected $_orderId;
 
     protected $_countryCode;
@@ -197,12 +303,11 @@ class ModelFactory extends oxSuperCfg {
      */
     private function _getConfirmSettings()
     {
-        $oDb = oxDb::getDb();
-        $sqlResult = $oDb->getRow('SELECT * FROM pi_ratepay_global_settings');
+        $oConfig = $this->getConfig();
+        $iRPAutoPaymentConfirm =
+            (int) $oConfig->getConfigParam('blRPAutoPaymentConfirm');
 
-        $globalConfig['confirm'] = (bool) $sqlResult[2];
-
-        return $sqlResult[2];
+        return $iRPAutoPaymentConfirm;
     }
 
     /**
@@ -289,6 +394,18 @@ class ModelFactory extends oxSuperCfg {
     }
 
     /**
+     * Sets countryid by currently logged in user
+     *
+     * @param void
+     * @return void
+     */
+    protected function _piSetCountryIdByUser() {
+        $oUser = $this->getUser();
+
+        $this->_countryId = $oUser->oxuser__oxcountryid->value;
+    }
+
+    /**
      * make payment change
      *
      * @return object|bool
@@ -315,14 +432,6 @@ class ModelFactory extends oxSuperCfg {
     }
 
     /**
-     *
-     */
-    protected function _getSecurityCode()
-    {
-        $oConfig = $this->getConfig();
-    }
-
-    /**
      * return the head for an request
      */
     private function _getHead()
@@ -331,19 +440,26 @@ class ModelFactory extends oxSuperCfg {
             $profileId = $this->_profileId;
             $securityCode = $this->_securityCode;
         } else {
+            $this->_piSetCountryIdByUser();
             $util = new pi_ratepay_util_Utilities();
-            $paymentMethod =  $util->getPaymentMethod($this->_paymentType);
+            $oConfig = $this->getConfig();
+            $paymentMethod = $util->getPaymentMethod($this->_paymentType);
             $paymentMethod = strtolower($paymentMethod);
             $country = $this->_getCountryCodeById($this->_countryId);
-            $settings = oxNew('pi_ratepay_settings');
-            if ($country) {
-                $settings->loadByType($paymentMethod, $this->_shopId, $country);
-            } else {
-                $settings->loadByType($paymentMethod, $this->_shopId);
-            }
-            $profileId = $settings->pi_ratepay_settings__profile_id->rawValue;
-            $securityCode = $settings->pi_ratepay_settings__security_code->rawValue;
-            $this->setSandbox($settings->pi_ratepay_settings__sandbox->rawValue);
+            $country = strtolower($country);
+
+            $sConfigParamProfileId =
+                $this->_aCountry2Payment2Configs[$country][$paymentMethod]['profileid'];
+            $sConfigParamSecurityCode =
+                $this->_aCountry2Payment2Configs[$country][$paymentMethod]['secret'];
+            $sConfigParamSandbox =
+                $this->_aCountry2Payment2Configs[$country][$paymentMethod]['sandbox'];
+
+            $profileId = $oConfig->getConfigParam($sConfigParamProfileId);
+            $securityCode = $oConfig->getConfigParam($sConfigParamSecurityCode);
+            $sSandbox = $oConfig->getConfigParam($sConfigParamSandbox);
+
+            $this->setSandbox($sSandbox);
         }
 
         $headArray = [
@@ -361,7 +477,6 @@ class ModelFactory extends oxSuperCfg {
                 ]
             ]
         ];
-
         $modelBuilder = new RatePAY\ModelBuilder();
 
         if (!empty($this->_transactionId)) {

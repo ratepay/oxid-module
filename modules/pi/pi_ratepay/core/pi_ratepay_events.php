@@ -6,7 +6,7 @@ class pi_ratepay_events
 {
     public static $sQueryTableSettings = "
         CREATE TABLE IF NOT EXISTS `pi_ratepay_settings` (
-          `OXID` INT(11) NOT NULL AUTO_INCREMENT,
+          `OXID` CHAR(32) NOT NULL,
           `SHOPID` INT(11) NOT NULL DEFAULT '1',
           `ACTIVE` TINYINT(1) NOT NULL DEFAULT '0',
           `COUNTRY` VARCHAR(2) NOT NULL,
@@ -32,14 +32,6 @@ class pi_ratepay_events
           `CURRENCIES` varchar(50),
           `DELIVERY_COUNTRIES` varchar(50),
           PRIMARY KEY (`OXID`)
-        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;";
-
-    public static $sQueryTableGlobalSettings = "
-        CREATE TABLE `pi_ratepay_global_settings` (
-         `SHOPID` INT(11) NOT NULL DEFAULT '1',
-         `LOGGING` TINYINT(1) NOT NULL DEFAULT '1',
-         `AUTOCONFIRM` TINYINT(1) NOT NULL DEFAULT '0',
-         PRIMARY KEY (`SHOPID`)
         ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;";
 
     public static $sQueryTableOrders = "
@@ -218,7 +210,6 @@ class pi_ratepay_events
     public static function addDatabaseStructure()
     {
         self::addTableIfNotExists('pi_ratepay_settings', self::$sQueryTableSettings);
-        self::addTableIfNotExists('pi_ratepay_global_settings', self::$sQueryTableGlobalSettings);
         self::addTableIfNotExists('pi_ratepay_orders', self::$sQueryTableOrders);
         self::addTableIfNotExists('pi_ratepay_order_details', self::$sQueryTableOrderDetails);
         self::addTableIfNotExists('pi_ratepay_logs', self::$sQueryTableLogs);

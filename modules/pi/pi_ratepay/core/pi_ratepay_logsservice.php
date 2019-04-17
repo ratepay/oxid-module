@@ -137,10 +137,10 @@ class pi_ratepay_LogsService extends oxSuperCfg
      */
     private function _getLogSettings()
     {
-        $oDb = oxDb::getDb();
-        $sqlResult = $oDb->getRow('SELECT * FROM pi_ratepay_global_settings');
+        $oConfig = $this->getConfig();
+        $iRPLogging = (int) $oConfig->getConfigParam('blRPLogging');
 
-        return $sqlResult[1];
+        return $iRPLogging;
     }
 
 }
