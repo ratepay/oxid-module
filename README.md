@@ -3,7 +3,7 @@
 
 |Module | RatePAY Payment Module for OXID
 |------|----------
-|Author | `Annegret Seufert`, `Tim Bischoff`
+|Author | `Annegret Seufert`, `Tim Bischoff`, 'Fatchip GmbH'
 |Prefix | `pi`
 |Shop Version | `CE/PE` `4.7.x-4.10.x` `EE` `5.0.x-5.3.x`
 |Version | `4.0.3`
@@ -13,6 +13,10 @@
 
 ## Changelog
 
+### Version 5.0.0 - Released 
+* Added compatibility to PHP7
+* Added compatibility to OXID6
+* Refactored module to use more oxid standards
 * solving installation problems
 
 ### Version 4.0.3 - Released 2018-05-04
