@@ -80,22 +80,22 @@ class pi_ratepay_DetailsViewData extends oxBase
 
         # Get order articles
         $articlesSql = "SELECT
-              oo.oxcurrency,
-              oa.oxid,
-              oa.oxartid,
-              oa.oxartnum,
-              oa.oxvat,
-              oa.oxbprice,
-              oa.oxnprice,
-              oa.oxtitle,
-              oa.oxnetprice,
-              oa.oxamount,
-              prrod.ordered,
-              prrod.cancelled,
-              prrod.returned,
-              prrod.shipped,
-              prrod.unique_article_number,
-              if(oa.OXSELVARIANT != '',concat(oa.oxtitle,', ',oa.OXSELVARIANT),oa.oxtitle) as title
+              oo.OXCURRENCY,
+              oa.OXID,
+              oa.OXARTID,
+              oa.OXARTNUM,
+              oa.OXVAT,
+              oa.OXBPRICE,
+              oa.OXNPRICE,
+              oa.OXTITLE,
+              oa.OXNETPRICE,
+              oa.OXAMOUNT,
+              prrod.ORDERED,
+              prrod.CANCELLED,
+              prrod.RETURNED,
+              prrod.SHIPPED,
+              prrod.UNIQUE_ARTICLE_NUMBER,
+              if(oa.OXSELVARIANT != '',concat(oa.OXTITLE,', ',oa.OXSELVARIANT),oa.OXTITLE) as TITLE
             FROM
               `oxorder` oo,
               `oxorderarticles` oa,
@@ -105,7 +105,6 @@ class pi_ratepay_DetailsViewData extends oxBase
               AND prrod.order_number = oa.oxorderid
               AND oa.oxartid = prrod.article_number
               AND oo.oxid = prrod.order_number";
-
         $aRows = $oDb->getAll($articlesSql);
 
         foreach ($aRows as $aRow) {
