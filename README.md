@@ -13,7 +13,10 @@
 
 ## Changelog
 
-### Version 5.0.0 - Released 
+### Version 5.0.1 - Released 2019-04-29
+* Fixed problem in order tab
+
+### Version 5.0.0 - Released 2019-04-17
 * Added compatibility to PHP7
 * Added compatibility to OXID6
 * Refactored module to use more oxid standards
