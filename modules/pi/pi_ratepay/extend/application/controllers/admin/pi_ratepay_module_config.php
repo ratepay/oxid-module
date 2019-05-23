@@ -95,7 +95,7 @@ class pi_ratepay_module_config extends pi_ratepay_module_config_parent
                 'secret' => 'sRPNetherlandInvoiceSecret',
             ),
             'elv' => array(
-                'active' => 'blRPAustriaElv',
+                'active' => 'blRPNetherlandElv',
                 'sandbox' => 'blRPNetherlandElvSandbox',
                 'profileid' => 'sRPNetherlandElvProfileId',
                 'secret' => 'sRPNetherlandElvSecret',
