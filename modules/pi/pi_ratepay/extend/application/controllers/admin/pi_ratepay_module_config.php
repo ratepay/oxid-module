@@ -212,6 +212,8 @@ class pi_ratepay_module_config extends pi_ratepay_module_config_parent
             $oSettings = oxNew('pi_ratepay_Settings');
             $oSettings->piUpdateSettings($aActiveCombination, $aResult);
         }
+
+        $this->addTplParam('blSaveSuccess', true);
     }
 
     /**

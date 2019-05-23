@@ -1,4 +1,7 @@
 [{if $oView->piIsRatepayModuleConfig()}]
+    [{if $blSaveSuccess == true}]
+        <div class="messagebox" style="color:green;"><b>[{oxmultilang ident="PI_RATEPAY_CONFIGSAVESUCCESS"}]</b></div>
+    [{/if}]
     <div id="ratepay-config-connectiontest" style="margin-bottom: 10px;">
         <table style="border: 1px solid gray;padding: 2px;margin: 2px;" cellpadding="2" cellspacing="2">
             <tr>

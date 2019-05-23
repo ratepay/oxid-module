@@ -150,5 +150,6 @@ $aLang = array(
     'PI_RATEPAY_ELV_SETTINGS'                  => "Lastschrift Einstellungen",
     'PI_RATEPAY_ELV_SETTINGS_TITLE'            => "RatePAY SEPA-Lastschrift Einstellungen",
     'PI_RATEPAY_SAVEBANKDATA'                  => "Save bank data (encrypted)",
-    'PI_RATEPAY_ACTIVATE_ELV'                  => "Lastschrift für Rate aktivieren"
+    'PI_RATEPAY_ACTIVATE_ELV'                  => "Lastschrift für Rate aktivieren",
+    'PI_RATEPAY_CONFIGSAVESUCCESS'             => "The configuration has been updated successfully.",
 );
