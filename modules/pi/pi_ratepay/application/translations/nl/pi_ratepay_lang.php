@@ -35,7 +35,7 @@ $aLang = array(
     'PI_RATEPAY_VIEW_RADIO_LABEL_ELV'                 => 'Per elektronischem Lastschriftverfahren',
     'PI_RATEPAY_VIEW_RADIO_PAYMENT_WIRE'              => 'Per &Uuml;berweisung',
     'PI_RATEPAY_VIEW_RATEPAY_ADDRESS'                 => 'RatePAY GmbH, Franklinstra&szlig;e 28-29, 10587 Berlin',
-    'PI_RATEPAY_POLICY'                               => 'De aanvullende',
-    'PI_RATEPAY_POLICY2'                              => 'voorwaarden en het gegevensbeschermingsvoorschrift ',
-    'PI_RATEPAY_POLICY3'                              => 'van RatePAY GmbH zijn van toepassing',
+    'PI_RATEPAY_POLICY'                               => '<h4>Aanvullende algemene voorwaarden voor RATEPAY-betaalmethoden en privacyverklaringen van de RatePAY GmbH</h4> <p>Om u aantrekkelijke soorten betalingen te kunnen aanbieden, werken wij samen met de <strong>RatePAY GmbH, Franklinstraße 28-29, 10587 Berlijn</strong> (<q>RATEPAY</q>). Als tussen u en ons een doeltreffende contractuele relatie tot stand komt, <strong>staan wij onze vordering tot betaling af aan RATEPAY</strong>, indien u kiest voor een RATEPAY-betaalmethode. Bij gebruik van de RATEPAY-betaalmethode termijnbetaling, <strong>staan wij onze vordering tot betaling af aan de partnerbank van RATEPAY</strong>.</p> <p>In het kader van de bestelprocedure dragen wij uw gegevens voor de uitvoering van de identiteits- en kredietwaardigheidscontrole, alsook de uitvoering van het contract over aan RATEPAY. Alle details vindt u in de ',
+    'PI_RATEPAY_POLICY2'                              => 'Aanvullende algemene voorwaarden voor RATEPAY-betaalmethoden en privacyverklaringen van de RatePAY GmbH',
+    'PI_RATEPAY_POLICY3'                              => ', die deel uitmaken van deze Algemene Voorwaarden.</p>',
 );

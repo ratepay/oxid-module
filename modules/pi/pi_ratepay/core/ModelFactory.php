@@ -400,9 +400,10 @@ class ModelFactory extends oxSuperCfg {
      * @return void
      */
     protected function _piSetCountryIdByUser() {
-        $oUser = $this->getUser();
-
-        $this->_countryId = $oUser->oxuser__oxcountryid->value;
+        if (empty($this->_countryId)) { // might be set already, for example by _getOrderCountryId()
+            $oUser = $this->getUser();
+            $this->_countryId = $oUser->oxuser__oxcountryid->value;
+        }
     }
 
     /**

@@ -35,7 +35,7 @@ $aLang = array(
     'PI_RATEPAY_VIEW_RADIO_LABEL_ELV'                 => 'Per elektronischem Lastschriftverfahren',
     'PI_RATEPAY_VIEW_RADIO_PAYMENT_WIRE'              => 'Per Überweisung',
     'PI_RATEPAY_VIEW_RATEPAY_ADDRESS'                 => 'RatePAY GmbH, Franklinstra&szlig;e 28-29, 10587 Berlin',
-    'PI_RATEPAY_POLICY'                               => 'The Additional ',
-    'PI_RATEPAY_POLICY2'                              => 'General Terms and Conditions and Data Protection Notice',
-    'PI_RATEPAY_POLICY3'                              => 'of the RatePAY GmbH apply',
+    'PI_RATEPAY_POLICY'                               => '<h4>Additional Terms and Conditions and Data Protection Notice of RatePAY GmbH</h4><p>In order to be able to offer you attractive payment methods we cooperate with <strong>RatePAY GmbH, Franklinstraße 28-29, D-10587 Berlin</strong> (<q>RATEPAY</q>). Should a valid contractual relationship come into being between you and us, <strong>we shall cede our payment claim to RATEPAY</strong>, inasmuch as you should decide in favour of a RATEPAY payment method. In the event that you should use the RATEPAY payment method payment by instalments <strong>we shall cede our payment claim to the partner bank of RATEPAY</strong>.</p> <p>Within the order process we will be sending your data to RatePAY GmbH for the purpose of verifying your identity and creditworthiness as well as the performance of the contract. All details may be found in the ',
+    'PI_RATEPAY_POLICY2'                              => 'Additional Terms and Conditions and Data Protection Notice of RatePAY GmbH',
+    'PI_RATEPAY_POLICY3'                              => ', which are part of these General Terms and Conditions.</p>',
 );

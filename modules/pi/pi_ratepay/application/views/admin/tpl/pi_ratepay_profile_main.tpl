@@ -182,22 +182,6 @@
                 </tr>
                 <tr>
                     <td class="edittext">
-                        [{oxmultilang ident="PI_RATEPAY_PROFILE_DFP"}]&nbsp;
-                    </td>
-                    <td class="edittext">
-                        [{$edit->pi_ratepay_settings__dfp->value}]
-                    </td>
-                </tr>
-                <tr>
-                    <td class="edittext">
-                        [{oxmultilang ident="PI_RATEPAY_PROFILE_DFP_SNIPPET_ID"}]&nbsp;
-                    </td>
-                    <td class="edittext">
-                        [{$edit->pi_ratepay_settings__dfp_snippet_id->value}]
-                    </td>
-                </tr>
-                <tr>
-                    <td class="edittext">
                         [{oxmultilang ident="PI_RATEPAY_PROFILE_CURRENCIES"}]&nbsp;
                     </td>
                     <td class="edittext">

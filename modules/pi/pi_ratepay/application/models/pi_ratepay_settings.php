@@ -165,6 +165,21 @@ class pi_ratepay_Settings extends oxBase
     }
 
     /**
+     * Check if checkbox has been set to on for given parameter.
+     *
+     * @param string $parameter
+     * @return int 0 for false and 1 for true
+     */
+    protected function _isParameterCheckedYes($parameter)
+    {
+        $checked = 0;
+        if ($parameter != null && $parameter == 'yes') {
+            $checked = 1;
+        }
+        return $checked;
+    }
+
+    /**
      * Adding merchant config to settings
      *
      * @param $aMerchantConfig
@@ -173,28 +188,17 @@ class pi_ratepay_Settings extends oxBase
      */
     protected function _piUpdateMerchantConfig($aMerchantConfig, $sRequestMethod)
     {
-        $this->pi_ratepay_settings__limit_min =
-            new oxField($aMerchantConfig['tx-limit-' . $sRequestMethod . '-min']);
-        $this->pi_ratepay_settings__limit_max =
-            new oxField($aMerchantConfig['tx-limit-' . $sRequestMethod . '-max']);
-        $this->pi_ratepay_settings__limit_max_b2b =
-            new oxField($aMerchantConfig['tx-limit-' . $sRequestMethod . '-max-b2b']);
-        $this->pi_ratepay_settings__b2b =
-            new oxField($aMerchantConfig['b2b-' . $sRequestMethod]);
-        $this->pi_ratepay_settings__ala =
-            new oxField($aMerchantConfig['delivery-address-' . $sRequestMethod]);
-        $this->pi_ratepay_settings__dfp =
-            new oxField($aMerchantConfig['eligibility-device-fingerprint']);
-        $this->pi_ratepay_settings__dfp_snippet_id =
-            new oxField($aMerchantConfig['device-fingerprint-snippet-id']);
-        $this->pi_ratepay_settings__currencies =
-            new oxField($aMerchantConfig['currency']);
-        $this->pi_ratepay_settings__delivery_countries =
-            new oxField($aMerchantConfig['country-code-delivery']);
+        $this->pi_ratepay_settings__limit_min = new oxField($aMerchantConfig['tx-limit-'.$sRequestMethod.'-min']);
+        $this->pi_ratepay_settings__limit_max = new oxField($aMerchantConfig['tx-limit-'.$sRequestMethod.'-max']);
+        $this->pi_ratepay_settings__limit_max_b2b = new oxField($aMerchantConfig['tx-limit-'.$sRequestMethod.'-max-b2b']);
+        $this->pi_ratepay_settings__b2b = new oxField($this->_isParameterCheckedYes($aMerchantConfig['b2b-'.$sRequestMethod]));
+        $this->pi_ratepay_settings__ala = new oxField($this->_isParameterCheckedYes($aMerchantConfig['delivery-address-'.$sRequestMethod]));
+        $this->pi_ratepay_settings__dfp = new oxField($this->_isParameterCheckedYes($aMerchantConfig['eligibility-device-fingerprint']));
+        $this->pi_ratepay_settings__currencies = new oxField($aMerchantConfig['currency']);
+        $this->pi_ratepay_settings__delivery_countries = new oxField($aMerchantConfig['country-code-delivery']);
 
         if ($this->pi_ratepay_settings__b2b->value !== 0) {
-            $this->pi_ratepay_settings__b2b =
-                new oxField($aMerchantConfig['tx-limit-' . $sRequestMethod . '-max']);
+            $this->pi_ratepay_settings__b2b = new oxField($aMerchantConfig['tx-limit-'.$sRequestMethod.'-max']);
         }
     }
 
@@ -206,14 +210,10 @@ class pi_ratepay_Settings extends oxBase
      */
     protected function _piUpdateInstallmentConfig($aInstallmentConfig)
     {
-        $this->pi_ratepay_settings__month_allowed =
-            new oxField("[" .$aInstallmentConfig['month-allowed']."]");
-        $this->pi_ratepay_settings__min_rate =
-            new oxField($aInstallmentConfig['rate-min-normal']);
-        $this->pi_ratepay_settings__interest_rate =
-            new oxField($aInstallmentConfig['interestrate-default']);
-        $this->pi_ratepay_settings__payment_firstday =
-            new oxField($aInstallmentConfig['valid-payment-firstdays']);
+        $this->pi_ratepay_settings__month_allowed = new oxField("[" .$aInstallmentConfig['month-allowed']."]");
+        $this->pi_ratepay_settings__min_rate = new oxField($aInstallmentConfig['rate-min-normal']);
+        $this->pi_ratepay_settings__interest_rate = new oxField($aInstallmentConfig['interestrate-default']);
+        $this->pi_ratepay_settings__payment_firstday = new oxField($aInstallmentConfig['valid-payment-firstdays']);
     }
 
 

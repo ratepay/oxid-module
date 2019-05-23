@@ -28,6 +28,7 @@ $aLang = array(
     'SHOP_MODULE_GROUP_PI_RATEPAY_NETHERLAND'  => 'Niederlande',
     'SHOP_MODULE_blRPLogging'                   => 'Vorgänge protokollieren',
     'SHOP_MODULE_blRPAutoPaymentConfirm'        => 'Auto Payment Confirm',
+    'SHOP_MODULE_sRPDeviceFingerprintSnippetId' => 'Device Fingerprint Snippet-Id',
     'SHOP_MODULE_blRPInvoiceActive'             => 'RatePAY Rechnung aktiv',
     'SHOP_MODULE_blRPInvoiceSandbox'            => 'Sandbox (Testmodus)',
     'SHOP_MODULE_sRPInvoiceProfileId'           => 'Profil ID',

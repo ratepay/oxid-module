@@ -424,14 +424,14 @@ class pi_ratepay_DetailsViewData extends oxBase
 
         $sQuery = "
             SELECT 
-                oxorder.oxcurrency, 
+                oo.oxcurrency, 
                 prrod.* 
             FROM 
                 {$this->pi_ratepay_order_details} prrod, oxorder oo
             WHERE
-                prrod.order_number='{$this->_orderId}' AND 
-                prrod.article_number='oxgiftcard' AND 
-                oxorder.oxid = prrod.order_number";
+                prrod.order_number = '{$this->_orderId}' AND 
+                prrod.article_number = '{$sIdent}' AND 
+                oo.oxid = prrod.order_number";
 
         $aRow = $oDb->getRow($sQuery);
 

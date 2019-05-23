@@ -225,7 +225,7 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                     $this->addTplParam('pi_ratepay_elv_bank_account_owner', $customer->oxuser__oxfname->rawValue . " " . $customer->oxuser__oxlname->rawValue);
                 }
 
-                $this->_setDeviceFingerPrint($settings);
+                $this->_setDeviceFingerPrint();
             }
 
             // @todo here for compatibility reasons will be removed in the future.
@@ -892,22 +892,19 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
 
     /**
      * Creates a device fingerprint token if not exists
-     *
-     * @param string $paymentMethod
      */
-    private function _setDeviceFingerPrint($settings) {
+    private function _setDeviceFingerPrint() {
         $DeviceFingerprintToken     = $this->getSession()->getVariable('pi_ratepay_dfp_token');
-        $DeviceFingerprint          = (bool) $settings->pi_ratepay_settings__dfp->rawValue;
+        $DeviceFingerprintSnippetId = $this->getConfig()->getConfigParam('sRPDeviceFingerprintSnippetId');
 
-        if ($DeviceFingerprint === true && empty($DeviceFingerprintToken)) {
-            $snippetId = $settings->pi_ratepay_settings__dfp_snippet_id->rawValue;
+        if (!empty($DeviceFingerprintSnippetId) && empty($DeviceFingerprintToken)) {
             $timestamp = microtime();
             $sessionId = $this->getSession()->getId();
             $token = md5($sessionId . "_" . $timestamp);
 
             $this->getSession()->setVariable('pi_ratepay_dfp_token', $token);
             $this->addTplParam('pi_ratepay_dfp_token', $token);
-            $this->addTplParam('pi_ratepay_dfp_snippet_id', $snippetId);
+            $this->addTplParam('pi_ratepay_dfp_snippet_id', $DeviceFingerprintSnippetId);
         }
     }
 
