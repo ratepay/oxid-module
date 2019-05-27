@@ -174,6 +174,8 @@ class pi_ratepay_order extends pi_ratepay_order_parent
                     $modelFactory->setTransactionId($tid);
                     $modelFactory->doOperation('PAYMENT_CONFIRM');
 
+                    $this->getSession()->deleteVariable('pi_ratepay_dfp_token');
+
                     $this->_ratepayPaymentType = $this->getBasket()->getPaymentId();
                     // proceeding to next view
                     return $this->_getNextStep($iSuccess);

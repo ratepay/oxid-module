@@ -60,7 +60,7 @@ class pi_ratepay_module_config extends pi_ratepay_module_config_parent
                 'profileid' => 'sRPAustriaElvProfileId',
                 'secret' => 'sRPAustriaElvSecret',
             ),
-            'inovice' => array(
+            'invoice' => array(
                 'active' => 'blRPAustriaInvoice',
                 'sandbox' => 'blRPAustriaInvoiceSandbox',
                 'profileid' => 'sRPAustriaInvoiceProfileId',

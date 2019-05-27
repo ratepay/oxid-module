@@ -73,7 +73,7 @@ class ModelFactory extends oxSuperCfg {
                 'profileid' => 'sRPAustriaElvProfileId',
                 'secret' => 'sRPAustriaElvSecret',
             ),
-            'inovice' => array(
+            'invoice' => array(
                 'active' => 'blRPAustriaInvoice',
                 'sandbox' => 'blRPAustriaInvoiceSandbox',
                 'profileid' => 'sRPAustriaInvoiceProfileId',
