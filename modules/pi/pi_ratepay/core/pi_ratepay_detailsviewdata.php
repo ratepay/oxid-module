@@ -283,9 +283,10 @@ class pi_ratepay_DetailsViewData extends oxBase
                 ov.oxdiscount AS price,
                 prrod.article_number AS artnr,
                 ov.oxvouchernr AS title,
-                prrod.ordered, prrod.cancelled,
-                prrod.returned,
-                prrod.shipped,
+                prrod.ORDERED,
+                prrod.CANCELLED,
+                prrod.RETURNED,
+                prrod.SHIPPED,
                 prrod.unique_article_number,
                 ovs.OXSERIENR as seriesTitle,
                 ovs.OXSERIEDESCRIPTION as seriesDescription
@@ -357,10 +358,11 @@ class pi_ratepay_DetailsViewData extends oxBase
                 ov.oxdiscount AS price,
                 prrod.article_number AS artnr,
                 ov.oxvouchernr AS title,
-                prrod.ordered, prrod.cancelled,
-                prrod.returned,
+                prrod.ORDERED,
+                prrod.CANCELLED,
+                prrod.RETURNED,
                 prrod.unique_article_number,
-                prrod.shipped
+                prrod.SHIPPED
             FROM
                 `oxorder` oo,
                 `oxvouchers` ov,
