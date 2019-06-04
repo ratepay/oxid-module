@@ -6,108 +6,22 @@ class pi_ratepay_module_config extends pi_ratepay_module_config_parent
 
     /**
      * Assignment helper for ratepay payment activity
+     * Will be filled in constructor
+     *
      * @var array
      */
-    protected $_aCountry2Payment2Configs = array(
-        'de' => array(
-            'rechnung' => array(
-                'active'=> 'blRPInvoiceActive',
-                'sandbox' => 'blRPInvoiceSandbox',
-                'profileid' => 'sRPInvoiceProfileId',
-                'secret' => 'sRPInvoiceSecret',
-            ),
-            'rate' => array(
-                'active' => 'blRPInstallmentActive',
-                'sandbox' => 'blRPInstallmentSandbox',
-                'profileid' => 'sRPInstallmentProfileId',
-                'secret' => 'sRPInstallmentSecret',
-            ),
-            'elv' => array(
-                'active' => 'blRPElvActive',
-                'sandbox' => 'blRPElvSandbox',
-                'profileid' => 'sRPElvProfileId',
-                'secret' => 'sRPElvSecret',
-            ),
-            'invoice' => array(
-                'active'=> 'blRPInvoiceActive',
-                'sandbox' => 'blRPInvoiceSandbox',
-                'profileid' => 'sRPInvoiceProfileId',
-                'secret' => 'sRPInvoiceSecret',
-            ),
-            'installment' => array(
-                'active' => 'blRPInstallmentActive',
-                'sandbox' => 'blRPInstallmentSandbox',
-                'profileid' => 'sRPInstallmentProfileId',
-                'secret' => 'sRPInstallmentSecret',
-            ),
-        ),
-        'at' => array(
-            'rechnung' => array(
-                'active' => 'blRPAustriaInvoice',
-                'sandbox' => 'blRPAustriaInvoiceSandbox',
-                'profileid' => 'sRPAustriaInvoiceProfileId',
-                'secret' => 'sRPAustriaInvoiceSecret',
-            ),
-            'rate' => array(
-                'active' => 'blRPAustriaInstallment',
-                'sandbox' => 'blRPAustriaInstallmentSandbox',
-                'profileid' => 'sRPAustriaInstallmentProfileId',
-                'secret' => 'sRPAustriaInstallmentSecret',
-            ),
-            'elv' => array(
-                'active' => 'blRPAustriaElv',
-                'sandbox' => 'blRPAustriaElvSandbox',
-                'profileid' => 'sRPAustriaElvProfileId',
-                'secret' => 'sRPAustriaElvSecret',
-            ),
-            'invoice' => array(
-                'active' => 'blRPAustriaInvoice',
-                'sandbox' => 'blRPAustriaInvoiceSandbox',
-                'profileid' => 'sRPAustriaInvoiceProfileId',
-                'secret' => 'sRPAustriaInvoiceSecret',
-            ),
-            'installment' => array(
-                'active' => 'blRPAustriaInstallment',
-                'sandbox' => 'blRPAustriaInstallmentSandbox',
-                'profileid' => 'sRPAustriaInstallmentProfileId',
-                'secret' => 'sRPAustriaInstallmentSecret',
-            ),
-        ),
-        'ch' => array(
-            'rechnung' => array(
-                'active' => 'blRPSwitzerlandInvoice',
-                'sandbox' => 'blRPSwitzerlandInvoiceSandbox',
-                'profileid' => 'sRPSwitzerlandInvoiceProfileId',
-                'secret' => 'sRPSwitzerlandInvoiceSecret',
-            ),
-            'invoice' => array(
-                'active' => 'blRPSwitzerlandInvoice',
-                'sandbox' => 'blRPSwitzerlandInvoiceSandbox',
-                'profileid' => 'sRPSwitzerlandInvoiceProfileId',
-                'secret' => 'sRPSwitzerlandInvoiceSecret',
-            ),
-        ),
-        'nl' => array(
-            'rechnung' => array(
-                'active' => 'blRPNetherlandInvoice',
-                'sandbox' => 'blRPNetherlandInvoiceSandbox',
-                'profileid' => 'sRPNetherlandInvoiceProfileId',
-                'secret' => 'sRPNetherlandInvoiceSecret',
-            ),
-            'elv' => array(
-                'active' => 'blRPNetherlandElv',
-                'sandbox' => 'blRPNetherlandElvSandbox',
-                'profileid' => 'sRPNetherlandElvProfileId',
-                'secret' => 'sRPNetherlandElvSecret',
-            ),
-            'invoice' => array(
-                'active' => 'blRPNetherlandInvoice',
-                'sandbox' => 'blRPNetherlandInvoiceSandbox',
-                'profileid' => 'sRPNetherlandInvoiceProfileId',
-                'secret' => 'sRPNetherlandInvoiceSecret',
-            ),
-        ),
-    );
+    protected $_aCountry2Payment2Configs;
+
+    /**
+     * Class constructor
+     *
+     * @return null
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->_aCountry2Payment2Configs = ModelFactory::getConfigurationParameterMap();
+    }
 
     /**
      * Returns url of country code
@@ -158,7 +72,9 @@ class pi_ratepay_module_config extends pi_ratepay_module_config_parent
         $blValid = isset(
             $this->_aCountry2Payment2Configs[$sCountryCode][$sPaymentType]
         );
-        if (!$blValid) return false;
+        if (!$blValid) {
+            return false;
+        }
 
         $aConfig =
             $this->_aCountry2Payment2Configs[$sCountryCode][$sPaymentType];
@@ -288,4 +204,24 @@ class pi_ratepay_module_config extends pi_ratepay_module_config_parent
         return $aActiveCombinations;
     }
 
+    /**
+     * Determines which settlement types are available in the connected RatePAY profile
+     *
+     * @param string $sSettlementTypes
+     * @return array
+     */
+    public function piGetAvailableSettlementTypes($sSettlementTypes)
+    {
+        $sCountry = 'DE';
+        if ($sSettlementTypes == 'sRPAustriaInstallmentSettlement') {
+            $sCountry = 'AT';
+        }
+
+        $settings = oxNew('pi_ratepay_settings');
+        $shopId = $this->getConfig()->getShopId();
+        $shopId = $settings->setShopIdToOne($shopId);
+        $settings->loadByType(pi_ratepay_util_utilities::getPaymentMethod('pi_ratepay_rate'), $shopId, $sCountry);
+
+        return $settings->getAvailableSettlementTypes();
+    }
 }

@@ -21,7 +21,7 @@ class ModelFactory extends oxSuperCfg {
      * Assignment helper for ratepay payment activity
      * @var array
      */
-    protected $_aCountry2Payment2Configs = array(
+    protected static $_aCountry2Payment2Configs = array(
         'de' => array(
             'rechnung' => array(
                 'active'=> 'blRPInvoiceActive',
@@ -34,6 +34,7 @@ class ModelFactory extends oxSuperCfg {
                 'sandbox' => 'blRPInstallmentSandbox',
                 'profileid' => 'sRPInstallmentProfileId',
                 'secret' => 'sRPInstallmentSecret',
+                'settlement' => 'sRPInstallmentSettlement',
             ),
             'elv' => array(
                 'active' => 'blRPElvActive',
@@ -52,6 +53,7 @@ class ModelFactory extends oxSuperCfg {
                 'sandbox' => 'blRPInstallmentSandbox',
                 'profileid' => 'sRPInstallmentProfileId',
                 'secret' => 'sRPInstallmentSecret',
+                'settlement' => 'sRPInstallmentSettlement',
             ),
         ),
         'at' => array(
@@ -66,6 +68,7 @@ class ModelFactory extends oxSuperCfg {
                 'sandbox' => 'blRPAustriaInstallmentSandbox',
                 'profileid' => 'sRPAustriaInstallmentProfileId',
                 'secret' => 'sRPAustriaInstallmentSecret',
+                'settlement' => 'sRPAustriaInstallmentSettlement',
             ),
             'elv' => array(
                 'active' => 'blRPAustriaElv',
@@ -84,6 +87,7 @@ class ModelFactory extends oxSuperCfg {
                 'sandbox' => 'blRPAustriaInstallmentSandbox',
                 'profileid' => 'sRPAustriaInstallmentProfileId',
                 'secret' => 'sRPAustriaInstallmentSecret',
+                'settlement' => 'sRPAustriaInstallmentSettlement',
             ),
         ),
         'ch' => array(
@@ -150,6 +154,28 @@ class ModelFactory extends oxSuperCfg {
     protected $_countryId;
 
     protected $_calculationData = array();
+
+    /**
+     *
+     *
+     * @return array
+     */
+    public static function getConfigurationParameterMap()
+    {
+        return self::$_aCountry2Payment2Configs;
+    }
+
+    /**
+     * @param string $sCountry
+     * @return bool
+     */
+    public static function getSettlementTypeConfigParamByCountry($sCountry)
+    {
+        if (isset(self::$_aCountry2Payment2Configs[strtolower($sCountry)]['installment']['settlement'])) {
+            return self::$_aCountry2Payment2Configs[strtolower($sCountry)]['installment']['settlement'];
+        }
+        return false;
+    }
 
     /**
      * @param mixed $subtype
@@ -449,12 +475,9 @@ class ModelFactory extends oxSuperCfg {
             $country = $this->_getCountryCodeById($this->_countryId);
             $country = strtolower($country);
 
-            $sConfigParamProfileId =
-                $this->_aCountry2Payment2Configs[$country][$paymentMethod]['profileid'];
-            $sConfigParamSecurityCode =
-                $this->_aCountry2Payment2Configs[$country][$paymentMethod]['secret'];
-            $sConfigParamSandbox =
-                $this->_aCountry2Payment2Configs[$country][$paymentMethod]['sandbox'];
+            $sConfigParamProfileId = self::$_aCountry2Payment2Configs[$country][$paymentMethod]['profileid'];
+            $sConfigParamSecurityCode = self::$_aCountry2Payment2Configs[$country][$paymentMethod]['secret'];
+            $sConfigParamSandbox = self::$_aCountry2Payment2Configs[$country][$paymentMethod]['sandbox'];
 
             $profileId = $oConfig->getConfigParam($sConfigParamProfileId);
             $securityCode = $oConfig->getConfigParam($sConfigParamSecurityCode);

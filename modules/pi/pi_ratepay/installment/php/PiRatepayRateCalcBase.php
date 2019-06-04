@@ -362,6 +362,14 @@ class PiRatepayRateCalcBase
     }
 
     /**
+     * @return pi_ratepay_Settings
+     */
+    public function getSettings()
+    {
+        return $this->picalcdata->getSettings();
+    }
+
+    /**
      * @return string
      */
     public function getRequestIban()

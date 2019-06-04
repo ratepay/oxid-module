@@ -81,7 +81,7 @@ class pi_ratepay_Settings extends oxBase
         $whereClause = array(
             $this->getViewName() . ".shopid" => $shopId,
             $this->getViewName() . ".type" => strtolower($type),
-            $this->getViewName() . ".country" => $this->_getCountry()
+            $this->getViewName() . ".country" => $this->getCountry()
         );
         $selectQuery = $this->buildSelectString($whereClause);
 
@@ -217,7 +217,7 @@ class pi_ratepay_Settings extends oxBase
     }
 
 
-    private function _getCountry()
+    public function getCountry()
     {
         if ($this->_country === null) {
             $this->_country = pi_ratepay_util_utilities::getCountry($this->getUser()->oxuser__oxcountryid->value);
@@ -228,5 +228,42 @@ class pi_ratepay_Settings extends oxBase
     private function _setCountry($country)
     {
         $this->_country = $country;
+    }
+
+    /**
+     * Determines which settlement types are available in the connected RatePAY profile
+     *
+     * @return array
+     */
+    public function getAvailableSettlementTypes()
+    {
+        if (empty($this->getId())) {
+            return array('debit', 'banktransfer', 'both'); // Settings not set yet
+        }
+
+        if ($this->pi_ratepay_settings__payment_firstday->value == '2,28') {
+            return array('debit', 'banktransfer', 'both');
+        } elseif ($this->pi_ratepay_settings__payment_firstday->value == '28') {
+            return array('banktransfer');
+        }
+        return array('debit');
+    }
+
+    public function getSettlementType()
+    {
+        if ($this->pi_ratepay_settings__type->value != 'installment' || !in_array($this->pi_ratepay_settings__country->value, array('DE', 'AT'))) {
+            return false;
+        }
+
+        $sConfigParam = ModelFactory::getSettlementTypeConfigParamByCountry($this->pi_ratepay_settings__country->value);
+
+        $sSettlementType = $this->getConfig()->getConfigParam($sConfigParam);
+
+        $aAvailableSettlementTypes = $this->getAvailableSettlementTypes();
+
+        if (in_array($sSettlementType, $aAvailableSettlementTypes)) {
+            return $sSettlementType;
+        }
+        return $aAvailableSettlementTypes[0];
     }
 }

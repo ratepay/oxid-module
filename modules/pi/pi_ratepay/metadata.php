@@ -209,6 +209,11 @@ $aModule = array(
             'block'    => 'admin_module_config_form',
             'file'     => 'admin_pi_ratepay_module_config_form.tpl',
         ),
+        array(
+            'template' => 'module_config.tpl',
+            'block'    => 'admin_module_config_var_type_select',
+            'file'     => 'admin_pi_ratepay_module_config_var_type_select.tpl',
+        ),
     ),
     'settings' => array(
         // ratepay general
@@ -225,6 +230,7 @@ $aModule = array(
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPInstallmentSandbox', 'type' => 'bool', 'value' => false),
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'sRPInstallmentProfileId', 'type' => 'str', 'value' => ''),
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'sRPInstallmentSecret', 'type' => 'str', 'value' => ''),
+        array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'sRPInstallmentSettlement', 'type' => 'select', 'value' => 'debit', 'constrains' => 'debit|banktransfer|both'),
         // ratepay germany elv
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPElvActive', 'type' => 'bool', 'value' => false),
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPElvSandbox', 'type' => 'bool', 'value' => false),
@@ -241,6 +247,7 @@ $aModule = array(
         array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'blRPAustriaInstallmentSandbox', 'type' => 'bool', 'value' => false),
         array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'sRPAustriaInstallmentProfileId', 'type' => 'str', 'value' => ''),
         array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'sRPAustriaInstallmentSecret', 'type' => 'str', 'value' => ''),
+        array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'sRPAustriaInstallmentSettlement', 'type' => 'select', 'value' => 'debit', 'constrains' => 'debit|banktransfer|both'),
         // ratepay austria elv
         array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'blRPAustriaElv', 'type' => 'bool', 'value' => false),
         array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'blRPAustriaElvSandbox', 'type' => 'bool', 'value' => false),

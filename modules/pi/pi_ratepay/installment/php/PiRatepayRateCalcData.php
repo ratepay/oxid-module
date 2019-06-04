@@ -45,7 +45,7 @@ class PiRatepayRateCalcData implements PiRatepayRateCalcDataInterface
     public function getProfileId()
     {
 
-        $settings = $this->_getSettings();
+        $settings = $this->getSettings();
 
         $profileId = $settings->pi_ratepay_settings__profile_id->rawValue;
         return $profileId;
@@ -57,7 +57,7 @@ class PiRatepayRateCalcData implements PiRatepayRateCalcDataInterface
      */
     public function getSecurityCode()
     {
-        $settings = $this->_getSettings();
+        $settings = $this->getSettings();
 
         $securityCode = $settings->pi_ratepay_settings__security_code->rawValue;
         return $securityCode;
@@ -69,7 +69,7 @@ class PiRatepayRateCalcData implements PiRatepayRateCalcDataInterface
      */
     public function isLive()
     {
-        $settings = $this->_getSettings();
+        $settings = $this->getSettings();
 
         $sandbox = $settings->pi_ratepay_settings__sandbox->rawValue;
         if ($sandbox == 1) {
@@ -288,7 +288,7 @@ class PiRatepayRateCalcData implements PiRatepayRateCalcDataInterface
      */
     public function getPaymentFirstdayConfig()
     {
-        $settings = $this->_getSettings();
+        $settings = $this->getSettings();
         return $settings->pi_ratepay_settings__payment_firstday->rawValue;
     }
 
@@ -324,12 +324,11 @@ class PiRatepayRateCalcData implements PiRatepayRateCalcDataInterface
      * Get installment settings
      * @return pi_ratepay_Settings
      */
-    private function _getSettings()
+    public function getSettings()
     {
 
         $settings = oxNew('pi_ratepay_settings');
         $settings->loadByType(strtolower('installment'), oxRegistry::getSession()->getVariable('shopId'));
-
 
         return $settings;
     }

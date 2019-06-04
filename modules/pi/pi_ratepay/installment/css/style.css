@@ -72,6 +72,14 @@
 #rp-iban-account-number {
     display: block;
 }
-.rp-payment-type-switch {
-    text-decoration: underline;
+.rp-payment-type-switch A {
+    display:inline-block;
+    color:#444;
+    border:1px solid #CCC;
+    background:#FFF;
+    cursor:pointer;
+    vertical-align:middle;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
 }
