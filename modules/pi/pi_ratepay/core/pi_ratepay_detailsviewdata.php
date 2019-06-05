@@ -211,7 +211,7 @@ class pi_ratepay_DetailsViewData extends oxBase
                 oo.oxcurrency,
                 od.oxid AS ARTID,
                 od.oxtitle AS TITLE,
-                prrod.price AS PRICE,
+                oo.oxdiscount AS PRICE,
                 prrod.ordered AS ORDERED,
                 prrod.cancelled AS CANCELLED,
                 prrod.returned AS RETURNED,
@@ -281,6 +281,7 @@ class pi_ratepay_DetailsViewData extends oxBase
             SELECT
                 oo.oxcurrency,
                 ov.oxdiscount AS price,
+                oo.OXVOUCHERDISCOUNT as totaldiscount,
                 prrod.article_number AS artnr,
                 ov.oxvouchernr AS title,
                 prrod.ORDERED,
@@ -302,41 +303,54 @@ class pi_ratepay_DetailsViewData extends oxBase
                 ovs.oxid = ov.OXVOUCHERSERIEID AND 
                 oo.oxid = prrod.order_number";
 
-        $aRow = $oDb->getRow($sQuery);
+        $aRows = $oDb->getAll($sQuery);
 
-        if ($aRow['price'] != 0) {
-            $listEntry['oxid'] = "";
-            $listEntry['artid'] = $aRow['artnr'];
-            $listEntry['arthash'] = md5($aRow['artnr']);
-            $listEntry['artnum'] = 'voucher_' . $aRow['title'];
-            $listEntry['title'] = $aRow['seriesTitle'];
-            $listEntry['oxtitle'] = $aRow['seriesTitle'];
-            $listEntry['vat'] = "0";
-            $listEntry['unitprice'] = (float) $aRow['price'];
-            $listEntry['amount'] = 1 - $aRow['SHIPPED'] - $aRow['CANCELLED'];
-            $listEntry['ordered'] = $aRow['ORDERED'];
-            $listEntry['shipped'] = $aRow['SHIPPED'];
-            $listEntry['returned'] = $aRow['RETURNED'];
-            $listEntry['cancelled'] = $aRow['CANCELLED'];
-            $listEntry['currency'] = $aRow['oxcurrency'];
-            $listEntry['unique_article_number'] = $aRow['unique_article_number'];
+        $dSum = 0;
+        for ($i = 0; $i < count($aRows); $i++) {
+            $aRow = $aRows[$i];
+            if ($aRow['price'] != 0) {
+                $listEntry['oxid'] = "";
+                $listEntry['artid'] = $aRow['artnr'];
+                $listEntry['arthash'] = md5($aRow['artnr']);
+                $listEntry['artnum'] = 'voucher_' . $aRow['title'];
+                $listEntry['title'] = $aRow['seriesTitle'];
+                $listEntry['oxtitle'] = $aRow['seriesTitle'];
+                $listEntry['vat'] = "0";
+                $listEntry['unitprice'] = (float)$aRow['price'];
+                $listEntry['amount'] = 1 - $aRow['SHIPPED'] - $aRow['CANCELLED'];
+                $listEntry['ordered'] = $aRow['ORDERED'];
+                $listEntry['shipped'] = $aRow['SHIPPED'];
+                $listEntry['returned'] = $aRow['RETURNED'];
+                $listEntry['cancelled'] = $aRow['CANCELLED'];
+                $listEntry['currency'] = $aRow['oxcurrency'];
+                $listEntry['unique_article_number'] = $aRow['unique_article_number'];
 
-            $blHasTotal = (
-                ($aRow['ORDERED'] - $aRow['RETURNED'] - $aRow['CANCELLED']) > 0
-            );
+                $blHasTotal = (
+                    ($aRow['ORDERED'] - $aRow['RETURNED'] - $aRow['CANCELLED']) > 0
+                );
 
-            if ($blHasTotal) {
-                $dTotal =
-                    (float) $aRow['price'] +
-                    ((float) $aRow['price'] *
-                        round((float) $aRow['VAT']) / 100);
+                if ($blHasTotal) {
+                    $dTotal =
+                        (float)$aRow['price'] +
+                        ((float)$aRow['price'] *
+                            round((float)$aRow['VAT']) / 100);
 
-                $listEntry['totalprice'] = $dTotal;
-            } else {
-                $listEntry['totalprice'] = 0;
+                    $listEntry['totalprice'] = $dTotal;
+                } else {
+                    $listEntry['totalprice'] = 0;
+                }
+
+                $dSum += (float)$aRow['price'];
+
+                if ($blHasTotal && count($aRows) == ($i + 1) && $dSum != (float)$aRow['totaldiscount']) { // is last voucher
+                    // compensation for rounding discrepancies
+                    $dDiff = (float)$aRow['totaldiscount'] - $dSum;
+                    $listEntry['unitprice'] += $dDiff;
+                    $listEntry['totalprice'] += $dDiff;
+                }
+
+                $articleList[] = $listEntry;
             }
-
-            $articleList[] = $listEntry;
         }
 
         return $articleList;

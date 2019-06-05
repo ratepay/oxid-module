@@ -725,7 +725,7 @@ class ModelFactory extends oxSuperCfg {
 
         $discount = array(
             'Description'       => 'Discount ' . $vNr,
-            'UnitPriceGross'    => $discount,
+            'UnitPriceGross'    => $basket->getTotalDiscountSum(),
             'TaxRate'           => $util->getFormattedNumber("0"),
         );
 
