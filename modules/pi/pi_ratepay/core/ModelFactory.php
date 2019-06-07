@@ -705,17 +705,22 @@ class ModelFactory extends oxSuperCfg {
         $basket = $this->_basket;
         $util = new pi_ratepay_util_Utilities();
 
+        $sDiscountTitle = '';
+
         if ($basket->getTotalDiscount() && $basket->getTotalDiscount()->getBruttoPrice() > 0) {
             $discount = $discount + (float)$util->getFormattedNumber($basket->getTotalDiscount()->getBruttoPrice());
+
+            $aDiscounts = $basket->getDiscounts();
+            foreach ($aDiscounts as $oDiscount) {
+                $sDiscountTitle .= '_'.$oDiscount->sDiscount;
+            }
         }
 
         if (count($basket->getVouchers())) {
-
             foreach ($basket->getVouchers() as $voucher) {
                 $vNr = $voucher->sVoucherId;
-                $vNr = $this->_getVoucherTitle($vNr);
+                $sDiscountTitle .= '_'.$this->_getVoucherTitle($vNr);
                 $discount = $discount + (float)$util->getFormattedNumber($voucher->dVoucherdiscount);
-
             }
         }
 
@@ -723,8 +728,10 @@ class ModelFactory extends oxSuperCfg {
             return false;
         }
 
+        $sDiscountTitle = trim($sDiscountTitle, '_');
+
         $discount = array(
-            'Description'       => 'Discount ' . $vNr,
+            'Description'       => $sDiscountTitle,
             'UnitPriceGross'    => $basket->getTotalDiscountSum(),
             'TaxRate'           => $util->getFormattedNumber("0"),
         );

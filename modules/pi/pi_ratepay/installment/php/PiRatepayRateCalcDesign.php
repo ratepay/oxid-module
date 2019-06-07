@@ -103,9 +103,12 @@
     </div>
     <?php if (in_array($sSettlementType, array('both', 'debit'))): ?>
         <div id="rp-rate-elv">
-            <div class="row rp-sepa-form">
-                <hr/>
-            </div>
+            <?php if ($sSettlementType == 'both'): ?>
+                <strong class="rp-installment-header"><?php echo $rp_header_debit; ?></strong>
+                <div class="row small rp-payment-type-switch" id="rp-switch-payment-type-bank-transfer" onclick="rp_change_payment(28)">
+                    <a class="rp-link"><?php echo $rp_switch_payment_type_bank_transfer; ?></a>
+                </div><br>
+            <?php endif; ?>
 
             <div class="row rp-row-space rp-sepa-form">
                 <table class="rp-sepa-table small">
@@ -168,16 +171,14 @@
                 <br/><br/>
                 <?php echo $wcd_sepa_terms_block_3; ?>
             </div><br/>
-            <?php if ($sSettlementType == 'both'): ?>
-                <div class="row small rp-payment-type-switch" id="rp-switch-payment-type-bank-transfer" onclick="rp_change_payment(28)">
-                    <a class="rp-link"><?php echo $rp_switch_payment_type_bank_transfer; ?></a>
-                </div>
-            <?php endif; ?>
         </div>
         <?php if ($sSettlementType == 'both'): ?>
             <!-- Switching between payment type direct debit and bank transfer (which requires no sepa form) is only allowed if  -->
-            <div class="row small rp-payment-type-switch" id="rp-switch-payment-type-direct-debit" onclick="rp_change_payment(2)">
-                <a class="rp-link"><?php echo $rp_switch_payment_type_direct_debit; ?></a>
+            <div id="rp-switch-payment-type-direct-debit">
+                <strong class="rp-installment-header"><?php echo $rp_header_bank_transfer; ?></strong>
+                <div class="row small rp-payment-type-switch" onclick="rp_change_payment(2)">
+                    <a class="rp-link"><?php echo $rp_switch_payment_type_direct_debit; ?></a>
+                </div>
             </div>
         <?php endif; ?>
     <?php endif; ?>

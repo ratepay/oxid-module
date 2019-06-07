@@ -49,6 +49,8 @@ $rp_reason_code_translation_697 = "F&uuml;r die gew&auml;hlte Ratenh&ouml;he ist
 $rp_reason_code_translation_698 = "Die Rate war zu niedrig f&uuml;r die maximal verf&uuml;gbare Laufzeit. Die Rate wurde erh&ouml;ht.";
 $rp_reason_code_translation_699 = "Die Rate ist zu hoch f&uuml;r die minimal verf&uuml;gbare Laufzeit. Die Rate wurde verringert.";
 
+$rp_header_bank_transfer = "Installment by bank transfer";
+$rp_header_debit = "Installment by debit";
 $rp_switch_payment_type_bank_transfer = "Ich m&ouml;chte die Ratenzahlungen selbst vornehmen und nicht per Lastschrift begleichen";
 $rp_switch_payment_type_direct_debit = "Ich m&ouml;chte die Ratenzahlungen bequem per Lastschrift begleichen";
 $rp_address = "RatePAY GmbH, Franklinstra&szlig;e 28-29, 10587 Berlin";
