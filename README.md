@@ -3,16 +3,32 @@
 
 |Module | RatePAY Payment Module for OXID
 |------|----------
-|Author | `Annegret Seufert`, `Tim Bischoff`
+|Author | `Annegret Seufert`, `Tim Bischoff`, `Fatchip GmbH`
 |Prefix | `pi`
-|Shop Version | `CE/PE` `4.7.x-4.10.x` `EE` `5.0.x-5.3.x`
-|Version | `4.0.3`
+|Shop Version | `CE/PE` `4.7.x-6.1.x` `EE` `5.0.x-6.1.x`
+|Version | `5.0.2`
 |Link | `http://www.ratepay.com`
 |Mail | `integration@ratepay.com`
 |Installation | `see separate installation manual`
 
 ## Changelog
 
+### Version 5.0.2 - Released 2019-06-12
+* Fixed a couple of problems with RatePay order management in backend
+* Fixed problems in the backend profile configuration
+* Fixed orders with differing addresses when ALA is enabled for configured profile
+* Updated general terms text
+* Changed device fingerprint mechanic
+* Added config option for installment settlement
+* Made buttons for installment settlement more obvious
+
+### Version 5.0.1 - Released 2019-04-29
+* Fixed problem in order tab
+
+### Version 5.0.0 - Released 2019-04-17
+* Added compatibility to PHP7
+* Added compatibility to OXID6
+* Refactored module to use more oxid standards
 * solving installation problems
 
 ### Version 4.0.3 - Released 2018-05-04
