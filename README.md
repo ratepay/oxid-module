@@ -9,7 +9,7 @@
 |Version | `5.0.2`
 |Link | `http://www.ratepay.com`
 |Mail | `integration@ratepay.com`
-|Installation | `see separate installation manual`
+|Installation | `https://ratepay.gitbook.io/oxid/`
 
 ## Changelog
 
