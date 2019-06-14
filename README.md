@@ -7,9 +7,11 @@
 |Prefix | `pi`
 |Shop Version | `CE/PE` `4.7.x-6.1.x` `EE` `5.0.x-6.1.x`
 |Version | `5.0.2`
-|Link | `http://www.ratepay.com`
-|Mail | `integration@ratepay.com`
-|Installation | `see separate installation manual`
+|Link | http://www.ratepay.com
+|Mail | integration@ratepay.com
+|Installation | https://ratepay.gitbook.io/oxid/
+|Demoshop|https://oxid6.ratepay.demoshop.rocks/|
+|Demoshop-Admin|https://oxid6.ratepay.demoshop.rocks/admin - Username: `support@fatchip.de` + Password: `support@fatchip.de`|
 
 ## Changelog
 
