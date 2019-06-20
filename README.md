@@ -15,6 +15,8 @@
 
 ## Changelog
 
+* Added default Device-Fingerprint Snippet id
+
 ### Version 5.0.2 - Released 2019-06-12
 * Fixed a couple of problems with RatePay order management in backend
 * Fixed problems in the backend profile configuration
