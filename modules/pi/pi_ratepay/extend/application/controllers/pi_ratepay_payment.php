@@ -896,8 +896,11 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
     private function _setDeviceFingerPrint() {
         $DeviceFingerprintToken     = $this->getSession()->getVariable('pi_ratepay_dfp_token');
         $DeviceFingerprintSnippetId = $this->getConfig()->getConfigParam('sRPDeviceFingerprintSnippetId');
+        if (empty($DeviceFingerprintSnippetId)) {
+            $DeviceFingerprintSnippetId = 'ratepay'; // default value, so that there is always a device fingerprint
+        }
 
-        if (!empty($DeviceFingerprintSnippetId) && empty($DeviceFingerprintToken)) {
+        if (empty($DeviceFingerprintToken)) {
             $timestamp = microtime();
             $sessionId = $this->getSession()->getId();
             $token = md5($sessionId . "_" . $timestamp);
