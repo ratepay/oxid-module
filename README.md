@@ -15,6 +15,7 @@
 
 ## Changelog
 
+### Version 5.0.3 - Released 2019-06-21
 * Added default Device-Fingerprint Snippet id
 
 ### Version 5.0.2 - Released 2019-06-12
