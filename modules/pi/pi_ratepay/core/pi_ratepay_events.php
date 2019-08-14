@@ -6,7 +6,7 @@ class pi_ratepay_events
 {
     public static $sQueryTableSettings = "
         CREATE TABLE IF NOT EXISTS `pi_ratepay_settings` (
-          `OXID` CHAR(32) NOT NULL,
+          `OXID` char(32) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
           `SHOPID` INT(11) NOT NULL DEFAULT '1',
           `ACTIVE` TINYINT(1) NOT NULL DEFAULT '0',
           `COUNTRY` VARCHAR(2) NOT NULL,
@@ -140,6 +140,7 @@ class pi_ratepay_events
     {
         self::addDatabaseStructure();
         self::addPayments();
+        self::checkColumns();
         self::regenerateViews();
         self::clearTmp();
     }
@@ -199,6 +200,16 @@ class pi_ratepay_events
     }
 
     /**
+     * Add or change missing columns
+     *
+     * @return void
+     */
+    public static function checkColumns()
+    {
+        self::changeCharsetIfNeeded('pi_ratepay_settings', 'OXID', 'latin1', 'ALTER TABLE pi_ratepay_settings CHANGE OXID OXID CHAR(32) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL;');
+    }
+
+    /**
      * Creating database structure changes.
      *
      * @return void
@@ -230,6 +241,27 @@ class pi_ratepay_events
             return true;
         }
         return false;
+    }
+
+    /**
+     * Check charset of a given column and change it if needed
+     *
+     * @param  string $sTableName
+     * @param  string $sColumnName
+     * @param  string $sNeededCharset
+     * @param  string $sQuery
+     * @return void
+     */
+    public static function changeCharsetIfNeeded($sTableName, $sColumnName, $sNeededCharset, $sQuery)
+    {
+        $sCheckQuery = 'SELECT character_set_name FROM information_schema.`COLUMNS` 
+                        WHERE table_schema = "'.oxRegistry::getConfig()->getConfigParam('dbName').'"
+                          AND table_name = "'.$sTableName.'"
+                          AND column_name = "'.$sColumnName.'";';
+        $sCurrentCharset = oxDb::getDb()->getOne($sCheckQuery);
+        if ($sCurrentCharset != $sNeededCharset) {
+            oxDb::getDb()->Execute($sQuery);
+        }
     }
 
     /**
