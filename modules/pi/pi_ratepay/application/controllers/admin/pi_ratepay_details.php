@@ -636,36 +636,42 @@ class pi_ratepay_Details extends oxAdminDetails
         $oOrder->reloadDelivery(false);
         $oDb = oxDb::getDb();
 
-            $totalprice = 0;
+        $totalprice = 0;
 
-            foreach($aOrderArticles as $article){
+        foreach($aOrderArticles as $article){
+            if (stripos($article['artnum'], 'pi-Merchant-Voucher') !== false) {
+                $totalprice -= $article['totalprice'];
+            } else {
                 $totalprice += $article['totalprice'];
-                $oxnprice = $article['unitprice'] * $article['amount'];
-                $oxbprice = ($oxnprice * ($article['vat'] + 100)) / 100;
-                $oDb->execute("update oxorderarticles set oxnetprice ='" . $oxnprice . "', oxbrutprice = '". $oxbprice ."' where oxartid = '" . $article['artid'] ."' and oxorderid = " . $oDb->quote($oOrder->oxorder__oxid->getRawValue()));
             }
+            // Why should the orderarticle be updated with it's own data??? ( calculated in the wrong way )
+            #//$oxnprice = $article['unitprice'] * $article['amount']; // orig
+            #$oxnprice = $article['unitprice'] * $article['ordered']; // fixed
+            #$oxbprice = ($oxnprice * ($article['vat'] + 100)) / 100;
+            #$oDb->execute("update oxorderarticles set oxnetprice ='" . $oxnprice . "', oxbrutprice = '". $oxbprice ."' where oxartid = '" . $article['artid'] ."' and oxorderid = " . $oDb->quote($oOrder->oxorder__oxid->getRawValue()));
+        }
 
-            if($voucherNr != null){
-                $discount = (float) $oDb->getOne("select oxdiscount from oxvouchers where oxvouchernr = '" . $voucherNr . "'");
-                $tDiscount = $oOrder->oxorder__oxvoucherdiscount->getRawValue();
-                $tDiscount += $discount;
-                $sQ = "update oxorder set oxvoucherdiscount ='" . $tDiscount . "'where oxid=" . $oDb->quote($oOrder->oxorder__oxid->getRawValue());
-                $oDb->execute($sQ);
-                $totalprice -= $discount;
-            }
-
-            if($totalprice < 0){
-                $totalprice = 0;
-            }
-
-            $oxnprice = $oDb->getOne("select sum(oxnetprice) from oxorderarticles where oxorderid=" . $oDb->quote($oOrder->oxorder__oxid->getRawValue()));
-            $oxbprice = $oDb->getOne("select sum(oxbrutprice) from oxorderarticles where oxorderid=" . $oDb->quote($oOrder->oxorder__oxid->getRawValue()));
-
-            $sQ = "update oxorder set oxtotalordersum = '" . $totalprice . "', oxtotalnetsum ='" . $oxnprice . "', oxtotalbrutsum ='" . $oxbprice . "'  where oxid = " . $oDb->quote($oOrder->oxorder__oxid->getRawValue());
+        if($voucherNr != null){
+            $discount = (float) $oDb->getOne("select oxdiscount from oxvouchers where oxvouchernr = '" . $voucherNr . "'");
+            $tDiscount = $oOrder->oxorder__oxvoucherdiscount->getRawValue();
+            $tDiscount += $discount;
+            $sQ = "update oxorder set oxvoucherdiscount ='" . $tDiscount . "'where oxid=" . $oDb->quote($oOrder->oxorder__oxid->getRawValue());
             $oDb->execute($sQ);
-            $oOrder->oxorder__oxtotalordersum->setValue($totalprice);
-            $oOrder->oxorder__oxtotalnetsum->setValue($oxnprice);
-            $oOrder->oxorder__oxtotalbrutsum->setValue($oxbprice);
+            $totalprice -= $discount;
+        }
+
+        if($totalprice < 0){
+            $totalprice = 0;
+        }
+
+        $oxnprice = $oDb->getOne("select sum(oxnetprice) from oxorderarticles where oxorderid=" . $oDb->quote($oOrder->oxorder__oxid->getRawValue()));
+        $oxbprice = $oDb->getOne("select sum(oxbrutprice) from oxorderarticles where oxorderid=" . $oDb->quote($oOrder->oxorder__oxid->getRawValue()));
+
+        $sQ = "update oxorder set oxtotalordersum = '" . $totalprice . "', oxtotalnetsum ='" . $oxnprice . "', oxtotalbrutsum ='" . $oxbprice . "'  where oxid = " . $oDb->quote($oOrder->oxorder__oxid->getRawValue());
+        $oDb->execute($sQ);
+        $oOrder->oxorder__oxtotalordersum->setValue($totalprice);
+        $oOrder->oxorder__oxtotalnetsum->setValue($oxnprice);
+        $oOrder->oxorder__oxtotalbrutsum->setValue($oxbprice);
     }
 
     /**

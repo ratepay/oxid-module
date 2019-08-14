@@ -388,41 +388,42 @@ class pi_ratepay_DetailsViewData extends oxBase
             AND prrod.article_number = ov.oxid
             AND oo.oxid = prrod.order_number";
 
-        $aRow = $oDb->getRow($sQuery);
+        $aRows = $oDb->getAll($sQuery);
+        foreach ($aRows as $aRow) {
+            if ($aRow['price'] != 0) {
+                $listEntry['oxid'] = "";
+                $listEntry['artid'] = $aRow['artnr'];
+                $listEntry['arthash'] = md5($aRow['artnr']);
+                $listEntry['artnum'] = 'voucher_' . $aRow['title'];
+                $listEntry['title'] = $aRow['seriesTitle'];
+                $listEntry['oxtitle'] = $aRow['seriesTitle'];
+                $listEntry['vat'] = "0";
+                $listEntry['unitprice'] = (float)$aRow['price'];
+                $listEntry['amount'] = 1 - $aRow['SHIPPED'] - $aRow['CANCELLED'];
+                $listEntry['ordered'] = $aRow['ORDERED'];
+                $listEntry['shipped'] = $aRow['SHIPPED'];
+                $listEntry['returned'] = $aRow['RETURNED'];
+                $listEntry['cancelled'] = $aRow['CANCELLED'];
+                $listEntry['currency'] = $aRow['oxcurrency'];
+                $listEntry['unique_article_number'] = $aRow['unique_article_number'];
 
-        if ($aRow['price'] != 0) {
-            $listEntry['oxid'] = "";
-            $listEntry['artid'] = $aRow['artnr'];
-            $listEntry['arthash'] = md5($aRow['artnr']);
-            $listEntry['artnum'] = 'voucher_' . $aRow['title'];
-            $listEntry['title'] = $aRow['seriesTitle'];
-            $listEntry['oxtitle'] = $aRow['seriesTitle'];
-            $listEntry['vat'] = "0";
-            $listEntry['unitprice'] = (float) $aRow['price'];
-            $listEntry['amount'] = 1 - $aRow['SHIPPED'] - $aRow['CANCELLED'];
-            $listEntry['ordered'] = $aRow['ORDERED'];
-            $listEntry['shipped'] = $aRow['SHIPPED'];
-            $listEntry['returned'] = $aRow['RETURNED'];
-            $listEntry['cancelled'] = $aRow['CANCELLED'];
-            $listEntry['currency'] = $aRow['oxcurrency'];
-            $listEntry['unique_article_number'] = $aRow['unique_article_number'];
+                $blHasTotal = (
+                    ($aRow['ORDERED'] - $aRow['RETURNED'] - $aRow['CANCELLED']) > 0
+                );
 
-            $blHasTotal = (
-                ($aRow['ORDERED'] - $aRow['RETURNED'] - $aRow['CANCELLED']) > 0
-            );
+                if ($blHasTotal) {
+                    $dTotal =
+                        (float)$aRow['price'] +
+                        ((float)$aRow['price'] *
+                            round((float)$aRow['VAT']) / 100);
 
-            if ($blHasTotal) {
-                $dTotal =
-                    (float) $aRow['price'] +
-                    ((float) $aRow['price'] *
-                        round((float) $aRow['VAT']) / 100);
+                    $listEntry['totalprice'] = $dTotal;
+                } else {
+                    $listEntry['totalprice'] = 0;
+                }
 
-                $listEntry['totalprice'] = $dTotal;
-            } else {
-                $listEntry['totalprice'] = 0;
+                $articleList[] = $listEntry;
             }
-
-            $articleList[] = $listEntry;
         }
 
         return $articleList;
