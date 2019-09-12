@@ -208,7 +208,6 @@ class pi_ratepay_events
     public static function checkColumns()
     {
         // Changes from former update.sql
-        self::dropTable('pi_ratepay_rate_configuration');
         self::addColumnIfNotExists('pi_ratepay_settings', 'DUEDATE', "ALTER TABLE `pi_ratepay_settings` ADD COLUMN `DUEDATE` INT(11) NOT NULL DEFAULT '14' AFTER `PAYMENT_FIRSTDAY`");
         self::addColumnIfNotExists('pi_ratepay_order_details', 'PRICE', "ALTER TABLE `pi_ratepay_order_details` ADD `PRICE` DOUBLE NOT NULL DEFAULT '0' AFTER `ARTICLE_NUMBER`");
         self::addColumnIfNotExists('pi_ratepay_order_details', 'VAT', "ALTER TABLE `pi_ratepay_order_details` ADD `VAT` DOUBLE NOT NULL DEFAULT '0' AFTER `PRICE`");
@@ -218,9 +217,6 @@ class pi_ratepay_events
         // Changes from former UPDATE_3.3.3_ZU_4.0.0.sql not needed because they cancel out with update.sql changes
         self::addColumnIfNotExists('pi_ratepay_order_details', 'UNIQUE_ARTICLE_NUMBER', "ALTER TABLE `pi_ratepay_order_details` ADD `UNIQUE_ARTICLE_NUMBER` VARCHAR(50) NOT NULL AFTER `ARTICLE_NUMBER`");
         self::dropColumnIfExists('pi_ratepay_orders', 'TRANSACTION_SHORT_ID');
-
-        // Changes from former UPDATE_4.0.1_ZU_4.0.2.sql not needed because they cancel out with update.sql changes
-        self::dropTable('pi_ratepay_global_settings');
 
         // Changes from former UPDATE_4.0.2_ZU_4.0.3.sql not needed because they cancel out with update.sql changes
         self::addColumnIfNotExists('pi_ratepay_orders', 'VAT', "ALTER TABLE `pi_ratepay_orders` ADD `RP_API` VARCHAR(10) NULL AFTER `USERBIRTHDATE`");
