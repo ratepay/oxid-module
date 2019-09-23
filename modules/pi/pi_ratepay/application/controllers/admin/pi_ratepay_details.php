@@ -430,7 +430,6 @@ class pi_ratepay_Details extends oxAdminDetails
                             $oOrder->oxorder__oxdiscount->setValue(0);
                         }else {
                             $value = $oOrder->oxorder__oxvoucherdiscount->getRawValue() + $article['totalprice'];
-                            $oOrder->oxorder__oxvoucherdiscount->setValue($value);
                         }
                     }
                 }
@@ -550,7 +549,7 @@ class pi_ratepay_Details extends oxAdminDetails
             $blUseStock = $myConfig->getConfigParam('blUseStock');
             if ($fullCancellation) {
                 $oOrder->oxorder__oxstorno = new oxField(1);
-               }
+            }
 
             $oOrder->save();
 
@@ -636,36 +635,31 @@ class pi_ratepay_Details extends oxAdminDetails
         $oOrder->reloadDelivery(false);
         $oDb = oxDb::getDb();
 
-            $totalprice = 0;
+        $totalprice = 0;
 
-            foreach($aOrderArticles as $article){
+        foreach($aOrderArticles as $article) {
+            if (stripos($article['artnum'], 'pi-Merchant-Voucher') !== false) continue; // Credit value is already included in voucheramount
+            if ($article['artnum'] == 'discount' || substr($article['artnum'], 0, 7) == 'voucher') {
+                $totalprice -= $article['totalprice'];
+            } else {
                 $totalprice += $article['totalprice'];
-                $oxnprice = $article['unitprice'] * $article['amount'];
-                $oxbprice = ($oxnprice * ($article['vat'] + 100)) / 100;
-                $oDb->execute("update oxorderarticles set oxnetprice ='" . $oxnprice . "', oxbrutprice = '". $oxbprice ."' where oxartid = '" . $article['artid'] ."' and oxorderid = " . $oDb->quote($oOrder->oxorder__oxid->getRawValue()));
             }
+        }
 
-            if($voucherNr != null){
-                $discount = (float) $oDb->getOne("select oxdiscount from oxvouchers where oxvouchernr = '" . $voucherNr . "'");
-                $tDiscount = $oOrder->oxorder__oxvoucherdiscount->getRawValue();
-                $tDiscount += $discount;
-                $sQ = "update oxorder set oxvoucherdiscount ='" . $tDiscount . "'where oxid=" . $oDb->quote($oOrder->oxorder__oxid->getRawValue());
-                $oDb->execute($sQ);
-                $totalprice -= $discount;
-            }
+        if ($voucherNr != null) {
+            $discount = (float) $oDb->getOne("select oxdiscount from oxvouchers where oxvouchernr = '" . $voucherNr . "'");
+            $tDiscount = $oOrder->oxorder__oxvoucherdiscount->getRawValue();
+            $tDiscount += $discount;
+            $sQ = "update oxorder set oxvoucherdiscount ='" . $tDiscount . "'where oxid=" . $oDb->quote($oOrder->oxorder__oxid->getRawValue());
+            $oDb->execute($sQ);
+            $totalprice -= $discount;
+        }
 
-            if($totalprice < 0){
-                $totalprice = 0;
-            }
-
-            $oxnprice = $oDb->getOne("select sum(oxnetprice) from oxorderarticles where oxorderid=" . $oDb->quote($oOrder->oxorder__oxid->getRawValue()));
-            $oxbprice = $oDb->getOne("select sum(oxbrutprice) from oxorderarticles where oxorderid=" . $oDb->quote($oOrder->oxorder__oxid->getRawValue()));
-
-            $sQ = "update oxorder set oxtotalordersum = '" . $totalprice . "', oxtotalnetsum ='" . $oxnprice . "', oxtotalbrutsum ='" . $oxbprice . "'  where oxid = " . $oDb->quote($oOrder->oxorder__oxid->getRawValue());
+        if ($totalprice > 0) {
+            $sQ = "update oxorder set oxtotalordersum = '" . $totalprice . "'  where oxid = " . $oDb->quote($oOrder->oxorder__oxid->getRawValue());
             $oDb->execute($sQ);
             $oOrder->oxorder__oxtotalordersum->setValue($totalprice);
-            $oOrder->oxorder__oxtotalnetsum->setValue($oxnprice);
-            $oOrder->oxorder__oxtotalbrutsum->setValue($oxbprice);
+        }
     }
 
     /**

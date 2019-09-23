@@ -445,9 +445,7 @@ class ModelFactory extends oxSuperCfg {
 
         $this->basket = $detailsViewData->getPreparedOrderArticles();
 
-        $shoppingBasket = [
-            'ShoppingBasket' => $this->_getSpecialBasket(),
-        ];
+        $shoppingBasket = ['ShoppingBasket' => $this->_getSpecialBasket()];
 
         $mbContent = new RatePAY\ModelBuilder('Content');
         $mbContent->setArray($shoppingBasket);
@@ -881,8 +879,14 @@ class ModelFactory extends oxSuperCfg {
                 }
             }
 
-            if (substr($article['artnum'], 0, 7) == 'voucher' || $article['artnum'] == 'discount') {
+            if (substr($article['artnum'], 0, 7) == 'voucher' || $article['artnum'] == 'discount' || stripos($article['artnum'], 'pi-Merchant-Voucher') !== false) {
                 if ($api  == true) {
+                    if (empty($article['oxtitle'])) {
+                        $article['oxtitle'] = $article['title'];
+                    }
+                    if (stripos($article['artnum'], 'pi-Merchant-Voucher') !== false && $this->_subtype == 'return') {
+                        $article['unitprice'] = 0; // Credit voucher amount is already included in the orders oxvoucherdiscount value
+                    }
                     if (!empty($shoppingBasket['Discount']['UnitPriceGross'])) {
                         $article['unitprice'] = $article['unitprice'] + $shoppingBasket['Discount']['UnitPriceGross'];
                         $article['oxtitle'] = $shoppingBasket['Discount']['Description'] . '_' . $article['oxtitle'];
