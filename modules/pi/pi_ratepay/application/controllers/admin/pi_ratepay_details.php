@@ -141,7 +141,7 @@ class pi_ratepay_Details extends oxAdminDetails
         $this->addTplParam('pi_total_amount', $order->oxorder__oxtotalordersum->getRawValue());
 
         $this->addTplParam('pi_ratepay_payment_type', $this->_paymentMethod);
-        $this->addTplParam('articleList', $this->getPreparedOrderArticles());
+        $this->addTplParam('articleList', $this->getPreparedOrderArticles(true));
         $this->addTplParam('historyList', $this->getHistory($this->_aViewData["articleList"]));
 
         if ($this->_getPaymentSid() == "pi_ratepay_rate") {
@@ -276,13 +276,14 @@ class pi_ratepay_Details extends oxAdminDetails
     /**
      * Gets all articles with additional informations
      *
+     * @param bool $blIsDisplayList
      * @return array
      */
-    public function getPreparedOrderArticles()
+    public function getPreparedOrderArticles($blIsDisplayList = false)
     {
         $detailsViewData = oxNew('pi_ratepay_detailsviewdata', $this->_getOrderId());
 
-        return $detailsViewData->getPreparedOrderArticles();
+        return $detailsViewData->getPreparedOrderArticles($blIsDisplayList);
     }
 
     /**

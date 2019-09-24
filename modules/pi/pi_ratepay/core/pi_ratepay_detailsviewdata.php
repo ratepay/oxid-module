@@ -51,9 +51,10 @@ class pi_ratepay_DetailsViewData extends oxBase
     /**
      * Gets all articles with additional informations
      *
+     * @param bool $blIsDisplayList
      * @return array
      */
-    public function getPreparedOrderArticles()
+    public function getPreparedOrderArticles($blIsDisplayList = false)
     {
         $articleList = $this->_piGetOrderArticleList();
         $articleList = $this->_piAddSpecialCosts($articleList, 'oxwrapping', 'Wrapping Cost');
@@ -62,7 +63,7 @@ class pi_ratepay_DetailsViewData extends oxBase
         $articleList = $this->_piAddSpecialCosts($articleList, 'oxdelivery', 'Delivery Costs');
         $articleList = $this->_piAddSpecialCosts($articleList, 'oxtsprotection', 'TS Protection Cost');
         $articleList = $this->_piAddDiscounts($articleList);
-        $articleList = $this->_piAddVouchers($articleList);
+        $articleList = $this->_piAddVouchers($articleList, $blIsDisplayList);
         $articleList = $this->_piAddCredit($articleList);
 
         return $articleList;
@@ -270,10 +271,11 @@ class pi_ratepay_DetailsViewData extends oxBase
     /**
      * Add vouchers to article list
      *
-     * @param $articleList
+     * @param array $articleList
+     * @param bool $blIsDisplayList
      * @return array
      */
-    protected function _piAddVouchers($articleList) 
+    protected function _piAddVouchers($articleList, $blIsDisplayList = false)
     {
         $oDb = oxDb::getDb(oxDb::FETCH_MODE_ASSOC);
 
@@ -342,7 +344,7 @@ class pi_ratepay_DetailsViewData extends oxBase
 
                 $dSum += (float)$aRow['price'];
 
-                if ($blHasTotal && count($aRows) == ($i + 1) && $dSum != (float)$aRow['totaldiscount']) { // is last voucher
+                if ($blIsDisplayList === false && $blHasTotal && count($aRows) == ($i + 1) && $dSum != (float)$aRow['totaldiscount']) { // is last voucher
                     // compensation for rounding discrepancies
                     $dDiff = (float)$aRow['totaldiscount'] - $dSum;
                     $listEntry['unitprice'] += $dDiff;
