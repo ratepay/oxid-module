@@ -864,6 +864,13 @@ class ModelFactory extends oxSuperCfg {
 
         $api = $this->_isNewApi();
 
+        $blHasVoucher = false;
+        foreach ($this->_basket AS $article) {
+            if (substr($article['artnum'], 0, 7) == 'voucher' && stripos($article['artnum'], 'pi-Merchant-Voucher') === false) {
+                $blHasVoucher = true;
+            }
+        }
+
         foreach ($this->_basket AS $article) {
             if (oxRegistry::getConfig()->getRequestParameter($article['arthash']) <= 0 && $article['title'] !== 'Credit') {
                 continue;
@@ -884,7 +891,7 @@ class ModelFactory extends oxSuperCfg {
                     if (empty($article['oxtitle'])) {
                         $article['oxtitle'] = $article['title'];
                     }
-                    if (stripos($article['artnum'], 'pi-Merchant-Voucher') !== false && $this->_subtype == 'return') {
+                    if ($blHasVoucher === true && stripos($article['artnum'], 'pi-Merchant-Voucher') !== false && $this->_subtype == 'return') {
                         $article['unitprice'] = 0; // Credit voucher amount is already included in the orders oxvoucherdiscount value
                     }
                     if (!empty($shoppingBasket['Discount']['UnitPriceGross'])) {

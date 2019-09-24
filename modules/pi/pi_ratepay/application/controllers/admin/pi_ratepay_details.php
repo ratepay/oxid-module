@@ -637,9 +637,16 @@ class pi_ratepay_Details extends oxAdminDetails
 
         $totalprice = 0;
 
+        $blHasVoucher = false;
         foreach($aOrderArticles as $article) {
-            if (stripos($article['artnum'], 'pi-Merchant-Voucher') !== false) continue; // Credit value is already included in voucheramount
-            if ($article['artnum'] == 'discount' || substr($article['artnum'], 0, 7) == 'voucher') {
+            if (substr($article['artnum'], 0, 7) == 'voucher' && stripos($article['artnum'], 'pi-Merchant-Voucher') === false) {
+                $blHasVoucher = true;
+            }
+        }
+
+        foreach($aOrderArticles as $article) {
+            if ($blHasVoucher === true && stripos($article['artnum'], 'pi-Merchant-Voucher') !== false) continue; // Credit value is already included in voucheramount
+            if ($article['artnum'] == 'discount' || substr($article['artnum'], 0, 7) == 'voucher' || stripos($article['artnum'], 'pi-Merchant-Voucher') !== false) {
                 $totalprice -= $article['totalprice'];
             } else {
                 $totalprice += $article['totalprice'];
