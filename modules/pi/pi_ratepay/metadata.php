@@ -43,6 +43,8 @@ $aModule = array(
         // conrollers
         'payment'           => 'pi/pi_ratepay/extend/application/controllers/pi_ratepay_payment',
         'order'             => 'pi/pi_ratepay/extend/application/controllers/pi_ratepay_order',
+        // models
+        'oxorder'           => 'pi/pi_ratepay/extend/application/models/pi_ratepay_order',
         // core
         'oxshopcontrol'     => 'pi/pi_ratepay/extend/core/pi_ratepay_shopcontrol'
     ),
@@ -213,6 +215,16 @@ $aModule = array(
             'template' => 'module_config.tpl',
             'block'    => 'admin_module_config_var_type_select',
             'file'     => 'admin_pi_ratepay_module_config_var_type_select.tpl',
+        ),
+        array(
+            'template' => 'order_overview.tpl',
+            'block'    => 'admin_order_overview_total',
+            'file'     => 'admin_pi_ratepay_order_total.tpl',
+        ),
+        array(
+            'template' => 'order_article.tpl',
+            'block'    => 'admin_order_article_total',
+            'file'     => 'admin_pi_ratepay_order_total.tpl',
         ),
     ),
     'settings' => array(
