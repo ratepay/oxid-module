@@ -6,7 +6,7 @@
 |Author | `Annegret Seufert`, `Tim Bischoff`, `Fatchip GmbH`
 |Prefix | `pi`
 |Shop Version | `CE/PE` `4.7.x-6.1.x` `EE` `5.0.x-6.1.x`
-|Version | `5.0.2`
+|Version | `5.0.4`
 |Link | http://www.ratepay.com
 |Mail | integration@ratepay.com
 |Installation | https://ratepay.gitbook.io/oxid/
@@ -14,6 +14,12 @@
 |Demoshop-Admin|https://oxid6.ratepay.demoshop.rocks/admin - Username: `support@fatchip.de` + Password: `support@fatchip.de`|
 
 ## Changelog
+
+### Version 5.0.4 - Released 2019-09-30
+* Refactored payment process to use OXIDs executePayment routine
+* Extended update routine to work with all previous database layouts
+* Fixed character set of OXID column in pi_ratepay_settings table
+* Fixed problems with credit and vouchers in RatePAY order management in backend
 
 ### Version 5.0.3 - Released 2019-06-21
 * Added default Device-Fingerprint Snippet id
