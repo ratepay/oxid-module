@@ -51,9 +51,10 @@ class pi_ratepay_DetailsViewData extends oxBase
     /**
      * Gets all articles with additional informations
      *
+     * @param bool $blIsDisplayList
      * @return array
      */
-    public function getPreparedOrderArticles()
+    public function getPreparedOrderArticles($blIsDisplayList = false)
     {
         $articleList = $this->_piGetOrderArticleList();
         $articleList = $this->_piAddSpecialCosts($articleList, 'oxwrapping', 'Wrapping Cost');
@@ -62,7 +63,7 @@ class pi_ratepay_DetailsViewData extends oxBase
         $articleList = $this->_piAddSpecialCosts($articleList, 'oxdelivery', 'Delivery Costs');
         $articleList = $this->_piAddSpecialCosts($articleList, 'oxtsprotection', 'TS Protection Cost');
         $articleList = $this->_piAddDiscounts($articleList);
-        $articleList = $this->_piAddVouchers($articleList);
+        $articleList = $this->_piAddVouchers($articleList, $blIsDisplayList);
         $articleList = $this->_piAddCredit($articleList);
 
         return $articleList;
@@ -270,10 +271,11 @@ class pi_ratepay_DetailsViewData extends oxBase
     /**
      * Add vouchers to article list
      *
-     * @param $articleList
+     * @param array $articleList
+     * @param bool $blIsDisplayList
      * @return array
      */
-    protected function _piAddVouchers($articleList) 
+    protected function _piAddVouchers($articleList, $blIsDisplayList = false)
     {
         $oDb = oxDb::getDb(oxDb::FETCH_MODE_ASSOC);
 
@@ -281,7 +283,7 @@ class pi_ratepay_DetailsViewData extends oxBase
             SELECT
                 oo.oxcurrency,
                 ov.oxdiscount AS price,
-                oo.OXVOUCHERDISCOUNT as totaldiscount,
+                ov.oxdiscount as totaldiscount,
                 prrod.article_number AS artnr,
                 ov.oxvouchernr AS title,
                 prrod.ORDERED,
@@ -301,9 +303,12 @@ class pi_ratepay_DetailsViewData extends oxBase
                 ov.oxorderid = prrod.order_number AND 
                 prrod.article_number = ov.oxid AND 
                 ovs.oxid = ov.OXVOUCHERSERIEID AND 
-                oo.oxid = prrod.order_number";
+                oo.oxid = prrod.order_number AND
+                ov.oxvoucherserieid != 'pi_ratepay_voucher'";
 
         $aRows = $oDb->getAll($sQuery);
+
+        $dTotalprice = 0;
 
         $dSum = 0;
         for ($i = 0; $i < count($aRows); $i++) {
@@ -341,10 +346,11 @@ class pi_ratepay_DetailsViewData extends oxBase
                 }
 
                 $dSum += (float)$aRow['price'];
+                $dTotalprice += $listEntry['totalprice'];
 
-                if ($blHasTotal && count($aRows) == ($i + 1) && $dSum != (float)$aRow['totaldiscount']) { // is last voucher
+                if ($blIsDisplayList === false && $blHasTotal && count($aRows) == ($i + 1) && $dSum != (float)$aRow['totaldiscount']) { // is last voucher
                     // compensation for rounding discrepancies
-                    $dDiff = (float)$aRow['totaldiscount'] - $dSum;
+                    $dDiff = (float)$dTotalprice - $dSum;
                     $listEntry['unitprice'] += $dDiff;
                     $listEntry['totalprice'] += $dDiff;
                 }
@@ -384,7 +390,7 @@ class pi_ratepay_DetailsViewData extends oxBase
             WHERE
             prrod.order_number = '" . $this->_orderId . "'
             AND ov.oxorderid = prrod.order_number
-            AND ov.oxvoucherserieid = 'Anbieter Gutschrift'
+            AND ov.oxvoucherserieid = 'pi_ratepay_voucher'
             AND prrod.article_number = ov.oxid
             AND oo.oxid = prrod.order_number";
 
@@ -395,8 +401,8 @@ class pi_ratepay_DetailsViewData extends oxBase
                 $listEntry['artid'] = $aRow['artnr'];
                 $listEntry['arthash'] = md5($aRow['artnr']);
                 $listEntry['artnum'] = 'voucher_' . $aRow['title'];
-                $listEntry['title'] = $aRow['seriesTitle'];
-                $listEntry['oxtitle'] = $aRow['seriesTitle'];
+                $listEntry['title'] = $aRow['title'];
+                $listEntry['oxtitle'] = $aRow['title'];
                 $listEntry['vat'] = "0";
                 $listEntry['unitprice'] = (float)$aRow['price'];
                 $listEntry['amount'] = 1 - $aRow['SHIPPED'] - $aRow['CANCELLED'];
@@ -407,17 +413,8 @@ class pi_ratepay_DetailsViewData extends oxBase
                 $listEntry['currency'] = $aRow['oxcurrency'];
                 $listEntry['unique_article_number'] = $aRow['unique_article_number'];
 
-                $blHasTotal = (
-                    ($aRow['ORDERED'] - $aRow['RETURNED'] - $aRow['CANCELLED']) > 0
-                );
-
-                if ($blHasTotal) {
-                    $dTotal =
-                        (float)$aRow['price'] +
-                        ((float)$aRow['price'] *
-                            round((float)$aRow['VAT']) / 100);
-
-                    $listEntry['totalprice'] = $dTotal;
+                if (($aRow['ORDERED'] - $aRow['RETURNED'] - $aRow['CANCELLED']) > 0) {
+                    $listEntry['totalprice'] = (float)$aRow['price'] + ((float)$aRow['price'] * round((float)$aRow['VAT']) / 100);;
                 } else {
                     $listEntry['totalprice'] = 0;
                 }
