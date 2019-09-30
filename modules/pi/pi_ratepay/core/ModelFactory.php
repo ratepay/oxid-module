@@ -891,9 +891,6 @@ class ModelFactory extends oxSuperCfg {
                     if (empty($article['oxtitle'])) {
                         $article['oxtitle'] = $article['title'];
                     }
-                    if ($blHasVoucher === true && stripos($article['artnum'], 'pi-Merchant-Voucher') !== false && $this->_subtype == 'return') {
-                        $article['unitprice'] = 0; // Credit voucher amount is already included in the orders oxvoucherdiscount value
-                    }
                     if (!empty($shoppingBasket['Discount']['UnitPriceGross'])) {
                         $article['unitprice'] = $article['unitprice'] + $shoppingBasket['Discount']['UnitPriceGross'];
                         $article['oxtitle'] = $shoppingBasket['Discount']['Description'] . '_' . $article['oxtitle'];

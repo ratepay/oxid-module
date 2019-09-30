@@ -283,7 +283,7 @@ class pi_ratepay_DetailsViewData extends oxBase
             SELECT
                 oo.oxcurrency,
                 ov.oxdiscount AS price,
-                oo.OXVOUCHERDISCOUNT as totaldiscount,
+                ov.oxdiscount as totaldiscount,
                 prrod.article_number AS artnr,
                 ov.oxvouchernr AS title,
                 prrod.ORDERED,
@@ -303,9 +303,12 @@ class pi_ratepay_DetailsViewData extends oxBase
                 ov.oxorderid = prrod.order_number AND 
                 prrod.article_number = ov.oxid AND 
                 ovs.oxid = ov.OXVOUCHERSERIEID AND 
-                oo.oxid = prrod.order_number";
+                oo.oxid = prrod.order_number AND
+                ov.oxvoucherserieid != 'pi_ratepay_voucher'";
 
         $aRows = $oDb->getAll($sQuery);
+
+        $dTotalprice = 0;
 
         $dSum = 0;
         for ($i = 0; $i < count($aRows); $i++) {
@@ -343,10 +346,11 @@ class pi_ratepay_DetailsViewData extends oxBase
                 }
 
                 $dSum += (float)$aRow['price'];
+                $dTotalprice += $listEntry['totalprice'];
 
                 if ($blIsDisplayList === false && $blHasTotal && count($aRows) == ($i + 1) && $dSum != (float)$aRow['totaldiscount']) { // is last voucher
                     // compensation for rounding discrepancies
-                    $dDiff = (float)$aRow['totaldiscount'] - $dSum;
+                    $dDiff = (float)$dTotalprice - $dSum;
                     $listEntry['unitprice'] += $dDiff;
                     $listEntry['totalprice'] += $dDiff;
                 }
@@ -386,7 +390,7 @@ class pi_ratepay_DetailsViewData extends oxBase
             WHERE
             prrod.order_number = '" . $this->_orderId . "'
             AND ov.oxorderid = prrod.order_number
-            AND ov.oxvoucherserieid = 'Anbieter Gutschrift'
+            AND ov.oxvoucherserieid = 'pi_ratepay_voucher'
             AND prrod.article_number = ov.oxid
             AND oo.oxid = prrod.order_number";
 
