@@ -139,7 +139,7 @@ class pi_ratepay_events
     public static function onActivate()
     {
         self::addDatabaseStructure();
-        self::addPayments();
+        self::addData();
         self::checkColumns();
         self::regenerateViews();
         self::clearTmp();
@@ -186,17 +186,19 @@ class pi_ratepay_events
     }
 
     /**
-     * Adding payments.
+     * Adding data to the database.
      *
      * @return void
      */
-    public static function addPayments()
+    public static function addData()
     {
         foreach (self::$aPaymentMethods as $sPaymentOxid => $sPaymentName) {
             //INSERT PAYMENT METHOD
             self::insertRowIfNotExists('oxpayments', array('OXID' => $sPaymentOxid), "INSERT INTO oxpayments (OXID, OXACTIVE, OXDESC, OXADDSUM, OXADDSUMTYPE, OXFROMBONI, OXFROMAMOUNT, OXTOAMOUNT, OXVALDESC, OXCHECKED, OXDESC_1, OXVALDESC_1, OXDESC_2, OXVALDESC_2, OXDESC_3, OXVALDESC_3, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXSORT) VALUES ('{$sPaymentOxid}', 1, '{$sPaymentName}', 0, 'abs', 0, 0, 999999, '', 1, '{$sPaymentName}', '', '', '', '', '', '', '', '', '', 0)");
             self::insertRowIfNotExists('oxobject2payment', array('OXPAYMENTID' => $sPaymentOxid, 'OXTYPE' => 'oxdelset'), "INSERT INTO oxobject2payment(OXID,OXPAYMENTID,OXOBJECTID,OXTYPE) values (MD5(CONCAT(NOW(),RAND())), '{$sPaymentOxid}', 'oxidstandard', 'oxdelset');");
         }
+
+        self::insertRowIfNotExists('oxvoucherseries', array('OXID' => 'pi_ratepay_voucher'), "INSERT INTO `oxvoucherseries` (OXID,OXSHOPID,OXSERIENR,OXSERIEDESCRIPTION,OXDISCOUNT,OXDISCOUNTTYPE,OXBEGINDATE,OXENDDATE,OXALLOWSAMESERIES,OXALLOWOTHERSERIES,OXALLOWUSEANOTHER,OXMINIMUMVALUE,OXCALCULATEONCE,OXTIMESTAMP) VALUES ('pi_ratepay_voucher', 1, 'Ratepay Gutschrift-Platzhalter', 'Ratepay Gutschrift-Platzhalter', 0.00, 'absolute', '2010-01-01 00:00:01', '2099-01-01 00:00:01', 1, 1, 1, 0.00, 0, NOW());");
     }
 
     /**
