@@ -43,6 +43,8 @@ $aModule = array(
         // conrollers
         'payment'           => 'pi/pi_ratepay/extend/application/controllers/pi_ratepay_payment',
         'order'             => 'pi/pi_ratepay/extend/application/controllers/pi_ratepay_order',
+        // models
+        'oxpaymentgateway'  => 'pi/pi_ratepay/extend/application/models/pi_ratepay_paymentgateway',
         // core
         'oxshopcontrol'     => 'pi/pi_ratepay/extend/core/pi_ratepay_shopcontrol'
     ),
