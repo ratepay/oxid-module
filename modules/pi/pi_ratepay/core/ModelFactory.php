@@ -445,9 +445,7 @@ class ModelFactory extends oxSuperCfg {
 
         $this->basket = $detailsViewData->getPreparedOrderArticles();
 
-        $shoppingBasket = [
-            'ShoppingBasket' => $this->_getSpecialBasket(),
-        ];
+        $shoppingBasket = ['ShoppingBasket' => $this->_getSpecialBasket()];
 
         $mbContent = new RatePAY\ModelBuilder('Content');
         $mbContent->setArray($shoppingBasket);
@@ -866,6 +864,13 @@ class ModelFactory extends oxSuperCfg {
 
         $api = $this->_isNewApi();
 
+        $blHasVoucher = false;
+        foreach ($this->_basket AS $article) {
+            if (substr($article['artnum'], 0, 7) == 'voucher' && stripos($article['artnum'], 'pi-Merchant-Voucher') === false) {
+                $blHasVoucher = true;
+            }
+        }
+
         foreach ($this->_basket AS $article) {
             if (oxRegistry::getConfig()->getRequestParameter($article['arthash']) <= 0 && $article['title'] !== 'Credit') {
                 continue;
@@ -881,8 +886,11 @@ class ModelFactory extends oxSuperCfg {
                 }
             }
 
-            if (substr($article['artnum'], 0, 7) == 'voucher' || $article['artnum'] == 'discount') {
+            if (substr($article['artnum'], 0, 7) == 'voucher' || $article['artnum'] == 'discount' || stripos($article['artnum'], 'pi-Merchant-Voucher') !== false) {
                 if ($api  == true) {
+                    if (empty($article['oxtitle'])) {
+                        $article['oxtitle'] = $article['title'];
+                    }
                     if (!empty($shoppingBasket['Discount']['UnitPriceGross'])) {
                         $article['unitprice'] = $article['unitprice'] + $shoppingBasket['Discount']['UnitPriceGross'];
                         $article['oxtitle'] = $shoppingBasket['Discount']['Description'] . '_' . $article['oxtitle'];
