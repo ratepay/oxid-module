@@ -302,7 +302,7 @@ class pi_ratepay_Details extends oxAdminDetails
 
         $newVoucher = oxNew("oxvoucher");
         $newVoucher->assign(array(
-            'oxvoucherserieid' => 'pi_ratepay_voucher',
+            'oxvoucherserieid' => 'Anbieter Gutschrift',
             'oxorderid' => $orderId,
             'oxuserid' => $order->getFieldData("oxuserid"),
             'oxdiscount' => $this->piRatepayVoucher,
@@ -628,9 +628,6 @@ class pi_ratepay_Details extends oxAdminDetails
      * Call to order object to recalculateOrder
      *
      * @param oxorder $oOrder
-     * @param array $aOrderArticles
-     * @param string $voucherNr
-     * @return void
      */
     private function _recalculateOrder($oOrder, $aOrderArticles, $voucherNr = null)
     {
@@ -640,16 +637,16 @@ class pi_ratepay_Details extends oxAdminDetails
         $oDb = oxDb::getDb();
 
         $totalprice = 0;
-        $voucherDiscountTotal = 0;
-        $creditTotal = 0;
+
+        $blHasVoucher = false;
+        foreach($aOrderArticles as $article) {
+            if (substr($article['artnum'], 0, 7) == 'voucher' && stripos($article['artnum'], 'pi-Merchant-Voucher') === false) {
+                $blHasVoucher = true;
+            }
+        }
 
         foreach($aOrderArticles as $article) {
-            if (substr($article['artnum'], 0, 7) == 'voucher' && stripos($article['artnum'], 'pi-Merchant-Voucher') === false && ($article['ordered'] - $article['returned'] > 0)) {
-                $voucherDiscountTotal += $article['totalprice'];
-            }
-            if (stripos($article['artnum'], 'pi-Merchant-Voucher') !== false && $article['returned'] == 0) {
-                $creditTotal += $article['unitprice'];
-            }
+            if ($blHasVoucher === true && stripos($article['artnum'], 'pi-Merchant-Voucher') !== false) continue; // Credit value is already included in voucheramount
             if ($article['artnum'] == 'discount' || substr($article['artnum'], 0, 7) == 'voucher' || stripos($article['artnum'], 'pi-Merchant-Voucher') !== false) {
                 $totalprice -= $article['totalprice'];
             } else {
@@ -657,20 +654,13 @@ class pi_ratepay_Details extends oxAdminDetails
             }
         }
 
-        if ($voucherNr != null) { // Add new credit virtual voucher
+        if ($voucherNr != null) {
             $discount = (float) $oDb->getOne("select oxdiscount from oxvouchers where oxvouchernr = '" . $voucherNr . "'");
-            $creditTotal += $discount;
+            $tDiscount = $oOrder->oxorder__oxvoucherdiscount->getRawValue();
+            $tDiscount += $discount;
+            $sQ = "update oxorder set oxvoucherdiscount ='" . $tDiscount . "'where oxid=" . $oDb->quote($oOrder->oxorder__oxid->getRawValue());
+            $oDb->execute($sQ);
             $totalprice -= $discount;
-        }
-
-        if ($oOrder->oxorder__ratepaycreditamount->getRawValue() != $creditTotal) {
-            $sQ = "update oxorder set ratepaycreditamount ='" . $creditTotal . "'where oxid=" . $oDb->quote($oOrder->oxorder__oxid->getRawValue());
-            $oDb->execute($sQ);
-        }
-
-        if ($oOrder->oxorder__oxvoucherdiscount->getRawValue() != $voucherDiscountTotal) {
-            $sQ = "update oxorder set oxvoucherdiscount ='" . $voucherDiscountTotal . "'where oxid=" . $oDb->quote($oOrder->oxorder__oxid->getRawValue());
-            $oDb->execute($sQ);
         }
 
         if ($totalprice > 0) {

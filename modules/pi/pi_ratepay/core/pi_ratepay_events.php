@@ -6,7 +6,7 @@ class pi_ratepay_events
 {
     public static $sQueryTableSettings = "
         CREATE TABLE IF NOT EXISTS `pi_ratepay_settings` (
-          `OXID` char(32) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+          `OXID` CHAR(32) NOT NULL,
           `SHOPID` INT(11) NOT NULL DEFAULT '1',
           `ACTIVE` TINYINT(1) NOT NULL DEFAULT '0',
           `COUNTRY` VARCHAR(2) NOT NULL,
@@ -139,8 +139,7 @@ class pi_ratepay_events
     public static function onActivate()
     {
         self::addDatabaseStructure();
-        self::addData();
-        self::checkColumns();
+        self::addPayments();
         self::regenerateViews();
         self::clearTmp();
     }
@@ -186,47 +185,17 @@ class pi_ratepay_events
     }
 
     /**
-     * Adding data to the database.
+     * Adding payments.
      *
      * @return void
      */
-    public static function addData()
+    public static function addPayments()
     {
         foreach (self::$aPaymentMethods as $sPaymentOxid => $sPaymentName) {
             //INSERT PAYMENT METHOD
             self::insertRowIfNotExists('oxpayments', array('OXID' => $sPaymentOxid), "INSERT INTO oxpayments (OXID, OXACTIVE, OXDESC, OXADDSUM, OXADDSUMTYPE, OXFROMBONI, OXFROMAMOUNT, OXTOAMOUNT, OXVALDESC, OXCHECKED, OXDESC_1, OXVALDESC_1, OXDESC_2, OXVALDESC_2, OXDESC_3, OXVALDESC_3, OXLONGDESC, OXLONGDESC_1, OXLONGDESC_2, OXLONGDESC_3, OXSORT) VALUES ('{$sPaymentOxid}', 1, '{$sPaymentName}', 0, 'abs', 0, 0, 999999, '', 1, '{$sPaymentName}', '', '', '', '', '', '', '', '', '', 0)");
             self::insertRowIfNotExists('oxobject2payment', array('OXPAYMENTID' => $sPaymentOxid, 'OXTYPE' => 'oxdelset'), "INSERT INTO oxobject2payment(OXID,OXPAYMENTID,OXOBJECTID,OXTYPE) values (MD5(CONCAT(NOW(),RAND())), '{$sPaymentOxid}', 'oxidstandard', 'oxdelset');");
         }
-
-        self::insertRowIfNotExists('oxvoucherseries', array('OXID' => 'pi_ratepay_voucher'), "INSERT INTO `oxvoucherseries` (OXID,OXSHOPID,OXSERIENR,OXSERIEDESCRIPTION,OXDISCOUNT,OXDISCOUNTTYPE,OXBEGINDATE,OXENDDATE,OXALLOWSAMESERIES,OXALLOWOTHERSERIES,OXALLOWUSEANOTHER,OXMINIMUMVALUE,OXCALCULATEONCE,OXTIMESTAMP) VALUES ('pi_ratepay_voucher', 1, 'Ratepay Gutschrift-Platzhalter', 'Ratepay Gutschrift-Platzhalter', 0.00, 'absolute', '2010-01-01 00:00:01', '2099-01-01 00:00:01', 1, 1, 1, 0.00, 0, NOW());");
-    }
-
-    /**
-     * Add or change missing columns
-     * Cumulated changes from the update-scripts from previous versions
-     *
-     * @return void
-     */
-    public static function checkColumns()
-    {
-        // Changes from former update.sql
-        self::addColumnIfNotExists('pi_ratepay_settings', 'DUEDATE', "ALTER TABLE `pi_ratepay_settings` ADD COLUMN `DUEDATE` INT(11) NOT NULL DEFAULT '14' AFTER `PAYMENT_FIRSTDAY`");
-        self::addColumnIfNotExists('pi_ratepay_order_details', 'PRICE', "ALTER TABLE `pi_ratepay_order_details` ADD `PRICE` DOUBLE NOT NULL DEFAULT '0' AFTER `ARTICLE_NUMBER`");
-        self::addColumnIfNotExists('pi_ratepay_order_details', 'VAT', "ALTER TABLE `pi_ratepay_order_details` ADD `VAT` DOUBLE NOT NULL DEFAULT '0' AFTER `PRICE`");
-
-        // Changes from former UPDATE_3.2.3_ZU_3.3.0.sql not needed because they cancel out with update.sql changes
-        // Changes from former UPDATE_3.3.2_ZU_3.3.3.sql not needed because they cancel out with update.sql changes
-        // Changes from former UPDATE_3.3.3_ZU_4.0.0.sql not needed because they cancel out with update.sql changes
-        self::addColumnIfNotExists('pi_ratepay_order_details', 'UNIQUE_ARTICLE_NUMBER', "ALTER TABLE `pi_ratepay_order_details` ADD `UNIQUE_ARTICLE_NUMBER` VARCHAR(50) NOT NULL AFTER `ARTICLE_NUMBER`");
-        self::dropColumnIfExists('pi_ratepay_orders', 'TRANSACTION_SHORT_ID');
-
-        // Changes from former UPDATE_4.0.2_ZU_4.0.3.sql not needed because they cancel out with update.sql changes
-        self::addColumnIfNotExists('pi_ratepay_orders', 'VAT', "ALTER TABLE `pi_ratepay_orders` ADD `RP_API` VARCHAR(10) NULL AFTER `USERBIRTHDATE`");
-
-        // Changes from 5.0.0 and later
-        self::changeCharsetIfNeeded('pi_ratepay_settings', 'OXID', 'latin1', 'ALTER TABLE pi_ratepay_settings CHANGE OXID OXID CHAR(32) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL;');
-
-        self::addColumnIfNotExists('oxorder', 'RATEPAYCREDITAMOUNT', "ALTER TABLE `oxorder` ADD COLUMN `RATEPAYCREDITAMOUNT` DOUBLE NOT NULL DEFAULT '0'");
     }
 
     /**
@@ -261,92 +230,6 @@ class pi_ratepay_events
             return true;
         }
         return false;
-    }
-
-    /**
-     * Drop DB-table if it exists
-     *
-     * @param  string $sTableName
-     * @return void
-     */
-    public static function dropTable($sTableName)
-    {
-        oxDb::getDb()->Execute("DROP TABLE IF EXISTS `{$sTableName}`;");
-    }
-
-    /**
-     * Check database if column exists
-     *
-     * @param  string $sTableName
-     * @param  string $sColumnName
-     * @return bool
-     */
-    public static function checkIfColumnExists($sTableName, $sColumnName)
-    {
-        $aColumns = oxDb::getDb()->getAll("SHOW COLUMNS FROM {$sTableName} LIKE '{$sColumnName}'");
-        if (!$aColumns || count($aColumns == 0)) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Add a column to a database table.
-     *
-     * @param string $sTableName  table name
-     * @param string $sColumnName column name
-     * @param string $sQuery      sql-query to add column to table
-     *
-     * @return boolean true or false
-     */
-    public static function addColumnIfNotExists($sTableName, $sColumnName, $sQuery)
-    {
-        if (self::checkIfColumnExists($sTableName, $sColumnName) === false) {
-            try {
-                oxDb::getDb()->Execute($sQuery);
-            } catch (Exception $e) {}
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Drop column if exists
-     *
-     * @param  string $sTableName
-     * @param  string $sColumnName
-     * @return bool
-     */
-    public static function dropColumnIfExists($sTableName, $sColumnName)
-    {
-        if (self::checkIfColumnExists($sTableName, $sColumnName) === true) {
-            try {
-                oxDb::getDb()->Execute("ALTER TABLE `{$sTableName}` DROP `{$sColumnName}`;");
-            } catch (Exception $e) {}
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Check charset of a given column and change it if needed
-     *
-     * @param  string $sTableName
-     * @param  string $sColumnName
-     * @param  string $sNeededCharset
-     * @param  string $sQuery
-     * @return void
-     */
-    public static function changeCharsetIfNeeded($sTableName, $sColumnName, $sNeededCharset, $sQuery)
-    {
-        $sCheckQuery = 'SELECT character_set_name FROM information_schema.`COLUMNS` 
-                        WHERE table_schema = "'.oxRegistry::getConfig()->getConfigParam('dbName').'"
-                          AND table_name = "'.$sTableName.'"
-                          AND column_name = "'.$sColumnName.'";';
-        $sCurrentCharset = oxDb::getDb()->getOne($sCheckQuery);
-        if ($sCurrentCharset != $sNeededCharset) {
-            oxDb::getDb()->Execute($sQuery);
-        }
     }
 
     /**

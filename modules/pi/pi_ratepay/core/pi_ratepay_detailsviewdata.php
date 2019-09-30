@@ -386,7 +386,7 @@ class pi_ratepay_DetailsViewData extends oxBase
             WHERE
             prrod.order_number = '" . $this->_orderId . "'
             AND ov.oxorderid = prrod.order_number
-            AND ov.oxvoucherserieid = 'pi_ratepay_voucher'
+            AND ov.oxvoucherserieid = 'Anbieter Gutschrift'
             AND prrod.article_number = ov.oxid
             AND oo.oxid = prrod.order_number";
 
