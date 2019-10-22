@@ -10,8 +10,6 @@
 |Link | http://www.ratepay.com
 |Mail | integration@ratepay.com
 |Installation | https://ratepay.gitbook.io/oxid/
-|Demoshop|https://oxid6.ratepay.demoshop.rocks/|
-|Demoshop-Admin|https://oxid6.ratepay.demoshop.rocks/admin - Username: `support@fatchip.de` + Password: `support@fatchip.de`|
 |Terms of service / Nutzungsbedingungen | http://www.ratepay.com/nutzungsbedingungen
 |Legal Disclaimer|https://ratepay.gitbook.io/docs/#legal-disclaimer
 
