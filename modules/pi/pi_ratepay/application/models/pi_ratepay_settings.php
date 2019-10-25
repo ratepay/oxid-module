@@ -101,6 +101,9 @@ class pi_ratepay_Settings extends oxBase
     {
         $oConfig = $this->getConfig();
         $sShopId = $oConfig->getShopId();
+        if ($sShopId == 'oxbaseshop') {
+            $sShopId = 1;
+        }
         $sCountry = $aActiveCombination['country'];
         $sRequestMethod = $aActiveCombination['requestmethod'];
         $sMethod = $aActiveCombination['method'];

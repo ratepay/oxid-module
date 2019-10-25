@@ -17,7 +17,7 @@ class pi_ratepay_shopcontrol extends pi_ratepay_shopcontrol_parent
          * Then we call a specific class autoloader for those classes
          */
         if (!class_exists('RatePAY\RequestBuilder')) {
-            require __DIR__ . '/../autoloader.php';
+            require __DIR__ . '/../../autoloader.php';
             spl_autoload_register('ratepayAutoload');
         }
 
