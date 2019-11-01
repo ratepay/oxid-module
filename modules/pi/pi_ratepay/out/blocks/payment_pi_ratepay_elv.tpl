@@ -37,7 +37,7 @@
         </div>
         [{/if}]
         <div>
-            [{ oxmultilang ident="PI_RATEPAY_POLICY" }]<a href="[{$pi_ratepay_elv_url}]" title="Legal - RatePAY" target="_blank">[{ oxmultilang ident="PI_RATEPAY_POLICY2" }]</a>.[{ oxmultilang ident="PI_RATEPAY_POLICY3" }]
+            [{ oxmultilang ident="PI_RATEPAY_POLICY" }]<a style="text-decoration: underline" href="https://ratepay.com/legal" title="Legal - RatePAY" target="_blank">[{ oxmultilang ident="PI_RATEPAY_POLICY2" }]</a>.[{ oxmultilang ident="PI_RATEPAY_POLICY3" }]
         </div>
         <br/>
         <div style="border: 1px solid #BDBDBD; padding-left: 4px;">
@@ -120,7 +120,7 @@
                             [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_1"}]
                             [{oxmultilang ident="PI_RATEPAY_VIEW_RATEPAY_ADDRESS"}]
                             [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_2"}]
-                            <a href='[{$pi_ratepay_elv_url}]' target='_blank' style="text-decoration:underline;">[{oxmultilang ident="PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_PRIVACYPOLICY"}]</a>
+                            <a href='https://ratepay.com/legal' target='_blank' style="text-decoration:underline;">[{oxmultilang ident="PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_PRIVACYPOLICY"}]</a>
                             [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_4"}]
                             <br/><br/>
                             [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_5"}]
