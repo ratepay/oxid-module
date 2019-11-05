@@ -115,7 +115,7 @@
                         <input type="hidden" name="pi_ratepay_elv_privacy" value="1" style="float: left;" />
                     </td>
                     <td>
-                        <a id="pi_ratepay_elv_sepa_agreement_link" onclick="showAgreement();">[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT"}]</a>
+                        <a id="pi_ratepay_elv_sepa_agreement_link" style="text-decoration: underline; cursor: pointer" onclick="showAgreement();">[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT"}]</a>
                         <span id="pi_ratepay_elv_sepa_agreement" style="display: none">
                             [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_1"}]
                             [{oxmultilang ident="PI_RATEPAY_VIEW_RATEPAY_ADDRESS"}]
