@@ -126,6 +126,10 @@ class pi_ratepay_paymentgateway extends pi_ratepay_paymentgateway_parent
                 $this->getSession()->setVariable($this->_paymentId . '_error_id', $this->paymentMethodIds[$this->_paymentId]['denied']);
 
             }
+
+            // OX-19: delete order if payment failed
+            $oOrder->delete();
+
             oxRegistry::getUtils()->redirect($this->getConfig()->getSslShopUrl() . 'index.php?cl=payment', false);
         }
         $this->getSession()->setVariable($this->_paymentId . '_descriptor', $payRequest->getDescriptor());
