@@ -1076,6 +1076,13 @@ class ModelFactory extends oxSuperCfg {
             $shoppingBasket['Items'][] = array('Item' => $item);
         }
 
+        // OX-18
+        // Take currency in account
+        $currency = $this->_basket->getBasketCurrency();
+        if ($currency) {
+            $shoppingBasket['Currency'] = $currency->name;
+        }
+
         return $shoppingBasket;
 
     }
