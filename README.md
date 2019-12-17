@@ -6,7 +6,7 @@
 |Author | `Annegret Seufert`, `Tim Bischoff`, `Fatchip GmbH`
 |Prefix | `pi`
 |Shop Version | `CE/PE` `4.7.x-6.1.x` `EE` `5.0.x-6.1.x`
-|Version | `5.0.4`
+|Version | `5.0.5`
 |Link | http://www.ratepay.com
 |Mail | integration@ratepay.com
 |Installation | https://ratepay.gitbook.io/oxid/
@@ -17,6 +17,7 @@
 
 ### Version 5.0.5 - Released 2019-12-17
 * Template updated to remove a wrong price displayed
+* Fixed backward compatibility problems
 * Link style in payment page reworked
 * Fixed the currency misuse for order in CHF
 * Fixed missing order number in payment request
