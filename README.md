@@ -15,6 +15,12 @@
 
 ## Changelog
 
+### Version 5.0.5 - Released 2019-12-17
+* Template updated to remove a wrong price displayed
+* Link style in payment page reworked
+* Fixed the currency misuse for order in CHF
+* Fixed missing order number in payment request
+
 ### Version 5.0.4 - Released 2019-09-30
 * Refactored payment process to use OXIDs executePayment routine
 * Extended update routine to work with all previous database layouts
