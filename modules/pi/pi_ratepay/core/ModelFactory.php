@@ -963,7 +963,7 @@ class ModelFactory extends oxSuperCfg {
                 'Quantity' => $article->getAmount(),
                 'UnitPriceGross' => $article->getPrice()->getBruttoPrice() / $article->getAmount(),
                 'TaxRate' => $article->getPrice()->getVat(),
-                'UniqueArticleNumber' => $article->getArticle()->getId(),
+                'UniqueArticleNumber' => $article->getBasketItemKey(),
             );
 
             $shoppingBasket['Items'][] = array('Item' => $item);

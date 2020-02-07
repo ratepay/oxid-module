@@ -98,14 +98,15 @@ class pi_ratepay_DetailsViewData extends oxBase
               prrod.UNIQUE_ARTICLE_NUMBER,
               if(oa.OXSELVARIANT != '',concat(oa.OXTITLE,', ',oa.OXSELVARIANT),oa.OXTITLE) as TITLE
             FROM
-              `oxorder` oo,
-              `oxorderarticles` oa,
-              ".$this->pi_ratepay_order_details." prrod
+                `oxorder` AS oo
+            INNER JOIN
+                `oxorderarticles` AS oa ON oa.oxorderid = oo.oxid
+            INNER JOIN
+                ".$this->pi_ratepay_order_details." AS prrod ON prrod.ORDER_NUMBER = oo.oxid
             WHERE
-              prrod.order_number = '{$this->_orderId}'
-              AND prrod.order_number = oa.oxorderid
-              AND oa.oxartid = prrod.article_number
-              AND oo.oxid = prrod.order_number";
+                oo.oxid = '{$this->_orderId}' AND
+               oa.oxartid = prrod.article_number
+            GROUP BY prrod.oxid";
         $aRows = $oDb->getAll($articlesSql);
 
         foreach ($aRows as $aRow) {
@@ -114,7 +115,7 @@ class pi_ratepay_DetailsViewData extends oxBase
 
             $listEntry['oxid'] = $aRow['OXID'];
             $listEntry['artid'] = $aRow['OXARTID'];
-            $listEntry['arthash'] = md5($aRow['OXARTID']);
+            $listEntry['arthash'] = $aRow['UNIQUE_ARTICLE_NUMBER'];
             $listEntry['artnum'] = $aRow['OXARTNUM'];
             $listEntry['title'] = $aRow['TITLE'];
             $listEntry['oxtitle'] = $aRow['OXTITLE'];
