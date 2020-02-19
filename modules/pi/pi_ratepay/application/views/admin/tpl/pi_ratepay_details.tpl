@@ -76,7 +76,7 @@
     <div class="messagebox" style="color:green;"><b>[{oxmultilang ident="PI_RATEPAY_SUCCESSFULLCANCELLATION"}]</b></div>
     [{/if}]
     [{/if}]
-<div id="message" class="messagebox" style="visibility:hidden;">[{oxmultilang ident="PI_RATEPAY_ERRORTYPING"}]</div>
+<div id="message" class="messagebox" style="visibility:hidden;"></div>
 <fieldset style="padding-left: 5px; padding-right: 5px;">
     <legend>Transaktionssdetails</legend><br/>
     <table>
@@ -287,7 +287,7 @@
         <input type="hidden" name="oxid" value="[{$oxid}]">
         <input type="hidden" name="cl" value="pi_ratepay_details">
         <input type="hidden" name="fnc" value="credit">
-        <span>Wert: </span>
+        <span>[{oxmultilang ident="PI_RATEPAY_VALUE"}]: </span>
         <input id='voucherAmount' type='text' style="float:none;" maxlength='4' name='voucherAmount' size='4' value='0' onkeyup="check_voucher('[{$pi_total_amount}]');" onFocus="this.select();">[{oxmultilang ident="PI_RATEPAY_KOMMA"}]<input style='float:none;' id='voucherAmountKomma' type='text' maxlength='2' name='voucherAmountKomma' size='2' value='00' onkeyup="check_voucher('[{$pi_total_amount}]');" onFocus="hideMessageBox();this.select();" onBlur="hideMessageBox();">[{$article.currency}]<br><br>
         <input type='submit' name='voucher' value='&nbsp;&nbsp;[{oxmultilang ident="PI_RATEPAY_VOUCHER"}]&nbsp;&nbsp;'">
     </form>
