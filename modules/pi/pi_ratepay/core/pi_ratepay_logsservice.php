@@ -92,7 +92,7 @@ class pi_ratepay_LogsService extends oxSuperCfg
                 $status = (string) $trans->getResultMessage();
                 $statusCode = (string) $trans->getResultCode();
             } else {
-                $result = "service unavaible.";
+                $result = $trans->getReasonMessage();
                 $resultCode = $result;
             }
 
