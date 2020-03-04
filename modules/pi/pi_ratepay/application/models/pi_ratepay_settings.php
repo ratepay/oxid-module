@@ -258,15 +258,11 @@ class pi_ratepay_Settings extends oxBase
             return false;
         }
 
-        $sConfigParam = ModelFactory::getSettlementTypeConfigParamByCountry($this->pi_ratepay_settings__country->value);
-
-        $sSettlementType = $this->getConfig()->getConfigParam($sConfigParam);
-
-        $aAvailableSettlementTypes = $this->getAvailableSettlementTypes();
-
-        if (in_array($sSettlementType, $aAvailableSettlementTypes)) {
-            return $sSettlementType;
+        if ($this->pi_ratepay_settings__payment_firstday->value == '2,28') {
+            return 'both';
+        } elseif ($this->pi_ratepay_settings__payment_firstday->value == '28') {
+            return 'banktransfer';
         }
-        return $aAvailableSettlementTypes[0];
+        return 'debit';
     }
 }
