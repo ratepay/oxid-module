@@ -956,7 +956,6 @@ class ModelFactory extends oxSuperCfg {
         $artnr = array();
 
         foreach ($this->_basket->getContents() AS $article) {
-
             $item = array(
                 'Description' => $article->getTitle(),
                 'ArticleNumber' => $article->getArticle()->oxarticles__oxartnum->value,
@@ -965,6 +964,19 @@ class ModelFactory extends oxSuperCfg {
                 'TaxRate' => $article->getPrice()->getVat(),
                 'UniqueArticleNumber' => $article->getBasketItemKey(),
             );
+
+            $aPersParams = $article->getPersParams();
+            if (!empty($article->getPersParams())) {
+                if (count($aPersParams) == 1 && isset($aPersParams['details'])) {
+                    $sDescriptionAddition = $aPersParams['details'];
+                } else {
+                    $sDescriptionAddition = '';
+                    foreach ($article->getPersParams() as $sKey => $sValue) {
+                        $sDescriptionAddition .= $sKey.'='.$sValue.';';
+                    }
+                }
+                $item['DescriptionAddition'] = rtrim($sDescriptionAddition, ';');
+            }
 
             $shoppingBasket['Items'][] = array('Item' => $item);
         }
