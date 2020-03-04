@@ -156,13 +156,12 @@ class pi_ratepay_DetailsViewData extends oxBase
      */
     protected function _piAddSpecialCosts($articleList, $ident, $title)
     {
-        $orderValues = $this->_piGetOrderValues();
         $aRow = $this->_piGetOrderSpecialCostsQuery($ident);
 
         if ($aRow['PRICE'] > 0) {
             $listEntry['oxid'] = "";
             $listEntry['artid'] = $ident;
-            $listEntry['arthash'] = md5($orderValues['OXARTID']);
+            $listEntry['arthash'] = md5($aRow['UNIQUE_ARTICLE_NUMBER']);
             $listEntry['artnum'] = $ident;
             $listEntry['title'] = $title;
             $listEntry['oxtitle'] = $title;
@@ -233,7 +232,7 @@ class pi_ratepay_DetailsViewData extends oxBase
 
             $listEntry['oxid'] = "";
             $listEntry['artid'] = $aRow['ARTID'];
-            $listEntry['arthash'] = md5($aRow['oxartid']);
+            $listEntry['arthash'] = md5($aRow['unique_article_number']);
             $listEntry['artnum'] = "discount";
             $listEntry['title'] = $aRow['TITLE'];
             $listEntry['oxtitle'] = $aRow['TITLE'];
