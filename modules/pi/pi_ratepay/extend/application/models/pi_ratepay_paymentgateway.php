@@ -118,6 +118,7 @@ class pi_ratepay_paymentgateway extends pi_ratepay_paymentgateway_parent
         $modelFactory->setCustomerId($this->getUser()->oxuser__oxcustnr->value);
         $modelFactory->setDeviceToken($this->getSession()->getVariable('pi_ratepay_dfp_token'));
         $modelFactory->setBasket($this->getSession()->getBasket());
+        $modelFactory->setOrder($oOrder);
 
         $payRequest = $modelFactory->doOperation('PAYMENT_REQUEST');
         if (!$payRequest->isSuccessful()) {
@@ -146,7 +147,7 @@ class pi_ratepay_paymentgateway extends pi_ratepay_paymentgateway_parent
         if ($oOrder->getId() != null && $oOrder->getId() != $this->getSession()->getVariable('pi_ratepay_shops_order_id')) {
             $this->getSession()->setVariable('pi_ratepay_shops_order_id', $oOrder->getId());
         }
-        $this->_saveRatepayOrder($this->getSession()->getVariable('pi_ratepay_shops_order_id'));
+        $this->_saveRatepayOrder($this->getSession()->getVariable('pi_ratepay_shops_order_id'), $oOrder);
         $tid = $this->getSession()->getVariable($this->_paymentId . '_trans_id');
 
         $orderLogs = pi_ratepay_LogsService::getInstance()->getLogsList("transaction_id = " . oxDb::getDb(true)->quote($tid));
@@ -167,8 +168,9 @@ class pi_ratepay_paymentgateway extends pi_ratepay_paymentgateway_parent
      *
      * @uses functions _saveRatepayBasketItems
      * @param string $id
+     * @param object $oOrder
      */
-    private function _saveRatepayOrder($id)
+    private function _saveRatepayOrder($id, $oOrder)
     {
         $transid = $this->getSession()->getVariable($this->_paymentId . '_trans_id');
         $descriptor = $this->getSession()->getVariable($this->_paymentId . '_descriptor');
@@ -218,24 +220,24 @@ class pi_ratepay_paymentgateway extends pi_ratepay_paymentgateway_parent
             $ratepayRateDetails->save();
         }
 
-        $this->_saveRatepayBasketItems($id);
+        $this->_saveRatepayBasketItems($id, $oOrder);
     }
 
     /**
      * Save basket items information to ratepay order details tables in the db.
      *
      * @param string $id
-     * @param string $paymentType
+     * @param string $oOrder
      */
-    private function _saveRatepayBasketItems($id)
+    private function _saveRatepayBasketItems($id, $oOrder)
     {
         oxDb::getDb()->execute("DELETE FROM `pi_ratepay_order_details` where order_number = ?", array($id));
 
         $oBasket = $this->getSession()->getBasket();
-        foreach ($oBasket->getContents() as $article) {
-            $articlenumber = $article->getArticle()->getId();
-            $quantity = $article->getAmount();
-            $this->_saveToRatepayOrderDetails($id, $articlenumber, $article->getBasketItemKey(), $quantity);
+        foreach ($oOrder->getOrderArticles() AS $article) {
+            $articlenumber = $article->oxorderarticles__oxartid->value;
+            $quantity = $article->oxorderarticles__oxamount->value;
+            $this->_saveToRatepayOrderDetails($id, $articlenumber, $article->getId(), $quantity);
         }
 
         $specialItems = array('oxwrapping', 'oxgiftcard', 'oxdelivery', 'oxpayment', 'oxtsprotection');
