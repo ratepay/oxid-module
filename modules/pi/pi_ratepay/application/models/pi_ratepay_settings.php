@@ -240,7 +240,8 @@ class pi_ratepay_Settings extends oxBase
      */
     public function getAvailableSettlementTypes()
     {
-        if (empty($this->getId())) {
+        $sPaymentId = $this->getId();
+        if (empty($sPaymentId)) {
             return array('debit', 'banktransfer', 'both'); // Settings not set yet
         }
 

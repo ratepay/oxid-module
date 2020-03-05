@@ -626,7 +626,7 @@ class ModelFactory extends oxSuperCfg {
             ]
         ];
 
-        if (!empty('company')) {
+        if (!empty($this->getUser()->oxuser__oxcompany->value)) {
             $contentArr['Customer']['CompanyName'] = $this->getUser()->oxuser__oxcompany->value;
             $contentArr['Customer']['VatId'] = $this->getUser()->oxuser__oxustid->value;
         }
