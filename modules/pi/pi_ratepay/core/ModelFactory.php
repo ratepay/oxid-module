@@ -141,6 +141,8 @@ class ModelFactory extends oxSuperCfg {
 
     protected $_basket;
 
+    protected $_order;
+
     protected $_transactionId;
 
     protected $_deviceToken;
@@ -240,6 +242,14 @@ class ModelFactory extends oxSuperCfg {
     public function setBasket($basket)
     {
         $this->_basket = $basket;
+    }
+
+    /**
+     * @param mixed $order
+     */
+    public function setOrder($order)
+    {
+        $this->_order = $order;
     }
 
     /**
@@ -616,7 +626,7 @@ class ModelFactory extends oxSuperCfg {
             ]
         ];
 
-        if (!empty('company')) {
+        if (!empty($this->getUser()->oxuser__oxcompany->value)) {
             $contentArr['Customer']['CompanyName'] = $this->getUser()->oxuser__oxcompany->value;
             $contentArr['Customer']['VatId'] = $this->getUser()->oxuser__oxustid->value;
         }
@@ -914,6 +924,9 @@ class ModelFactory extends oxSuperCfg {
             if (!empty($article['unique_article_number'])) {
                 $item['UniqueArticleNumber'] = $article['unique_article_number'];
             }
+            if (!empty($article['description_addition'])) {
+                $item['DescriptionAddition'] = $article['description_addition'];
+            }
 
             if ($article['title'] == 'Credit') {
                 $item['Quantity'] = 1;
@@ -955,16 +968,28 @@ class ModelFactory extends oxSuperCfg {
         $util = new pi_ratepay_util_Utilities();
         $artnr = array();
 
-        foreach ($this->_basket->getContents() AS $article) {
-
+        foreach ($this->_order->getOrderArticles() AS $article) {
             $item = array(
-                'Description' => $article->getTitle(),
-                'ArticleNumber' => $article->getArticle()->oxarticles__oxartnum->value,
-                'Quantity' => $article->getAmount(),
-                'UnitPriceGross' => $article->getPrice()->getBruttoPrice() / $article->getAmount(),
-                'TaxRate' => $article->getPrice()->getVat(),
-                'UniqueArticleNumber' => $article->getArticle()->getId(),
+                'Description' => $article->oxorderarticles__oxtitle->value,
+                'ArticleNumber' => $article->oxorderarticles__oxartnum->value,
+                'Quantity' => $article->oxorderarticles__oxamount->value,
+                'UnitPriceGross' => $article->oxorderarticles__oxbprice->value,
+                'TaxRate' => $article->oxorderarticles__oxvat->value,
+                'UniqueArticleNumber' => $article->getId(),
             );
+
+            $aPersParams = $article->getPersParams();
+            if (!empty($article->getPersParams())) {
+                if (count($aPersParams) == 1 && isset($aPersParams['details'])) {
+                    $sDescriptionAddition = $aPersParams['details'];
+                } else {
+                    $sDescriptionAddition = '';
+                    foreach ($article->getPersParams() as $sKey => $sValue) {
+                        $sDescriptionAddition .= $sKey.'='.$sValue.';';
+                    }
+                }
+                $item['DescriptionAddition'] = rtrim($sDescriptionAddition, ';');
+            }
 
             $shoppingBasket['Items'][] = array('Item' => $item);
         }

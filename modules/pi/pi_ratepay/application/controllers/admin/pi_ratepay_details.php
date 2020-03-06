@@ -327,6 +327,7 @@ class pi_ratepay_Details extends oxAdminDetails
         $voucherDetails->assign(array(
             'order_number' => $orderId,
             'article_number' => $voucherId,
+            'unique_article_number' => $voucherId,
             'ordered' => 1,
         ));
         if ($tmptotal < $this->piRatepayVoucher){
@@ -406,10 +407,14 @@ class pi_ratepay_Details extends oxAdminDetails
                 if (oxRegistry::getConfig()->getRequestParameter($article['arthash']) > 0) {
                     $quant = oxRegistry::getConfig()->getRequestParameter($article['arthash']);
                     $artid = $article['artid'];
+                    $uniqueArticleNumber = $article['unique_article_number'];
+                    if (empty($uniqueArticleNumber)) {
+                        $uniqueArticleNumber = $artid;
+                    }
                     if ($paymentChangeType == "cancellation") {
-                        oxDb::getDb()->execute("update $this->pi_ratepay_order_details set cancelled=cancelled+$quant where order_number='" . $this->_getOrderId() . "' and article_number='$artid'");
+                        oxDb::getDb()->execute("UPDATE {$this->pi_ratepay_order_details} SET cancelled = cancelled + {$quant} WHERE order_number = '".$this->_getOrderId()."' AND unique_article_number = '{$uniqueArticleNumber}'");
                     } else if ($paymentChangeType == "return") {
-                        oxDb::getDb()->execute("update $this->pi_ratepay_order_details set returned=returned+$quant where order_number='" . $this->_getOrderId() . "' and article_number='$artid'");
+                        oxDb::getDb()->execute("UPDATE {$this->pi_ratepay_order_details} SET returned = returned + {$quant} WHERE order_number = '".$this->_getOrderId()."' AND unique_article_number = '{$uniqueArticleNumber}'");
                     }
                     $this->_logHistory($this->_getOrderId(), $artid, $quant, $operation, $paymentChangeType);
                     if ($article['oxid'] != "") {
@@ -499,8 +504,12 @@ class pi_ratepay_Details extends oxAdminDetails
                 if (oxRegistry::getConfig()->getRequestParameter($article['arthash']) > 0) {
                     $quant = oxRegistry::getConfig()->getRequestParameter($article['arthash']);
                     $artid = $article['artid'];
+                    $uniqueArticleNumber = $article['unique_article_number'];
+                    if (empty($uniqueArticleNumber)) {
+                        $uniqueArticleNumber = $artid;
+                    }
                     // @todo this can be done better
-                    oxDb::getDb()->execute("update $this->pi_ratepay_order_details set shipped=shipped+$quant where order_number='" . $this->_getOrderId() . "' and article_number='$artid'");
+                    oxDb::getDb()->execute("UPDATE {$this->pi_ratepay_order_details} SET shipped = shipped + {$quant} WHERE order_number = '".$this->_getOrderId()."' and unique_article_number = '{$uniqueArticleNumber}'");
                     $this->_logHistory($this->_getOrderId(), $artid, $quant, $operation, '');
                 }
             }
