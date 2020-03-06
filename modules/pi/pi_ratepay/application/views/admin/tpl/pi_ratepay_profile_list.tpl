@@ -150,8 +150,8 @@
 <script type="text/javascript">
     if (parent.parent)
     {   parent.parent.sShopTitle   = "[{$actshopobj->oxshops__oxname->getRawValue()|oxaddslashes}]";
-        parent.parent.sMenuItem    = "[{oxmultilang ident="PI_RATEPAY_LIST_MENUITEM" }]";
-        parent.parent.sMenuSubItem = "[{oxmultilang ident="PI_RATEPAY_LIST_MENUSUBITEM" }]";
+        parent.parent.sMenuItem    = "[{oxmultilang ident="PI_RATEPAY_RATEPAY" }]";
+        parent.parent.sMenuSubItem = "[{oxmultilang ident="PI_RATEPAY_LOGGING" }]";
         parent.parent.sWorkArea    = "[{$_act}]";
         parent.parent.setTitle();
     }

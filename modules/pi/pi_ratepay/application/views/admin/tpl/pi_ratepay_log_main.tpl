@@ -105,6 +105,14 @@
                 </tr>
                 <tr>
                     <td class="edittext">
+                        [{oxmultilang ident="PI_RATEPAY_LOGGING_REFERENCE"}]&nbsp;
+                    </td>
+                    <td class="edittext">
+                        [{$edit->pi_ratepay_logs__reference}]
+                    </td>
+                </tr>
+                <tr>
+                    <td class="edittext">
                         [{oxmultilang ident="PI_RATEPAY_LOGGING_FIRST_NAME"}]&nbsp;
                     </td>
                     <td class="edittext">

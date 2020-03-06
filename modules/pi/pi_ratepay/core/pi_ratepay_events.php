@@ -228,6 +228,7 @@ class pi_ratepay_events
         self::addColumnIfNotExists('pi_ratepay_logs', 'REASON_CODE', "ALTER TABLE `pi_ratepay_logs` ADD `REASON_CODE` VARCHAR(5) NOT NULL AFTER `REASON`");
         self::addColumnIfNotExists('pi_ratepay_logs', 'STATUS', "ALTER TABLE `pi_ratepay_logs` ADD `STATUS` VARCHAR(40) NOT NULL");
         self::addColumnIfNotExists('pi_ratepay_logs', 'STATUS_CODE', "ALTER TABLE `pi_ratepay_logs` ADD `STATUS_CODE` VARCHAR(5) NOT NULL");
+        self::addColumnIfNotExists('pi_ratepay_logs', 'REFERENCE', "ALTER TABLE `pi_ratepay_logs` ADD `REFERENCE` VARCHAR(40) NULL");
     }
 
     /**

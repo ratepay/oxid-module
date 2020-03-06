@@ -92,6 +92,7 @@ $aLang = array(
     'PI_RATEPAY_LOGGING_PAYMENTTYPE'           => "Operationtyp",
     'PI_RATEPAY_LOGGING_PAYMENTSUBTYPE'        => "Operationsuntertyp",
     'PI_RATEPAY_LOGGING_RESULT_CODE'           => "Ergebnis-Code",
+    'PI_RATEPAY_LOGGING_REFERENCE'             => "Verwendungszweck",
     'PI_RATEPAY_LOGGING_FIRST_NAME'            => "Vorname",
     'PI_RATEPAY_LOGGING_LAST_NAME'             => "Nachname",
     'PI_RATEPAY_LOGGING_RESULT'                => "Ergebnis",

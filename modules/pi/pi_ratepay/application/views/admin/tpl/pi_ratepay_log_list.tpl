@@ -139,9 +139,9 @@
                     <td valign="top" class="[{$listclass}]"><div class="listitemfloating">&nbsp;<a href="Javascript:top.oxid.admin.editThis('[{$listitem->pi_ratepay_logs__oxid->value}]');" class="[{$listclass}]">[{$listitem->pi_ratepay_logs__transaction_id->value }]</a></div></td>
                     <td valign="top" class="[{$listclass}]"><div class="listitemfloating">&nbsp;<a href="Javascript:top.oxid.admin.editThis('[{$listitem->pi_ratepay_logs__oxid->value}]');" class="[{$listclass}]">[{$listitem->pi_ratepay_logs__payment_method->value }]</a></div></td>
                     <td valign="top" class="[{$listclass}]"><div class="listitemfloating">&nbsp;<a href="Javascript:top.oxid.admin.editThis('[{$listitem->pi_ratepay_logs__oxid->value}]');" class="[{$listclass}]">[{$listitem->pi_ratepay_logs__payment_type->value }]</a></div></td>
-                    <td valign="top" class="[{$listclass}]"><div class="listitemfloating">&nbsp;<a href="Javascript:top.oxid.admin.editThis('[{$listitem->pi_ratepay_logs__oxid->value}]');" class="[{$listclass}]">[{$listitem->pi_ratepay_logs__result_code->value }] - [{$listitem->pi_ratepay_logs__result->value }]</a></div></td>
-                    <td valign="top" class="[{$listclass}]"><div class="listitemfloating">&nbsp;<a href="Javascript:top.oxid.admin.editThis('[{$listitem->pi_ratepay_logs__oxid->value}]');" class="[{$listclass}]">[{$listitem->pi_ratepay_logs__reason_code->value }] - [{$listitem->pi_ratepay_logs__reason->value }]</a></div></td>
-                    <td valign="top" class="[{$listclass}]"><div class="listitemfloating">&nbsp;<a href="Javascript:top.oxid.admin.editThis('[{$listitem->pi_ratepay_logs__oxid->value}]');" class="[{$listclass}]">[{$listitem->pi_ratepay_logs__status_code->value }] - [{$listitem->pi_ratepay_logs__status->value }]</a></div></td>
+                    <td valign="top" class="[{$listclass}]"><div class="listitemfloating">&nbsp;<a href="Javascript:top.oxid.admin.editThis('[{$listitem->pi_ratepay_logs__oxid->value}]');" class="[{$listclass}]">[{$listitem->pi_ratepay_logs__result->value }]</a></div></td>
+                    <td valign="top" class="[{$listclass}]"><div class="listitemfloating">&nbsp;<a href="Javascript:top.oxid.admin.editThis('[{$listitem->pi_ratepay_logs__oxid->value}]');" class="[{$listclass}]">[{$listitem->pi_ratepay_logs__reason->value }]</a></div></td>
+                    <td valign="top" class="[{$listclass}]"><div class="listitemfloating">&nbsp;<a href="Javascript:top.oxid.admin.editThis('[{$listitem->pi_ratepay_logs__oxid->value}]');" class="[{$listclass}]">[{$listitem->pi_ratepay_logs__status->value }]</a></div></td>
                     <td valign="top" class="[{$listclass}]"><div class="listitemfloating">&nbsp;<a href="Javascript:top.oxid.admin.editThis('[{$listitem->pi_ratepay_logs__oxid->value}]');" class="[{$listclass}]">[{$listitem->pi_ratepay_logs__date->value }]</a></div></td>
 
                     <td class="[{$listclass}]">
@@ -171,8 +171,8 @@
 <script type="text/javascript">
     if (parent.parent)
     {   parent.parent.sShopTitle   = "[{$actshopobj->oxshops__oxname->getRawValue()|oxaddslashes}]";
-        parent.parent.sMenuItem    = "[{oxmultilang ident="PI_RATEPAY_LIST_MENUITEM" }]";
-        parent.parent.sMenuSubItem = "[{oxmultilang ident="PI_RATEPAY_LIST_MENUSUBITEM" }]";
+        parent.parent.sMenuItem    = "[{oxmultilang ident="PI_RATEPAY_RATEPAY" }]";
+        parent.parent.sMenuSubItem = "[{oxmultilang ident="PI_RATEPAY_LOGGING" }]";
         parent.parent.sWorkArea    = "[{$_act}]";
         parent.parent.setTitle();
     }
