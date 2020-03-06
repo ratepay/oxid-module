@@ -37,7 +37,7 @@
         </div>
         [{/if}]
         <div>
-            [{ oxmultilang ident="PI_RATEPAY_POLICY" }]<a style="text-decoration: underline" href="https://ratepay.com/legal" title="Legal - RatePAY" target="_blank">[{ oxmultilang ident="PI_RATEPAY_POLICY2" }]</a>.[{ oxmultilang ident="PI_RATEPAY_POLICY3" }]
+            [{ oxmultilang ident="PI_RATEPAY_POLICY" }]
         </div>
         <br/>
         <div style="border: 1px solid #BDBDBD; padding-left: 4px;">
