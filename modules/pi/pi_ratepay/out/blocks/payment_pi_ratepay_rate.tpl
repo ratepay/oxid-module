@@ -71,7 +71,7 @@
         </ul>
         [{/if}]
         [{ if isset($error)}]
-        <div class="status error">[{ oxmultilang ident="PI_RATEPAY_RECHNUNG_AGBERROR" }]</div>
+        <div class="alert alert-danger">[{ oxmultilang ident="PI_RATEPAY_RECHNUNG_AGBERROR" }]</div>
         [{/if}]
 
         <br/>
@@ -81,7 +81,7 @@
         <script type="text/javascript" src="[{$oViewConf->getModuleUrl('pi_ratepay')}]installment/js/ajax.js"></script>
         <script type="text/javascript" src="[{$oViewConf->getModuleUrl('pi_ratepay')}]installment/js/mouseaction.js"></script>
         [{if $pierror == "-461"}]
-        <div class="status error">
+        <div class="alert alert-danger">
             [{oxmultilang ident="PI_RATEPAY_RATE_ERROR_CALCULATE_TO_PROCEED"}]
         </div>
         [{/if}]
