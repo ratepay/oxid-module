@@ -180,7 +180,7 @@
                 <td valign="top" class="[{$listclass}]"><input name="[{$article.arthash}]" type="text" maxlength="4" style="width: 40px;" class="edittext" value="[{$article.amount}]" disabled="disabled"/></td>
                 [{/if}]
                 <td valign="top" class="[{$listclass}]">[{$article.artnum}]</td>
-                <td valign="top" class="[{$listclass}]">[{$article.title|strip_tags}]</td>
+                <td valign="top" class="[{$listclass}]">[{$article.title|strip_tags}][{if $article.description_addition !== false}] - ([{$article.description_addition}])[{/if}]</td>
                 <td valign="top" class="[{$listclass}]">[{$article.unitprice|number_format:2:",":""}]</td>
                 <td valign="top" class="[{$listclass}]">[{$article.vat}] %</td>
                 <td valign="top" class="[{$listclass}]">[{$article.totalprice|number_format:2:",":""}] [{$article.currency}]</td>
@@ -258,7 +258,7 @@
                 <td valign="top" class="[{$listclass}]"><input name="[{$article.arthash}]" type="text" maxlength="4" style="width: 40px;" class="edittext" value="0" disabled="disabled" /></td>
                 [{/if}]
                 <td valign="top" class="[{$listclass}]">[{$article.artnum}]</td>
-                <td valign="top" class="[{$listclass}]">[{$article.title|strip_tags}]</td>
+                <td valign="top" class="[{$listclass}]">[{$article.title|strip_tags}][{if $article.description_addition !== false}] - ([{$article.description_addition}])[{/if}]</td>
                 <td valign="top" class="[{$listclass}]">[{$article.shipped}]</td>
                 <td valign="top" class="[{$listclass}]">[{$article.returned}]</td>
         <tr/>

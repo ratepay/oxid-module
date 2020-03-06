@@ -228,11 +228,9 @@ $aModule = array(
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPInstallmentSandbox', 'type' => 'bool', 'value' => false),
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'sRPInstallmentProfileId', 'type' => 'str', 'value' => ''),
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'sRPInstallmentSecret', 'type' => 'str', 'value' => ''),
-        array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'sRPInstallmentSettlement', 'type' => 'select', 'value' => 'debit', 'constrains' => 'debit|banktransfer|both'),
         // ratepay germany elv
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPElvActive', 'type' => 'bool', 'value' => false),
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPElvSandbox', 'type' => 'bool', 'value' => false),
-        array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPElvIbanOnly', 'type' => 'bool', 'value' => false),
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'sRPElvProfileId', 'type' => 'str', 'value' => ''),
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'sRPElvSecret', 'type' => 'str', 'value' => ''),
         // ratepay austria invoice
@@ -245,7 +243,6 @@ $aModule = array(
         array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'blRPAustriaInstallmentSandbox', 'type' => 'bool', 'value' => false),
         array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'sRPAustriaInstallmentProfileId', 'type' => 'str', 'value' => ''),
         array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'sRPAustriaInstallmentSecret', 'type' => 'str', 'value' => ''),
-        array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'sRPAustriaInstallmentSettlement', 'type' => 'select', 'value' => 'debit', 'constrains' => 'debit|banktransfer|both'),
         // ratepay austria elv
         array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'blRPAustriaElv', 'type' => 'bool', 'value' => false),
         array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'blRPAustriaElvSandbox', 'type' => 'bool', 'value' => false),

@@ -37,7 +37,9 @@
                 <col width="20%">
                 <col width="20%">
                 <col width="15%">
-                <col width="15%">
+                <col width="10%">
+                <col width="10%">
+		<col width="10%">
                 <col width="7%">
             </colgroup>
             <tr class="listitem">
@@ -79,6 +81,20 @@
                 <td valign="top" class="listfilter " height="20">
                     <div class="r1">
                         <div class="b1">
+                            <input class="listedit" type="text" size="20" maxlength="128" name="where[[{$listTable}][{$nameconcat}]reason]" value="[{$where.pi_ratepay_logs.reason}]">
+                        </div>
+                    </div>
+                </td>
+                <td valign="top" class="listfilter " height="20">
+                    <div class="r1">
+                        <div class="b1">
+                            <input class="listedit" type="text" size="20" maxlength="128" name="where[[{$listTable}][{$nameconcat}]status]" value="[{$where.pi_ratepay_logs.status}]">
+                        </div>
+                    </div>
+                </td>
+                <td valign="top" class="listfilter " height="20">
+                    <div class="r1">
+                        <div class="b1">
                             <input class="listedit" type="text" size="20" maxlength="128" name="where[[{$listTable}][{$nameconcat}]date]" value="[{$where.pi_ratepay_logs.date}]">
                         </div>
                     </div>
@@ -100,6 +116,8 @@
                 <td class="listheader" height="15">&nbsp;<a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$listTable}]', 'payment_method', 'asc');document.search.submit();" class="listheader">[{oxmultilang ident="PI_RATEPAY_LOGGING_PAYMENTMETHOD"}]</a></td>
                 <td class="listheader" height="15"><a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$listTable}]', 'payment_type', 'asc');document.search.submit();" class="listheader">[{oxmultilang ident="PI_RATEPAY_LOGGING_PAYMENTTYPE"}]</a></td>
                 <td class="listheader" height="15">&nbsp;<a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$listTable}]', 'result', 'asc');document.search.submit();" class="listheader">[{oxmultilang ident="PI_RATEPAY_LOGGING_RESULT"}]</a></td>
+                <td class="listheader" height="15">&nbsp;<a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$listTable}]', 'reason', 'asc');document.search.submit();" class="listheader">[{oxmultilang ident="PI_RATEPAY_LOGGING_REASON"}]</a></td>
+                <td class="listheader" height="15">&nbsp;<a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$listTable}]', 'status', 'asc');document.search.submit();" class="listheader">[{oxmultilang ident="PI_RATEPAY_LOGGING_STATUS"}]</a></td>
                 <td colspan="2" class="listheader" height="15">&nbsp;<a href="Javascript:top.oxid.admin.setSorting( document.search, '[{$listTable}]', 'date', 'asc');document.search.submit();" class="listheader">[{oxmultilang ident="PI_RATEPAY_LOGGING_DATE"}]</a></td>
             </tr>
             [{assign var="blWhite" value=""}]
@@ -122,6 +140,8 @@
                     <td valign="top" class="[{$listclass}]"><div class="listitemfloating">&nbsp;<a href="Javascript:top.oxid.admin.editThis('[{$listitem->pi_ratepay_logs__oxid->value}]');" class="[{$listclass}]">[{$listitem->pi_ratepay_logs__payment_method->value }]</a></div></td>
                     <td valign="top" class="[{$listclass}]"><div class="listitemfloating">&nbsp;<a href="Javascript:top.oxid.admin.editThis('[{$listitem->pi_ratepay_logs__oxid->value}]');" class="[{$listclass}]">[{$listitem->pi_ratepay_logs__payment_type->value }]</a></div></td>
                     <td valign="top" class="[{$listclass}]"><div class="listitemfloating">&nbsp;<a href="Javascript:top.oxid.admin.editThis('[{$listitem->pi_ratepay_logs__oxid->value}]');" class="[{$listclass}]">[{$listitem->pi_ratepay_logs__result->value }]</a></div></td>
+                    <td valign="top" class="[{$listclass}]"><div class="listitemfloating">&nbsp;<a href="Javascript:top.oxid.admin.editThis('[{$listitem->pi_ratepay_logs__oxid->value}]');" class="[{$listclass}]">[{$listitem->pi_ratepay_logs__reason->value }]</a></div></td>
+                    <td valign="top" class="[{$listclass}]"><div class="listitemfloating">&nbsp;<a href="Javascript:top.oxid.admin.editThis('[{$listitem->pi_ratepay_logs__oxid->value}]');" class="[{$listclass}]">[{$listitem->pi_ratepay_logs__status->value }]</a></div></td>
                     <td valign="top" class="[{$listclass}]"><div class="listitemfloating">&nbsp;<a href="Javascript:top.oxid.admin.editThis('[{$listitem->pi_ratepay_logs__oxid->value}]');" class="[{$listclass}]">[{$listitem->pi_ratepay_logs__date->value }]</a></div></td>
 
                     <td class="[{$listclass}]">
@@ -151,8 +171,8 @@
 <script type="text/javascript">
     if (parent.parent)
     {   parent.parent.sShopTitle   = "[{$actshopobj->oxshops__oxname->getRawValue()|oxaddslashes}]";
-        parent.parent.sMenuItem    = "[{oxmultilang ident="PI_RATEPAY_LIST_MENUITEM" }]";
-        parent.parent.sMenuSubItem = "[{oxmultilang ident="PI_RATEPAY_LIST_MENUSUBITEM" }]";
+        parent.parent.sMenuItem    = "[{oxmultilang ident="PI_RATEPAY_RATEPAY" }]";
+        parent.parent.sMenuSubItem = "[{oxmultilang ident="PI_RATEPAY_LOGGING" }]";
         parent.parent.sWorkArea    = "[{$_act}]";
         parent.parent.setTitle();
     }

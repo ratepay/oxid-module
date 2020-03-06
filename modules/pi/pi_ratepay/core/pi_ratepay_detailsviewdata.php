@@ -69,6 +69,25 @@ class pi_ratepay_DetailsViewData extends oxBase
         return $articleList;
     }
 
+    protected function _getDescriptionAddition($sPersParam)
+    {
+        $sDescriptionAddition = false;
+        if (!empty($sPersParam)) {
+            $aPersParams = unserialize($sPersParam);
+            if (is_array($aPersParams) && !empty($aPersParams)) {
+                if (count($aPersParams) == 1 && isset($aPersParams['details'])) {
+                    $sDescriptionAddition = $aPersParams['details'];
+                } else {
+                    $sDescriptionAddition = '';
+                    foreach ($aPersParams as $sKey => $sValue) {
+                        $sDescriptionAddition .= $sKey.'='.$sValue.';';
+                    }
+                }
+            }
+        }
+        return $sDescriptionAddition;
+    }
+
     /**
      * Initial method for generating an article list
      *
@@ -91,6 +110,7 @@ class pi_ratepay_DetailsViewData extends oxBase
               oa.OXTITLE,
               oa.OXNETPRICE,
               oa.OXAMOUNT,
+              oa.OXPERSPARAM,
               prrod.ORDERED,
               prrod.CANCELLED,
               prrod.RETURNED,
@@ -98,14 +118,15 @@ class pi_ratepay_DetailsViewData extends oxBase
               prrod.UNIQUE_ARTICLE_NUMBER,
               if(oa.OXSELVARIANT != '',concat(oa.OXTITLE,', ',oa.OXSELVARIANT),oa.OXTITLE) as TITLE
             FROM
-              `oxorder` oo,
-              `oxorderarticles` oa,
-              ".$this->pi_ratepay_order_details." prrod
+                `oxorder` AS oo
+            INNER JOIN
+                `oxorderarticles` AS oa ON oa.oxorderid = oo.oxid
+            INNER JOIN
+                ".$this->pi_ratepay_order_details." AS prrod ON oa.oxid = prrod.unique_article_number
             WHERE
-              prrod.order_number = '{$this->_orderId}'
-              AND prrod.order_number = oa.oxorderid
-              AND oa.oxartid = prrod.article_number
-              AND oo.oxid = prrod.order_number";
+                oo.oxid = '{$this->_orderId}' AND
+               oa.oxartid = prrod.article_number
+            GROUP BY prrod.oxid";
         $aRows = $oDb->getAll($articlesSql);
 
         foreach ($aRows as $aRow) {
@@ -114,7 +135,7 @@ class pi_ratepay_DetailsViewData extends oxBase
 
             $listEntry['oxid'] = $aRow['OXID'];
             $listEntry['artid'] = $aRow['OXARTID'];
-            $listEntry['arthash'] = md5($aRow['OXARTID']);
+            $listEntry['arthash'] = $aRow['UNIQUE_ARTICLE_NUMBER'];
             $listEntry['artnum'] = $aRow['OXARTNUM'];
             $listEntry['title'] = $aRow['TITLE'];
             $listEntry['oxtitle'] = $aRow['OXTITLE'];
@@ -128,6 +149,7 @@ class pi_ratepay_DetailsViewData extends oxBase
             $listEntry['currency'] = $aRow['OXCURRENCY'];
             $listEntry['bruttoprice'] = (float) $aRow['OXBPRICE'];
             $listEntry['unique_article_number'] = $aRow['UNIQUE_ARTICLE_NUMBER'];
+            $listEntry['description_addition'] = $this->_getDescriptionAddition($aRow['OXPERSPARAM']);
 
             if ($dTotal > 0) {
                 $listEntry['totalprice'] = (float)
@@ -156,13 +178,12 @@ class pi_ratepay_DetailsViewData extends oxBase
      */
     protected function _piAddSpecialCosts($articleList, $ident, $title)
     {
-        $orderValues = $this->_piGetOrderValues();
         $aRow = $this->_piGetOrderSpecialCostsQuery($ident);
 
         if ($aRow['PRICE'] > 0) {
             $listEntry['oxid'] = "";
             $listEntry['artid'] = $ident;
-            $listEntry['arthash'] = md5($orderValues['OXARTID']);
+            $listEntry['arthash'] = md5($aRow['UNIQUE_ARTICLE_NUMBER']);
             $listEntry['artnum'] = $ident;
             $listEntry['title'] = $title;
             $listEntry['oxtitle'] = $title;
@@ -175,6 +196,7 @@ class pi_ratepay_DetailsViewData extends oxBase
             $listEntry['cancelled'] = $aRow['CANCELLED'];
             $listEntry['currency'] = $aRow['oxcurrency'];
             $listEntry['unique_article_number'] = $aRow['unique_article_number'];
+            $listEntry['description_addition'] = false;
 
             $blHasTotal = (
                 ($aRow['ORDERED'] - $aRow['RETURNED'] - $aRow['CANCELLED']) > 0
@@ -233,7 +255,7 @@ class pi_ratepay_DetailsViewData extends oxBase
 
             $listEntry['oxid'] = "";
             $listEntry['artid'] = $aRow['ARTID'];
-            $listEntry['arthash'] = md5($aRow['oxartid']);
+            $listEntry['arthash'] = md5($aRow['unique_article_number']);
             $listEntry['artnum'] = "discount";
             $listEntry['title'] = $aRow['TITLE'];
             $listEntry['oxtitle'] = $aRow['TITLE'];
@@ -246,6 +268,7 @@ class pi_ratepay_DetailsViewData extends oxBase
             $listEntry['cancelled'] = $aRow['CANCELLED'];
             $listEntry['currency'] = $aRow['oxcurrency'];
             $listEntry['unique_article_number'] = $aRow['unique_article_number'];
+            $listEntry['description_addition'] = false;
 
             $blHasTotal = (
                 ($aRow['ORDERED'] - $aRow['RETURNED'] - $aRow['CANCELLED']) > 0
@@ -329,6 +352,7 @@ class pi_ratepay_DetailsViewData extends oxBase
                 $listEntry['cancelled'] = $aRow['CANCELLED'];
                 $listEntry['currency'] = $aRow['oxcurrency'];
                 $listEntry['unique_article_number'] = $aRow['unique_article_number'];
+                $listEntry['description_addition'] = false;
 
                 $blHasTotal = (
                     ($aRow['ORDERED'] - $aRow['RETURNED'] - $aRow['CANCELLED']) > 0
@@ -412,6 +436,7 @@ class pi_ratepay_DetailsViewData extends oxBase
                 $listEntry['cancelled'] = $aRow['CANCELLED'];
                 $listEntry['currency'] = $aRow['oxcurrency'];
                 $listEntry['unique_article_number'] = $aRow['unique_article_number'];
+                $listEntry['description_addition'] = false;
 
                 if (($aRow['ORDERED'] - $aRow['RETURNED'] - $aRow['CANCELLED']) > 0) {
                     $listEntry['totalprice'] = (float)$aRow['price'] + ((float)$aRow['price'] * round((float)$aRow['VAT']) / 100);;
