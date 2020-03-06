@@ -157,6 +157,8 @@ class ModelFactory extends oxSuperCfg {
 
     protected $_calculationData = array();
 
+    protected $_orderNumber;
+
     /**
      *
      *
@@ -364,7 +366,7 @@ class ModelFactory extends oxSuperCfg {
         $rb = new RatePAY\RequestBuilder($this->_sandbox);
 
         $paymentConfirm = $rb->callPaymentConfirm($mbHead);
-        pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->_orderId, $this->_transactionId, $this->_paymentType, 'PAYMENT_CONFIRM', $this->_subtype, '', '', $paymentConfirm);
+        pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->getOrderNumber(), $this->_transactionId, $this->_paymentType, 'PAYMENT_CONFIRM', $this->_subtype, '', '', $paymentConfirm);
 
         if ($paymentConfirm->isSuccessful()) {
             return true;
@@ -417,7 +419,7 @@ class ModelFactory extends oxSuperCfg {
 
         $rb = new \RatePAY\RequestBuilder($this->_sandbox);
         $confirmationDeliver = $rb->callConfirmationDeliver($mbHead, $mbContent);
-        pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->_orderId, $this->_transactionId, $this->_paymentType, 'CONFIRMATION_DELIVER', $this->_subtype, '', '', $confirmationDeliver);
+        pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->getOrderNumber(), $this->_transactionId, $this->_paymentType, 'CONFIRMATION_DELIVER', $this->_subtype, '', '', $confirmationDeliver);
         return $confirmationDeliver;
     }
 
@@ -462,7 +464,7 @@ class ModelFactory extends oxSuperCfg {
 
         $rb = new \RatePAY\RequestBuilder($this->_sandbox);
         $paymentChange = $rb->callPaymentChange($mbHead, $mbContent)->subtype($this->_subtype);
-        pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->_orderId, $this->_transactionId, $this->_paymentType, 'PAYMENT_CHANGE', $this->_subtype, '', '', $paymentChange);
+        pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->getOrderNumber(), $this->_transactionId, $this->_paymentType, 'PAYMENT_CHANGE', $this->_subtype, '', '', $paymentChange);
         return $paymentChange;
     }
 
@@ -564,7 +566,7 @@ class ModelFactory extends oxSuperCfg {
         $head = $this->_getHead();
         $rb = new \RatePAY\RequestBuilder($this->_sandbox);
         $paymentInit = $rb->callPaymentInit($head);
-        pi_ratepay_LogsService::getInstance()->logRatepayTransaction('', '', $this->_paymentType, 'PAYMENT_INIT', '', $this->getUser()->oxuser__oxfname->value, $this->getUser()->oxuser__oxlname->value, $paymentInit);
+        pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->getOrderNumber(), '', $this->_paymentType, 'PAYMENT_INIT', '', $this->getUser()->oxuser__oxfname->value, $this->getUser()->oxuser__oxlname->value, $paymentInit);
         return $paymentInit;
     }
 
@@ -664,7 +666,7 @@ class ModelFactory extends oxSuperCfg {
         $rb = new \RatePAY\RequestBuilder($this->_sandbox);
 
         $paymentRequest = $rb->callPaymentRequest($head, $mbContent);
-        pi_ratepay_LogsService::getInstance()->logRatepayTransaction('', $this->_transactionId, $this->_paymentType, 'PAYMENT_REQUEST', '', $this->getUser()->oxuser__oxfname->value, $this->getUser()->oxuser__oxlname->value, $paymentRequest);
+        pi_ratepay_LogsService::getInstance()->logRatepayTransaction($this->getOrderNumber(), $this->_transactionId, $this->_paymentType, 'PAYMENT_REQUEST', '', $this->getUser()->oxuser__oxfname->value, $this->getUser()->oxuser__oxlname->value, $paymentRequest);
         return $paymentRequest;
     }
 
@@ -1123,4 +1125,23 @@ class ModelFactory extends oxSuperCfg {
         return oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $countryId . "'");
     }
 
+    /**
+     * @return string
+     */
+    protected function getOrderNumber()
+    {
+        if (empty($this->_orderNumber)) {
+            if (empty($this->_orderId)) {
+                return '';
+            }
+
+            $orderNr = oxDb::getDb()->getOne('SELECT OXORDERNR FROM oxorder where oxid = ?', array($this->_orderId));
+            if (!$orderNr) {
+                $orderNr = '';
+            }
+            $this->_orderNumber = $orderNr;
+        }
+
+        return $this->_orderNumber;
+    }
 }

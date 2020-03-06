@@ -152,7 +152,11 @@ class pi_ratepay_paymentgateway extends pi_ratepay_paymentgateway_parent
 
         $orderLogs = pi_ratepay_LogsService::getInstance()->getLogsList("transaction_id = " . oxDb::getDb(true)->quote($tid));
         foreach ($orderLogs as $log) {
-            $log->assign(array('order_number' => $this->getSession()->getVariable('pi_ratepay_shops_order_id')));
+            if (!is_null($oOrder->oxorder__oxordernr)) {
+                $log->assign(array('order_number' => $oOrder->oxorder__oxordernr));
+            } else {
+                $log->assign(array('order_number' => $this->getSession()->getVariable('pi_ratepay_shops_order_id')));
+            }
             $log->save();
         }
 

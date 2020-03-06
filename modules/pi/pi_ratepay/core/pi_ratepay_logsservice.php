@@ -78,13 +78,26 @@ class pi_ratepay_LogsService extends oxSuperCfg
             $requestXml = $trans->getRequestRaw();
             $responseXml = $trans->getResponseRaw();
             $reason = '';
+            $reasonCode = '';
+            $result = '';
+            $resultCode = '';
+            $status = '';
+            $statusCode = '';
+            $reference = '';
 
             if ($trans->isSuccessful()) {
                 $result = (string) $trans->getResultMessage();
                 $resultCode = (string) $trans->getResultCode();
                 $reason = (string) $trans->getReasonMessage();
+                $reasonCode = (string) $trans->getResultCode();
+                $status = (string) $trans->getStatusMessage();
+                $statusCode = (string) $trans->getStatusCode();
+
+                if ($paymentType == 'PAYMENT_REQUEST') {
+                    $reference =  (string) $trans->getDescriptor();
+                }
             } else {
-                $result = "service unavaible.";
+                $result = $trans->getReasonMessage();
                 $resultCode = $result;
             }
 
@@ -105,6 +118,10 @@ class pi_ratepay_LogsService extends oxSuperCfg
                 'first_name'      => $name,
                 'last_name'       => $surname,
                 'reason'          => $reason,
+                'reason_code'     => $reasonCode,
+                'status'          => $status,
+                'status_code'     => $statusCode,
+                'reference'       => $reference,
                 'date'            => date('Y-m-d H:i:s', $oUtilsDate->getTime())
             ));
 

@@ -60,7 +60,7 @@
                         [{oxmultilang ident="PI_RATEPAY_LOGGING_PAYMENTMETHOD"}]&nbsp;
                     </td>
                     <td class="edittext">
-                        [{$edit->pi_ratepay_logs__paymentmethod}]
+                        [{$edit->pi_ratepay_logs__payment_method}]
                     </td>
                 </tr>
                 <tr>
@@ -101,6 +101,14 @@
                     </td>
                     <td class="edittext">
                         [{$edit->pi_ratepay_logs__result_code}]
+                    </td>
+                </tr>
+                <tr>
+                    <td class="edittext">
+                        [{oxmultilang ident="PI_RATEPAY_LOGGING_REFERENCE"}]&nbsp;
+                    </td>
+                    <td class="edittext">
+                        [{$edit->pi_ratepay_logs__reference}]
                     </td>
                 </tr>
                 <tr>
