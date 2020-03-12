@@ -6,7 +6,7 @@
 |Author | `Annegret Seufert`, `Tim Bischoff`, `Fatchip GmbH`
 |Prefix | `pi`
 |Shop Version | `CE/PE` `4.7.x-6.1.x` `EE` `5.0.x-6.1.x`
-|Version | `5.0.5`
+|Version | `5.0.6`
 |Link | http://www.ratepay.com
 |Mail | integration@ratepay.com
 |Installation | https://ratepay.gitbook.io/oxid/
