@@ -15,6 +15,15 @@
 
 ## Changelog
 
+### Version 5.0.6 - Released 2020-03-12
+* Fixed problems with individual items in checkout
+* Fixed problems in order-ratepay tab in backend
+* Fixed order post-handling for new data handling
+* Add the transmission of invoice number in request, when available
+* Update log entries to display more information from the response (codes, messages)
+* Rate payment : Added choice of payment mode (transfer/debit) directly to checkout form
+* Visual improvement (error messages, translations, legal text)
+
 ### Version 5.0.5 - Released 2019-12-17
 * Template updated to remove a wrong price displayed
 * Fixed backward compatibility problems
