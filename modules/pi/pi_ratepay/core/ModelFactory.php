@@ -406,16 +406,27 @@ class ModelFactory extends oxSuperCfg {
      */
     private function _makeConfirmationDeliver()
     {
+        $mbContent = new RatePAY\ModelBuilder('Content');
+
         $this->_getOrderCountryId();
         $mbHead = $this->_getHead();
 
         $shoppingBasket = [
             'ShoppingBasket' => $this->_getSpecialBasket(),
         ];
-
-        $mbContent = new RatePAY\ModelBuilder('Content');
         $mbContent->setArray($shoppingBasket);
-        //$mbContent->setArray($invoicing);
+
+        // OX-31 Add invoice number if existing
+        $orderBillNr = $this->_getOrderBillNr();
+        if (!empty($orderBillNr)) {
+            $invoicing = [
+                'Invoicing' => [
+                    'InvoiceId' => $orderBillNr
+                ]
+            ];
+
+            $mbContent->setArray($invoicing);
+        }
 
         $rb = new \RatePAY\RequestBuilder($this->_sandbox);
         $confirmationDeliver = $rb->callConfirmationDeliver($mbHead, $mbContent);
@@ -429,6 +440,14 @@ class ModelFactory extends oxSuperCfg {
     private function _getOrderCountryId() {
         $countryId = oxDb::getDb()->getOne("SELECT OXBILLCOUNTRYID FROM oxorder WHERE OXID = '" . $this->_orderId . "'");
         $this->_countryId = $countryId;
+    }
+
+    /**
+     * get order
+     */
+    protected function _getOrderBillNr() {
+        $billNr = oxDb::getDb()->getOne("SELECT OXBILLNR FROM oxorder WHERE OXID = '" . $this->_orderId . "'");
+        return $billNr;
     }
 
     /**
