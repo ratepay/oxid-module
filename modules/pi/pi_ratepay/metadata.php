@@ -18,6 +18,11 @@
  */
 
 /**
+ * Metadata version
+ */
+$sMetadataVersion = '1.2';
+
+/**
  * Module information
  */
 $librarySubModel = 'pi/pi_ratepay/library/src/Model/Request/SubModel/';
