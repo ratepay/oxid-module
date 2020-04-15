@@ -1096,7 +1096,7 @@ class ModelFactory extends oxSuperCfg {
 
         //trusted protection
         if (method_exists($this->_basket, 'getTrustedShopProtectionCost') && $this->_basket->getTrustedShopProtectionCost()) {
-            $tsProtectionCosts = $this->_basket->getTrustedShopProtectionCost()->getPrice();
+            $tsProtectionCosts = $this->_basket->getTrustedShopProtectionCost()->getBruttoPrice();
             $tsProtectionVat = $this->_basket->getTrustedShopProtectionCost()->getVat();
         } elseif (method_exists($this->_basket, 'getTsProtectionCosts') && $this->_basket->getTsProtectionCosts()) {
             $tsProtectionCosts = $this->_basket->getTsProtectionCosts();
@@ -1112,8 +1112,8 @@ class ModelFactory extends oxSuperCfg {
 
         if (!empty($tsProtectionCosts) && $tsProtectionCosts > 0) {
             $item = array(
-                'Description' => 'Giftcard Costs',
-                'ArticleNumber' => 'oxgiftcard',
+                'Description' => 'TS Protection Cost',
+                'ArticleNumber' => 'oxtsprotection',
                 'Quantity' => 1,
                 'UnitPriceGross' => $util->getFormattedNumber($tsProtectionCosts, '2', '.'),
                 'TaxRate' => $util->getFormattedNumber(ceil($tsProtectionVat), '2', '.'),
