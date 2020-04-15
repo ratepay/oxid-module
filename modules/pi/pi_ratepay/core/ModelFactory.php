@@ -1084,8 +1084,8 @@ class ModelFactory extends oxSuperCfg {
 
         if (!empty($paymentCosts) && $paymentCosts > 0) {
             $item = array(
-                'Description' => 'Giftcard Costs',
-                'ArticleNumber' => 'oxgiftcard',
+                'Description' => 'Payment Costs',
+                'ArticleNumber' => 'oxpayment',
                 'Quantity' => 1,
                 'UnitPriceGross' => $util->getFormattedNumber($paymentCosts, '2', '.'),
                 'TaxRate' => $util->getFormattedNumber(ceil($paymentVat), '2', '.'),
