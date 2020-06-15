@@ -35,5 +35,5 @@ $aLang = array(
     'PI_RATEPAY_VIEW_RADIO_LABEL_ELV'                 => 'Per elektronischem Lastschriftverfahren',
     'PI_RATEPAY_VIEW_RADIO_PAYMENT_WIRE'              => 'Per &Uuml;berweisung',
     'PI_RATEPAY_VIEW_RATEPAY_ADDRESS'                 => 'RatePAY GmbH, Franklinstra&szlig;e 28-29, 10587 Berlin',
-    'PI_RATEPAY_POLICY'                               => '<p>F&uuml;r diese Zahlungsart gelten <a href="//ratepay.com/legal" title="Legal - RatePAY" target="_blank" style="text-decoration: underline; cursor: pointer">zus&auml;tzliche AGB und Datenschutzhinweise</a>.</p>',
+    'PI_RATEPAY_POLICY'                               => '<p>Voor deze betalingsmethode gelden <a href="//ratepay.com/legal" title="Legal - RatePAY" target="_blank" style="text-decoration: underline; cursor: pointer">aanvullende AV- en gegevensbeschermingsverklaringen</a>.</p>',
 );
