@@ -70,4 +70,6 @@ $aLang = array(
     'PI_RATEPAY_ELV_VIEW_BANK_NAME'                 => 'Kreditinstitut',
     'PI_RATEPAY_ELV_ERROR_BANKCODE_TO_SHORT'        => 'Die Bankleitzahl muss acht Zeichen lang sein.',
     'PI_RATEPAY_ELV_VIEW_BANK_CODE'                 => "BLZ:",
+    'PI_RATEPAY_ELV_SEPA_ACCOUNT_INFORMATION'       => 'SEPA Kontodaten',
+    'PI_RATEPAY_ELV_CLASSIC_ACCOUNT_INFORMATION'    => 'Klassische Kontodaten',
 );

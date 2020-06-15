@@ -78,8 +78,8 @@
         </ul>
 
         [{if !$pi_ratepay_elv_iban_only}]
-            <button id="policyButton[{$sPaymentID}]" class="submitButton largeButton" type="button" onclick="rpElvSwitch('sepa')">IBAN Kontodaten</button>
-            <button id="policyButton[{$sPaymentID}]" class="submitButton largeButton" type="button" onclick="rpElvSwitch('classic')">Klassische Kontodaten</button>
+            <button id="policyButton[{$sPaymentID}]" class="submitButton largeButton" type="button" onclick="rpElvSwitch('sepa')">[{oxmultilang ident="PI_RATEPAY_ELV_SEPA_ACCOUNT_INFORMATION"}]</button>
+            <button id="policyButton[{$sPaymentID}]" class="submitButton largeButton" type="button" onclick="rpElvSwitch('classic')">[{oxmultilang ident="PI_RATEPAY_ELV_CLASSIC_ACCOUNT_INFORMATION"}]</button>
         [{/if}]
         <input type="hidden" name="pi_ratepay_elv_bank_datatype" id="pi_ratepay_elv_bank_datatype" value="[{$pi_ratepay_elv_bank_datatype}]">
         <ul class="form" id="pi_ratepay_elv_sepa_bankdata" [{if $pi_ratepay_elv_bank_datatype=="classic"}] style="display: none" [{/if}]>
