@@ -15,12 +15,14 @@
                 document.getElementById('pi_ratepay_elv_bank_datatype').value = 'sepa';
             }
         }
-        function showAgreement() {
-            document.getElementById('pi_ratepay_elv_sepa_agreement').style.display = 'block';
-            document.getElementById('pi_ratepay_elv_sepa_agreement_link').style.display = 'none';
-        }
     </script>
-    [{/if}]
+[{/if}]
+<script type="text/javascript">
+    function showAgreement() {
+        document.getElementById('pi_ratepay_elv_sepa_agreement').style.display = 'block';
+        document.getElementById('pi_ratepay_elv_sepa_agreement_link').style.display = 'none';
+    }
+</script>
 <dl>
     <dt>
         <input id="payment_[{$sPaymentID}]" type="radio" onclick="piCalculator();" name="paymentid" value="[{$sPaymentID}]" [{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]checked[{/if}] style="position:relative;">
