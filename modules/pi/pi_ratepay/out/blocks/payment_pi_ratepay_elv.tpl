@@ -117,11 +117,11 @@
                     </td>
                     <td>
                         <div id="pi_ratepay_elv_sepa_agreement">
-                            <p style="font-weight: bold">
+                            <p>
                                 <input type="checkbox" name="rp-sepa-aggreement" id="rp-sepa-aggreement" onchange="checkElvAgreement()" class="required" />
                                 <span style="margin-left: 5px">[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_1"}]</span>
                             </p>
-                            <p style="font-weight: bold">[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_2"}]</p>
+                            <p>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_2"}]</p>
                         </div>
                     </td>
                 </tr>
