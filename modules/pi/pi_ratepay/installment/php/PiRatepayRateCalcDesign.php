@@ -105,13 +105,13 @@
         <div id="rp-rate-elv">
             <?php if ($sSettlementType == 'both'): ?>
                 <strong class="rp-installment-header"><?php echo $rp_header_debit; ?></strong>
-                <div class="row small rp-payment-type-switch" id="rp-switch-payment-type-bank-transfer" onclick="rp_change_payment(28)">
+                <div class="row rp-payment-type-switch" id="rp-switch-payment-type-bank-transfer" onclick="rp_change_payment(28)">
                     <a class="rp-link"><?php echo $rp_switch_payment_type_bank_transfer; ?></a>
                 </div><br>
             <?php endif; ?>
 
             <div class="row rp-row-space rp-sepa-form">
-                <table class="rp-sepa-table small">
+                <table class="rp-sepa-table">
                     <tr>
                         <td colspan="2">
                          <?php echo $wcd_address; ?>
@@ -136,7 +136,7 @@
                 </table>
             </div>
             <br/>
-            <div class="row rp-sepa-form small rp-special-item rp-row-space">
+            <div class="row rp-sepa-form rp-special-item rp-row-space">
                 <?php echo $wcd_sepa_notice_block; ?>
             </div>
             <br/>
@@ -163,7 +163,7 @@
             <!--<div class="row rp-row-space small rp-sepa-form" id="rp-show-sepa-agreement">
                 <a class="rp-link"><?php echo $rp_sepa_link; ?></a>
             </div>-->
-            <div class="row rp-row-space small rp-sepa-form" id="rp-sepa-agreement">
+            <div class="row rp-row-space rp-sepa-form" id="rp-sepa-agreement">
                 <input type="checkbox" name="rp-sepa-aggreement" id="rp-sepa-aggreement" onchange="updateCalculator()" class="required" />
                 <?php echo $wcd_sepa_terms_block_1; ?>
                 <br><br>
@@ -176,7 +176,7 @@
             <!-- Switching between payment type direct debit and bank transfer (which requires no sepa form) is only allowed if  -->
             <div id="rp-switch-payment-type-direct-debit">
                 <strong class="rp-installment-header"><?php echo $rp_header_bank_transfer; ?></strong>
-                <div class="row small rp-payment-type-switch" onclick="rp_change_payment(2)">
+                <div class="row rp-payment-type-switch" onclick="rp_change_payment(2)">
                     <a class="rp-link"><?php echo $rp_switch_payment_type_direct_debit; ?></a>
                 </div>
             </div>
