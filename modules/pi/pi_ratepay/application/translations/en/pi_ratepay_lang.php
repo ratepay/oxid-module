@@ -36,5 +36,4 @@ $aLang = array(
     'PI_RATEPAY_VIEW_RADIO_PAYMENT_WIRE'              => 'By bank transfer',
     'PI_RATEPAY_VIEW_RATEPAY_ADDRESS'                 => 'RatePAY GmbH, Franklinstra&szlig;e 28-29, 10587 Berlin',
     'PI_RATEPAY_POLICY'                               => '<p>For this payment method <a href="//ratepay.com/legal" title="Legal - RatePAY" target="_blank" style="text-decoration: underline; cursor: pointer">additional GTC and data protection notices</a> apply.</p>',
-    'PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_1'    => 'I hereby authorise Wirecard Bank AG to collect payments from my account by direct debit. At the same time, I authorise my bank to debit my account in accordance with the instructions from Wirecard Bank AG.</p><p>Note: As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited. My rights are explained in a statement that I can obtain from my bank.',
 );

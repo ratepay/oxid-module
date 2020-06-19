@@ -158,4 +158,13 @@ function piCalculator() {
     }
 
 }
+function checkElvAgreement() {
+    if ($('#payment_pi_ratepay_elv').is(':checked')) {
+        if ($('#rp-sepa-aggreement').is(':checked')) {
+            $('#paymentNextStepBottom').prop('disabled', false);
+        } else {
+            $('#paymentNextStepBottom').prop('disabled', true);
+        }
+    }
+}
 </script>

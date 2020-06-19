@@ -18,14 +18,13 @@
     </script>
 [{/if}]
 <script type="text/javascript">
-    function showAgreement() {
-        document.getElementById('pi_ratepay_elv_sepa_agreement').style.display = 'block';
-        document.getElementById('pi_ratepay_elv_sepa_agreement_link').style.display = 'none';
-    }
+    document.addEventListener('DOMContentLoaded', function(){
+        checkElvAgreement();
+    }, false);
 </script>
 <dl>
     <dt>
-        <input id="payment_[{$sPaymentID}]" type="radio" onclick="piCalculator();" name="paymentid" value="[{$sPaymentID}]" [{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]checked[{/if}] style="position:relative;">
+        <input id="payment_[{$sPaymentID}]" type="radio" onclick="piCalculator();checkElvAgreement();" name="paymentid" value="[{$sPaymentID}]" [{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]checked[{/if}] style="position:relative;">
         <label for="payment_[{$sPaymentID}]"><b>
                 [{$paymentmethod->oxpayments__oxdesc->value}]
         </b></label>
@@ -117,18 +116,13 @@
                         <input type="hidden" name="pi_ratepay_elv_privacy" value="1" style="float: left;" />
                     </td>
                     <td>
-                        <a id="pi_ratepay_elv_sepa_agreement_link" style="text-decoration: underline; cursor: pointer" onclick="showAgreement();">[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT"}]</a>
-                        <span id="pi_ratepay_elv_sepa_agreement" style="display: none">
-                            [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_1"}]
-                            [{oxmultilang ident="PI_RATEPAY_VIEW_RATEPAY_ADDRESS"}]
-                            [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_2"}]
-                            <a href='https://ratepay.com/legal' target='_blank' style="text-decoration:underline;">[{oxmultilang ident="PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_PRIVACYPOLICY"}]</a>
-                            [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_4"}]
-                            <br/><br/>
-                            [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_5"}]
-                            </br>
-                            [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_6"}]
-                        </span>
+                        <div id="pi_ratepay_elv_sepa_agreement">
+                            <p style="font-weight: bold">
+                                <input type="checkbox" name="rp-sepa-aggreement" id="rp-sepa-aggreement" onchange="checkElvAgreement()" class="required" />
+                                <span style="margin-left: 5px">[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_1"}]</span>
+                            </p>
+                            <p style="font-weight: bold">[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_2"}]</p>
+                        </div>
                     </td>
                 </tr>
             </table>
