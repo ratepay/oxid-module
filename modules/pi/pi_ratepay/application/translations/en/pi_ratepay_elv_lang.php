@@ -21,7 +21,7 @@
 // -------------------------------
 $sLangName = "English";
 
-$piErrorAge = 'To make a payment via RatePAY direct debit, you must be at least 18 years old.';
+$piErrorAge = 'To make a payment via RatePAY Lastschrift, you must be at least 18 years old.';
 $piErrorBirth = 'To make a payment via RatePAY Lastschrift, please provide your birth date.';
 $piErrorPhone = 'To make a payment via RatePAY Lastschrift, please provide your phone numer.';
 $piErrorCompany = 'Please enter your company name and VAT ID.';
