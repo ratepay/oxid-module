@@ -121,7 +121,7 @@
                         <td>
                          <?php echo $rp_creditor; ?>
                         </td>
-                        <td>
+                        <td style="padding-left: 15px;">
                          <?php echo $wcd_creditor_id; ?>
                         </td>
                     </tr>
@@ -129,7 +129,7 @@
                         <td>
                          <?php echo $rp_mandate; ?>&nbsp;
                         </td>
-                        <td>
+                        <td style="padding-left: 15px;">
                          <?php echo $rp_mandate_ref; ?>
                         </td>
                     </tr>
