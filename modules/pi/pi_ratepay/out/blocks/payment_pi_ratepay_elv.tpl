@@ -14,17 +14,18 @@
                 document.getElementById('pi_ratepay_elv_sepa_bankdata').style.display = 'block';
                 document.getElementById('pi_ratepay_elv_bank_datatype').value = 'sepa';
             }
+            checkElvForm();
         }
     </script>
 [{/if}]
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function(){
-        checkElvAgreement();
+        checkElvForm();
     }, false);
 </script>
 <dl>
     <dt>
-        <input id="payment_[{$sPaymentID}]" type="radio" onclick="piCalculator();checkElvAgreement();" name="paymentid" value="[{$sPaymentID}]" [{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]checked[{/if}] style="position:relative;">
+        <input id="payment_[{$sPaymentID}]" type="radio" onclick="piCalculator();checkElvForm();" name="paymentid" value="[{$sPaymentID}]" [{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]checked[{/if}] style="position:relative;">
         <label for="payment_[{$sPaymentID}]"><b>
                 [{$paymentmethod->oxpayments__oxdesc->value}]
         </b></label>
@@ -90,7 +91,7 @@
             </li>
             <li>
                 <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_IBAN"}]:</label>
-                <input name='pi_ratepay_elv_bank_iban' maxlength='50' size='37' type='text' value='[{$pi_ratepay_elv_bank_iban}]'/>
+                <input id='pi_ratepay_elv_bank_iban' name='pi_ratepay_elv_bank_iban' onchange="checkElvForm()" maxlength='50' size='37' type='text' value='[{$pi_ratepay_elv_bank_iban}]'/>
             </li>
         </ul>
         [{if !$pi_ratepay_elv_iban_only}]
@@ -101,11 +102,11 @@
             </li>
             <li>
                 <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_ACCOUNT_NUMBER"}]:</label>
-                <input name='pi_ratepay_elv_bank_account_number' maxlength='50' size='37' type='text' value='[{$pi_ratepay_elv_bank_account_number}]' />
+                <input id='pi_ratepay_elv_bank_account_number' name='pi_ratepay_elv_bank_account_number' onchange="checkElvForm()" maxlength='50' size='37' type='text' value='[{$pi_ratepay_elv_bank_account_number}]' />
             </li>
             <li>
                 <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_CODE"}]:</label>
-                <input name='pi_ratepay_elv_bank_code' maxlength='50' size='37' type='text' value='[{$pi_ratepay_elv_bank_code}]' />
+                <input id='pi_ratepay_elv_bank_code' name='pi_ratepay_elv_bank_code' onchange="checkElvForm()" maxlength='50' size='37' type='text' value='[{$pi_ratepay_elv_bank_code}]' />
             </li>
         </ul>
         [{/if}]
@@ -118,7 +119,7 @@
                     <td>
                         <div id="pi_ratepay_elv_sepa_agreement">
                             <p>
-                                <input type="checkbox" name="rp-sepa-aggreement" id="rp-sepa-aggreement" onchange="checkElvAgreement()" class="required" />
+                                <input type="checkbox" name="pi_ratepay_elv_sepa_agreement_check" id="pi_ratepay_elv_sepa_agreement_check" onchange="checkElvForm()" class="required" />
                                 <span style="margin-left: 5px">[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_1"}]</span>
                             </p>
                             <p>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_2"}]</p>
