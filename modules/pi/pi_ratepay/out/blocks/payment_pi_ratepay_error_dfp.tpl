@@ -160,35 +160,14 @@ function piCalculator() {
 }
 function checkElvForm() {
     if ($('#payment_pi_ratepay_elv').is(':checked')) {
-
-        var elvBankDatatypeField = $('#pi_ratepay_elv_bank_datatype');
         var agreementCheckbox = $('#pi_ratepay_elv_sepa_agreement_check');
+        var ibanField = $('#pi_ratepay_elv_bank_iban');
 
-        if (elvBankDatatypeField.val() == 'classic') {
-            var accountNumberField = $('#pi_ratepay_elv_bank_account_number');
-            var bankCodeField = $('#pi_ratepay_elv_bank_code');
-
-            if (accountNumberField.val() !== ''
-                && bankCodeField.val() !== ''
-                && agreementCheckbox.is(':checked'))
-            {
-                $('#paymentNextStepBottom').prop('disabled', false);
-
-            } else {
-                $('#paymentNextStepBottom').prop('disabled', true);
-            }
+        if (ibanField.val() !== '' && agreementCheckbox.is(':checked')) {
+            $('#paymentNextStepBottom').prop('disabled', false);
 
         } else {
-            var ibanField = $('#pi_ratepay_elv_bank_iban');
-
-            if (ibanField.val() !== ''
-                && agreementCheckbox.is(':checked'))
-            {
-                $('#paymentNextStepBottom').prop('disabled', false);
-
-            } else {
-                $('#paymentNextStepBottom').prop('disabled', true);
-            }
+            $('#paymentNextStepBottom').prop('disabled', true);
         }
     }
 }

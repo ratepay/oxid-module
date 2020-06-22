@@ -1,23 +1,6 @@
 [{if $sPaymentID == "pi_ratepay_elv"}]
 [{assign var="dynvalue" value=$oView->getDynValue()}]
 
-[{if !$pi_ratepay_elv_iban_only}]
-    <script type="text/javascript">
-        function rpElvSwitch(type) {
-            if(type == 'classic') {
-                document.getElementById('pi_ratepay_elv_classic_bankdata').style.display = 'block';
-                document.getElementById('pi_ratepay_elv_sepa_bankdata').style.display = 'none';
-                document.getElementById('pi_ratepay_elv_bank_datatype').value = 'classic';
-
-            } else {
-                document.getElementById('pi_ratepay_elv_classic_bankdata').style.display = 'none';
-                document.getElementById('pi_ratepay_elv_sepa_bankdata').style.display = 'block';
-                document.getElementById('pi_ratepay_elv_bank_datatype').value = 'sepa';
-            }
-            checkElvForm();
-        }
-    </script>
-[{/if}]
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function(){
         checkElvForm();
@@ -79,10 +62,6 @@
 			[{/if}]
         </ul>
 
-        [{if !$pi_ratepay_elv_iban_only}]
-            <button id="policyButton[{$sPaymentID}]" class="submitButton largeButton" type="button" onclick="rpElvSwitch('sepa')">[{oxmultilang ident="PI_RATEPAY_ELV_SEPA_ACCOUNT_INFORMATION"}]</button>
-            <button id="policyButton[{$sPaymentID}]" class="submitButton largeButton" type="button" onclick="rpElvSwitch('classic')">[{oxmultilang ident="PI_RATEPAY_ELV_CLASSIC_ACCOUNT_INFORMATION"}]</button>
-        [{/if}]
         <input type="hidden" name="pi_ratepay_elv_bank_datatype" id="pi_ratepay_elv_bank_datatype" value="[{$pi_ratepay_elv_bank_datatype}]">
         <ul class="form" id="pi_ratepay_elv_sepa_bankdata" [{if $pi_ratepay_elv_bank_datatype=="classic"}] style="display: none" [{/if}]>
             <li>
@@ -94,22 +73,6 @@
                 <input id='pi_ratepay_elv_bank_iban' name='pi_ratepay_elv_bank_iban' onchange="checkElvForm()" maxlength='50' size='37' type='text' value='[{$pi_ratepay_elv_bank_iban}]'/>
             </li>
         </ul>
-        [{if !$pi_ratepay_elv_iban_only}]
-        <ul class="form" id="pi_ratepay_elv_classic_bankdata" [{if $pi_ratepay_elv_bank_datatype=="sepa"}] style="display: none" [{/if}]>
-            <li>
-                <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_OWNER"}]:</label>
-                <label>[{$pi_ratepay_elv_bank_account_owner}]</label>
-            </li>
-            <li>
-                <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_ACCOUNT_NUMBER"}]:</label>
-                <input id='pi_ratepay_elv_bank_account_number' name='pi_ratepay_elv_bank_account_number' onchange="checkElvForm()" maxlength='50' size='37' type='text' value='[{$pi_ratepay_elv_bank_account_number}]' />
-            </li>
-            <li>
-                <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_CODE"}]:</label>
-                <input id='pi_ratepay_elv_bank_code' name='pi_ratepay_elv_bank_code' onchange="checkElvForm()" maxlength='50' size='37' type='text' value='[{$pi_ratepay_elv_bank_code}]' />
-            </li>
-        </ul>
-        [{/if}]
         <div style="margin: 15px 0;">
             <table>
                 <tr>
