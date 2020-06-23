@@ -15,7 +15,7 @@
 
 ## Changelog
 
-### Version 5.0.7 - Released 2020-03-12
+### Version 5.0.7 - Released 2020-06-23
 * Fixed Trusted Shops issues
 * Fixed problem with payment surcharges
 * Fixed ordernr missing for DirectDebit payment confirmation
