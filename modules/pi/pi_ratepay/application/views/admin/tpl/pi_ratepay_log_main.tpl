@@ -138,7 +138,7 @@
                         [{oxmultilang ident="PI_RATEPAY_LOGGING_REQUEST"}]&nbsp;
                     </td>
                     <td class="edittext">
-                        <textarea cols="80" rows="10">[{$edit->pi_ratepay_logs__request}]</textarea>
+                        <pre>[{$edit->getFormattedRequest()}]</pre>
                     </td>
                 </tr>
                 <tr>
@@ -146,11 +146,11 @@
                         [{oxmultilang ident="PI_RATEPAY_LOGGING_RESPONSE"}]&nbsp;
                     </td>
                     <td class="edittext">
-                        <textarea cols="80" rows="10">[{$edit->pi_ratepay_logs__response}]</textarea>
+                        <pre>[{$edit->getFormattedResponse()}]</pre>
                     </td>
                 </tr>
                 <tr>
-                    <td>
+                    <td colspan="2">
                         <form id="deleteForm" action="[{$oViewConf->getSelfLink()}]" method="post">
                             [{$oViewConf->getHiddenSid()}]
                             <input type="hidden" name="cl" value="pi_ratepay_log_main">
