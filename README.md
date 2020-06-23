@@ -6,7 +6,7 @@
 |Author | `Annegret Seufert`, `Tim Bischoff`, `Fatchip GmbH`
 |Prefix | `pi`
 |Shop Version | `CE/PE` `4.7.x-6.1.x` `EE` `5.0.x-6.1.x`
-|Version | `5.0.6`
+|Version | `5.0.7`
 |Link | http://www.ratepay.com
 |Mail | integration@ratepay.com
 |Installation | https://ratepay.gitbook.io/oxid/
@@ -14,6 +14,14 @@
 |Legal Disclaimer|https://ratepay.gitbook.io/docs/#legal-disclaimer
 
 ## Changelog
+
+### Version 5.0.7 - Released 2020-03-12
+* Fixed Trusted Shops issues
+* Fixed problem with payment surcharges
+* Fixed ordernr missing for DirectDebit payment confirmation
+* Update : checkout (mandatory agreement checkbox, no more "classical bank data" option, only IBAN)
+* Update : missing translation (EN, NL), update for DE
+* docs: add license file
 
 ### Version 5.0.6 - Released 2020-03-12
 * Fixed problems with individual items in checkout
