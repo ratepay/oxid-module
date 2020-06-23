@@ -152,10 +152,28 @@ function piHide(input, elementToToggle) {
 }
 function piCalculator() {
     if ($('#payment_pi_ratepay_rate').is(':checked')) {
+        var agreementCheckbox = $('#rp-sepa-aggreement');
+        agreementCheckbox.prop('checked', false);
+        $('#paymentNextStepBottom').prop('disabled', true);
+    } else if ($('#payment_pi_ratepay_elv').is(':checked')) {
+        agreementCheckbox = $('#pi_ratepay_elv_sepa_agreement_check');
+        agreementCheckbox.prop('checked', false);
         $('#paymentNextStepBottom').prop('disabled', true);
     } else {
         $('#paymentNextStepBottom').prop('disabled', false);
     }
+}
+function checkElvForm() {
+    if ($('#payment_pi_ratepay_elv').is(':checked')) {
+        var agreementCheckbox = $('#pi_ratepay_elv_sepa_agreement_check');
+        var ibanField = $('#pi_ratepay_elv_bank_iban');
 
+        if (ibanField.val() !== '' && agreementCheckbox.is(':checked')) {
+            $('#paymentNextStepBottom').prop('disabled', false);
+
+        } else {
+            $('#paymentNextStepBottom').prop('disabled', true);
+        }
+    }
 }
 </script>

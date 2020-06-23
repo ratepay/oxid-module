@@ -1,29 +1,14 @@
 [{if $sPaymentID == "pi_ratepay_elv"}]
 [{assign var="dynvalue" value=$oView->getDynValue()}]
 
-[{if !$pi_ratepay_elv_iban_only}]
-    <script type="text/javascript">
-        function rpElvSwitch(type) {
-            if(type == 'classic') {
-                document.getElementById('pi_ratepay_elv_classic_bankdata').style.display = 'block';
-                document.getElementById('pi_ratepay_elv_sepa_bankdata').style.display = 'none';
-                document.getElementById('pi_ratepay_elv_bank_datatype').value = 'classic';
-
-            } else {
-                document.getElementById('pi_ratepay_elv_classic_bankdata').style.display = 'none';
-                document.getElementById('pi_ratepay_elv_sepa_bankdata').style.display = 'block';
-                document.getElementById('pi_ratepay_elv_bank_datatype').value = 'sepa';
-            }
-        }
-        function showAgreement() {
-            document.getElementById('pi_ratepay_elv_sepa_agreement').style.display = 'block';
-            document.getElementById('pi_ratepay_elv_sepa_agreement_link').style.display = 'none';
-        }
-    </script>
-    [{/if}]
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function(){
+        checkElvForm();
+    }, false);
+</script>
 <dl>
     <dt>
-        <input id="payment_[{$sPaymentID}]" type="radio" onclick="piCalculator();" name="paymentid" value="[{$sPaymentID}]" [{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]checked[{/if}] style="position:relative;">
+        <input id="payment_[{$sPaymentID}]" type="radio" onclick="piCalculator();checkElvForm();" name="paymentid" value="[{$sPaymentID}]" [{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]checked[{/if}] style="position:relative;">
         <label for="payment_[{$sPaymentID}]"><b>
                 [{$paymentmethod->oxpayments__oxdesc->value}]
         </b></label>
@@ -40,12 +25,20 @@
             [{ oxmultilang ident="PI_RATEPAY_POLICY" }]
         </div>
         <br/>
-        <div style="border: 1px solid #BDBDBD; padding-left: 4px;">
-            [{oxmultilang ident="PI_RATEPAY_VIEW_RATEPAY_ADDRESS"}]
-            <br/>
-            [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_CREDITOR_ID_TEXT"}]: [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_CREDITOR_ID_VALUE"}]
-            <br/>
-            [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_MANDATE_TEXT"}]: [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_MANDATE_VALUE"}]
+        <div style="padding-left: 4px;">
+            <table>
+                <tr>
+                    <td colspan="2">[{oxmultilang ident="PI_RATEPAY_VIEW_RATEPAY_ADDRESS"}]</td>
+                </tr>
+                <tr>
+                    <td>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_CREDITOR_ID_TEXT"}]</td>
+                    <td style="padding-left: 15px;">[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_CREDITOR_ID_VALUE"}]</td>
+                </tr>
+                <tr>
+                    <td>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_MANDATE_TEXT"}]</td>
+                    <td style="padding-left: 15px;">[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_MANDATE_VALUE"}]</td>
+                </tr>
+            </table>
         </div>
         <ul class="form">
 			[{if isset($pi_ratepay_elv_fon_check)}]
@@ -77,37 +70,18 @@
 			[{/if}]
         </ul>
 
-        [{if !$pi_ratepay_elv_iban_only}]
-            <button id="policyButton[{$sPaymentID}]" class="submitButton largeButton" type="button" onclick="rpElvSwitch('sepa')">IBAN Kontodaten</button>
-            <button id="policyButton[{$sPaymentID}]" class="submitButton largeButton" type="button" onclick="rpElvSwitch('classic')">Klassische Kontodaten</button>
-        [{/if}]
         <input type="hidden" name="pi_ratepay_elv_bank_datatype" id="pi_ratepay_elv_bank_datatype" value="[{$pi_ratepay_elv_bank_datatype}]">
-        <ul class="form" id="pi_ratepay_elv_sepa_bankdata" [{if $pi_ratepay_elv_bank_datatype=="classic"}] style="display: none" [{/if}]>
-            <li>
-                <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_OWNER"}]:</label>
-                <label>[{$pi_ratepay_elv_bank_account_owner}]</label>
-            </li>
-            <li>
-                <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_IBAN"}]:</label>
-                <input name='pi_ratepay_elv_bank_iban' maxlength='50' size='37' type='text' value='[{$pi_ratepay_elv_bank_iban}]'/>
-            </li>
-        </ul>
-        [{if !$pi_ratepay_elv_iban_only}]
-        <ul class="form" id="pi_ratepay_elv_classic_bankdata" [{if $pi_ratepay_elv_bank_datatype=="sepa"}] style="display: none" [{/if}]>
-            <li>
-                <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_OWNER"}]:</label>
-                <label>[{$pi_ratepay_elv_bank_account_owner}]</label>
-            </li>
-            <li>
-                <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_ACCOUNT_NUMBER"}]:</label>
-                <input name='pi_ratepay_elv_bank_account_number' maxlength='50' size='37' type='text' value='[{$pi_ratepay_elv_bank_account_number}]' />
-            </li>
-            <li>
-                <label>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_CODE"}]:</label>
-                <input name='pi_ratepay_elv_bank_code' maxlength='50' size='37' type='text' value='[{$pi_ratepay_elv_bank_code}]' />
-            </li>
-        </ul>
-        [{/if}]
+        <div class="form" id="pi_ratepay_elv_sepa_bankdata" [{if $pi_ratepay_elv_bank_datatype=="classic"}] style="display: none" [{/if}]>
+            <p style="margin-bottom: 15px;">
+                <label class="">[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_OWNER"}]</label>
+                <input type="text" class="form-control disabled" name="rp-iban-account-owner" value="[{$pi_ratepay_elv_bank_account_owner}]" disabled />
+            </p>
+            <p>
+                <label class="">[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_IBAN"}]</label>
+                <input id="pi_ratepay_elv_bank_iban" name="pi_ratepay_elv_bank_iban" onchange="checkElvForm()" maxlength='50' size='37' type="text" value="[{$pi_ratepay_elv_bank_iban}]" class="form-control required" />
+            </p>
+        </div>
+
         <div style="margin: 15px 0;">
             <table>
                 <tr>
@@ -115,18 +89,13 @@
                         <input type="hidden" name="pi_ratepay_elv_privacy" value="1" style="float: left;" />
                     </td>
                     <td>
-                        <a id="pi_ratepay_elv_sepa_agreement_link" style="text-decoration: underline; cursor: pointer" onclick="showAgreement();">[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT"}]</a>
-                        <span id="pi_ratepay_elv_sepa_agreement" style="display: none">
-                            [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_1"}]
-                            [{oxmultilang ident="PI_RATEPAY_VIEW_RATEPAY_ADDRESS"}]
-                            [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_2"}]
-                            <a href='https://ratepay.com/legal' target='_blank' style="text-decoration:underline;">[{oxmultilang ident="PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_PRIVACYPOLICY"}]</a>
-                            [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_4"}]
-                            <br/><br/>
-                            [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_5"}]
-                            </br>
-                            [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_6"}]
-                        </span>
+                        <div id="pi_ratepay_elv_sepa_agreement">
+                            <p>
+                                <input type="checkbox" name="pi_ratepay_elv_sepa_agreement_check" id="pi_ratepay_elv_sepa_agreement_check" onchange="checkElvForm()" class="required" />
+                                <span style="margin-left: 5px">[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_1"}]</span>
+                            </p>
+                            <p>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_PRIVACY_AGREEMENT_TEXT_2"}]</p>
+                        </div>
                     </td>
                 </tr>
             </table>

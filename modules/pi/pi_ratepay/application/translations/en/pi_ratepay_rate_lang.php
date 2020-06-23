@@ -21,11 +21,11 @@
 // -------------------------------
 $sLangName = "English";
 
-$piErrorAge = 'Um eine Zahlung per RatePAY Rate durchzuf&uuml;hren, m&uuml;ssen Sie mindestens 18 Jahre alt sein.';
+$piErrorAge = 'To make a payment via RatePAY Rate, you must be at least 18 years old.';
 $piErrorBirth = 'To make a payment via RatePAY Rate, please provide your birth date.';
 $piErrorPhone = 'To make a payment via RatePAY Rate, please provide your phone numer.';
-$piErrorCompany = 'Geben Sie bitte Ihren Firmennamen und Ihre Umsatzsteuer-ID ein.';
-$piErrorBirthdayDigits = 'Geben Sie bitte Ihr Geburtsjahr vierstellig ein. (z.B. 1982)';
+$piErrorCompany = 'Please enter your company name and VAT ID.';
+$piErrorBirthdayDigits = 'Please enter your year of birth in four digits. (e.g. 1982)';
 
 $aLang = array(
     'charset'                                       => 'UTF-8',
