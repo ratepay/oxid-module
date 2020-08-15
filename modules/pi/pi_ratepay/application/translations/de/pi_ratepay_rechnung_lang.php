@@ -21,9 +21,9 @@
 // -------------------------------
 $sLangName = "Deutsch";
 
-$piErrorAge = 'Um eine Zahlung per RatePAY Rechnung durchzuf&uuml;hren, m&uuml;ssen Sie mindestens 18 Jahre alt sein.';
-$piErrorBirth = 'Um eine Zahlung per RatePAY Rechnung durchzuf&uuml;hren, geben Sie bitte Ihr Geburtsdatum ein.';
-$piErrorPhone = 'Um eine Zahlung per RatePAY Rechnung durchzuf&uuml;hren, geben Sie bitte Ihre Telefonnummer ein.';
+$piErrorAge = 'Um eine Zahlung per Ratepay Rechnung durchzuf&uuml;hren, m&uuml;ssen Sie mindestens 18 Jahre alt sein.';
+$piErrorBirth = 'Um eine Zahlung per Ratepay Rechnung durchzuf&uuml;hren, geben Sie bitte Ihr Geburtsdatum ein.';
+$piErrorPhone = 'Um eine Zahlung per Ratepay Rechnung durchzuf&uuml;hren, geben Sie bitte Ihre Telefonnummer ein.';
 $piErrorCompany = 'Geben Sie bitte Ihren Firmennamen und Ihre Umsatzsteuer-ID ein.';
 $piErrorBirthdayDigits = 'Geben Sie bitte Ihr Geburtsjahr vierstellig ein. (z.B. 1982)';
 
@@ -39,11 +39,11 @@ $aLang = array(
     'PI_RATEPAY_RECHNUNG_VIEW_POLICY_TEXT_5'             => ' sowie der ',
     'PI_RATEPAY_RECHNUNG_VIEW_POLICY_OWNERPOLICY'        => 'H&auml;ndler-Datenschutzerkl&auml;rung',
     'PI_RATEPAY_RECHNUNG_VIEW_POLICY_TEXT_6'             => ' und bin insbesondere damit einverstanden, zum Zwecke der Durchf&uuml;hrung des Vertrags &uuml;ber die von mir angegebene E-Mail-Adresse kontaktiert zu werden.',
-    'PI_RATEPAY_RECHNUNG_VIEW_POLICY_PRIVACYPOLICY'      => 'RatePAY-Datenschutzerkl&auml;rung',
-    'PI_RATEPAY_RECHNUNG_ERROR'                          => 'Leider ist eine Bezahlung mit RatePAY nicht m&ouml;glich. Diese Entscheidung ist von RatePAY auf der Grundlage einer automatisierten Datenverarbeitung getroffen worden. Einzelheiten erfahren Sie in der ',
+    'PI_RATEPAY_RECHNUNG_VIEW_POLICY_PRIVACYPOLICY'      => 'Ratepay-Datenschutzerkl&auml;rung',
+    'PI_RATEPAY_RECHNUNG_ERROR'                          => 'Leider ist eine Bezahlung mit Ratepay nicht m&ouml;glich. Diese Entscheidung ist von Ratepay auf der Grundlage einer automatisierten Datenverarbeitung getroffen worden. Einzelheiten erfahren Sie in der ',
     'PI_RATEPAY_RECHNUNG_AGBERROR'                       => 'Bitte akzeptieren Sie die Bedingungen.',
     'PI_RATEPAY_RECHNUNG_SUCCESS'                        => 'Bestellung erfolgreich abgeschlossen',
-    'PI_RATEPAY_RECHNUNG_ERROR_ADDRESS'                  => 'Bitte beachten Sie, dass RatePAY Rate nur genutzt werden kann, wenn Rechnungs- und Lieferaddresse identisch sind.',
+    'PI_RATEPAY_RECHNUNG_ERROR_ADDRESS'                  => 'Bitte beachten Sie, dass Ratepay Rate nur genutzt werden kann, wenn Rechnungs- und Lieferaddresse identisch sind.',
     'PI_RATEPAY_RECHNUNG_ERROR_ZIP'                      => 'Bitte geben Sie Ihre korrekte Postleitzahl ein.',
     'PI_RATEPAY_RECHNUNG_ERROR_BIRTH'                    => $piErrorBirth,
     'PI_RATEPAY_RECHNUNG_ERROR_PHONE'                    => $piErrorPhone,
