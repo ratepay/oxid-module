@@ -31,15 +31,15 @@ $librarySubModelContent = 'RatePAY\Model\Request\SubModel\Content';
 
 $aModule = array(
     'id'           => 'pi_ratepay',
-    'title'        => 'RatePAY',
+    'title'        => 'Ratepay',
     'description'  => array(
-        'de' => 'Bezahlung mit RatePAY',
-        'en' => 'Payment with RatePAY'
+        'de' => 'Bezahlung mit Ratepay',
+        'en' => 'Payment with Ratepay'
     ),
     'thumbnail'    => 'ratepay_logo.png',
     'lang'         => 'en',
     'version'      => '5.0.7',
-    'author'       => 'RatePAY GmbH',
+    'author'       => 'Ratepay GmbH',
     'email'        => 'integration@ratepay.com',
     'url'          => 'http://www.ratepay.com/',
     'extend'       => array(

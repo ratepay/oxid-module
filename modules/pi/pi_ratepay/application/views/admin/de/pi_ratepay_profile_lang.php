@@ -24,7 +24,7 @@ $aLang = array(
     'PI_RATEPAY_PROFILE_CREDENTIALS'     => "Zugangsdaten",
     'PI_RATEPAY_PROFILE_SAVE'            => "Konfiguration speichern",
     'PI_RATEPAY_PROFILE_SAVED'           => "Konfiguration gespeichert",
-    'PI_RATEPAY_PROFILE_PAYMENT_FOR'     => "RatePAY Payment f&uuml;r",
+    'PI_RATEPAY_PROFILE_PAYMENT_FOR'     => "Ratepay Payment f&uuml;r",
 
     'PI_RATEPAY_PROFILE_COUNTRY_DE'      => "Deutschland",
     'PI_RATEPAY_PROFILE_COUNTRY_AT'      => "&Ouml;sterreich",
@@ -55,7 +55,7 @@ $aLang = array(
     'PI_RATEPAY_PROFILE_SETTINGS_SECURITYCODE' => "Security Code",
     'PI_RATEPAY_PROFILE_SETTINGS_TITLE'        => "Bezeichnung (im Checkout)",
     'PI_RATEPAY_PROFILE_SETTINGS_SANDBOX'      => "Sandbox",
-    'PI_RATEPAY_PROFILE_SETTINGS_URL'          => "RatePAY-Datenschutzerkl&auml;rung URL",
+    'PI_RATEPAY_PROFILE_SETTINGS_URL'          => "Ratepay-Datenschutzerkl&auml;rung URL",
     'PI_RATEPAY_PROFILE_SETTINGS_LOGGING'      => "Logging",
     'PI_RATEPAY_PROFILE_SETTINGS_WHITELABEL'   => "Whitelabel",
     'PI_RATEPAY_PROFILE_SETTINGS_DUEDATE'      => "F&auml;llig nach",
@@ -85,7 +85,7 @@ $aLang = array(
     'PI_RATEPAY_PROFILE_CURRENCIES'            => 'CURRENCIES',
     'PI_RATEPAY_PROFILE_DELIVERY_COUNTRIES'    => 'DELIVERY_COUNTRIES',
 
-    'PI_RATEPAY_PROFILE_ERROR_DEACTIVATED_BY_REQUEST'   => "Diese Zahlart ist bei RatePAY nicht aktiviert",
+    'PI_RATEPAY_PROFILE_ERROR_DEACTIVATED_BY_REQUEST'   => "Diese Zahlart ist bei Ratepay nicht aktiviert",
     'PI_RATEPAY_PROFILE_ERROR_CREDENTIALS_INVALID_LIVE' => "Die eingetragenen Zugangsdaten wurden vom Live-Gateway abgelehnt",
     'PI_RATEPAY_PROFILE_ERROR_CREDENTIALS_INVALID_INT'  => "Die eingetragenen Zugangsdaten wurden vom Integrations-Gateway abgelehnt"
 );

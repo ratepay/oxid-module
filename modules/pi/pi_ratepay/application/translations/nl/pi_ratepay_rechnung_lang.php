@@ -21,9 +21,9 @@
 // -------------------------------
 $sLangName = "Niederländisch";
 
-$piErrorAge = 'Om door RatePAY een betaling op rekening door te kunnen, voeren moet u ten minste 18 jaar of ouder zijn.';
-$piErrorBirth = 'Om door RatePAY een betaling op rekening door te kunnen voeren, gelieve hier uw geboortedatum invoeren.';
-$piErrorPhone = 'Om door RatePAY een betaling op rekening door te kunnen voeren, gelieve hier uw telefoonnummer invoeren.';
+$piErrorAge = 'Om door Ratepay een betaling op rekening door te kunnen, voeren moet u ten minste 18 jaar of ouder zijn.';
+$piErrorBirth = 'Om door Ratepay een betaling op rekening door te kunnen voeren, gelieve hier uw geboortedatum invoeren.';
+$piErrorPhone = 'Om door Ratepay een betaling op rekening door te kunnen voeren, gelieve hier uw telefoonnummer invoeren.';
 $piErrorCompany = 'Gelieve hier uw bedrijfsnaam en uw btw-nummer invoeren.';
 $piErrorBirthdayDigits = 'Gelieve hier uw geboortedatum middels een viercijferige invoer vastleggen (bijv. 1982)';
 
@@ -39,11 +39,11 @@ $aLang = array(
     'PI_RATEPAY_RECHNUNG_VIEW_POLICY_TEXT_5'             => ' evenals van ',
     'PI_RATEPAY_RECHNUNG_VIEW_POLICY_OWNERPOLICY'        => 'handelaar-privacybeleid',
     'PI_RATEPAY_RECHNUNG_VIEW_POLICY_TEXT_6'             => ' en in het bijzonder geef ik toestemming tot contactopname via e-mail als deze betrekking heeft op de afhandeling van mijn overeenkomst.',
-    'PI_RATEPAY_RECHNUNG_VIEW_POLICY_PRIVACYPOLICY'      => 'RatePAY Privacybeleid',
+    'PI_RATEPAY_RECHNUNG_VIEW_POLICY_PRIVACYPOLICY'      => 'Ratepay Privacybeleid',
     'PI_RATEPAY_RECHNUNG_ERROR'                          => 'Helaas is een betaling met de gekozen betaalmethode Factuur niet mogelijk. Dit besluit is genomen op basis van een geautomatiseerde gegevenscontrole. Details vindt u onder ',
     'PI_RATEPAY_RECHNUNG_AGBERROR'                       => 'Gelieve hier akkoord gaan met de voorwaarden.',
     'PI_RATEPAY_RECHNUNG_SUCCESS'                        => 'Uw bestelling is succelvol afgerond',
-    'PI_RATEPAY_RECHNUNG_ERROR_ADDRESS'                  => 'BHoudt u er rekening mee dat uw factuur- en afleveradres overeenstemmend moeten zijn om een aankoop middels RatePAY SEPA-incasso door te kunnen voeren.',
+    'PI_RATEPAY_RECHNUNG_ERROR_ADDRESS'                  => 'BHoudt u er rekening mee dat uw factuur- en afleveradres overeenstemmend moeten zijn om een aankoop middels Ratepay SEPA-incasso door te kunnen voeren.',
     'PI_RATEPAY_RECHNUNG_ERROR_ZIP'                      => 'Bitte geben Sie Ihre korrekte Postleitzahl ein.',
     'PI_RATEPAY_RECHNUNG_ERROR_BIRTH'                    => $piErrorBirth,
     'PI_RATEPAY_RECHNUNG_ERROR_PHONE'                    => $piErrorPhone,
