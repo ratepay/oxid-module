@@ -21,9 +21,9 @@
 // -------------------------------
 $sLangName = "English";
 
-$piErrorAge = 'To make a payment via RatePAY Rate, you must be at least 18 years old.';
-$piErrorBirth = 'To make a payment via RatePAY Rate, please provide your birth date.';
-$piErrorPhone = 'To make a payment via RatePAY Rate, please provide your phone numer.';
+$piErrorAge = 'To make a payment via Ratepay Rate, you must be at least 18 years old.';
+$piErrorBirth = 'To make a payment via Ratepay Rate, please provide your birth date.';
+$piErrorPhone = 'To make a payment via Ratepay Rate, please provide your phone numer.';
 $piErrorCompany = 'Please enter your company name and VAT ID.';
 $piErrorBirthdayDigits = 'Please enter your year of birth in four digits. (e.g. 1982)';
 
@@ -35,13 +35,13 @@ $aLang = array(
     'PI_RATEPAY_RATE_VIEW_POLICY_TEXT_3'            => '. ',
     'PI_RATEPAY_RATE_VIEW_POLICY_AGB'               => 'general terms and conditions',
     'PI_RATEPAY_RATE_VIEW_POLICY_WIDER'             => 'withdrawal',
-    'PI_RATEPAY_RATE_VIEW_POLICY_PRIVACYPOLICY'     => 'RatePAY Data Privacy Statement',
-    'PI_RATEPAY_RATE_ERROR'                         => 'Sorry, there is no payment with RatePAY possible. This decision was taken by RatePAY on the basis of an automated data processing algorithm. For Details, please read the ',
+    'PI_RATEPAY_RATE_VIEW_POLICY_PRIVACYPOLICY'     => 'Ratepay Data Privacy Statement',
+    'PI_RATEPAY_RATE_ERROR'                         => 'Sorry, there is no payment with Ratepay possible. This decision was taken by Ratepay on the basis of an automated data processing algorithm. For Details, please read the ',
     'PI_RATEPAY_RATE_AGBERROR'                      => 'Please accept the conditions.',
     'PI_RATEPAY_RATE_SUCCESS'                       => 'Order completed successfully',
     'PI_RATEPAY_RATE_ERROR_BIRTH'                   => $piErrorBirth,
     'PI_RATEPAY_RATE_ERROR_PHONE'                   => $piErrorPhone,
-    'PI_RATEPAY_RATE_ERROR_ADDRESS'                 => 'Please note that RatePAY Rate can only be used as a payment method when billing and shipping address entered are equal.',
+    'PI_RATEPAY_RATE_ERROR_ADDRESS'                 => 'Please note that Ratepay Rate can only be used as a payment method when billing and shipping address entered are equal.',
     'PI_RATEPAY_RATE_ERROR_ZIP'                     => 'Please enter your correct zipcode.',
     'PI_RATEPAY_RATE_ERROR_AGE'                     => $piErrorAge,
     'PI_RATEPAY_RATE_VIEW_PAYMENT_FON'              => 'Fon:',

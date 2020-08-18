@@ -23,17 +23,17 @@ $sLangName = "Niederländisch";
 
 $aLang = array(
     'charset'                                         => 'UTF-8',
-    'PI_RATEPAY_ERROR_CONNECTION_TIMEOUT'             => 'Helaas is de verbinding tot RatePAY op dit moment onderbroken. Probeert u het later opnieuw.',
+    'PI_RATEPAY_ERROR_CONNECTION_TIMEOUT'             => 'Helaas is de verbinding tot Ratepay op dit moment onderbroken. Probeert u het later opnieuw.',
     'PI_RATEPAY_SHOW_MORE_INFORMATION'                => 'Meer informatie',
     'PI_RATEPAY_HIDE_MORE_INFORMATION'                => 'Details verbergen',
-    'PI_RATEPAY_ERROR_PRIVACY_AGREEMENT'              => 'Gelieve hier akkoord gaan met het RatePAY Privacybeleid',
+    'PI_RATEPAY_ERROR_PRIVACY_AGREEMENT'              => 'Gelieve hier akkoord gaan met het Ratepay Privacybeleid',
     'PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_TEXT_1'        => 'Ik geef toestemming tot gebruik van mijn gegevens volgens de ',
     'PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_TEXT_2'        => ' evenals van ',
     'PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_TEXT_3'        => ' en in het bijzonder geef ik toestemming tot contactopname via e-mail als deze betrekking heeft op de afhandeling van mijn overeenkomst. ',
-    'PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_PRIVACYPOLICY' => 'RatePAY Privacybeleid',
+    'PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_PRIVACYPOLICY' => 'Ratepay Privacybeleid',
     'PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_OWNERPOLICY'   => 'H&auml;ndler-Datenschutzerkl&auml;rung',
     'PI_RATEPAY_VIEW_RADIO_LABEL_ELV'                 => 'Per elektronischem Lastschriftverfahren',
     'PI_RATEPAY_VIEW_RADIO_PAYMENT_WIRE'              => 'Per &Uuml;berweisung',
-    'PI_RATEPAY_VIEW_RATEPAY_ADDRESS'                 => 'RatePAY GmbH, Franklinstra&szlig;e 28-29, 10587 Berlin',
-    'PI_RATEPAY_POLICY'                               => '<p>Voor deze betalingsmethode gelden <a href="//ratepay.com/legal" title="Legal - RatePAY" target="_blank" style="text-decoration: underline; cursor: pointer">aanvullende AV- en gegevensbeschermingsverklaringen</a>.</p>',
+    'PI_RATEPAY_VIEW_RATEPAY_ADDRESS'                 => 'Ratepay GmbH, Franklinstra&szlig;e 28-29, 10587 Berlin',
+    'PI_RATEPAY_POLICY'                               => '<p>Voor deze betalingsmethode gelden <a href="//ratepay.com/legal" title="Legal - Ratepay" target="_blank" style="text-decoration: underline; cursor: pointer">aanvullende AV- en gegevensbeschermingsverklaringen</a>.</p>',
 );

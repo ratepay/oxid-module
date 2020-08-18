@@ -21,9 +21,9 @@
 // -------------------------------
 $sLangName = "Niederländisch";
 
-$piErrorAge = 'Om door RatePAY een betaling op rekening door te kunnen, voeren moet u ten minste 18 jaar of ouder zijn.';
-$piErrorBirth = 'Om door RatePAY een betaling op rekening door te kunnen voeren, gelieve hier uw geboortedatum invoeren.';
-$piErrorPhone = 'Om door RatePAY een betaling op rekening door te kunnen voeren, gelieve hier uw telefoonnummer invoeren.';
+$piErrorAge = 'Om door Ratepay een betaling op rekening door te kunnen, voeren moet u ten minste 18 jaar of ouder zijn.';
+$piErrorBirth = 'Om door Ratepay een betaling op rekening door te kunnen voeren, gelieve hier uw geboortedatum invoeren.';
+$piErrorPhone = 'Om door Ratepay een betaling op rekening door te kunnen voeren, gelieve hier uw telefoonnummer invoeren.';
 $piErrorCompany = 'Gelieve hier uw bedrijfsnaam en uw btw-nummer invoeren.';
 $piErrorBirthdayDigits = 'Gelieve hier uw geboortedatum middels een viercijferige invoer vastleggen (bijv. 1982)';
 
@@ -35,9 +35,9 @@ $aLang = array(
     'PI_RATEPAY_RATE_VIEW_POLICY_TEXT_3'            => ' informiert.',
     'PI_RATEPAY_RATE_VIEW_POLICY_AGB'               => 'Allgemeinen Gesch&auml;ftsbedingungen',
     'PI_RATEPAY_RATE_VIEW_POLICY_WIDER'             => 'Widerrufsrecht',
-    'PI_RATEPAY_RATE_VIEW_POLICY_PRIVACYPOLICY'     => 'RatePAY-Datenschutzerkl&auml;rung',
-    'PI_RATEPAY_RATE_ERROR'                         => 'Leider ist eine Bezahlung mit RatePAY nicht m&ouml;glich. Diese Entscheidung ist von RatePAY auf der Grundlage einer automatisierten Datenverarbeitung getroffen worden. Einzelheiten erfahren Sie in der ',
-    'PI_RATEPAY_RATE_ERROR_ADDRESS'                 => 'Bitte beachten Sie, dass RatePAY Rate nur genutzt werden kann, wenn Rechnungs- und Lieferaddresse identisch sind.',
+    'PI_RATEPAY_RATE_VIEW_POLICY_PRIVACYPOLICY'     => 'Ratepay-Datenschutzerkl&auml;rung',
+    'PI_RATEPAY_RATE_ERROR'                         => 'Leider ist eine Bezahlung mit Ratepay nicht m&ouml;glich. Diese Entscheidung ist von Ratepay auf der Grundlage einer automatisierten Datenverarbeitung getroffen worden. Einzelheiten erfahren Sie in der ',
+    'PI_RATEPAY_RATE_ERROR_ADDRESS'                 => 'Bitte beachten Sie, dass Ratepay Rate nur genutzt werden kann, wenn Rechnungs- und Lieferaddresse identisch sind.',
     'PI_RATEPAY_RATE_ERROR_ZIP'                     => 'Bitte geben Sie Ihre korrekte Postleitzahl ein.',
     'PI_RATEPAY_RATE_ERROR_BIRTH'                   => $piErrorBirth,
     'PI_RATEPAY_RATE_ERROR_PHONE'                   => $piErrorPhone,

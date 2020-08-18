@@ -126,9 +126,9 @@ class pi_ratepay_events
         ) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_general_ci;";
 
     public static $aPaymentMethods = array(
-        'pi_ratepay_rechnung' => 'RatePAY Rechnung',
-        'pi_ratepay_rate' => 'RatePAY Rate',
-        'pi_ratepay_elv' => 'RatePAY SEPA-Lastschrift',
+        'pi_ratepay_rechnung' => 'Ratepay Rechnung',
+        'pi_ratepay_rate' => 'Ratepay Rate',
+        'pi_ratepay_elv' => 'Ratepay SEPA-Lastschrift',
     );
 
     /**

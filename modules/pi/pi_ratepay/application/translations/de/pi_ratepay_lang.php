@@ -23,17 +23,17 @@ $sLangName = "Deutsch";
 
 $aLang = array(
     'charset'                                         => 'UTF-8',
-    'PI_RATEPAY_ERROR_CONNECTION_TIMEOUT'             => 'Leider ist die Verbindung zu RatePAY derzeit nicht m&ouml;glich, bitte versuchen Sie es zu einem sp&auml;teren Zeitpunkt erneut.',
+    'PI_RATEPAY_ERROR_CONNECTION_TIMEOUT'             => 'Leider ist die Verbindung zu Ratepay derzeit nicht m&ouml;glich, bitte versuchen Sie es zu einem sp&auml;teren Zeitpunkt erneut.',
     'PI_RATEPAY_SHOW_MORE_INFORMATION'                => 'Mehr Informationen',
     'PI_RATEPAY_HIDE_MORE_INFORMATION'                => 'Informationen ausblenden',
-    'PI_RATEPAY_ERROR_PRIVACY_AGREEMENT'              => 'Bitte akzeptieren Sie die RatePAY-Datenschutzerkl&auml;rung',
+    'PI_RATEPAY_ERROR_PRIVACY_AGREEMENT'              => 'Bitte akzeptieren Sie die Ratepay-Datenschutzerkl&auml;rung',
     'PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_TEXT_1'        => 'Ich erkl&auml;re hiermit meine Einwilligung zur Verwendung meiner Daten gem&auml;&szlig; der ',
     'PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_TEXT_2'        => ' sowie der ',
     'PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_TEXT_3'        => ' und bin insbesondere damit einverstanden, zum Zwecke der Durchf&uuml;hrung des Vertrags &uuml;ber die von mir angegebene E-Mail-Adresse kontaktiert zu werden.',
-    'PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_PRIVACYPOLICY' => 'RatePAY-Datenschutzerkl&auml;rung',
+    'PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_PRIVACYPOLICY' => 'Ratepay-Datenschutzerkl&auml;rung',
     'PI_RATEPAY_VIEW_PRIVACY_AGREEMENT_OWNERPOLICY'   => 'H&auml;ndler-Datenschutzerkl&auml;rung',
     'PI_RATEPAY_VIEW_RADIO_LABEL_ELV'                 => 'Per elektronischem Lastschriftverfahren',
     'PI_RATEPAY_VIEW_RADIO_PAYMENT_WIRE'              => 'Per &Uuml;berweisung',
-    'PI_RATEPAY_VIEW_RATEPAY_ADDRESS'                 => 'RatePAY GmbH, Franklinstra&szlig;e 28-29, 10587 Berlin',
-    'PI_RATEPAY_POLICY'                               => '<p>F&uuml;r diese Zahlungsart gelten <a href="//ratepay.com/legal" title="Legal - RatePAY" target="_blank" style="text-decoration: underline; cursor: pointer">zus&auml;tzliche AGB und Datenschutzhinweise</a>.</p>',
+    'PI_RATEPAY_VIEW_RATEPAY_ADDRESS'                 => 'Ratepay GmbH, Franklinstra&szlig;e 28-29, 10587 Berlin',
+    'PI_RATEPAY_POLICY'                               => '<p>Mit Klicken auf &quot;Zahlungspflichtig bestellen&quot; erkl&auml;ren Sie sich mit den <a href="//ratepay.com/legal-payment-terms" title="Legal Payment Terms - Ratepay" target="_blank" style="text-decoration: underline; cursor: pointer">Zahlungsbedingungen unseres Zahlungspartners</a> sowie mit der Durchf&uuml;hrung einer <a href="//ratepay.com/legal-payment-dataprivacy" title="Legal Payment Dataprivacy - Ratepay" target="_blank" style="text-decoration: underline; cursor: pointer">Risikopr&uuml;fung durch unseren Zahlungspartner</a> einverstanden.</p>',
 );
