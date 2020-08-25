@@ -140,6 +140,7 @@ class pi_ratepay_events
     {
         self::addDatabaseStructure();
         self::addData();
+        self::updateData();
         self::checkColumns();
         self::regenerateViews();
         self::clearTmp();
@@ -286,7 +287,7 @@ class pi_ratepay_events
     public static function checkIfColumnExists($sTableName, $sColumnName)
     {
         $aColumns = oxDb::getDb()->getAll("SHOW COLUMNS FROM {$sTableName} LIKE '{$sColumnName}'");
-        if (!$aColumns || count($aColumns == 0)) {
+        if (!$aColumns || count($aColumns) == 0) {
             return false;
         }
         return true;
@@ -388,5 +389,66 @@ class pi_ratepay_events
         $sPaymenthodIds = "'" . implode("','", array_keys(self::$aPaymentMethods)) . "'";
         $sQ = "update oxpayments set oxactive = 0 where oxid in ($sPaymenthodIds)";
         oxDB::getDB()->Execute($sQ);
+    }
+
+    /**
+     * Update data
+     */
+    public static function updateData()
+    {
+        // Changes from 5.0.8 and later
+
+        // OX-42 renaming/rebranding
+        $aRenamingCriteria = array(
+            'pi_ratepay_rechnung' => 'RatePAY Rechnung',
+            'pi_ratepay_rate' => 'RatePAY Rate',
+            'pi_ratepay_elv' => 'RatePAY SEPA-Lastschrift',
+        );
+        foreach (self::$aPaymentMethods as $sCode => $sName) {
+            if (!isset($aRenamingCriteria[$sCode])) {
+                continue;
+            }
+            self::updateDataIfExists(
+                'oxpayments',
+                array('OXID' => $sCode),
+                'OXDESC',
+                $sName,
+                array('OXDESC' => $aRenamingCriteria[$sCode])
+            );
+        }
+    }
+
+    /**
+     * Insert a database row to an existing table.
+     *
+     * @param string $sTableName database table name
+     * @param array $aKeyValue keys of rows to change
+     * @param string $sColumnName the column name to change, used also to existence check
+     * @param string $sValue
+     *
+     * @param $aCriteria
+     * @return bool
+     */
+    public static function updateDataIfExists($sTableName, $aKeyValue, $sColumnName, $sValue, $aCriteria)
+    {
+        if (!self::checkIfColumnExists($sTableName, $sColumnName)) {
+            return false;
+        }
+
+        $sWhere = '';
+        foreach ($aKeyValue as $key => $value) {
+            $sWhere .= " AND $key = '$value'";
+        }
+        foreach ($aCriteria as $key => $value) {
+            $sWhere .= " AND $key = '$value'";
+        }
+        $sQ = "UPDATE {$sTableName} SET {$sColumnName} = '{$sValue}' WHERE 1" . $sWhere;
+        try {
+            oxDB::getDB()->Execute($sQ);
+        } catch (Exception $oEx) {
+            return false;
+        }
+
+        return true;
     }
 }
