@@ -6,7 +6,7 @@
 |Author | `Fatchip GmbH`
 |Prefix | `pi`
 |Shop Version | `CE/PE` `4.7.x-6.1.x` `EE` `5.0.x-6.2.x`
-|Version | `5.0.7`
+|Version | `5.0.8`
 |Link | http://www.ratepay.com
 |Mail | integration@ratepay.com
 |Installation | https://ratepay.gitbook.io/oxid/
@@ -14,6 +14,16 @@
 |Legal Disclaimer|https://ratepay.gitbook.io/docs/#legal-disclaimer
 
 ## Changelog
+
+### Version 5.0.8 - Released 2020-08-26
+* Fixed : add check to prevent loading a log if none got selected (on first time
+* Fixed : add session data cleaning process after successful order placement
+* Fixed : add check to accept alphanumeric format for NL IBAN
+* Fixed : bug in database migration steps
+* Fixed : removed NL lang files, as this translation is not fully supported
+* Fixed : Adjust shipping cost fetching to use brutto value during payment placement
+* Update : renaming and rebranding
+* Update : add step on activation to update database existing values
 
 ### Version 5.0.7 - Released 2020-06-23
 * Fixed Trusted Shops issues
