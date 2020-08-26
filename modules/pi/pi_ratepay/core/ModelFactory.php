@@ -698,8 +698,11 @@ class ModelFactory extends oxSuperCfg {
     {
         $basket = $this->_basket;
         if (method_exists($basket, 'getDeliveryCost') && $basket->getDeliveryCost()) {
-            $deliveryCosts = $basket->getDeliveryCost()->getPrice();
-            $deliveryVat = $basket->getDeliveryCost()->getVat();
+            // OX-46 use BruttoPrice to place correct shipping costs with the payment request
+            /** @var oxPrice $deliveryCostsItem */
+            $deliveryCostsItem = $basket->getDeliveryCost();
+            $deliveryCosts = $deliveryCostsItem->getBruttoPrice();
+            $deliveryVat = $deliveryCostsItem->getVat();
         } elseif (method_exists($basket, 'getDeliveryCosts') && $basket->getDeliveryCosts()) {
             $deliveryCosts = $basket->getDeliveryCosts();
             if ($basket->$deliveryCosts() > 0) {
