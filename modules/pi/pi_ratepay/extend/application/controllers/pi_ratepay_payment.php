@@ -677,7 +677,7 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
             if (empty($iban)) {
                 $isBankDataValid = false;
                 $this->_errors[] = '-501';
-            } elseif (!is_numeric($numericPart)) {
+            } elseif (!is_numeric($numericPart) && $countryPrefix != 'NL') {
                 $isBankDataValid = false;
                 $this->_errors[] = '-501';
             } elseif ($countryPrefix == "DE" && strlen($iban) <> 22) {
