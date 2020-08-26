@@ -3,9 +3,9 @@
 
 |Module | RatePAY Payment Module for OXID
 |------|----------
-|Author | `Annegret Seufert`, `Tim Bischoff`, `Fatchip GmbH`
+|Author | `Fatchip GmbH`
 |Prefix | `pi`
-|Shop Version | `CE/PE` `4.7.x-6.1.x` `EE` `5.0.x-6.1.x`
+|Shop Version | `CE/PE` `4.7.x-6.1.x` `EE` `5.0.x-6.2.x`
 |Version | `5.0.8`
 |Link | http://www.ratepay.com
 |Mail | integration@ratepay.com
