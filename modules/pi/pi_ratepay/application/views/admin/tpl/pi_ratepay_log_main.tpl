@@ -1,5 +1,5 @@
 [{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign}]
-[{ if $readonly }]
+[{if $readonly}]
     [{assign var="readonly" value="readonly disabled"}]
 [{else}]
     [{assign var="readonly" value=""}]
@@ -29,6 +29,7 @@
     <input type="hidden" name="editlanguage" value="[{$editlanguage}]">
 </form>
 
+[{if $edit}]
 <table cellspacing="0" cellpadding="0" border="0" width="98%">
     <colgroup><col width="20%"><col width="5%"><col width="75%"></colgroup>
     [{ $oViewConf->getHiddenSid() }]
@@ -166,5 +167,6 @@
         </td>
     </tr>
 </table>
+[{/if}]
 
 [{include file="bottomitem.tpl"}]
