@@ -38,6 +38,8 @@ require_once getShopBasePath() . 'bootstrap.php';
  */
 class PiRatepayRateCalcData implements PiRatepayRateCalcDataInterface
 {
+    protected $paymentMethod = 'pi_ratepay_rate';
+
     /**
      * {@inheritdoc}
      * @return string
@@ -204,40 +206,40 @@ class PiRatepayRateCalcData implements PiRatepayRateCalcDataInterface
     )
     {
         oxRegistry::getSession()->setVariable(
-            'pi_ratepay_rate_total_amount', $total_amount
+            $this->paymentMethod . '_total_amount', $total_amount
         );
         oxRegistry::getSession()->setVariable(
-            'pi_ratepay_rate_amount', $amount
+            $this->paymentMethod . '_amount', $amount
         );
         oxRegistry::getSession()->setVariable(
-            'pi_ratepay_rate_interest_rate', $interest_rate
+            $this->paymentMethod . '_interest_rate', $interest_rate
         );
         oxRegistry::getSession()->setVariable(
-            'pi_ratepay_rate_interest_amount', $interest_amount
+            $this->paymentMethod . '_interest_amount', $interest_amount
         );
         oxRegistry::getSession()->setVariable(
-            'pi_ratepay_rate_service_charge', $service_charge
+            $this->paymentMethod . '_service_charge', $service_charge
         );
         oxRegistry::getSession()->setVariable(
-            'pi_ratepay_rate_annual_percentage_rate', $annual_percentage_rate
+            $this->paymentMethod . '_annual_percentage_rate', $annual_percentage_rate
         );
         oxRegistry::getSession()->setVariable(
-            'pi_ratepay_rate_monthly_debit_interest', $monthly_debit_interest
+            $this->paymentMethod . '_monthly_debit_interest', $monthly_debit_interest
         );
         oxRegistry::getSession()->setVariable(
-            'pi_ratepay_rate_number_of_rates', $number_of_rates
+            $this->paymentMethod . '_number_of_rates', $number_of_rates
         );
         oxRegistry::getSession()->setVariable(
-            'pi_ratepay_rate_rate', $rate
+            $this->paymentMethod . '_rate', $rate
         );
         oxRegistry::getSession()->setVariable(
-            'pi_ratepay_rate_last_rate', $last_rate
+            $this->paymentMethod . '_last_rate', $last_rate
         );
         oxRegistry::getSession()->setVariable(
-            'pi_ratepay_rate_payment_firstday', $payment_firstday
+            $this->paymentMethod . '_payment_firstday', $payment_firstday
         );
         oxRegistry::getSession()->setVariable(
-            'pi_ratepay_rate_bank_iban', $bank_iban
+            $this->paymentMethod . '_bank_iban', $bank_iban
         );
     }
 
@@ -248,18 +250,18 @@ class PiRatepayRateCalcData implements PiRatepayRateCalcDataInterface
     public function getData()
     {
         $array = array(
-            'total_amount'           => oxRegistry::getSession()->getVariable('pi_ratepay_rate_total_amount'),
-            'amount'                 => oxRegistry::getSession()->getVariable('pi_ratepay_rate_amount'),
-            'interest_rate'          => oxRegistry::getSession()->getVariable('pi_ratepay_rate_interest_rate'),
-            'interest_amount'        => oxRegistry::getSession()->getVariable('pi_ratepay_rate_interest_amount'),
-            'service_charge'         => oxRegistry::getSession()->getVariable('pi_ratepay_rate_service_charge'),
-            'annual_percentage_rate' => oxRegistry::getSession()->getVariable('pi_ratepay_rate_annual_percentage_rate'),
-            'monthly_debit_interest' => oxRegistry::getSession()->getVariable('pi_ratepay_rate_monthly_debit_interest'),
-            'number_of_rates'        => oxRegistry::getSession()->getVariable('pi_ratepay_rate_number_of_rates'),
-            'rate'                   => oxRegistry::getSession()->getVariable('pi_ratepay_rate_rate'),
-            'last_rate'              => oxRegistry::getSession()->getVariable('pi_ratepay_rate_last_rate'),
-            'payment_firstday'       => oxRegistry::getSession()->getVariable('pi_ratepay_rate_payment_firstday'),
-            'bank_iban'              => oxRegistry::getSession()->getVariable('pi_ratepay_rate_bank_iban')
+            'total_amount'           => oxRegistry::getSession()->getVariable($this->paymentMethod . '_rate_total_amount'),
+            'amount'                 => oxRegistry::getSession()->getVariable($this->paymentMethod . '_rate_amount'),
+            'interest_rate'          => oxRegistry::getSession()->getVariable($this->paymentMethod . '_rate_interest_rate'),
+            'interest_amount'        => oxRegistry::getSession()->getVariable($this->paymentMethod . '_rate_interest_amount'),
+            'service_charge'         => oxRegistry::getSession()->getVariable($this->paymentMethod . '_rate_service_charge'),
+            'annual_percentage_rate' => oxRegistry::getSession()->getVariable($this->paymentMethod . '_annual_percentage_rate'),
+            'monthly_debit_interest' => oxRegistry::getSession()->getVariable($this->paymentMethod . '_monthly_debit_interest'),
+            'number_of_rates'        => oxRegistry::getSession()->getVariable($this->paymentMethod . '_number_of_rates'),
+            'rate'                   => oxRegistry::getSession()->getVariable($this->paymentMethod . '_rate'),
+            'last_rate'              => oxRegistry::getSession()->getVariable($this->paymentMethod . '_last_rate'),
+            'payment_firstday'       => oxRegistry::getSession()->getVariable($this->paymentMethod . '_payment_firstday'),
+            'bank_iban'              => oxRegistry::getSession()->getVariable($this->paymentMethod . '_bank_iban')
         );
         return $array;
     }
@@ -269,17 +271,17 @@ class PiRatepayRateCalcData implements PiRatepayRateCalcDataInterface
      */
     public function unsetData()
     {
-        oxRegistry::getSession()->deleteVariable('pi_ratepay_rate_total_amount');
-        oxRegistry::getSession()->deleteVariable('pi_ratepay_rate_amount');
-        oxRegistry::getSession()->deleteVariable('pi_ratepay_rate_interest_rate');
-        oxRegistry::getSession()->deleteVariable('pi_ratepay_rate_interest_amount');
-        oxRegistry::getSession()->deleteVariable('pi_ratepay_rate_service_charge');
-        oxRegistry::getSession()->deleteVariable('pi_ratepay_rate_annual_percentage_rate');
-        oxRegistry::getSession()->deleteVariable('pi_ratepay_rate_monthly_debit_interest');
-        oxRegistry::getSession()->deleteVariable('pi_ratepay_rate_number_of_rates');
-        oxRegistry::getSession()->deleteVariable('pi_ratepay_rate_rate');
-        oxRegistry::getSession()->deleteVariable('pi_ratepay_rate_last_rate');
-        oxRegistry::getSession()->deleteVariable('pi_ratepay_rate_payment_firstday');
+        oxRegistry::getSession()->deleteVariable($this->paymentMethod . '_total_amount');
+        oxRegistry::getSession()->deleteVariable($this->paymentMethod . '_amount');
+        oxRegistry::getSession()->deleteVariable($this->paymentMethod . '_interest_rate');
+        oxRegistry::getSession()->deleteVariable($this->paymentMethod . '_interest_amount');
+        oxRegistry::getSession()->deleteVariable($this->paymentMethod . '_service_charge');
+        oxRegistry::getSession()->deleteVariable($this->paymentMethod . '_annual_percentage_rate');
+        oxRegistry::getSession()->deleteVariable($this->paymentMethod . '_monthly_debit_interest');
+        oxRegistry::getSession()->deleteVariable($this->paymentMethod . '_number_of_rates');
+        oxRegistry::getSession()->deleteVariable($this->paymentMethod . '_rate');
+        oxRegistry::getSession()->deleteVariable($this->paymentMethod . '_last_rate');
+        oxRegistry::getSession()->deleteVariable($this->paymentMethod . '_payment_firstday');
     }
 
     /**
@@ -326,11 +328,22 @@ class PiRatepayRateCalcData implements PiRatepayRateCalcDataInterface
      */
     public function getSettings()
     {
-
+        $type = 'installment';
+        if ($this->paymentMethod == 'pi_ratepay_rate0') {
+            $type = 'installment0';
+        }
         $settings = oxNew('pi_ratepay_settings');
-        $settings->loadByType(strtolower('installment'), oxRegistry::getSession()->getVariable('shopId'));
+        $settings->loadByType(strtolower($type), oxRegistry::getSession()->getVariable('shopId'));
 
         return $settings;
+    }
+
+    /**
+     * @param string $paymentMethod
+     */
+    public function setPaymentMethod($paymentMethod)
+    {
+        $this->paymentMethod = $paymentMethod;
     }
 
 }

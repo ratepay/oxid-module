@@ -130,7 +130,7 @@ class pi_ratepay_Settings extends oxBase
         $aMerchantConfig = $aResult['merchantConfig'];
         $this->_piUpdateMerchantConfig($aMerchantConfig, $sRequestMethod);
 
-        $blAddInstallmentData = ($sMethod == 'rate' && $blActive);
+        $blAddInstallmentData = (($sMethod == 'rate' || $sMethod == 'rate0') && $blActive);
         if ($blAddInstallmentData) {
             $aInstallmentConfig = $aResult['installmentConfig'];
             $this->_piUpdateInstallmentConfig($aInstallmentConfig);
@@ -255,7 +255,7 @@ class pi_ratepay_Settings extends oxBase
 
     public function getSettlementType()
     {
-        if ($this->pi_ratepay_settings__type->value != 'installment' || !in_array($this->pi_ratepay_settings__country->value, array('DE', 'AT'))) {
+        if (($this->pi_ratepay_settings__type->value != 'installment' && $this->pi_ratepay_settings__type->value != 'installment0') || !in_array($this->pi_ratepay_settings__country->value, array('DE', 'AT'))) {
             return false;
         }
 

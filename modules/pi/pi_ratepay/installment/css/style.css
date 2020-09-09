@@ -6,16 +6,16 @@
 .rp-installment-plan-description {
     display: none;
 }
-#rp-installment-plan-details {
+#pi_ratepay_rate_rp-installment-plan-details, #pi_ratepay_rate0_rp-installment-plan-details {
     display: none;
 }
-#rp-installment-plan-no-details {
+#pi_ratepay_rate_rp-installment-plan-no-details, #pi_ratepay_rate0_rp-installment-plan-no-details {
     display: block;
 }
-#rp-hide-installment-plan-details {
+#pi_ratepay_rate_rp-hide-installment-plan-details, #pi_ratepay_rate0_rp-hide-installment-plan-details {
     display: none;
 }
-#rp-show-installment-plan-details {
+#pi_ratepay_rate_rp-show-installment-plan-details, #pi_ratepay_rate0_rp-show-installment-plan-details {
     display: block;
 }
 .rp-table-striped {
@@ -60,16 +60,19 @@
 .rp-link {
     margin-left: 20px
 }
-#rp-sepa-agreement {
+#pi_ratepay_rate_rp-sepa-agreement, #pi_ratepay_rate0_rp-sepa-agreement {
     margin-left: 5px
 }
 .form-group input, .form-group label {
     margin-left: 5px
 }
-#rp-switch-payment-type-direct-debit, #rp-rate-elv {
+#pi_ratepay_rate_rp-switch-payment-type-direct-debit, #pi_ratepay_rate_rp-switch-payment-type-direct-debit, #pi_ratepay_rate0_pi_ratepay_rate_rp-rate-elv, #pi_ratepay_rate0_pi_ratepay_rate_rp-rate-elv {
     display: none;
 }
-#rp-iban-account-number {
+#pi_ratepay_rate_rp-switch-payment-type-direct-debit, #pi_ratepay_rate_rp-rate-elv, #pi_ratepay_rate0_rp-switch-payment-type-direct-debit, #pi_ratepay_rate0_rp-rate-elv {
+    display: none;
+}
+#pi_ratepay_rate_rp-iban-account-number, #pi_ratepay_rate0_rp-iban-account-number {
     display: block;
 }
 .rp-payment-type-switch A {

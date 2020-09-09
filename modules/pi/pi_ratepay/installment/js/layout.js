@@ -7,19 +7,19 @@
  * Code by PayIntelligent GmbH  <http://www.payintelligent.de/>
  */
 
-function changeDetails() {
+function changeDetails(paymentMethod) {
 
-    if (document.getElementById('rp-show-installment-plan-details').style.display === 'none') {
-        document.getElementById('rp-show-installment-plan-details').style.display = 'block';
-        document.getElementById('rp-hide-installment-plan-details').style.display = 'none';
-        document.getElementById('rp-installment-plan-details').style.display = 'none';
-        document.getElementById('rp-installment-plan-no-details').style.display = 'block';
+    if (document.getElementById(paymentMethod + '_rp-show-installment-plan-details').style.display === 'none') {
+        document.getElementById(paymentMethod + '_rp-show-installment-plan-details').style.display = 'block';
+        document.getElementById(paymentMethod + '_rp-hide-installment-plan-details').style.display = 'none';
+        document.getElementById(paymentMethod + '_rp-installment-plan-details').style.display = 'none';
+        document.getElementById(paymentMethod + '_rp-installment-plan-no-details').style.display = 'block';
     } else {
-        document.getElementById('rp-hide-installment-plan-details').style.display = 'block';
-        document.getElementById('rp-show-installment-plan-details').style.display = 'none';
-        document.getElementById('rp-show-installment-plan-details').style.display = 'none';
-        document.getElementById('rp-installment-plan-details').style.display = 'block';
-        document.getElementById('rp-installment-plan-no-details').style.display = 'none';
+        document.getElementById(paymentMethod + '_rp-hide-installment-plan-details').style.display = 'block';
+        document.getElementById(paymentMethod + '_rp-show-installment-plan-details').style.display = 'none';
+        document.getElementById(paymentMethod + '_rp-show-installment-plan-details').style.display = 'none';
+        document.getElementById(paymentMethod + '_rp-installment-plan-details').style.display = 'block';
+        document.getElementById(paymentMethod + '_rp-installment-plan-no-details').style.display = 'none';
     }
 
 }
