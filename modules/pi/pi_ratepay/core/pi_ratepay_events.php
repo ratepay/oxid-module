@@ -231,6 +231,9 @@ class pi_ratepay_events
         self::addColumnIfNotExists('pi_ratepay_logs', 'STATUS', "ALTER TABLE `pi_ratepay_logs` ADD `STATUS` VARCHAR(40) NOT NULL");
         self::addColumnIfNotExists('pi_ratepay_logs', 'STATUS_CODE', "ALTER TABLE `pi_ratepay_logs` ADD `STATUS_CODE` VARCHAR(5) NOT NULL");
         self::addColumnIfNotExists('pi_ratepay_logs', 'REFERENCE', "ALTER TABLE `pi_ratepay_logs` ADD `REFERENCE` VARCHAR(40) NULL");
+
+        // OX-28 : extend size of "Type" column in "pi_ratepay_settings" to allow longer value
+        self::changeColumnIfExists('pi_ratepay_settings', 'TYPE', "ALTER TABLE `pi_ratepay_settings` MODIFY `TYPE` VARCHAR(20) NOT NULL");
     }
 
     /**
@@ -306,6 +309,26 @@ class pi_ratepay_events
     public static function addColumnIfNotExists($sTableName, $sColumnName, $sQuery)
     {
         if (self::checkIfColumnExists($sTableName, $sColumnName) === false) {
+            try {
+                oxDb::getDb()->Execute($sQuery);
+            } catch (Exception $e) {}
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Change a column of a database table.
+     *
+     * @param string $sTableName  table name
+     * @param string $sColumnName column name
+     * @param string $sQuery      sql-query to change column
+     *
+     * @return boolean true or false
+     */
+    public static function changeColumnIfExists($sTableName, $sColumnName, $sQuery)
+    {
+        if (self::checkIfColumnExists($sTableName, $sColumnName) === true) {
             try {
                 oxDb::getDb()->Execute($sQuery);
             } catch (Exception $e) {}
