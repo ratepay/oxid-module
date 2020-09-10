@@ -191,6 +191,11 @@ class pi_ratepay_Settings extends oxBase
      */
     protected function _piUpdateMerchantConfig($aMerchantConfig, $sRequestMethod)
     {
+        // OX-28 : turn back method from 0% to normal, as data come from RP undistinctly named
+        if ($sRequestMethod == 'installment0') {
+            $sRequestMethod = 'installment';
+        }
+
         $this->pi_ratepay_settings__limit_min = new oxField($aMerchantConfig['tx-limit-'.$sRequestMethod.'-min']);
         $this->pi_ratepay_settings__limit_max = new oxField($aMerchantConfig['tx-limit-'.$sRequestMethod.'-max']);
         $this->pi_ratepay_settings__limit_max_b2b = new oxField($aMerchantConfig['tx-limit-'.$sRequestMethod.'-max-b2b']);
