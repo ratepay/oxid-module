@@ -128,7 +128,7 @@ class pi_ratepay_events
     public static $aPaymentMethods = array(
         'pi_ratepay_rechnung' => 'Ratepay Rechnung',
         'pi_ratepay_rate' => 'Ratepay Rate',
-        'pi_ratepay_rate0' => 'Ratepay Rate 0%',
+        'pi_ratepay_rate0' => 'Ratepay 0% Finanzierung',
         'pi_ratepay_elv' => 'Ratepay SEPA-Lastschrift',
     );
 
