@@ -163,6 +163,18 @@ function piCalculator() {
         $('#paymentNextStepBottom').prop('disabled', false);
     }
 }
+function autoLoadPiCalculator(methodName) {
+    if ($('#payment_' + methodName).is(':checked')) {
+        var idPattern = methodName+'_piRpInput-buttonMonth';
+        var runtimeButtons = $("button[id^="+idPattern+"]");
+        if (runtimeButtons.length === 0) {
+            return;
+        }
+
+        var month = runtimeButtons[0].innerText;
+        piRatepayRateCalculatorAction('runtime', methodName, month);
+    }
+}
 function checkElvForm() {
     if ($('#payment_pi_ratepay_elv').is(':checked')) {
         var agreementCheckbox = $('#pi_ratepay_elv_sepa_agreement_check');

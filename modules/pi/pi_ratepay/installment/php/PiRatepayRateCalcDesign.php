@@ -48,7 +48,8 @@
     } else {
 ?>
 <div class="rpContainer">
-    <div class="row">
+    <?php if ($sPaymentMethod != 'pi_ratepay_rate0') { ?>
+    <div class="row"<?php if ($sPaymentMethod == 'pi_ratepay_rate0') { echo 'style="display: none"';  }?>>
         <div class="col-md-10">
             <?php
                 echo $rp_calculation_intro_part1;
@@ -57,7 +58,8 @@
             ?>
         </div>
     </div>
-    <div class="row">
+    <?php } ?>
+    <div class="row"<?php if ($sPaymentMethod == 'pi_ratepay_rate0') { echo 'style="display: none"';  }?>>
         <div class="col-md-5">
             <div class="panel panel-default">
                 <div class="panel-heading text-center" id="<?php echo $sPaymentMethod; ?>_firstInput">
