@@ -636,7 +636,7 @@ class ModelFactory extends oxSuperCfg {
                 'Contacts' => [
                     'Email' => $this->getUser()->oxuser__oxusername->value,
                     'Phone' => [
-                        'DirectDial' => $phone
+                        'DirectDial' => !empty($phone) ? $phone : '03033988560'
                     ],
                 ],
             ],
