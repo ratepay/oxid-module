@@ -363,7 +363,6 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
      */
     private function _checkCompanyData()
     {
-        $isCompanyDataValid = false;
         $user = $this->getUser();
 
         $companySet = !empty($user->oxuser__oxcompany->value) && !empty($user->oxuser__oxustid->value);
@@ -373,26 +372,31 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
             return true;
         }
 
-        $ustId = oxRegistry::getConfig()->getRequestParameter($this->_selectedPaymentMethod . '_ust');
-        if (!empty($ustId)) {
-            $user->oxuser__oxustid->value = $ustId;
-            $isCompanyDataValid = true;
-        }
-
+        $isDataChanged = false;
         $company = oxRegistry::getConfig()->getRequestParameter($this->_selectedPaymentMethod . '_company');
         if (!empty($company)) {
             $user->oxuser__oxcompany->value = $company;
-            $isCompanyDataValid = true;
+            $isDataChanged = true;
         }
 
-        if (!$isCompanyDataValid) {
-            $this->_errors[] = '-416';
-        } else {
+        $ustId = oxRegistry::getConfig()->getRequestParameter($this->_selectedPaymentMethod . '_ust');
+        if (!empty($ustId)) {
+            $user->oxuser__oxustid->value = $ustId;
+            $isDataChanged = true;
+        }
+
+        if ($isDataChanged) {
             $user->save();
             $this->setUser($user);
         }
 
-        return $isCompanyDataValid;
+        if (empty($user->oxuser__oxcompany->value) && !empty($user->oxuser__oxustid->value)) {
+            $this->_errors[] = '-416';
+            return false;
+        }
+
+        // OX-50 VatID is optional
+        return true;
     }
 
     /**
