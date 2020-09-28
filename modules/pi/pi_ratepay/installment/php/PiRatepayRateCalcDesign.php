@@ -19,6 +19,7 @@
     $pi_firstday = $pi_calculator->getRequestFirstday();
     $pi_owner = $pi_calculator->getRequestBankOwner();
     $pi_valid_firstday = $pi_calculator->getValidRequestPaymentFirstday();
+    $pi_companyName = $pi_calculator->getRequestCompanyName();
 
     $oSettings = $pi_calculator->getSettings();
     $sSettlementType = $oSettings->getSettlementType(); // debit, banktransfer, both
@@ -145,7 +146,15 @@
                     <input type="hidden" name="rp-payment-type" id="rp-payment-type" />
                     <div class="form-group">
                         <label class=""><?php echo $rp_account_holder; ?></label>
-                        <input type="text" class="form-control disabled" name="rp-iban-account-owner" value="<?php echo $pi_owner; ?>" disabled /><!-- Show account holder name = billing address firstname and lastname -->
+                        <?php if (!empty($pi_companyName)) { ?>
+                        <select name="rp_sepa_use_company_name">
+                            <option selected="selected" value="1"><?php echo $pi_companyName; ?></option>
+                            <option value="0"><?php echo $pi_owner; ?></option>
+                        </select>
+                        <?php } else { ?>
+                        <input type="text" class="form-control disabled" value="<?php echo $pi_owner; ?>" disabled />
+                        <input type="hidden" name="rp_sepa_use_company_name" value="0" />
+                        <?php } ?>
                     </div>
                     <!-- Account number is only allowed for customers with german billing address. IBAN must be used for all others -->
                     <div class="form-group">

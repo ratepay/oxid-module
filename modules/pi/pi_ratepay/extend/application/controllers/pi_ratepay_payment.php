@@ -212,6 +212,7 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                 }
 
                 $session->setVariable('bankOwner', $customer->oxuser__oxfname->rawValue . " " . $customer->oxuser__oxlname->rawValue);
+                $session->setVariable('companyName', $customer->oxuser__oxcompany->rawValue);
 
                 $this->addTplParam($paymentMethod . '_minimumAmount', $settings->pi_ratepay_settings__limit_min->rawValue);
                 $this->addTplParam($paymentMethod . '_maximumAmount', $settings->pi_ratepay_settings__limit_max->rawValue);

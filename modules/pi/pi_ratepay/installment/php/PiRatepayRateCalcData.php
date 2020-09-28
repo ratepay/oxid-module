@@ -140,6 +140,12 @@ class PiRatepayRateCalcData implements PiRatepayRateCalcDataInterface
         return $owner;
     }
 
+    public function getCompanyName() {
+        $companyName = oxRegistry::getSession()->getVariable('companyName');
+
+        return $companyName;
+    }
+
     /**
      * {@inheritdoc}
      * @return type

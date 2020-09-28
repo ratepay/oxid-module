@@ -286,6 +286,12 @@ class PiRatepayRateCalcBase
      * @var PiRatepayRateCalcData
      */
     private $picalcdata;
+    /**
+     * Company name of billing address
+     *
+     * @var string
+     */
+    protected $request_companyName;
 
     /**
      * Constructer of PiRatepayRateCalcBase, assigns PiRatepayRateCalcData
@@ -315,6 +321,7 @@ class PiRatepayRateCalcBase
         $this->request_merchant_consumer_classification = $this->picalcdata->getMerchantConsumerClassification();
         $this->request_amount = $this->picalcdata->getAmount();
         $this->request_bankOwner = $this->picalcdata->getBankOwner();
+        $this->request_companyName = $this->picalcdata->getCompanyName();
         $this->request_live = $this->picalcdata->isLive();
 
         $this->language = $this->picalcdata->getLanguage();
@@ -1162,6 +1169,14 @@ class PiRatepayRateCalcBase
     public function getCode()
     {
         return $this->request_code;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRequestCompanyName()
+    {
+        return $this->request_companyName;
     }
 
     /**

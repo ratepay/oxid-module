@@ -244,13 +244,17 @@ abstract class pi_ratepay_RequestAbstract extends oxSuperCfg
 
     protected function _getOwner($paymentType)
     {
+        $elvUseCompany = $this->getSession()->getVariable('elv_use_company_name');
+
         $owner = null;
         if ($this->getSession()->hasVariable($paymentType . '_bank_owner')) {
             $owner = $this->getSession()->getVariable($paymentType . 'elv_bank_owner');
         } else {
-            $owner = $this->getCustomerFirstName() .
-                ' ' .
-                $this->getCustomerLastName();
+            if (!empty($elvUseCompany) && $elvUseCompany == 1) {
+                $owner = $this->getUser()->oxuser__oxcompany->value;
+            } else {
+                $owner = $this->getCustomerFirstName() . ' ' . $this->getCustomerLastName();
+            }
         }
 
         return $owner;
