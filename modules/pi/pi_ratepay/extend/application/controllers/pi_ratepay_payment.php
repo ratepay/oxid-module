@@ -223,6 +223,7 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
 
                 if ($paymentMethod === 'pi_ratepay_elv') {
                     $this->addTplParam('pi_ratepay_elv_bank_account_owner', $customer->oxuser__oxfname->rawValue . " " . $customer->oxuser__oxlname->rawValue);
+                    $this->addTplParam('pi_ratepay_elv_company_name', $customer->oxuser__oxcompany->value);
                 }
 
                 $this->_setDeviceFingerPrint();
@@ -624,6 +625,9 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         if ($paymentMethod != 'pi_ratepay_elv' && $paymentMethod != 'pi_ratepay_rate') {
             return true;
         }
+
+        $elvUserCompany = oxRegistry::getConfig()->getRequestParameter('rp_sepa_use_company_name');
+        $this->getSession()->setVariable('elv_use_company_name', $elvUserCompany);
 
         if ($paymentMethod == 'pi_ratepay_rate' && $_SESSION['pi_ratepay_rate_payment_firstday'] == 28) {
             return true;
