@@ -203,7 +203,7 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         $toDate = new DateTimeImmutable($paymentBan->pi_ratepay_payment_ban__to_date->rawValue);
         $today = new DateTime();
         if (
-            $today->getTimestamp() > $fromDate->getTimestamp()
+            $today->getTimestamp() >= $fromDate->getTimestamp()
             && $today->getTimestamp() < $toDate->getTimestamp()
         ) {
             return false;
