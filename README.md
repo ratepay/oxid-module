@@ -6,7 +6,7 @@
 |Author | `Fatchip GmbH`
 |Prefix | `pi`
 |Shop Version | `CE/PE` `4.7.x-6.1.x` `EE` `5.0.x-6.2.x`
-|Version | `5.0.8`
+|Version | `5.1.0`
 |Link | http://www.ratepay.com
 |Mail | integration@ratepay.com
 |Installation | https://ratepay.gitbook.io/oxid/
@@ -14,6 +14,15 @@
 |Legal Disclaimer|https://ratepay.gitbook.io/docs/#legal-disclaimer
 
 ## Changelog
+
+### Version 5.0.8 - Released 2020-09-28
+* New : add 0% Installment payment method
+* New : add 48h payment ban after rejected attempt (dependind on reason code)
+* Update : new SEPA mandate text for Ratepay inhouse instalment payment menthod
+* Update : legal text and links updated
+* Update : vatId field in checkout turned into optional
+* Update : default phone number transmitted if missing during checkout payment
+* Update : account holder for SEPA transaction adapted for B2B (choice given between Customer name and Company)
 
 ### Version 5.0.8 - Released 2020-08-26
 * Fixed : add check to prevent loading a log if none got selected (on first time
