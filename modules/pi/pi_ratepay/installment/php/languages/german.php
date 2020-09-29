@@ -81,3 +81,6 @@ $wcd_sepa_terms_please_note = "Hinweis: ";
 $wcd_sepa_terms_block_1 = "Ich erm&auml;chtige die Wirecard Bank AG, Zahlungen von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von der Wirecard Bank AG auf mein Konto gezogenen Lastschriften einzul&ouml;sen.";
 $wcd_sepa_terms_block_2 = "Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages verlangen.";
 $wcd_sepa_terms_block_3 = "Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.";
+$rp_sepa_terms_block_21 = "Ich erm&auml;chtige die Ratepay GmbH, Zahlungen von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von der Ratepay GmbH auf mein Konto gezogenen Lastschriften einzul&ouml;sen.";
+$rp_sepa_terms_block_22 = "Hinweis: Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages verlangen.";
+$rp_sepa_terms_block_23 = "Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.";

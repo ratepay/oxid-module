@@ -81,3 +81,6 @@ $wcd_sepa_terms_please_note = "Note: ";
 $wcd_sepa_terms_block_1 = "I hereby authorise Wirecard Bank AG to collect payments from my account by direct debit. At the same time, I authorise my bank to debit my account in accordance with the instructions from Wirecard Bank AG.";
 $wcd_sepa_terms_block_2 = "As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.";
 $wcd_sepa_terms_block_3 = "My rights are explained in a statement that I can obtain from my bank.";
+$rp_sepa_terms_block_21 = "I hereby authorise Ratepay GmbH to collect payments from my account by direct debit. At the same time, I authorise my bank to debit my account in accordance with the instructions from Ratepay GmbH.";
+$rp_sepa_terms_block_22 = "Note: As part of my rights, I am entitled to a refund from my bank under the terms and conditions of my agreement with my bank. A refund must be claimed within 8 weeks starting from the date on which my account was debited.";
+$rp_sepa_terms_block_23 = "My rights are explained in a statement that I can obtain from my bank.";
