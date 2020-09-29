@@ -85,10 +85,10 @@
             [{oxmultilang ident="PI_RATEPAY_RATE_ERROR_CALCULATE_TO_PROCEED"}]
         </div>
         [{/if}]
-        <div id="pirpmain-cont"></div>
+        <div id="pi_ratepay_rate_pirpmain-cont"></div>
         <script type="text/javascript">
-            if(document.getElementById('pirpmain-cont')){
-                piLoadrateCalculator();
+            if(document.getElementById('pi_ratepay_rate_pirpmain-cont')){
+                piLoadrateCalculator('pi_ratepay_rate');
             }
 
         </script>

@@ -1,4 +1,4 @@
-[{if $pi_payment->getId()  == "pi_ratepay_rate" || $pi_payment->getId()  == "pi_ratepay_rechnung"}]
+[{if $pi_payment->getId()  == "pi_ratepay_rate" || $pi_payment->getId()  == "pi_ratepay_rate0" || $pi_payment->getId()  == "pi_ratepay_rechnung"}]
 <form action="[{ $oViewConf->getSslSelfLink() }]" method="post" id="orderConfirmAgbBottom">
     [{ $oViewConf->getHiddenSid() }]
     [{ $oViewConf->getNavFormParams() }]

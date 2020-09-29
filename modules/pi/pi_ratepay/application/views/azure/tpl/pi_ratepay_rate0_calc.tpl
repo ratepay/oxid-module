@@ -30,22 +30,22 @@
 <script type="text/javascript" src="[{$oViewConf->getModuleUrl('pi_ratepay')}]ratenrechner/js/mouseaction.js"></script>
 [{if $pierror == "-461"}]
     <div class="alert alert-danger">
-        [{oxmultilang ident="PI_RATEPAY_RATE_ERROR_CALCULATE_TO_PROCEED"}]
+        [{oxmultilang ident="PI_RATEPAY_RATE0_ERROR_CALCULATE_TO_PROCEED"}]
     </div>
 [{/if}]
-<div id="pi_ratepay_rate_pirpmain-cont">
+<div id="pi_ratepay_rate0_pirpmain-cont">
 
 </div>
 <script type="text/javascript">
-    if(document.getElementById('pi_ratepay_rate_pirpmain-cont')){
-    piLoadrateCalculator('pi_ratepay_rate');
+    if(document.getElementById('pi_ratepay_rate0_pirpmain-cont')){
+    piLoadrateCalculator('pi_ratepay_rate0');
 }
 
 </script>
 <form action="[{ $oViewConf->getSslSelfLink() }]" method="post">
     [{ $oViewConf->getHiddenSid() }]
     [{ $oViewConf->getNavFormParams() }]
-    <input type="hidden" name="cl" value="pi_ratepay_rate_calc">
+    <input type="hidden" name="cl" value="pi_ratepay_rate0_calc">
     <input type="hidden" name="fnc" value="check">
     <div class="lineBox clear">
         <a href="[{ $oViewConf->getSslSelfLink() }]cl=payment" class="submitButton largeButton" id="paymentBackStepBottom">[{ oxmultilang ident="PREVIOUS_STEP" }]</a>

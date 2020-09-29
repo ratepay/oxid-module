@@ -195,6 +195,11 @@ $aModule = array(
         array(
             'template' => 'page/checkout/payment.tpl',
             'block'    => 'select_payment',
+            'file'     => 'payment_pi_ratepay_rate0.tpl'
+        ),
+        array(
+            'template' => 'page/checkout/payment.tpl',
+            'block'    => 'select_payment',
             'file'     => 'payment_pi_ratepay_elv.tpl'
         ),
         array(
@@ -233,6 +238,11 @@ $aModule = array(
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPInstallmentSandbox', 'type' => 'bool', 'value' => false),
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'sRPInstallmentProfileId', 'type' => 'str', 'value' => ''),
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'sRPInstallmentSecret', 'type' => 'str', 'value' => ''),
+        // ratepay germany installment 0%
+        array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPInstallment0Active', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPInstallment0Sandbox', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'sRPInstallment0ProfileId', 'type' => 'str', 'value' => ''),
+        array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'sRPInstallment0Secret', 'type' => 'str', 'value' => ''),
         // ratepay germany elv
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPElvActive', 'type' => 'bool', 'value' => false),
         array('group' => 'PI_RATEPAY_GERMANY', 'name' => 'blRPElvSandbox', 'type' => 'bool', 'value' => false),
@@ -248,6 +258,11 @@ $aModule = array(
         array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'blRPAustriaInstallmentSandbox', 'type' => 'bool', 'value' => false),
         array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'sRPAustriaInstallmentProfileId', 'type' => 'str', 'value' => ''),
         array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'sRPAustriaInstallmentSecret', 'type' => 'str', 'value' => ''),
+        // ratepay austria installment 0%
+        array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'blRPAustriaInstallment0', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'blRPAustriaInstallment0Sandbox', 'type' => 'bool', 'value' => false),
+        array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'sRPAustriaInstallment0ProfileId', 'type' => 'str', 'value' => ''),
+        array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'sRPAustriaInstallment0Secret', 'type' => 'str', 'value' => ''),
         // ratepay austria elv
         array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'blRPAustriaElv', 'type' => 'bool', 'value' => false),
         array('group' => 'PI_RATEPAY_AUSTRIA', 'name' => 'blRPAustriaElvSandbox', 'type' => 'bool', 'value' => false),

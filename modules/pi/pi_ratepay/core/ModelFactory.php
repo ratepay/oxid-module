@@ -36,6 +36,13 @@ class ModelFactory extends oxSuperCfg {
                 'secret' => 'sRPInstallmentSecret',
                 'settlement' => 'sRPInstallmentSettlement',
             ),
+            'rate0' => array(
+                'active' => 'blRPInstallment0Active',
+                'sandbox' => 'blRPInstallment0Sandbox',
+                'profileid' => 'sRPInstallment0ProfileId',
+                'secret' => 'sRPInstallment0Secret',
+                'settlement' => 'sRPInstallment0Settlement',
+            ),
             'elv' => array(
                 'active' => 'blRPElvActive',
                 'sandbox' => 'blRPElvSandbox',
@@ -55,6 +62,13 @@ class ModelFactory extends oxSuperCfg {
                 'secret' => 'sRPInstallmentSecret',
                 'settlement' => 'sRPInstallmentSettlement',
             ),
+            'installment0' => array(
+                'active' => 'blRPInstallment0Active',
+                'sandbox' => 'blRPInstallment0Sandbox',
+                'profileid' => 'sRPInstallment0ProfileId',
+                'secret' => 'sRPInstallment0Secret',
+                'settlement' => 'sRPInstallment0Settlement',
+            ),
         ),
         'at' => array(
             'rechnung' => array(
@@ -69,6 +83,13 @@ class ModelFactory extends oxSuperCfg {
                 'profileid' => 'sRPAustriaInstallmentProfileId',
                 'secret' => 'sRPAustriaInstallmentSecret',
                 'settlement' => 'sRPAustriaInstallmentSettlement',
+            ),
+            'rate0' => array(
+                'active' => 'blRPAustriaInstallment0',
+                'sandbox' => 'blRPAustriaInstallment0Sandbox',
+                'profileid' => 'sRPAustriaInstallment0ProfileId',
+                'secret' => 'sRPAustriaInstallment0Secret',
+                'settlement' => 'sRPAustriaInstallment0Settlement',
             ),
             'elv' => array(
                 'active' => 'blRPAustriaElv',
@@ -88,6 +109,13 @@ class ModelFactory extends oxSuperCfg {
                 'profileid' => 'sRPAustriaInstallmentProfileId',
                 'secret' => 'sRPAustriaInstallmentSecret',
                 'settlement' => 'sRPAustriaInstallmentSettlement',
+            ),
+            'installment0' => array(
+                'active' => 'blRPAustriaInstallment0',
+                'sandbox' => 'blRPAustriaInstallment0Sandbox',
+                'profileid' => 'sRPAustriaInstallment0ProfileId',
+                'secret' => 'sRPAustriaInstallment0Secret',
+                'settlement' => 'sRPAustriaInstallment0Settlement',
             ),
         ),
         'ch' => array(
@@ -668,6 +696,20 @@ class ModelFactory extends oxSuperCfg {
                 $contentArr['Payment']['DebitPayType'] = 'DIRECT-DEBIT';
             }
         }
+        if ($util->getPaymentMethod($this->_paymentType) == 'INSTALLMENT0') {
+            $contentArr['Payment']['InstallmentDetails'] = $this->_getInstallment0Data();
+            $contentArr['Payment']['DebitPayType'] = 'BANK-TRANSFER';
+            $contentArr['Payment']['Amount'] = $this->getSession()->getVariable('pi_ratepay_rate0_total_amount');
+            $contentArr['Payment']['Method'] = 'installment'; // OX-28: For RP, installment0 is still installment
+
+            $settings = oxNew('pi_ratepay_settings');
+            $iban = $this->getSession()->getVariable('pi_ratepay_rate0_bank_iban');
+            $settings->loadByType($util->getPaymentMethod('pi_ratepay_rate0'), $this->getSession()->getVariable('shopId'));
+            if (!empty($iban) && $iban !== 'undefined') {
+                $contentArr['Customer']['BankAccount'] = $this->_getCustomerBankdata('pi_ratepay_rate0');
+                $contentArr['Payment']['DebitPayType'] = 'DIRECT-DEBIT';
+            }
+        }
 
         $shippingCosts = $this->_getShippingCosts();
         if (!empty($shippingCosts)) {
@@ -795,6 +837,21 @@ class ModelFactory extends oxSuperCfg {
             'InstallmentAmount'     => $util->getFormattedNumber($this->getSession()->getVariable('pi_ratepay_rate_rate'), '2', '.'),
             'LastInstallmentAmount' => $util->getFormattedNumber($this->getSession()->getVariable('pi_ratepay_rate_last_rate'),'2', '.'),
             'InterestRate'          => $util->getFormattedNumber($this->getSession()->getVariable('pi_ratepay_rate_interest_rate'), '2', '.')
+        );
+    }
+
+    /**
+     * get installment 0% data
+     * @return array
+     */
+    private function _getInstallment0Data()
+    {
+        $util = new pi_ratepay_util_Utilities();
+        return array(
+            'InstallmentNumber'     => $this->getSession()->getVariable('pi_ratepay_rate0_number_of_rates'),
+            'InstallmentAmount'     => $util->getFormattedNumber($this->getSession()->getVariable('pi_ratepay_rate0_rate'), '2', '.'),
+            'LastInstallmentAmount' => $util->getFormattedNumber($this->getSession()->getVariable('pi_ratepay_rate0_last_rate'),'2', '.'),
+            'InterestRate'          => $util->getFormattedNumber($this->getSession()->getVariable('pi_ratepay_rate0_interest_rate'), '2', '.')
         );
     }
 
