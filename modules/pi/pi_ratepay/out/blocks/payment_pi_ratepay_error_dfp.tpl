@@ -151,7 +151,7 @@ function piHide(input, elementToToggle) {
     });
 }
 function piCalculator() {
-    if ($('#payment_pi_ratepay_rate').is(':checked')) {
+    if ($('#payment_pi_ratepay_rate').is(':checked') || $('#payment_pi_ratepay_rate0').is(':checked')) {
         var agreementCheckbox = $('#rp-sepa-aggreement');
         agreementCheckbox.prop('checked', false);
         $('#paymentNextStepBottom').prop('disabled', true);
@@ -161,6 +161,18 @@ function piCalculator() {
         $('#paymentNextStepBottom').prop('disabled', true);
     } else {
         $('#paymentNextStepBottom').prop('disabled', false);
+    }
+}
+function autoLoadPiCalculator(methodName) {
+    if ($('#payment_' + methodName).is(':checked')) {
+        var idPattern = methodName+'_piRpInput-buttonMonth';
+        var runtimeButtons = $("button[id^="+idPattern+"]");
+        if (runtimeButtons.length === 0) {
+            return;
+        }
+
+        var month = runtimeButtons[0].innerText;
+        piRatepayRateCalculatorAction('runtime', methodName, month);
     }
 }
 function checkElvForm() {

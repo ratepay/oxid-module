@@ -25,6 +25,11 @@ class pi_ratepay_paymentgateway extends pi_ratepay_paymentgateway_parent
             'denied' => '-407',
             'soft' => '-001',
         ),
+        'pi_ratepay_rate0' => array(
+            'connection_timeout' => '-418',
+            'denied' => '-407',
+            'soft' => '-001',
+        ),
         'pi_ratepay_elv' => array(
             'connection_timeout' => '-418',
             'denied' => '-300',
@@ -204,6 +209,36 @@ class pi_ratepay_paymentgateway extends pi_ratepay_paymentgateway_parent
             $numberOfRates = $this->getSession()->getVariable('pi_ratepay_rate_number_of_rates');
             $rate = $this->getSession()->getVariable('pi_ratepay_rate_rate');
             $lastRate = $this->getSession()->getVariable('pi_ratepay_rate_last_rate');
+
+            $ratepayRateDetails = oxNew('pi_ratepay_ratedetails');
+            $ratepayRateDetails->loadByOrderId($id);
+
+            $ratepayRateDetails->assign(array(
+                'orderid' => $id,
+                'totalamount' => $totalAmount,
+                'amount' => $amount,
+                'interestamount' => $interestAmount,
+                'servicecharge' => $service_charge,
+                'annualpercentagerate' => $annualPercentageRate,
+                'monthlydebitinterest' => $monthlyDebitInterest,
+                'numberofrates' => $numberOfRates,
+                'rate' => $rate,
+                'lastrate' => $lastRate
+            ));
+
+            $ratepayRateDetails->save();
+        }
+
+        if ($this->_paymentId === 'pi_ratepay_rate0') {
+            $totalAmount = $this->getSession()->getVariable('pi_ratepay_rate0_total_amount');
+            $amount = $this->getSession()->getVariable('pi_ratepay_rate0_amount');
+            $interestAmount = $this->getSession()->getVariable('pi_ratepay_rate0_interest_amount');
+            $service_charge = $this->getSession()->getVariable('pi_ratepay_rate0_service_charge');
+            $annualPercentageRate = $this->getSession()->getVariable('pi_ratepay_rate0_annual_percentage_rate');
+            $monthlyDebitInterest = $this->getSession()->getVariable('pi_ratepay_rate0_monthly_debit_interest');
+            $numberOfRates = $this->getSession()->getVariable('pi_ratepay_rate0_number_of_rates');
+            $rate = $this->getSession()->getVariable('pi_ratepay_rate0_rate');
+            $lastRate = $this->getSession()->getVariable('pi_ratepay_rate0_last_rate');
 
             $ratepayRateDetails = oxNew('pi_ratepay_ratedetails');
             $ratepayRateDetails->loadByOrderId($id);

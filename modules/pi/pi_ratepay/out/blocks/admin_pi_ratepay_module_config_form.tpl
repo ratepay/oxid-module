@@ -71,6 +71,31 @@
             </tr>
             <tr>
                 <td>
+                    <strong>[{oxmultilang ident="PI_RATEPAY_CONFIGTEST_INSTALLMENT0"}]</strong>
+                </td>
+                <td style="border: 1px solid gray;">
+                    [{if $oView->piTestConnectionEstablished('installment0', 'de')}]
+                    <span style="color:green;">[{oxmultilang ident="PI_RATEPAY_CONNECTED"}]</span>
+                    [{else}]
+                    <span style="color:red;">[{oxmultilang ident="PI_RATEPAY_DISCONNECTED"}]</span>
+                    [{/if}]
+                </td>
+                <td style="border: 1px solid gray;">
+                    [{if $oView->piTestConnectionEstablished('installment0', 'at')}]
+                    <span style="color:green;">[{oxmultilang ident="PI_RATEPAY_CONNECTED"}]</span>
+                    [{else}]
+                    <span style="color:red;">[{oxmultilang ident="PI_RATEPAY_DISCONNECTED"}]</span>
+                    [{/if}]
+                </td>
+                <td style="border: 1px solid gray;">
+                    <span style="color:lightgray;">[{oxmultilang ident="PI_RATEPAY_UNAVAILABLE"}]</span>
+                </td>
+                <td style="border: 1px solid gray;">
+                    <span style="color:lightgray;">[{oxmultilang ident="PI_RATEPAY_UNAVAILABLE"}]</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
                     <strong>[{oxmultilang ident="PI_RATEPAY_CONFIGTEST_ELV"}]</strong>
                 </td>
                 <td style="border: 1px solid gray;">

@@ -144,7 +144,7 @@ class pi_ratepay_Details extends oxAdminDetails
         $this->addTplParam('articleList', $this->getPreparedOrderArticles(true));
         $this->addTplParam('historyList', $this->getHistory($this->_aViewData["articleList"]));
 
-        if ($this->_getPaymentSid() == "pi_ratepay_rate") {
+        if ($this->_getPaymentSid() == "pi_ratepay_rate" || $this->_getPaymentSid() == "pi_ratepay_rate0") {
             $ratepayRateDetails = oxNew('pi_ratepay_ratedetails');
             $ratepayRateDetails->loadByOrderId($this->_getOrderId());
 

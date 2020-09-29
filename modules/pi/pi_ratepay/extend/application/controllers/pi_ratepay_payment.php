@@ -428,6 +428,9 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                     case 'pi_ratepay_rate':
                         $this->_errors[] = '-415';
                         break;
+                    case 'pi_ratepay_rate0':
+                        $this->_errors[] = '-415';
+                        break;
                     case 'pi_ratepay_elv':
                         $this->_errors[] = '-507';
                         break;
@@ -463,6 +466,9 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                         case 'pi_ratepay_rate':
                             $this->_errors[] = '-408';
                             break;
+                        case 'pi_ratepay_rate0':
+                            $this->_errors[] = '-408';
+                            break;
                         case 'pi_ratepay_elv':
                             $this->_errors[] = '-505';
                             break;
@@ -479,6 +485,9 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                     $this->_errors[] = '-401';
                     break;
                 case 'pi_ratepay_rate':
+                    $this->_errors[] = '-408';
+                    break;
+                case 'pi_ratepay_rate0':
                     $this->_errors[] = '-408';
                     break;
                 case 'pi_ratepay_elv':
@@ -517,6 +526,9 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                 case 'pi_ratepay_rate':
                     $this->_errors[] = '-413';
                     break;
+                case 'pi_ratepay_rate0':
+                    $this->_errors[] = '-413';
+                    break;
                 case 'pi_ratepay_elv':
                     $this->_errors[] = '-511';
                     break;
@@ -542,6 +554,10 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                         $isAlaZipValid = false;
                         break;
                     case 'pi_ratepay_rate':
+                        $this->_errors[] = '-413';
+                        $isAlaZipValid = false;
+                        break;
+                    case 'pi_ratepay_rate0':
                         $this->_errors[] = '-413';
                         $isAlaZipValid = false;
                         break;
@@ -607,6 +623,9 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
                 case 'pi_ratepay_rate':
                     $this->_errors[] = '-460';
                     break;
+                case 'pi_ratepay_rate0':
+                    $this->_errors[] = '-460';
+                    break;
                 case 'pi_ratepay_elv':
                     $this->_errors[] = '-508';
                     break;
@@ -621,11 +640,14 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
     private function _checkBankData()
     {
         $paymentMethod = $this->_selectedPaymentMethod;
-        if ($paymentMethod != 'pi_ratepay_elv' && $paymentMethod != 'pi_ratepay_rate') {
+        if ($paymentMethod != 'pi_ratepay_elv' && $paymentMethod != 'pi_ratepay_rate' && $paymentMethod != 'pi_ratepay_rate0') {
             return true;
         }
 
         if ($paymentMethod == 'pi_ratepay_rate' && $_SESSION['pi_ratepay_rate_payment_firstday'] == 28) {
+            return true;
+        }
+        if ($paymentMethod == 'pi_ratepay_rate0' && $_SESSION['pi_ratepay_rate0_payment_firstday'] == 28) {
             return true;
         }
 
@@ -648,6 +670,10 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         if ($paymentMethod == 'pi_ratepay_rate' && !empty($_SESSION['pi_ratepay_rate_bank_iban'])) {
             $bankDataType = 'iban';
             $iban = $_SESSION['pi_ratepay_rate_bank_iban'];
+        }
+        if ($paymentMethod == 'pi_ratepay_rate0' && !empty($_SESSION['pi_ratepay_rate0_bank_iban'])) {
+            $bankDataType = 'iban';
+            $iban = $_SESSION['pi_ratepay_rate0_bank_iban'];
         }
 
         if ($bankDataType == "classic") {
