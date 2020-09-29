@@ -98,8 +98,8 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
      */
     private function _getBanUserId()
     {
-        if ($this->getUser()->oxuser__register->value == '0000-00-00 00:00:00') {
-            return $this->getUser()->oxuser__username->value;
+        if (is_null($this->getUser()->oxuser__oxregister->value) || $this->getUser()->oxuser__oxregister->value == '0000-00-00 00:00:00') {
+            return $this->getUser()->oxuser__oxusername->value;
         }
 
         return $this->getUser()->oxuser__oxid->value;
