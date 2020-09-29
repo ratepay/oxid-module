@@ -16,6 +16,8 @@
     $bankAccount = $pi_calculator->getPostParameter('bankAccount');
     $paymentFirstday = $pi_calculator->getPostParameter('paymentFirstday');
 
+    $sPaymentMethod = $pi_calculator->getPaymentMethod();
+
     if ($calcValue != '' && $calcMethod != '') {
         if ($calcMethod == "calculation-by-time" || $calcMethod == "calculation-by-rate") {
             if (empty($calcValue)) {
@@ -25,7 +27,7 @@
                     $pi_calculator->setRequestCalculationValue($calcValue);
                     $pi_calculator->setRequestIban($bankAccount);
                     $pi_calculator->setRequestFirstday($paymentFirstday);
-                    $pi_resultArray = $pi_calculator->getRatepayRateDetails($calcMethod);
+                    $pi_resultArray = $pi_calculator->getRatepayRateDetails($calcMethod, $sPaymentMethod);
                 } else {
                     $pi_calculator->setErrorMsg('wrongvalue');
                 }
@@ -37,14 +39,14 @@
                     $pi_calculator->setRequestCalculationValue($pi_value);
                     $pi_calculator->setRequestIban($bankAccount);
                     $pi_calculator->setRequestFirstday($paymentFirstday);
-                    $pi_resultArray = $pi_calculator->getRatepayRateDetails($calcMethod);
+                    $pi_resultArray = $pi_calculator->getRatepayRateDetails($calcMethod, $sPaymentMethod);
                 } else if (preg_match('/^\d+(\.)?\d{0,2}/', $pi_value)) {
                     $pi_value = str_replace(",", "", $pi_value);
                     $pi_value = (substr($pi_value, -1) != ".") ? str_replace(",", ".", $pi_value) : str_replace(",", "", $pi_value);
                     $pi_calculator->setRequestCalculationValue($pi_value);
                     $pi_calculator->setRequestIban($bankAccount);
                     $pi_calculator->setRequestFirstday($paymentFirstday);
-                    $pi_resultArray = $pi_calculator->getRatepayRateDetails($calcMethod);
+                    $pi_resultArray = $pi_calculator->getRatepayRateDetails($calcMethod, $sPaymentMethod);
                 } else {
                     $pi_calculator->setErrorMsg('wrongvalue');
                 }
@@ -105,22 +107,22 @@
 
                 <div class="rp-menue">
                     <div colspan="2" class="small text-right">
-                        <a class="rp-link" id="rp-show-installment-plan-details" onclick="changeDetails()">
+                        <a class="rp-link" id="<?php echo $sPaymentMethod; ?>_rp-show-installment-plan-details" onclick="changeDetails('<?php echo $sPaymentMethod; ?>')">
                             Zeige Details
                             <img src="modules/pi/pi_ratepay/installment/resources/icon-enlarge.png" class="rp-details-icon" />
                         </a>
-                        <a class="rp-link" id="rp-hide-installment-plan-details" onclick="changeDetails()">
+                        <a class="rp-link" id="<?php echo $sPaymentMethod; ?>_rp-hide-installment-plan-details" onclick="changeDetails('<?php echo $sPaymentMethod; ?>')">
                             Schließe Details
                             <img src="modules/pi/pi_ratepay/installment/resources/icon-shrink.png" class="rp-details-icon" />
                         </a>
                     </div>
                 </div>
 
-                <div id="rp-installment-plan-details">
+                <div id="<?php echo $sPaymentMethod; ?>_rp-installment-plan-details">
                     <div class="rp-installment-plan-details">
-                        <div class="rp-installment-plan-title" onmouseover="piMouseOver('amount')" onmouseout="piMouseOut('amount')">
+                        <div class="rp-installment-plan-title" onmouseover="piMouseOver('<?php echo $sPaymentMethod; ?>_amount')" onmouseout="piMouseOut('<?php echo $sPaymentMethod; ?>_amount')">
                             <?php echo $rp_cash_payment_price; ?>
-                            <p id="amount" class="rp-installment-plan-description small">
+                            <p id="<?php echo $sPaymentMethod; ?>_amount" class="rp-installment-plan-description small">
                                 <?php echo $rp_mouseover_cash_payment_price; ?>
                             </p>
                         </div>
@@ -130,9 +132,9 @@
                     </div>
 
                     <div class="rp-installment-plan-details">
-                        <div class="rp-installment-plan-title" onmouseover="piMouseOver('serviceCharge')" onmouseout="piMouseOut('serviceCharge')">
+                        <div class="rp-installment-plan-title" onmouseover="piMouseOver('<?php echo $sPaymentMethod; ?>_serviceCharge')" onmouseout="piMouseOut('<?php echo $sPaymentMethod; ?>_serviceCharge')">
                             <?php echo $rp_service_charge; ?>
-                            <p id="serviceCharge" class="rp-installment-plan-description small">
+                            <p id="<?php echo $sPaymentMethod; ?>_serviceCharge" class="rp-installment-plan-description small">
                                 <?php echo $rp_mouseover_service_charge; ?>
                             </p>
                         </div>
@@ -142,9 +144,9 @@
                     </div>
 
                     <div class="rp-installment-plan-details">
-                        <div class="rp-installment-plan-title" onmouseover="piMouseOver('annualPercentageRate')" onmouseout="piMouseOut('annualPercentageRate')">
+                        <div class="rp-installment-plan-title" onmouseover="piMouseOver('<?php echo $sPaymentMethod; ?>_annualPercentageRate')" onmouseout="piMouseOut('<?php echo $sPaymentMethod; ?>_annualPercentageRate')">
                             <?php echo $rp_effective_rate; ?>
-                            <p id="annualPercentageRate" class="rp-installment-plan-description small"><?php echo $rp_mouseover_effective_rate; ?></p>
+                            <p id="<?php echo $sPaymentMethod; ?>_annualPercentageRate" class="rp-installment-plan-description small"><?php echo $rp_mouseover_effective_rate; ?></p>
                         </div>
                         <div class="text-right">
                             <?php echo $pi_resultArray['annualPercentageRate']; ?> %
@@ -152,9 +154,9 @@
                     </div>
 
                     <div class="rp-installment-plan-details">
-                        <div class="rp-installment-plan-title" onmouseover="piMouseOver('interestRate')" onmouseout="piMouseOut('interestRate')">
+                        <div class="rp-installment-plan-title" onmouseover="piMouseOver('<?php echo $sPaymentMethod; ?>_interestRate')" onmouseout="piMouseOut('<?php echo $sPaymentMethod; ?>_interestRate')">
                             <?php echo $rp_debit_rate; ?>
-                            <p id="interestRate" class="rp-installment-plan-description small"><?php echo $rp_mouseover_debit_rate; ?></p>
+                            <p id="<?php echo $sPaymentMethod; ?>_interestRate" class="rp-installment-plan-description small"><?php echo $rp_mouseover_debit_rate; ?></p>
                         </div>
                         <div class="text-right">
                             <?php echo $pi_resultArray['interestRate']; ?> %
@@ -162,9 +164,9 @@
                     </div>
 
                     <div class="rp-installment-plan-details">
-                        <div class="rp-installment-plan-title" onmouseover="piMouseOver('interestAmount')" onmouseout="piMouseOut('interestAmount')">
+                        <div class="rp-installment-plan-title" onmouseover="piMouseOver('<?php echo $sPaymentMethod; ?>_interestAmount')" onmouseout="piMouseOut('<?php echo $sPaymentMethod; ?>_interestAmount')">
                             <?php echo $rp_interest_amount; ?>
-                            <p id="interestAmount" class="rp-installment-plan-description small"><?php echo $rp_mouseover_interest_amount; ?></p>
+                            <p id="<?php echo $sPaymentMethod; ?>_interestAmount" class="rp-installment-plan-description small"><?php echo $rp_mouseover_interest_amount; ?></p>
                         </div>
                         <div class="text-right">
                             <?php echo $pi_resultArray['interestAmount']; ?>
@@ -177,9 +179,9 @@
 
 
                     <div class="rp-installment-plan-details">
-                        <div class="rp-installment-plan-title" onmouseover="piMouseOver('rate')" onmouseout="piMouseOut('rate')">
+                        <div class="rp-installment-plan-title" onmouseover="piMouseOver('<?php echo $sPaymentMethod; ?>_rate')" onmouseout="piMouseOut('<?php echo $sPaymentMethod; ?>_rate')">
                             <?php echo $pi_resultArray['numberOfRates']; ?> <?php echo $rp_duration_month; ?>
-                            <p id="rate" class="rp-installment-plan-description small"><?php echo $rp_mouseover_duration_month; ?></p>
+                            <p id="<?php echo $sPaymentMethod; ?>_rate" class="rp-installment-plan-description small"><?php echo $rp_mouseover_duration_month; ?></p>
                         </div>
                         <div class="text-right">
                             <?php echo $pi_resultArray['rate']; ?>
@@ -187,9 +189,9 @@
                     </div>
 
                     <div class="rp-installment-plan-details">
-                        <div class="rp-installment-plan-title" onmouseover="piMouseOver('lastRate')" onmouseout="piMouseOut('lastRate')">
+                        <div class="rp-installment-plan-title" onmouseover="piMouseOver('<?php echo $sPaymentMethod; ?>_lastRate')" onmouseout="piMouseOut('<?php echo $sPaymentMethod; ?>_lastRate')">
                             <?php echo $rp_last_rate; ?>
-                            <p id="lastRate" class="rp-installment-plan-description small"><?php echo $rp_mouseover_last_rate; ?></p>
+                            <p id="<?php echo $sPaymentMethod; ?>_lastRate" class="rp-installment-plan-description small"><?php echo $rp_mouseover_last_rate; ?></p>
                         </div>
                         <div class="text-right">
                             <?php echo $pi_resultArray['lastRate']; ?>
@@ -197,11 +199,11 @@
                     </div>
                 </div>
 
-                <div id="rp-installment-plan-no-details">
+                <div id="<?php echo $sPaymentMethod; ?>_rp-installment-plan-no-details">
                     <div class="rp-installment-plan-no-details">
-                        <div class="rp-installment-plan-title" onmouseover="piMouseOver('rate2')" onmouseout="piMouseOut('rate2')">
+                        <div class="rp-installment-plan-title" onmouseover="piMouseOver('<?php echo $sPaymentMethod; ?>_rate2')" onmouseout="piMouseOut('<?php echo $sPaymentMethod; ?>_rate2')">
                             <?php echo $pi_resultArray['numberOfRatesFull']; ?> <?php echo $rp_duration_month; ?>
-                            <p id="rate2" class="rp-installment-plan-description small"><?php echo $rp_mouseover_duration_month; ?></p>
+                            <p id="<?php echo $sPaymentMethod; ?>_rate2" class="rp-installment-plan-description small"><?php echo $rp_mouseover_duration_month; ?></p>
                         </div>
                         <div class="text-right">
                             <?php echo $pi_resultArray['rate']; ?>
@@ -209,9 +211,9 @@
                     </div>
                 </div>
                 <div class="rp-installment-plan-details">
-                    <div class="rp-installment-plan-title" onmouseover="piMouseOver('totalAmount')" onmouseout="piMouseOut('totalAmount')">
+                    <div class="rp-installment-plan-title" onmouseover="piMouseOver('<?php echo $sPaymentMethod; ?>_totalAmount')" onmouseout="piMouseOut('<?php echo $sPaymentMethod; ?>_totalAmount')">
                         <?php echo $rp_total_amount; ?>
-                        <p id="totalAmount" class="rp-installment-plan-description small"><?php echo $rp_mouseover_total_amount; ?></p>
+                        <p id="<?php echo $sPaymentMethod; ?>_totalAmount" class="rp-installment-plan-description small"><?php echo $rp_mouseover_total_amount; ?></p>
                     </div>
                     <div class="text-right">
                         <?php echo $pi_resultArray['totalAmount']; ?>

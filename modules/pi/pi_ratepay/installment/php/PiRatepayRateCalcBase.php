@@ -285,7 +285,15 @@ class PiRatepayRateCalcBase
      * Calculation date, data from shops (shop specific)
      * @var PiRatepayRateCalcData
      */
-    private $picalcdata;
+    protected $picalcdata;
+
+    /**
+     * Method name of Ratepay Installment
+     *
+     * @var string
+     */
+    protected $paymentMethod;
+
     /**
      * Company name of billing address
      *
@@ -1169,6 +1177,14 @@ class PiRatepayRateCalcBase
     public function getCode()
     {
         return $this->request_code;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentMethod()
+    {
+        return $this->paymentMethod;
     }
 
     /**

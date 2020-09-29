@@ -20,11 +20,13 @@ class pi_ratepay_util_Utilities
     public static $_RATEPAY_PAYMENT_METHOD = array(
         'pi_ratepay_rechnung',
         'pi_ratepay_rate',
+        'pi_ratepay_rate0',
         'pi_ratepay_elv'
     ); // 'pi_ratepay_vorkasse'
     public static $_RATEPAY_PAYMENT_METHOD_NAMES = array(
         'invoice' => "rechnung",
         'installment' => "rate",
+        'installment0' => "rate0",
         'elv' => "elv"
     ); // 'prepayment' => "vorkasse"
 
@@ -50,6 +52,9 @@ class pi_ratepay_util_Utilities
                 break;
             case 'pi_ratepay_rate':
                 $paymentMethod = 'INSTALLMENT';
+                break;
+            case 'pi_ratepay_rate0':
+                $paymentMethod = 'INSTALLMENT0';
                 break;
             case 'pi_ratepay_elv':
                 $paymentMethod = 'ELV';

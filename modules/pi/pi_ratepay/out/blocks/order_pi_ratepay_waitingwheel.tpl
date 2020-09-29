@@ -1,5 +1,5 @@
 [{assign var="pi_payment" value=$oView->getPayment() }]
-[{if $pi_payment->getId() == "pi_ratepay_rate" || $pi_payment->getId() == "pi_ratepay_rechnung"}]
+[{if $pi_payment->getId() == "pi_ratepay_rate" || $pi_payment->getId() == "pi_ratepay_rate0" || $pi_payment->getId() == "pi_ratepay_rechnung"}]
     <script type="text/javascript">
         function showWaitingWheel() {
         document.getElementById("waitingWheel").style.visibility = 'visible';

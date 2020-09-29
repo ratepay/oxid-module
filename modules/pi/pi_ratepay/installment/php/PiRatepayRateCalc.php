@@ -19,12 +19,6 @@ require_once 'PiRatepayRateCalcBase.php';
 class PiRatepayRateCalc extends PiRatepayRateCalcBase
 {
     /**
-     * Method name of RatePAY Installment
-     * @var string
-     */
-    private $_paymentMethod = 'pi_ratepay_rate';
-
-    /**
      * Optional parameters: RatePAY XML service and any implementation of
      * PiRatepayCalcDataInterface.
      * @param PiRatepayCalcDataInterface $piCalcData
@@ -47,17 +41,26 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
         } else {
             parent::__construct();
         }
+
+        // OX-28 : add support for Rate 0% method
+        $paymentMethod = $this->getPostParameter('smethod');
+        if (!empty($paymentMethod)) {
+            $this->setPaymentMethod($paymentMethod);
+        }
     }
 
     /**
      * Get RatePAY rate details and set data. If not successful also set
      * error message and unset data.
+     *
      * @see requestRateDetails()
      * @see setData()
      * @see setErrorMsg()
+     * @param $subtype
+     * @param string $sPaymentMethod
      * @return array $resultArray
      */
-    public function getRatepayRateDetails($subtype)
+    public function getRatepayRateDetails($subtype, $sPaymentMethod)
     {
         try {
             $this->requestRateDetails($subtype);
@@ -130,7 +133,7 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
         $sRatePayUsrCountry =
             $oSession->getVariable('pi_ratepay_rate_usr_country');
         $settings = oxNew('pi_ratepay_Settings');
-        $settings->loadByType('installment', $sShopId, $sRatePayUsrCountry);
+        $settings->loadByType(pi_ratepay_util_utilities::getPaymentMethod($this->paymentMethod), $sShopId, $sRatePayUsrCountry);
         $allowedRuntimes = array();
         $basketAmount = (float)$this->getRequestAmount();
         $rateMinNormal = $settings->pi_ratepay_settings__min_rate->rawValue;
@@ -174,7 +177,7 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
 
         $shopId = oxRegistry::getSession()->getVariable('shopId');
         $settings = oxNew('pi_ratepay_settings');
-        $settings->loadByType($this->_paymentMethod, $shopId);
+        $settings->loadByType(pi_ratepay_util_utilities::getPaymentMethod($this->paymentMethod), $shopId);
 
         $modelFactory->setCalculationData($calculationData);
         if (!empty($this->getRequestOrderId())) {
@@ -182,7 +185,7 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
             $modelFactory->setCustomerId($this->getRequestMerchantConsumerId());
         }
         $modelFactory->setShopId($shopId);
-        $modelFactory->setPaymentType(strtolower($this->_paymentMethod));
+        $modelFactory->setPaymentType(strtolower($this->paymentMethod));
         $response = $modelFactory->doOperation('CALCULATION_REQUEST');
 
         if ($response->isSuccessful()) {
@@ -224,5 +227,14 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
         $this->setDetailsRate('');
         $this->setDetailsLastRate('');
         $this->setDetailsPaymentFirstday('');
+    }
+
+    /**
+     * @param string $paymentMethod
+     */
+    public function setPaymentMethod($paymentMethod)
+    {
+        $this->paymentMethod = $paymentMethod;
+        $this->picalcdata->setPaymentMethod($paymentMethod);
     }
 }
