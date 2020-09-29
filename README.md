@@ -15,7 +15,7 @@
 
 ## Changelog
 
-### Version 5.0.8 - Released 2020-09-28
+### Version 5.1.0 - Released 2020-09-28
 * New : add 0% Installment payment method
 * New : add 48h payment ban after rejected attempt (dependind on reason code)
 * Update : new SEPA mandate text for Ratepay inhouse instalment payment menthod
