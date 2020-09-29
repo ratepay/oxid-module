@@ -135,6 +135,39 @@ class pi_ratepay_paymentgateway extends pi_ratepay_paymentgateway_parent
 
             }
 
+            // OX-33 : register a payment ban on error codes 703/720/721
+            if (in_array($payRequest->getReasonCode(), array(703, 720, 721))) {
+                $fromDate = (new DateTime())->format(DATE_ISO8601);
+                $toDate = (new DateTime('+2day'))->format(DATE_ISO8601);
+
+                /** @var oxuser $user */
+                $user = oxNew('oxuser');
+                $userId = $oOrder->oxorder__oxuserid->value;
+                $user->load($userId);
+                if ($user->oxuser__oxregister->value == '0000-00-00 00:00:00') {
+                    $userId = $user->oxuser__oxusername->value;
+                }
+
+                /** @var pi_ratepay_PaymentBan $paymentBan */
+                $paymentBan = oxNew('pi_ratepay_paymentban');
+                $existingEntry = $paymentBan->loadByUserAndMethod($userId, $this->_paymentId);
+                if ($existingEntry) {
+                    $paymentBan->pi_ratepay_payment_ban__from_date->rawValue = $fromDate;
+                    $paymentBan->pi_ratepay_payment_ban__to_date->rawValue = $toDate;
+                } else {
+                    $paymentBan->assign(
+                        array(
+                            'USERID' => $userId,
+                            'PAYMENT_METHOD' => $this->_paymentId,
+                            'FROM_DATE' => $fromDate,
+                            'TO_DATE' => $toDate
+                        )
+                    );
+                }
+                $paymentBan->save();
+            }
+
+
             // OX-19: delete order if payment failed
             $oOrder->delete();
 

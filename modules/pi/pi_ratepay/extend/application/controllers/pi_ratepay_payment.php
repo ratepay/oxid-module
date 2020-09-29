@@ -89,6 +89,23 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
     }
 
     /**
+     * OX-33 : select correct userid to check for payment ban
+     *
+     * If registered, using OXID
+     * If guest, using email (username)
+     *
+     * @return string
+     */
+    private function _getBanUserId()
+    {
+        if ($this->getUser()->oxuser__register->value == '0000-00-00 00:00:00') {
+            return $this->getUser()->oxuser__username->value;
+        }
+
+        return $this->getUser()->oxuser__oxid->value;
+    }
+
+    /**
      * Check if RatePAY payment methodes are set in the $paymentList.
      * Checks if RatePAY payment requirements are meet,
      * if not unsets the RatePAY payment type from $paymentList.
@@ -100,10 +117,11 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
     {
         $this->_setCountry();
         $ratePayAllowed = $this->_checkRatePAY();
+        $userId = $this->_getBanUserId();
 
         foreach (pi_ratepay_util_utilities::$_RATEPAY_PAYMENT_METHOD as $paymentMethod) {
             if (array_key_exists($paymentMethod, $paymentList)) {
-                $ratePAYMethodCheck = $this->_checkRatePAYMethodCheck($paymentMethod);
+                $ratePAYMethodCheck = $this->_checkRatePAYMethodCheck($paymentMethod, $userId);
                 if (!$ratePayAllowed || !$ratePAYMethodCheck) {
                     unset($paymentList[$paymentMethod]);
                 }
@@ -113,9 +131,9 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         return $paymentList;
     }
 
-    private function _checkRatePAYMethodCheck($paymentMethod)
+    private function _checkRatePAYMethodCheck($paymentMethod, $userId)
     {
-        return $this->_checkCurrency($paymentMethod) && $this->_checkActivation($paymentMethod) && $this->_checkLimit($paymentMethod) && $this->_checkALA($paymentMethod) && $this->_checkB2B($paymentMethod);
+        return $this->_checkCurrency($paymentMethod) && $this->_checkActivation($paymentMethod) && $this->_checkLimit($paymentMethod) && $this->_checkALA($paymentMethod) && $this->_checkB2B($paymentMethod) && $this->_checkPaymentBan($paymentMethod, $userId);
     }
 
     /**
@@ -164,6 +182,34 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
         $userCountry = $this->_getCountry(); //oxDb::getDb()->getOne("SELECT OXISOALPHA2 FROM oxcountry WHERE OXID = '" . $this->getUser()->oxuser__oxcountryid->value . "'");
         $settings = $this->_getRatePaySettings($paymentMethod, strtolower($userCountry));
         return (bool) $settings->pi_ratepay_settings__active->rawValue;
+    }
+
+    /**
+     * OX-33 : Check if the method for the user is under active ban
+     *
+     * @param string $paymentMethod
+     * @param string $userId
+     * @return bool True if no ban (valid), false if the method should be hidden
+     */
+    private function _checkPaymentBan($paymentMethod, $userId)
+    {
+        /** @var pi_ratepay_PaymentBan $paymentBan */
+        $paymentBan = oxNew('pi_ratepay_paymentban');
+        $existingEntry = $paymentBan->loadByUserAndMethod($userId, $paymentMethod);
+        if (!$existingEntry) {
+            return true;
+        }
+        $fromDate = new DateTimeImmutable($paymentBan->pi_ratepay_payment_ban__from_date->rawValue);
+        $toDate = new DateTimeImmutable($paymentBan->pi_ratepay_payment_ban__to_date->rawValue);
+        $today = new DateTime();
+        if (
+            $today->getTimestamp() > $fromDate->getTimestamp()
+            && $today->getTimestamp() < $toDate->getTimestamp()
+        ) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

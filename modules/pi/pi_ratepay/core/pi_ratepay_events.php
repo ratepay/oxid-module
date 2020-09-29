@@ -125,6 +125,17 @@ class pi_ratepay_events
           PRIMARY KEY (`id`)
         ) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_general_ci;";
 
+    public static $sQueryTablePaymentBan = "
+        CREATE TABLE `pi_ratepay_payment_ban` (
+          `OXID` char(32) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+          `USERID` varchar(256) NOT NULL,
+          `PAYMENT_METHOD` VARCHAR(50) NULL,
+          `FROM_DATE` DATETIME NULL,
+          `TO_DATE` DATETIME NULL,
+          PRIMARY KEY (`OXID`),
+          UNIQUE INDEX `UNQ_RATEPAY_CUSTOMER_ID_PAYMENT_METHOD` (`USERID` ASC, `PAYMENT_METHOD` ASC)
+        ) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_general_ci;";
+
     public static $aPaymentMethods = array(
         'pi_ratepay_rechnung' => 'Ratepay Rechnung',
         'pi_ratepay_rate' => 'Ratepay Rate',
@@ -246,6 +257,7 @@ class pi_ratepay_events
         self::addTableIfNotExists('pi_ratepay_history', self::$sQueryTableHistory);
         self::addTableIfNotExists('pi_ratepay_rate_details', self::$sQueryTableRateDetails);
         self::addTableIfNotExists('pi_ratepay_debit_details', self::$sQueryTableDebitDetails);
+        self::addTableIfNotExists('pi_ratepay_payment_ban', self::$sQueryTablePaymentBan);
     }
 
     /**

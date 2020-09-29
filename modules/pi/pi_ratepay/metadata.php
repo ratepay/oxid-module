@@ -90,6 +90,7 @@ $aModule = array(
         'pi_ratepay_LogsService'                        => 'pi/pi_ratepay/core/pi_ratepay_logsservice.php',
         'pi_ratepay_OrderDetails'                       => 'pi/pi_ratepay/core/pi_ratepay_orderdetails.php',
         'pi_ratepay_Orders'                             => 'pi/pi_ratepay/core/pi_ratepay_orders.php',
+        'pi_ratepay_PaymentBan'                         => 'pi/pi_ratepay/core/pi_ratepay_paymentban.php',
         'pi_ratepay_RateDetails'                        => 'pi/pi_ratepay/core/pi_ratepay_ratedetails.php',
         'pi_ratepay_RequestAbstract'                    => 'pi/pi_ratepay/core/pi_ratepay_requestabstract.php',
         'pi_ratepay_RequestDataBackend'                 => 'pi/pi_ratepay/core/pi_ratepay_requestdatabackend.php',
