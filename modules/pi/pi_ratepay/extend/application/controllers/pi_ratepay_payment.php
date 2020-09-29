@@ -600,9 +600,9 @@ class pi_ratepay_payment extends pi_ratepay_payment_parent
             'mobil' => oxRegistry::getConfig()->getRequestParameter($this->_selectedPaymentMethod . '_mobilfon')
         );
 
+        $isFonValid = true;
         foreach ($phoneNumbers as $type => $phoneNumber) {
             if (!empty($phoneNumber)) {
-                $isFonValid = true;
                 if ($type == 'fon') {
                     $user->oxuser__oxfon = new oxField($phoneNumber);
                 }
