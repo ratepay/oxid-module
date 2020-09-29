@@ -74,7 +74,15 @@
         <div class="form" id="pi_ratepay_elv_sepa_bankdata" [{if $pi_ratepay_elv_bank_datatype=="classic"}] style="display: none" [{/if}]>
             <p style="margin-bottom: 15px;">
                 <label class="">[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_OWNER"}]</label>
-                <input type="text" class="form-control disabled" name="rp-iban-account-owner" value="[{$pi_ratepay_elv_bank_account_owner}]" disabled />
+                [{if !empty($pi_ratepay_elv_company_name)}]
+                <select name="rp_sepa_use_company_name">
+                    <option selected="selected" value="1">[{$pi_ratepay_elv_company_name}]</option>
+                    <option value="0">[{$pi_ratepay_elv_bank_account_owner}]</option>
+                </select>
+                [{else}]
+                    <input type="text" class="form-control disabled" value="[{$pi_ratepay_elv_bank_account_owner}]" disabled />
+                    <input type="hidden" name="rp_sepa_use_company_name" value="0" />
+                [{/if}]
             </p>
             <p>
                 <label class="">[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_BANK_IBAN"}]</label>

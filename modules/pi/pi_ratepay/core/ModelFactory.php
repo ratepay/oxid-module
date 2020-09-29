@@ -868,6 +868,7 @@ class ModelFactory extends oxSuperCfg {
         $bankAccountNumber = $this->getSession()->getVariable($paymentType . '_bank_account_number');
         $bankCode          = $this->getSession()->getVariable($paymentType . '_bank_code');
         $bankIban          = $this->getSession()->getVariable($paymentType . '_bank_iban');
+        $elvUseCompany     = $this->getSession()->getVariable('elv_use_company_name');
 
         if ($bankDataType == 'classic') {
             $bankData['BankAccountNumber'] = $bankAccountNumber;
@@ -880,7 +881,11 @@ class ModelFactory extends oxSuperCfg {
         if ($this->getSession()->hasVariable($paymentType . '_bank_owner')) {
             $bankData['Owner'] = $this->getSession()->getVariable($paymentType . 'elv_bank_owner');
         } else {
-            $bankData['Owner'] = $this->getUser()->oxuser__oxfname->value . ' ' . $this->getUser()->oxuser__oxlname->value;
+            if (!empty($elvUseCompany) && $elvUseCompany == 1) {
+                $bankData['Owner'] = $this->getUser()->oxuser__oxcompany->value;
+            } else {
+                $bankData['Owner'] = $this->getUser()->oxuser__oxfname->value . ' ' . $this->getUser()->oxuser__oxlname->value;
+            }
         }
 
         return $bankData;
