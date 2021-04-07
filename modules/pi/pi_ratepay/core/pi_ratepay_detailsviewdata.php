@@ -122,7 +122,7 @@ class pi_ratepay_DetailsViewData extends oxBase
             INNER JOIN
                 `oxorderarticles` AS oa ON oa.oxorderid = oo.oxid
             INNER JOIN
-                ".$this->pi_ratepay_order_details." AS prrod ON oa.oxid = prrod.unique_article_number
+                (SELECT * FROM ".$this->pi_ratepay_order_details." WHERE ORDER_NUMBER = '{$this->_orderId}') AS prrod
             WHERE
                 oo.oxid = '{$this->_orderId}' AND
                oa.oxartid = prrod.article_number
