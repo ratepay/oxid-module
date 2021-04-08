@@ -6,7 +6,7 @@
 |Author | `Fatchip GmbH`
 |Prefix | `pi`
 |Shop Version | `CE/PE` `4.7.x-6.1.x` `EE` `5.0.x-6.2.x`
-|Version | `5.1.0`
+|Version | `5.1.1`
 |Link | http://www.ratepay.com
 |Mail | integration@ratepay.com
 |Installation | https://ratepay.gitbook.io/oxid/
@@ -14,6 +14,10 @@
 |Legal Disclaimer|https://ratepay.gitbook.io/docs/#legal-disclaimer
 
 ## Changelog
+### Version 5.1.1 - Released 2021-04-08
+* New : Add pre-calculation to estimate max valid runtime for 0% interest rate cases
+* Fixed : Extend width of installment calculator detail on order review page
+* Fixed : Bug fix for pre-5.0.5 orders management when the plugin get updated
 
 ### Version 5.1.0 - Released 2020-09-28
 * New : add 0% Installment payment method
