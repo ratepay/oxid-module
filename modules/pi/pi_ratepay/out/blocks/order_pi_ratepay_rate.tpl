@@ -11,6 +11,9 @@
     <script type="text/javascript">
     if(document.getElementById('pi_ratepay_rate_pirpmain-cont')) {
         piLoadrateResult('pi_ratepay_rate');
+        if (document.getElementsByClassName('rp-table-striped').length > 0) {
+            document.getElementsByClassName('rp-table-striped')[0].style.width = '100%';
+        }
     }
     </script>
 [{/if}]
