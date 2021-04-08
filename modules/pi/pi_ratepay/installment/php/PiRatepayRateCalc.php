@@ -141,8 +141,26 @@ class PiRatepayRateCalc extends PiRatepayRateCalcBase
         $interestRate = ((float)$settings->pi_ratepay_settings__interest_rate->rawValue / 12) / 100;
         // 0049008 : no need to calculate
         // $rateAmount will be equal to 0 if $interestRate is equal to 0
+        // OX-60 : pre-request made on highest available runtime
+        // to estimate the highest valid runtime for this basket
         if ($interestRate == 0) {
-            return $runTimes;
+            try {
+                $highestRuntime = $runTimes[count($runTimes)-1];
+                $pi_calculator = new PiRatepayRateCalc();
+                $pi_calculator->setRequestCalculationValue($highestRuntime);
+                $pi_calculator->setRequestIban('');
+                $pi_calculator->setRequestFirstday(28);
+                $pi_resultArray = $pi_calculator->getRatepayRateDetails('calculation-by-time', $this->paymentMethod);
+                $highestValidRunTime = $pi_resultArray['numberOfRatesFull'];
+
+                $runTimes = array_filter($runTimes, function($runTime) use ($highestValidRunTime) {
+                    return $runTime <= $highestValidRunTime;
+                });
+
+                return $runTimes;
+            } catch (Exception $e) {
+                return $runTimes;
+            }
         }
 
         foreach ($runTimes AS $month) {
