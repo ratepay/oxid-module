@@ -53,6 +53,7 @@ $rp_header_bank_transfer = "Rate per &Uuml;berweisung";
 $rp_header_debit = "Rate per Lastschrift";
 $rp_switch_payment_type_bank_transfer = "Ich m&ouml;chte die Ratenzahlungen selbst vornehmen und nicht per Lastschrift begleichen";
 $rp_switch_payment_type_direct_debit = "Ich m&ouml;chte die Ratenzahlungen bequem per Lastschrift begleichen";
+$rp_mand_cred_notification = "Mandatsreferenz und Gläubiger-ID wird Ihnen separat mitgeteilt.";
 $rp_address = "Ratepay GmbH, Franklinstra&szlig;e 28-29, 10587 Berlin";
 $wcd_address = "Wirecard Bank AG, Einsteinring 35, 85609 Aschheim";
 $rp_creditor = "Gl&auml;ubiger-ID";

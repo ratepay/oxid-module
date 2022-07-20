@@ -115,30 +115,8 @@
                 </div><br>
             <?php endif; ?>
 
-            <div class="row rp-row-space rp-sepa-form">
-                <table class="rp-sepa-table">
-                    <tr>
-                        <td colspan="2">
-                         <?php echo $rp_address; ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                         <?php echo $rp_creditor; ?>
-                        </td>
-                        <td style="padding-left: 15px;">
-                         <?php echo $rp_creditor_id; ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                         <?php echo $rp_mandate; ?>&nbsp;
-                        </td>
-                        <td style="padding-left: 15px;">
-                         <?php echo $rp_mandate_ref; ?>
-                        </td>
-                    </tr>
-                </table>
+            <div class="row rp-sepa-form rp-special-item rp-row-space">
+                <?php echo $rp_mand_cred_notification; ?>
             </div>
             <br/>
             <div class="row rp-sepa-form rp-special-item rp-row-space">
