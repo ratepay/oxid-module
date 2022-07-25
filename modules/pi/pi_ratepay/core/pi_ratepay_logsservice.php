@@ -76,6 +76,7 @@ class pi_ratepay_LogsService extends oxSuperCfg
 
         if ($logging == 1) {
             $requestXml = $trans->getRequestRaw();
+            $requestXml = preg_replace("/<securitycode>(.*)<\/securitycode>/", '<securitycode>***</securitycode>', $requestXml);
             $responseXml = $trans->getResponseRaw();
             $reason = '';
             $reasonCode = '';
