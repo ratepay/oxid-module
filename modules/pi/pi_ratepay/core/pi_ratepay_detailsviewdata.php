@@ -125,7 +125,7 @@ class pi_ratepay_DetailsViewData extends oxBase
                 (SELECT * FROM ".$this->pi_ratepay_order_details." WHERE ORDER_NUMBER = '{$this->_orderId}') AS prrod
             WHERE
                 oo.oxid = '{$this->_orderId}' AND
-               oa.oxartid = prrod.article_number
+               oa.oxid = prrod.UNIQUE_ARTICLE_NUMBER
             GROUP BY prrod.oxid";
         $aRows = $oDb->getAll($articlesSql);
 
