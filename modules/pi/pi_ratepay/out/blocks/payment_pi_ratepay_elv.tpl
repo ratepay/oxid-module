@@ -26,19 +26,7 @@
         </div>
         <br/>
         <div style="padding-left: 4px;">
-            <table>
-                <tr>
-                    <td colspan="2">[{oxmultilang ident="PI_RATEPAY_VIEW_RATEPAY_ADDRESS"}]</td>
-                </tr>
-                <tr>
-                    <td>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_CREDITOR_ID_TEXT"}]</td>
-                    <td style="padding-left: 15px;">[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_CREDITOR_ID_VALUE"}]</td>
-                </tr>
-                <tr>
-                    <td>[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_MANDATE_TEXT"}]</td>
-                    <td style="padding-left: 15px;">[{oxmultilang ident="PI_RATEPAY_ELV_VIEW_MANDATE_VALUE"}]</td>
-                </tr>
-            </table>
+            [{oxmultilang ident="PI_RATEPAY_ELV_VIEW_MAND_CRED_NOTIFICATION"}]
         </div>
         <ul class="form">
 			[{if isset($pi_ratepay_elv_fon_check)}]
