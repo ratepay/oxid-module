@@ -6,7 +6,7 @@
 |Author | `Fatchip GmbH`
 |Prefix | `pi`
 |Shop Version | `CE/PE` `4.7.x-6.1.x` `EE` `5.0.x-6.2.x`
-|Version | `5.1.1`
+|Version | `5.1.2`
 |Link | http://www.ratepay.com
 |Mail | integration@ratepay.com
 |Installation | https://ratepay.gitbook.io/oxid/
@@ -14,6 +14,12 @@
 |Legal Disclaimer|https://ratepay.gitbook.io/docs/#legal-disclaimer
 
 ## Changelog
+### Version 5.1.2 - Released 2022-08-23
+* Fixed : Bug when using descriptions for identical order items
+* Fixed : EN translations
+* Update : Data saved in request logs
+* Update : Obsolete param from profile removed
+
 ### Version 5.1.1 - Released 2021-04-08
 * New : Add pre-calculation to estimate max valid runtime for 0% interest rate cases
 * Fixed : Extend width of installment calculator detail on order review page
