@@ -56,14 +56,6 @@
                 </tr>
                 <tr>
                     <td class="edittext">
-                        [{oxmultilang ident="PI_RATEPAY_PROFILE_URL"}]&nbsp;
-                    </td>
-                    <td class="edittext">
-                        [{$edit->pi_ratepay_settings__url->value}]
-                    </td>
-                </tr>
-                <tr>
-                    <td class="edittext">
                         [{oxmultilang ident="PI_RATEPAY_PROFILE_SANDBOX"}]&nbsp;
                     </td>
                     <td class="edittext">
