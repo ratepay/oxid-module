@@ -1,3 +1,10 @@
+<!--
+*
+* Copyright (c) Ratepay GmbH
+*
+*For the full copyright and license information, please view the LICENSE
+*file that was distributed with this source code.
+*-->
 [{if isset($pi_ratepay_dfp_token)}]
     <script language="JavaScript" async>
         var di = {t:'[{$pi_ratepay_dfp_token}]',v:'[{$pi_ratepay_dfp_snippet_id}]',l:'Checkout'};

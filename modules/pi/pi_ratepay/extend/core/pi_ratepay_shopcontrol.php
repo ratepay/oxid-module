@@ -1,6 +1,14 @@
 <?php
 
 /**
+ *
+ * Copyright (c) Ratepay GmbH
+ *
+ *For the full copyright and license information, please view the LICENSE
+ *file that was distributed with this source code.
+ */
+
+/**
  * Class pi_ratepay_shopcontrol
  *
  * extends OXID ShopControl core class to enable loading a custom autoloader
