@@ -1,5 +1,13 @@
 <?php
 
+/**
+ *
+ * Copyright (c) Ratepay GmbH
+ *
+ *For the full copyright and license information, please view the LICENSE
+ *file that was distributed with this source code.
+ */
+
 class pi_ratepay_oxorder extends pi_ratepay_oxorder_parent
 {
     /**

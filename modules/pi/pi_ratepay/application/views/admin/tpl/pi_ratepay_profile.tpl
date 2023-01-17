@@ -1,3 +1,10 @@
+<!--
+*
+* Copyright (c) Ratepay GmbH
+*
+*For the full copyright and license information, please view the LICENSE
+*file that was distributed with this source code.
+*-->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
 <html>

@@ -1,3 +1,10 @@
+<!--
+*
+* Copyright (c) Ratepay GmbH
+*
+*For the full copyright and license information, please view the LICENSE
+*file that was distributed with this source code.
+*-->
 [{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign}]
 [{if $readonly}]
     [{assign var="readonly" value="readonly disabled"}]

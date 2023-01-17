@@ -1,3 +1,10 @@
+<!--
+*
+* Copyright (c) Ratepay GmbH
+*
+*For the full copyright and license information, please view the LICENSE
+*file that was distributed with this source code.
+*-->
 [{if $oView->piIsRatepayModuleConfig()}]
     [{if $blSaveSuccess == true}]
         <div class="messagebox" style="color:green;"><b>[{oxmultilang ident="PI_RATEPAY_CONFIGSAVESUCCESS"}]</b></div>

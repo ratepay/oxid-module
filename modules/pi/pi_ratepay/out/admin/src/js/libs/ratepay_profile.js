@@ -1,9 +1,10 @@
+
 /**
- * Created with JetBrains PhpStorm.
- * User: aarne
- * Date: 16.09.14
- * Time: 15:12
- * To change this template use File | Settings | File Templates.
+ *
+ * Copyright (c) Ratepay GmbH
+ *
+ *For the full copyright and license information, please view the LICENSE
+ *file that was distributed with this source code.
  */
 
 $(document).ready(function() {

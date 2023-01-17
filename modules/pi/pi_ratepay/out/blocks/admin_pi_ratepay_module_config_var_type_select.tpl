@@ -1,3 +1,10 @@
+<!--
+*
+* Copyright (c) Ratepay GmbH
+*
+*For the full copyright and license information, please view the LICENSE
+*file that was distributed with this source code.
+*-->
 [{if $module_var == 'sRPInstallmentSettlement' || $module_var == 'sRPAustriaInstallmentSettlement'}]
     [{assign var=aAvailableSettlementTypes value=$oView->piGetAvailableSettlementTypes($module_var)}]
     <select class="select" name="confselects[[{$module_var}]]" [{$readonly}]>
